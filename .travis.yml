@@ -1,3 +1,4 @@
-lanugage: scala
-scala:
- - 2.11.8
+sudo: false # container-based infrastructure
+language: scala
+scala: 2.11.8
+jdk: oraclejdk8

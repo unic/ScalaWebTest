@@ -1,0 +1,6 @@
+lanugage: scala
+scala:
+ - 2.11.8
+script:
+ - sbt compile
+ - sbt inttest

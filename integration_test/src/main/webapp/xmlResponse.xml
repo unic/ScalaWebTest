@@ -1,0 +1,8 @@
+<book>
+    <authors>
+        <author name="Gamma" firstname="Erich"/>
+        <author name="Johnson" firstname="Ralph"/>
+        <author name="Helm" firstname="Richard"/>
+        <author name="Vlissides" firstname="John"/>
+    </authors>
+</book>

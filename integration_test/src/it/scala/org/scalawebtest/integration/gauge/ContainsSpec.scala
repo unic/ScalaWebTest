@@ -17,15 +17,15 @@ package org.scalawebtest.integration.gauge
 import org.scalawebtest.core.Gauge._
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
-class LooseMatchingSpec extends ScalaWebTestBaseSpec {
+class ContainsSpec extends ScalaWebTestBaseSpec {
   {
-    "The default matcher" should "loosely match attributes" in {
+    "Contains" should "loosely match attributes" in {
       navigateTo("/navigation.jsp")
 
       fits(<nav>
         <ul>
           <li>
-            <a href="first">first navigation element</a>
+            <a href="@contains first">first navigation element</a>
           </li>
         </ul>
       </nav>)
@@ -34,7 +34,7 @@ class LooseMatchingSpec extends ScalaWebTestBaseSpec {
       fits(<nav>
         <ul>
           <li>
-            <a href="/path/to/first/element">navigation</a>
+            <a href="/path/to/first/element">@contains navigation</a>
           </li>
         </ul>
       </nav>)

@@ -19,22 +19,22 @@ import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
 class ExactSpec extends ScalaWebTestBaseSpec {
   {
-    "Exact" should "work for path matches" in {
+    "The default matcher" should "exactly match attributes" in {
       navigateTo("/navigation.jsp")
 
       fits(<nav>
         <ul>
           <li>
-            <a href="@exact /path/to/first/element">first navigation element</a>
+            <a href="/path/to/first/element">first navigation element</a>
           </li>
         </ul>
       </nav>)
     }
-    it should "work for text matches" in {
+    it should "exactly match text" in {
       fits(<nav>
         <ul>
           <li>
-            <a href="/path/to/first/element">@exact first navigation element</a>
+            <a href="/path/to/first/element">first navigation element</a>
           </li>
         </ul>
       </nav>)

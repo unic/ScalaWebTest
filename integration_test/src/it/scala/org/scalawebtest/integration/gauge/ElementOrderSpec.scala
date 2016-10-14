@@ -23,22 +23,22 @@ class ElementOrderSpec extends ScalaWebTestBaseSpec {
     fits(<div>
       <p>
         <a>link</a>
-        text-after-link
+        @contains text-after-link
       </p>
     </div>)
   }
   it should "fit with text element before link" in {
     fits(<div>
-      <p>text-before-link
+      <p>@contains text-before-link
         <a>link</a>
       </p>
     </div>)
   }
   it should "fit with text element after link" in {
     fits(<div>
-      <p>text-before-link
+      <p>@contains text-before-link
         <a>link</a>
-        text-after-link
+        @contains text-after-link
       </p>
     </div>)
   }

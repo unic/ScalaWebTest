@@ -303,8 +303,8 @@ object Gauge {
       new Gauge(definition).doesNotFit()
     }
   }
-}
 
+}
 
 case class CandidateAttribute(relevance: Int, containingElement: DomNode, attribute: dom.Node) {
   def value() = attribute.getNodeValue
@@ -321,8 +321,8 @@ case class CandidateElement(relevance: Int, element: DomNode) {
   */
 object Matcher {
   //Warning! Order within this lists matters. The first Matcher with a valid marker will be used. The marker of the DefaultMatcher is always valid.
-  val textMatchers: List[TextMatcher] = RegexMatcher :: ExactMatcher :: DefaultMatcher :: Nil
-  val attributeMatchers: List[AttributeMatcher] = RegexMatcher :: ExactMatcher :: DefaultMatcher :: Nil
+  val textMatchers: List[TextMatcher] = ContainsMatcher :: RegexMatcher :: DefaultMatcher :: Nil
+  val attributeMatchers: List[AttributeMatcher] = ContainsMatcher :: RegexMatcher :: DefaultMatcher :: Nil
 
   def attributeMatches(expectedValue: String, attribute: CandidateAttribute) = {
     val matcher = attributeMatchers.find(m => expectedValue.startsWith(m.marker))
@@ -364,18 +364,20 @@ object Matcher {
   object DefaultMatcher extends TextMatcher with AttributeMatcher {
     override val marker = ""
 
-    override def attributeMatches(expected: String, attribute: CandidateAttribute) =
-      if (attribute.value().contains(expected)) {
+    override def attributeMatches(expected: String, attribute: CandidateAttribute) = {
+      if (attribute.value().equals(expected)) {
         None
+      } else {
+        Some(Misfit(attribute.relevance, "Misfitting Attribute: [" + attribute.name() + "] in [" + attribute.containingElement + "] with value[" + attribute.value() + "] didn't equal [" + expected + "]"))
       }
-      else {
-        Some(Misfit(attribute.relevance, "Misfitting Attribute: [" + attribute.name() + "] in [" + attribute.containingElement + "] with value[" + attribute.value() + "] didn't contain [" + expected + "]"))
-      }
+    }
 
-    override def textMatches(expected: String, element: CandidateElement) = if (element.text().contains(expected)) {
-      None
-    } else {
-      Some(Misfit(element.relevance, "Misfitting Text: The [" + element.text + "] from [" + element.element + "] didn't contain [" + expected + "]"))
+    override def textMatches(expected: String, element: CandidateElement) = {
+      if (element.text().trim().equals(expected)) {
+        None
+      } else {
+        Some(Misfit(element.relevance, "Misfitting Text: The [" + element.text() + "] from [" + element.element + "] didn't equal [" + expected + "]"))
+      }
     }
   }
 
@@ -390,30 +392,34 @@ object Matcher {
       }
     }
 
-    override def textMatches(expected: String, element: CandidateElement) = if (element.text().matches(expected)) {
-      None
-    } else {
-      Some(Misfit(element.relevance, "Misfitting Text: The [" + element.text() + "] from [" + element.element + "] didn't match regex pattern [" + expected + "]"))
+    override def textMatches(expected: String, element: CandidateElement) = {
+      if (element.text().matches(expected)) {
+        None
+      } else {
+        Some(Misfit(element.relevance, "Misfitting Text: The [" + element.text() + "] from [" + element.element + "] didn't match regex pattern [" + expected + "]"))
+      }
     }
   }
 
-  object ExactMatcher extends TextMatcher with AttributeMatcher {
-    override val marker = "@exact "
+  object ContainsMatcher extends TextMatcher with AttributeMatcher {
+    override val marker = "@contains "
 
     override def attributeMatches(expected: String, attribute: CandidateAttribute) = {
-      if (attribute.value().equals(expected)) {
+      if (attribute.value().contains(expected)) {
         None
-      } else {
-        Some(Misfit(attribute.relevance, "Misfitting Attribute: [" + attribute.name() + "] in [" + attribute.containingElement + "] with value[" + attribute.value() + "] didn't equal [" + expected + "]"))
+      }
+      else {
+        Some(Misfit(attribute.relevance, "Misfitting Attribute: [" + attribute.name() + "] in [" + attribute.containingElement + "] with value[" + attribute.value() + "] didn't contain [" + expected + "]"))
       }
     }
 
-    override def textMatches(expected: String, element: CandidateElement) =
-      if (element.text().equals(expected)) {
+    override def textMatches(expected: String, element: CandidateElement) = {
+      if (element.text().contains(expected)) {
         None
       } else {
-        Some(Misfit(element.relevance, "Misfitting Text: The [" + element.text() + "] from [" + element.element + "] didn't equal [" + expected + "]"))
+        Some(Misfit(element.relevance, "Misfitting Text: The [" + element.text + "] from [" + element.element + "] didn't contain [" + expected + "]"))
       }
+    }
   }
 
 }
@@ -435,5 +441,3 @@ object MisfitHolder {
 
   def relevantMisfits() = misfits.filter(_.relevance == mostRelevant())
 }
-
-

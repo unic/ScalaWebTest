@@ -1046,7 +1046,7 @@ section .info {
 }
 
 .home {
-	background: transparent url("../images/neba-logo.png") no-repeat scroll center center;
+	background: transparent url("../images/scalawebtest-logo.png") no-repeat scroll center center;
 	border-right: none;
 	position: absolute;
 	left: 0;

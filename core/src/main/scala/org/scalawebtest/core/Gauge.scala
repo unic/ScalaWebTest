@@ -107,20 +107,37 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
     } else None
   }
 
-  private def textFits(textElement: DomNode, expectedText: String, previousSibling: Option[DomNode], misfitRelevance: Int): Boolean = {
+  private def textFits(nodeExpectedToContainText: DomNode, expectedText: String, previousSibling: Option[DomNode], misfitRelevance: Int): Boolean = {
     if (expectedText.isEmpty) {
       true
     }
     else {
       def elementFits: Boolean = {
-        Matcher.textMatches(expectedText, CandidateElement(misfitRelevance, textElement)) match {
-          case None => true
-          case Some(m) => MisfitHolder.addMisfit(m); false
+        def textElement = {
+          val children = nodeExpectedToContainText.getChildNodes.asScala.toList
+          val considerableNodes = previousSibling match {
+            case Some(p) => children.filter(p.before(_))
+            case None => children
+          }
+          considerableNodes.find(_.isInstanceOf[DomText])
+        }
+
+        textElement match {
+          case Some(e) => Matcher.textMatches(expectedText, CandidateElement(misfitRelevance, textElement.get)) match {
+            case None => true
+            case Some(m) => MisfitHolder.addMisfit(m); false
+          }
+          case None =>
+            previousSibling match {
+              case Some(p) => MisfitHolder.addMisfit(Misfit(misfitRelevance, "Misfitting element: element [" + nodeExpectedToContainText.prettyString() + "] did not contain a text element after [" + p.prettyString() + "]"))
+              case None => MisfitHolder.addMisfit(Misfit(misfitRelevance, "Misfitting element: element [" + nodeExpectedToContainText.prettyString() + "] did not contain a text"))
+            }
+            false
         }
       }
-
-      elementFits && textElementOrderCorrect(textElement, previousSibling, misfitRelevance)
+      elementFits
     }
+
   }
 
   private def findFittingNode(currentNode: DomNode, gaugeElement: Elem, previousSibling: Option[DomNode], misfitRelevance: Int): Option[DomNode] = {
@@ -142,7 +159,8 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
       var attributeMisfitRelevance = misfitRelevance
 
       //verify if the current candidate matches all attribute expectations
-      for (defAttr <- definitionAttributes; if matchesAllAttributes) {
+      for (defAttr <- definitionAttributes
+           if matchesAllAttributes) {
         val expectedKey = defAttr._1
         val expectedValue = defAttr._2.trim
 
@@ -185,14 +203,6 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
   private def elementOrderCorrect(current: DomNode, previousSibling: Option[DomNode], misfitRelevance: Int): Boolean = {
     if (previousSibling.isDefined && (current before previousSibling.get)) {
       MisfitHolder.addMisfit(misfitRelevance, "Misfitting Element Order: Wrong order of elements [" + current.prettyString() + "\n] was found before [" + previousSibling.get.prettyString() + "\n] but expected the other way")
-      false
-    }
-    else true
-  }
-
-  private def textElementOrderCorrect(current: DomNode, previousSibling: Option[DomNode], misfitRelevance: Int): Boolean = {
-    if (previousSibling.isDefined && !(current contains previousSibling.get)) {
-      MisfitHolder.addMisfit(misfitRelevance, "Misfitting Element Order: Wrong order of elements [" + current.prettyString() + "\n] should contain [" + previousSibling.get.prettyString() + "\n] but didn't")
       false
     }
     else true
@@ -251,17 +261,41 @@ object Gauge {
     * You may use the following refinements:
     *
     * ==Markers==
-    * =\u0040exact=
-    * The marker `\u0040exact` might be used in [[scala.xml.Text]] and attributes of [[scala.xml.Elem]] to request an exact match, i.e.
+    * =\u0040contains=
+    * The marker `\u0040contains` might be used in [[scala.xml.Text]] and attributes of [[scala.xml.Elem]] to request that the text or attribute contains the following text, i.e.
     *
     * {{{
-    * <form method="@exact POST"></form>
+    * <a href="@contains index">Home</a>
+    * }}}
+    *
+    * matches
+    *
+    * {{{
+    *   <a href="/index.html">Home</a>
+    * }}}
+    *
+    * but doens't match
+    *
+    * {{{
+    *   <a href="/home.html">Home</a>
     * }}}
     *
     * or
     *
     * {{{
-    * <p>@exact new NEBA version available</p>
+    * <p>@contains new NEBA version available</p>
+    * }}}
+    *
+    * matches
+    *
+    * {{{
+    *  <p>new NEBA version available since</p>
+    * }}}
+    *
+    * but doesn't match
+    *
+    * {{{
+    *  <p>new neba version available since</p>
     * }}}
     *
     * =\u0040regex=
@@ -271,11 +305,37 @@ object Gauge {
     * <a href="@regex http:\/\/[a-zA-Z]+\.domain.com.*,"></a>
     * }}}
     *
+    * matches
+    *
+    * {{{
+    *   < href="http://my.domain.com/index.html"></a>
+    * }}}
+    *
+    * but doesn't match
+    *
+    * {{{
+    *   < href="http://my.domain.org/index.html"></a>
+    * }}}
+    *
     * or
     *
     * {{{
     * <p>@regex new NEBA version [0-9.]+ available</p>
     * }}}
+    *
+    * matches
+    *
+    * {{{
+    *   <p>new NEBA Version 4.0.0 available</p>
+    * }}}
+    *
+    * but doesn't match
+    *
+    * {{{
+    *   <p>new NEBA Version 4.0.0-RC1 available</p>
+    * }}}
+    *
+    *
     */
   def fits(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver): Unit = {
     new Gauge(definition).fits()

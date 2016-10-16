@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html lang="en">
+{% include head.ext %}
+<body>
+{% include header.ext %}
+<!-- Main -->
+<div id="main">
+    <div class="container">
+        <div class="row">
+
+            <!-- Content -->
+            <div id="content" class="8u skel-cell-important">
+                {{content}}
+            </div>
+
+            <!-- Sidebar -->
+            <div id="sidebar" class="4u">
+                <section>
+                    <header>
+                        <h2>Related posts</h2>
+                    </header>
+                    <ul class="style">
+                        {% for post in site.posts %}
+                        <li>
+                            <p class="posted">{{post.date | date: "%B %d, %Y" }}</p>
+                            <p><a href="{{post.url}}">{{ post.title }}</a></p>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </section>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% include footer.ext %}
+<script src="/js/releasenotes.js" async="async"></script>
+</body>
+</html>

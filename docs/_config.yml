@@ -1,6 +1,6 @@
 github: [Repository metadata]
 markdown: kramdown
-url: http://www.scalawebtest.org
+baseurl: /ScalaWebTest
 scalaWebTestVersion: 1.0.0
 collections:
   - mainNavItems

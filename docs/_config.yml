@@ -1,5 +1,6 @@
 github: [Repository metadata]
 markdown: kramdown
+#also change prefix in init.js, when chaning the url
 url: https://unic.github.io/ScalaWebTest
 scalaWebTestVersion: 1.0.0
 collections:

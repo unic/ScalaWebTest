@@ -5,7 +5,7 @@
 */
 
 skel.init({
-	prefix: '{{site.url}}/css/style',
+	prefix: 'https://unic.github.io/ScalaWebTest/css/style',
 	resetCSS: true,
 	boxModel: 'border',
 	grid: {

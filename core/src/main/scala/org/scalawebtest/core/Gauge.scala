@@ -327,7 +327,7 @@ object Matcher {
   def attributeMatches(expectedValue: String, attribute: CandidateAttribute) = {
     val matcher = attributeMatchers.find(m => expectedValue.startsWith(m.marker))
     matcher match {
-      case None => Some(noMatcherFoundMisfit(attribute.relevance, expectedValue, textMatchers))
+      case None => Some(noMatcherFoundMisfit(attribute.relevance, expectedValue, attributeMatchers))
       case Some(m) => m.attributeMatches(expectedValue.stripPrefix(m.marker), attribute)
     }
   }

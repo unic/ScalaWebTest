@@ -29,7 +29,7 @@ class JsonSpec extends ScalaWebTestBaseSpec {
     model.name should equal("Dijkstra")
   }
   it should "have the correct theories" in {
-    model.theories should contain ("graph theory")
+    model.theories should contain("graph theory")
   }
   it should "have the correct university names" in {
     model.universityNames should contain allOf(
@@ -45,7 +45,10 @@ class Scientist(implicit webDriver: WebDriver) {
   def json = Json.parse(webDriver.getPageSource)
 
   def firstName = (json \ "firstName").as[String]
+
   def name = (json \ "name").as[String]
+
   def theories = (json \ "theories").as[List[String]]
+
   def universityNames = (json \ "universities" \\ "name").map(_.as[String])
 }

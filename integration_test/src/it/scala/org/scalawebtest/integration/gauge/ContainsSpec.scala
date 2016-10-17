@@ -14,30 +14,31 @@
  */
 package org.scalawebtest.integration.gauge
 
-import org.scalawebtest.core.Gauge._
+import org.scalawebtest.core.gauge.Gauge.fits
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
 class ContainsSpec extends ScalaWebTestBaseSpec {
-  {
-    "Contains" should "loosely match attributes" in {
-      navigateTo("/navigation.jsp")
-
-      fits(<nav>
+  "Contains" should "loosely match attributes" in {
+    navigateTo("/navigation.jsp")
+    fits(
+      <nav>
         <ul>
           <li>
-            <a href="@contains first">first navigation element</a>
+            <a href="first">first navigation element</a>
           </li>
         </ul>
-      </nav>)
-    }
-    it should "loosely match text" in {
-      fits(<nav>
+      </nav>
+    )
+  }
+  it should "loosely match text" in {
+    fits(
+      <nav>
         <ul>
           <li>
-            <a href="/path/to/first/element">@contains navigation</a>
+            <a href="/path/to/first/element">navigation</a>
           </li>
         </ul>
-      </nav>)
-    }
+      </nav>
+    )
   }
 }

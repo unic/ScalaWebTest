@@ -12,20 +12,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.scalawebtest.integration
+package org.scalawebtest.core.gauge
 
-import org.scalatest.concurrent.PatienceConfiguration.Timeout
-import org.scalatest.time.SpanSugar._
-import org.scalawebtest.aem.AemTweaks
-import org.scalawebtest.core.{FormBasedLogin, IntegrationFlatSpec}
+case class Misfit(relevance: Int, reason: String)
 
-import scala.language.postfixOps
+class MisfitHolder {
+  var misfits: List[Misfit] = Nil
 
-trait ScalaWebTestBaseSpec extends IntegrationFlatSpec with AemTweaks with FormBasedLogin {
-  override val host = "http://localhost:8080"
-  override val loginPath = "/fakeLogin.jsp"
+  def addMisfit(relevance: Int, reason: String): Unit = {
+    misfits = Misfit(relevance, reason) :: misfits
+  }
 
-  override val projectRoot = "/"
+  def addMisfit(misfit: Misfit): Unit = {
+    misfits = misfit :: misfits
+  }
 
-  override def loginTimeout = Timeout(5 seconds)
+  def mostRelevant() = misfits.map(_.relevance).max
+
+  def relevantMisfits() = misfits.filter(_.relevance == mostRelevant())
 }

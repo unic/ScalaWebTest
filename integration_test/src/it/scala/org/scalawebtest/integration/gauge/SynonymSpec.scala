@@ -14,7 +14,7 @@
  */
 package org.scalawebtest.integration.gauge
 
-import org.scalawebtest.core.Gauge.{NotFit, doesnt, fit, fits}
+import org.scalawebtest.core.gauge.Gauge.{NotFit, doesnt, fit, fits}
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
 class SynonymSpec extends ScalaWebTestBaseSpec {

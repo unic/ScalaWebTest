@@ -15,7 +15,7 @@
 package org.scalawebtest.integration.js
 
 import org.scalatest.time.{Seconds, Span}
-import org.scalawebtest.core.Gauge.fits
+import org.scalawebtest.core.gauge.Gauge.fits
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
 class AjaxSpec extends ScalaWebTestBaseSpec {
@@ -37,5 +37,4 @@ class AjaxSpec extends ScalaWebTestBaseSpec {
   def container = {
     find(cssSelector("div#container")).get
   }
-
 }

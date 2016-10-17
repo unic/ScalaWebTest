@@ -14,30 +14,31 @@
  */
 package org.scalawebtest.integration.gauge
 
-import org.scalawebtest.core.Gauge._
+import org.scalawebtest.core.gauge.Gauge._
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
 class ExactSpec extends ScalaWebTestBaseSpec {
-  {
-    "The default matcher" should "exactly match attributes" in {
-      navigateTo("/navigation.jsp")
-
-      fits(<nav>
+  "The default matcher" should "exactly match attributes" in {
+    navigateTo("/navigation.jsp")
+    fits(
+      <nav>
         <ul>
           <li>
             <a href="/path/to/first/element">first navigation element</a>
           </li>
         </ul>
-      </nav>)
-    }
-    it should "exactly match text" in {
-      fits(<nav>
+      </nav>
+    )
+  }
+  it should "exactly match text" in {
+    fits(
+      <nav>
         <ul>
           <li>
             <a href="/path/to/first/element">first navigation element</a>
           </li>
         </ul>
-      </nav>)
-    }
+      </nav>
+    )
   }
 }

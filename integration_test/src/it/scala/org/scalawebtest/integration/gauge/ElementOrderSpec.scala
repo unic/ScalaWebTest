@@ -14,71 +14,82 @@
  */
 package org.scalawebtest.integration.gauge
 
-import org.scalawebtest.core.Gauge.{doesnt, fits}
+import org.scalawebtest.core.gauge.Gauge.{doesnt, fits}
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
 class ElementOrderSpec extends ScalaWebTestBaseSpec {
   "Text element order" should "have a correct main navigation" in {
     navigateTo("/textElementOrder.jsp")
-    fits(<div>
-      <p>
-        <a>link</a>
-        text-after-link
-      </p>
-    </div>)
+    fits(
+      <div>
+        <p>
+          <a>link</a>
+          text-after-link
+        </p>
+      </div>
+    )
   }
   it should "fit with text element before link" in {
-    fits(<div>
-      <p>text-before-link
-        <a>link</a>
-      </p>
-    </div>)
+    fits(
+      <div>
+        <p>text-before-link
+          <a>link</a>
+        </p>
+      </div>
+    )
   }
   it should "fit with text element after link" in {
-    fits(<div>
-      <p>text-before-link
-        <a>link</a>
-        text-after-link
-      </p>
-    </div>)
+    fits(
+      <div>
+        <p>text-before-link
+          <a>link</a>
+          text-after-link
+        </p>
+      </div>
+    )
   }
   it should "not fit with text-after-link before link in spec" in {
-    doesnt fit <div>
-      <p>text-after-link
-        <a>link</a>
-      </p>
-    </div>
+    doesnt fit
+      <div>
+        <p>text-after-link
+          <a>link</a>
+        </p>
+      </div>
   }
   it should "not fit with text-before-link after link in spec" in {
-    doesnt fit <div>
-      <p>
-        <a>link</a>
-        text-before-link
-      </p>
-    </div>
+    doesnt fit
+      <div>
+        <p>
+          <a>link</a>
+          text-before-link
+        </p>
+      </div>
   }
   it should "not fit with missing text element" in {
-    doesnt fit <div>
-      <p class="not-fitting-element-order">text-before-link
-        <a>link</a>
-        text-after-link
-      </p>
-    </div>
+    doesnt fit
+      <div>
+        <p class="not-fitting-element-order">text-before-link
+          <a>link</a>
+          text-after-link
+        </p>
+      </div>
   }
   it should "not fit with missing link or text before" in {
-    doesnt fit <div>
-      <p class="not-fitting-element-order missing-elements">
-        text
-        <a>link</a>
-      </p>
-    </div>
+    doesnt fit
+      <div>
+        <p class="not-fitting-element-order missing-elements">
+          text
+          <a>link</a>
+        </p>
+      </div>
   }
   it should "not fit with missing link or text after" in {
-    doesnt fit <div>
-      <p class="not-fitting-element-order missing-elements">
-        <a>link</a>
-        text
-      </p>
-    </div>
+    doesnt fit
+      <div>
+        <p class="not-fitting-element-order missing-elements">
+          <a>link</a>
+          text
+        </p>
+      </div>
   }
 }

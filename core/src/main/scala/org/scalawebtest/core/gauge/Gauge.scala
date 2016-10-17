@@ -12,11 +12,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.scalawebtest.core
+package org.scalawebtest.core.gauge
 
 import com.gargoylesoftware.htmlunit.html.{DomElement, DomNode, DomText}
 import org.scalatest.Assertions
 import org.scalatest.words.NotWord
+import org.scalawebtest.core.WebClientExposingDriver
 import org.w3c._
 
 import scala.collection.JavaConverters._
@@ -24,10 +25,10 @@ import scala.xml.{Elem, Node, NodeSeq, Text}
 
 /**
   * Gauge provides functions to write integration tests with very low effort. For a detailed description of it's usage,
-  * see [[org.scalawebtest.core.Gauge.fits]]
-  * and [[org.scalawebtest.core.Gauge.doesnt.fit]]
+  * see [[org.scalawebtest.core.gauge.Gauge.fits]]
+  * and [[org.scalawebtest.core.gauge.Gauge.doesnt.fit]]
   */
-class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) extends Assertions {
+class Gauge(definition: NodeSeq, misfitHolder: MisfitHolder)(implicit webDriver: WebClientExposingDriver) extends Assertions {
   val MISFIT_RELEVANCE_START_VALUE: Int = 0
 
   def fits(): Unit = {
@@ -125,19 +126,18 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
         textElement match {
           case Some(e) => Matcher.textMatches(expectedText, CandidateElement(misfitRelevance, textElement.get)) match {
             case None => true
-            case Some(m) => MisfitHolder.addMisfit(m); false
+            case Some(m) => misfitHolder.addMisfit(m); false
           }
           case None =>
             previousSibling match {
-              case Some(p) => MisfitHolder.addMisfit(Misfit(misfitRelevance, "Misfitting element: element [" + nodeExpectedToContainText.prettyString() + "] did not contain a text element after [" + p.prettyString() + "]"))
-              case None => MisfitHolder.addMisfit(Misfit(misfitRelevance, "Misfitting element: element [" + nodeExpectedToContainText.prettyString() + "] did not contain a text"))
+              case Some(p) => misfitHolder.addMisfit(Misfit(misfitRelevance, "Misfitting element: element [" + nodeExpectedToContainText.prettyString() + "] did not contain a text element after [" + p.prettyString() + "]"))
+              case None => misfitHolder.addMisfit(Misfit(misfitRelevance, "Misfitting element: element [" + nodeExpectedToContainText.prettyString() + "] did not contain a text"))
             }
             false
         }
       }
       elementFits
     }
-
   }
 
   private def findFittingNode(currentNode: DomNode, gaugeElement: Elem, previousSibling: Option[DomNode], misfitRelevance: Int): Option[DomNode] = {
@@ -148,7 +148,7 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
     var fittingNode: Option[DomNode] = None
 
     if (!candidatesIt.hasNext) {
-      MisfitHolder.addMisfit(misfitRelevance, "Misfitting Element: No element matching cssSelector [" + cssSelector + "] found below " + currentNode.prettyString)
+      misfitHolder.addMisfit(misfitRelevance, "Misfitting Element: No element matching cssSelector [" + cssSelector + "] found below " + currentNode.prettyString)
     }
     //test all candidate elements, whether they match given attribute expectations
     while (fittingNode.isEmpty && candidatesIt.hasNext) {
@@ -170,17 +170,17 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
           def matchesAttribute(): Boolean = {
             val attributes: dom.NamedNodeMap = candidate.getAttributes
             if (attributes == null) {
-              MisfitHolder.addMisfit(attributeMisfitRelevance, "Misfitting Element: element [" + candidate.prettyString() + "] does not have any attributes, but attribute [" + defAttr + "] expected")
+              misfitHolder.addMisfit(attributeMisfitRelevance, "Misfitting Element: element [" + candidate.prettyString() + "] does not have any attributes, but attribute [" + defAttr + "] expected")
               return false
             }
             val attr: dom.Node = attributes.getNamedItem(expectedKey)
             if (attr == null) {
-              MisfitHolder.addMisfit(attributeMisfitRelevance, "Misfitting Element: element [" + candidate.prettyString() + "] does not have the expected attribute [" + defAttr + "]")
+              misfitHolder.addMisfit(attributeMisfitRelevance, "Misfitting Element: element [" + candidate.prettyString() + "] does not have the expected attribute [" + defAttr + "]")
               return false
             }
             Matcher.attributeMatches(expectedValue, CandidateAttribute(attributeMisfitRelevance, candidate, attr)) match {
               case None => true
-              case Some(m) => MisfitHolder.addMisfit(m); false
+              case Some(m) => misfitHolder.addMisfit(m); false
             }
           }
           matchesAllAttributes &= matchesAttribute()
@@ -196,13 +196,13 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
   }
 
   private def failAndReportMisfit() = {
-    val relevantMisfitsReason = MisfitHolder.relevantMisfits().reverse.map(_.reason).mkString("\n")
+    val relevantMisfitsReason = misfitHolder.relevantMisfits().reverse.map(_.reason).mkString("\n")
     fail(relevantMisfitsReason + "\nCurrent document does not match provided checking gauge:\n" + definition.toString)
   }
 
   private def elementOrderCorrect(current: DomNode, previousSibling: Option[DomNode], misfitRelevance: Int): Boolean = {
     if (previousSibling.isDefined && (current before previousSibling.get)) {
-      MisfitHolder.addMisfit(misfitRelevance, "Misfitting Element Order: Wrong order of elements [" + current.prettyString() + "\n] was found before [" + previousSibling.get.prettyString() + "\n] but expected the other way")
+      misfitHolder.addMisfit(misfitRelevance, "Misfitting Element Order: Wrong order of elements [" + current.prettyString() + "\n] was found before [" + previousSibling.get.prettyString() + "\n] but expected the other way")
       false
     }
     else true
@@ -338,7 +338,7 @@ object Gauge {
     *
     */
   def fits(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver): Unit = {
-    new Gauge(definition).fits()
+    new Gauge(definition, new MisfitHolder).fits()
   }
 
   /**
@@ -360,144 +360,8 @@ object Gauge {
       * To get detailed information about available options in `Gauge` definitions, read the ScalaDoc of [[Gauge.fits]]
       */
     def fit(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver): Unit = {
-      new Gauge(definition).doesNotFit()
+      new Gauge(definition, new MisfitHolder).doesNotFit()
     }
   }
 
-}
-
-case class CandidateAttribute(relevance: Int, containingElement: DomNode, attribute: dom.Node) {
-  def value() = attribute.getNodeValue
-
-  def name() = attribute.getNodeName
-}
-
-case class CandidateElement(relevance: Int, element: DomNode) {
-  def text() = element.asText()
-}
-
-/**
-  * Verifies element text or attribute values with one of its PluggableMatchers.
-  */
-object Matcher {
-  //Warning! Order within this lists matters. The first Matcher with a valid marker will be used. The marker of the DefaultMatcher is always valid.
-  val textMatchers: List[TextMatcher] = ContainsMatcher :: RegexMatcher :: DefaultMatcher :: Nil
-  val attributeMatchers: List[AttributeMatcher] = ContainsMatcher :: RegexMatcher :: DefaultMatcher :: Nil
-
-  def attributeMatches(expectedValue: String, attribute: CandidateAttribute) = {
-    val matcher = attributeMatchers.find(m => expectedValue.startsWith(m.marker))
-    matcher match {
-      case None => Some(noMatcherFoundMisfit(attribute.relevance, expectedValue, attributeMatchers))
-      case Some(m) => m.attributeMatches(expectedValue.stripPrefix(m.marker), attribute)
-    }
-  }
-
-  def textMatches(expectedValue: String, element: CandidateElement) = {
-    val matcher = textMatchers.find(m => expectedValue.startsWith(m.marker))
-    matcher match {
-      case None => Some(noMatcherFoundMisfit(element.relevance, expectedValue, textMatchers))
-      case Some(m) => m.textMatches(expectedValue.stripPrefix(m.marker), element)
-    }
-  }
-
-  private def noMatcherFoundMisfit(relevance: Int, expectedValue: String, matchers: List[PluggableMatcher]): Misfit = {
-    Misfit(relevance, "No matcher found for checkingGauge definition [" + expectedValue + "]. None of the registered matchers [" + matchers + "] contained a matching marked [" + matchers.map(_.marker) + "]")
-  }
-
-  /**
-    * PlugableMatchers can be used to evaluate content of an element or attribute.
-    * They are triggered by a marked, such as "@regex ".
-    * To provide an additional matcher, extend a subclass of PlugableMatcher and add your matcher to the according matchers list in the Matcher object.
-    */
-  trait PluggableMatcher {
-    val marker: String
-  }
-
-  trait TextMatcher extends PluggableMatcher {
-    def textMatches(expected: String, element: CandidateElement): Option[Misfit]
-  }
-
-  trait AttributeMatcher extends PluggableMatcher {
-    def attributeMatches(expected: String, attribute: CandidateAttribute): Option[Misfit]
-  }
-
-  object DefaultMatcher extends TextMatcher with AttributeMatcher {
-    override val marker = ""
-
-    override def attributeMatches(expected: String, attribute: CandidateAttribute) = {
-      if (attribute.value().equals(expected)) {
-        None
-      } else {
-        Some(Misfit(attribute.relevance, "Misfitting Attribute: [" + attribute.name() + "] in [" + attribute.containingElement + "] with value[" + attribute.value() + "] didn't equal [" + expected + "]"))
-      }
-    }
-
-    override def textMatches(expected: String, element: CandidateElement) = {
-      if (element.text().trim().equals(expected)) {
-        None
-      } else {
-        Some(Misfit(element.relevance, "Misfitting Text: The [" + element.text() + "] from [" + element.element + "] didn't equal [" + expected + "]"))
-      }
-    }
-  }
-
-  object RegexMatcher extends TextMatcher with AttributeMatcher {
-    override val marker = "@regex "
-
-    override def attributeMatches(expected: String, attribute: CandidateAttribute) = {
-      if (attribute.value().matches(expected)) {
-        None
-      } else {
-        Some(Misfit(attribute.relevance, "Misfitting Attribute: [" + attribute.name() + "] in [" + attribute.containingElement + "] with value[" + attribute.value() + "] didn't match regex pattern [" + expected + "]"))
-      }
-    }
-
-    override def textMatches(expected: String, element: CandidateElement) = {
-      if (element.text().matches(expected)) {
-        None
-      } else {
-        Some(Misfit(element.relevance, "Misfitting Text: The [" + element.text() + "] from [" + element.element + "] didn't match regex pattern [" + expected + "]"))
-      }
-    }
-  }
-
-  object ContainsMatcher extends TextMatcher with AttributeMatcher {
-    override val marker = "@contains "
-
-    override def attributeMatches(expected: String, attribute: CandidateAttribute) = {
-      if (attribute.value().contains(expected)) {
-        None
-      }
-      else {
-        Some(Misfit(attribute.relevance, "Misfitting Attribute: [" + attribute.name() + "] in [" + attribute.containingElement + "] with value[" + attribute.value() + "] didn't contain [" + expected + "]"))
-      }
-    }
-
-    override def textMatches(expected: String, element: CandidateElement) = {
-      if (element.text().contains(expected)) {
-        None
-      } else {
-        Some(Misfit(element.relevance, "Misfitting Text: The [" + element.text + "] from [" + element.element + "] didn't contain [" + expected + "]"))
-      }
-    }
-  }
-
-}
-
-case class Misfit(relevance: Int, reason: String)
-
-object MisfitHolder {
-  var misfits: List[Misfit] = Nil
-
-  def addMisfit(relevance: Int, reason: String): Unit = {
-    misfits = Misfit(relevance, reason) :: misfits
-  }
-
-  def addMisfit(misfit: Misfit): Unit = {
-    misfits = misfit :: misfits
-  }
-
-  def mostRelevant() = misfits.map(_.relevance).max
-
-  def relevantMisfits() = misfits.filter(_.relevance == mostRelevant())
 }

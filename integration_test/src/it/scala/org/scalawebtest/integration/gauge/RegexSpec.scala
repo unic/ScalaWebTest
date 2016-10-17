@@ -14,30 +14,31 @@
  */
 package org.scalawebtest.integration.gauge
 
-import org.scalawebtest.core.Gauge._
+import org.scalawebtest.core.gauge.Gauge.fits
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
 class RegexSpec extends ScalaWebTestBaseSpec {
   "Regex" should "work for path matches" in {
     navigateTo("/navigation.jsp")
-
-    fits(<nav>
-      <ul>
-        <li>
-          <a href="@regex \/path\/to\/first\/element">first navigation element</a>
-        </li>
-      </ul>
-    </nav>)
+    fits(
+      <nav>
+        <ul>
+          <li>
+            <a href="@regex \/path\/to\/first\/element">first navigation element</a>
+          </li>
+        </ul>
+      </nav>
+    )
   }
   it should "work for text matches" in {
-    navigateTo("/navigation.jsp")
-
-    fits(<nav>
-      <ul>
-        <li>
-          <a href="/path/to/first/element">@regex first.* element</a>
-        </li>
-      </ul>
-    </nav>)
+    fits(
+      <nav>
+        <ul>
+          <li>
+            <a href="/path/to/first/element">@regex first.* element</a>
+          </li>
+        </ul>
+      </nav>
+    )
   }
 }

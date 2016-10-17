@@ -28,8 +28,9 @@ import scala.xml.{Elem, Node, NodeSeq, Text}
   * see [[org.scalawebtest.core.gauge.Gauge.fits]]
   * and [[org.scalawebtest.core.gauge.Gauge.doesnt.fit]]
   */
-class Gauge(definition: NodeSeq, misfitHolder: MisfitHolder)(implicit webDriver: WebClientExposingDriver) extends Assertions {
+class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) extends Assertions {
   val MISFIT_RELEVANCE_START_VALUE: Int = 0
+  val misfitHolder = new MisfitHolder
 
   def fits(): Unit = {
     var fittingNodes = List[DomNode]()
@@ -308,13 +309,13 @@ object Gauge {
     * matches
     *
     * {{{
-    *   < href="http://my.domain.com/index.html"></a>
+    *   <a href="http://my.domain.com/index.html"></a>
     * }}}
     *
     * but doesn't match
     *
     * {{{
-    *   < href="http://my.domain.org/index.html"></a>
+    *   <a href="http://my.domain.org/index.html"></a>
     * }}}
     *
     * or
@@ -338,7 +339,7 @@ object Gauge {
     *
     */
   def fits(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver): Unit = {
-    new Gauge(definition, new MisfitHolder).fits()
+    new Gauge(definition).fits()
   }
 
   /**
@@ -360,7 +361,7 @@ object Gauge {
       * To get detailed information about available options in `Gauge` definitions, read the ScalaDoc of [[Gauge.fits]]
       */
     def fit(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver): Unit = {
-      new Gauge(definition, new MisfitHolder).doesNotFit()
+      new Gauge(definition).doesNotFit()
     }
   }
 

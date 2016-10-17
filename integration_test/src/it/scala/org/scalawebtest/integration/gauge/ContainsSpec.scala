@@ -24,7 +24,7 @@ class ContainsSpec extends ScalaWebTestBaseSpec {
       <nav>
         <ul>
           <li>
-            <a href="first">first navigation element</a>
+            <a href="@contains first">first navigation element</a>
           </li>
         </ul>
       </nav>
@@ -35,7 +35,7 @@ class ContainsSpec extends ScalaWebTestBaseSpec {
       <nav>
         <ul>
           <li>
-            <a href="/path/to/first/element">navigation</a>
+            <a href="/path/to/first/element">@contains navigation</a>
           </li>
         </ul>
       </nav>

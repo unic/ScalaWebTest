@@ -1,6 +1,6 @@
 lazy val commonSettings = Seq(
   organization := "org.scalawebtest",
-  version := "0.0.1-SNAPSHOT",
+  version := "1.0.0",
   scalaVersion := "2.11.8",
   scalacOptions := Seq("-unchecked", "-deprecation")
 )
@@ -9,7 +9,7 @@ lazy val core = project
   .settings(commonSettings: _*)
   .settings(
     libraryDependencies ++= Seq(
-      "org.scalatest" % "scalatest_2.11" % "3.0.0",
+      "org.scalatest" %% "scalatest" % "3.0.0",
       "org.seleniumhq.selenium" % "selenium-java" % "2.53.1",
       "org.seleniumhq.selenium" % "selenium-htmlunit-driver" % "2.52.0",
       "org.slf4j" % "slf4j-api" % "1.7.20"
@@ -27,7 +27,7 @@ lazy val integration_test = project
   .settings(
     libraryDependencies ++= Seq(
       "javax.servlet" % "javax.servlet-api" % "3.0.1" % "provided",
-      "org.scalatest" % "scalatest_2.11" % "3.0.0" % "it",
+      "org.scalatest" %% "scalatest" % "3.0.0" % "it",
       "org.seleniumhq.selenium" % "selenium-java" % "2.53.1" % "it",
       "org.seleniumhq.selenium" % "selenium-htmlunit-driver" % "2.52.0" % "it",
       "org.slf4j" % "slf4j-api" % "1.7.20" % "it",

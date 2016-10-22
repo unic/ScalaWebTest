@@ -14,27 +14,44 @@
  */
 package org.scalawebtest.aem
 
-import org.openqa.selenium.Cookie
 import org.scalawebtest.aem.WcmMode._
-import org.scalawebtest.core.IntegrationSpec
+import org.scalawebtest.core.{Configuration, FormBasedLogin, IntegrationSpec, WebClientExposingDriver}
 
-trait AemTweaks { self: IntegrationSpec =>
+/**
+  * Extend this trait to inherit useful default configuration for AEM projects.
+  *
+  * In addition it allows for convenient selection of the wcmmode.
+  */
+trait AemTweaks {
+  self: IntegrationSpec with FormBasedLogin =>
+
+  override val config = new Configuration() with AemConfig
+  override val loginPath = "/libs/granite/core/content/login.html"
+
+  trait AemConfig {
+    self: Configuration =>
+    def setWcmMode(wcmMode: WcmMode) = configurations += "wcmMode" ->
+      ((webDriver: WebClientExposingDriver) => setWcmModeCookie(wcmMode))
+  }
+
+  private def setWcmModeCookie(mode: WcmMode) {
+    add cookie("wcmmode", mode.toString)
+  }
+
+  /**
+    * Fixture to set the wccmode for the given function call
+    */
   def withWcmMode[X](mode: WcmMode) = withWcmModeInternal(mode, _: X => Unit)
 
   private def withWcmModeInternal[X](mode: WcmMode, f: X => Unit): X => Unit = {
     x: X => {
-      setWcmMode(mode)
+      setWcmModeCookie(mode)
       try {
         f(x)
       } finally {
-        setWcmMode(DISABLED)
+        setWcmModeCookie(DISABLED)
       }
     }
   }
 
-  def setWcmMode(mode: WcmMode) {
-    prepareCookieContext()
-    val cookie = new Cookie("wcmmode", mode.toString)
-    webDriver.manage().addCookie(cookie)
-  }
 }

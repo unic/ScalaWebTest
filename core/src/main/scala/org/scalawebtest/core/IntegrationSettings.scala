@@ -18,7 +18,6 @@ package org.scalawebtest.core
  * Default settings
  */
 trait IntegrationSettings {
-  val host = "http://localhost:4502"
-
+  val host = "http://localhost:8080"
   val projectRoot = ""
 }

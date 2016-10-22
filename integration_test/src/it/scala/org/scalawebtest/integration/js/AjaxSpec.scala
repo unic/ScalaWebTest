@@ -19,8 +19,7 @@ import org.scalawebtest.core.gauge.Gauge.fits
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
 class AjaxSpec extends ScalaWebTestBaseSpec {
-  webDriver.setJavascriptEnabled(true)
-  webDriver.getOptions.setThrowExceptionOnScriptError(true)
+  config.enableJavaScript(throwOnError = true)
 
   "A simple webpage loading content with JS" should "be correctly interpreted by HtmlUnit" in {
     navigateTo("/simpleAjax.jsp")

@@ -19,34 +19,53 @@ import java.util.logging.Level
 import org.openqa.selenium.Cookie
 import org.scalatest._
 import org.scalatest.concurrent.Eventually
-import org.scalatest.concurrent.PatienceConfiguration.Timeout
 import org.scalatest.selenium.WebBrowser
-import org.scalatest.time.SpanSugar._
 import org.slf4j.LoggerFactory
 
 import scala.collection.mutable.ListBuffer
 import scala.language.postfixOps
 
-/**
-  * Base class for integration tests. Please extend this class, together with your extension of IntegrationSettings
-  */
-
 abstract class FlatSpecBehavior extends FlatSpec with Matchers with Inspectors
+
 abstract class FreeSpecBehavior extends FreeSpec with Matchers with Inspectors
 
 abstract class IntegrationFlatSpec extends FlatSpecBehavior with IntegrationSpec
+
 abstract class IntegrationFreeSpec extends FreeSpecBehavior with IntegrationSpec
 
+/**
+  * This is the base trait for integration specs. The recommended way is to create your own project specific trait, which extends
+  * IntegrationFlatSpec or IntegrationFreeSpec, depending on the ScalaTest style which you prefer.
+  *
+  * In you own implementation you will usually overwrite settings provided by the IntegrationSettings trait,
+  * adapted the default configuration available in loginConfig and config,
+  * and extend one of the Login traits if applicable.
+  */
 trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with BeforeAndAfterAll with WebClientExposingHtmlUnit with IntegrationSettings with Eventually {
-  val cookiesToBeDiscarded = new ListBuffer[Cookie]()
   val logger = LoggerFactory.getLogger("IntegrationSpec")
+  val cookiesToBeDiscarded = new ListBuffer[Cookie]()
+  /**
+    * Configuration applied before login.
+    * Cookies cannot be set in this configuration. The webDriver
+    * has to open a connection, before it can set cookies
+    */
+  val loginConfig = new Configuration
+  /**
+    * Configuration applied after login.
+    * Cookies may be added here.
+    */
+  val config = new Configuration
 
-  def loginTimeout = Timeout(60 seconds)
 
-  webDriver.setJavascriptEnabled(false)
-  webDriver.getOptions.setThrowExceptionOnScriptError(false)
-  webDriver.getOptions.setCssEnabled(false)
-
+  /**
+    * Override to encode your project specific login mechanism.
+    *
+    * Best practice is to create a trait which overrides the login function and extends the trait Login.
+    *
+    * For the following standard mechanisms an implementation is already available.
+    *  - fill login form with your credentials (use FormBasedLogin trait)
+    *  - use basic authentication (use BasicAuthLogin trait)
+    */
   def login() {}
 
   /**
@@ -59,27 +78,48 @@ trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with
     */
   def afterLogin() = {}
 
+  def applyConfiguration(config: Configuration): Unit = {
+    config.configurations.values.foreach(configFunction =>
+      try {
+        configFunction(webDriver)
+      }
+      catch {
+        case e: Exception => logger.error("The following error occurred while applying settings.", e)
+      })
+  }
+
+  def avoidLogSpam(): Unit = {
+    java.util.logging.Logger.getLogger("com.gargoylesoftware").setLevel(Level.OFF)
+    java.util.logging.Logger.getLogger("org.apache.commons.httpclient").setLevel(Level.OFF)
+    java.util.logging.Logger.getLogger("net.lightbody").setLevel(Level.OFF)
+  }
+
+  override def afterEach() {
+    cookiesToBeDiscarded.foreach(cookie => delete cookie cookie.getName)
+    cookiesToBeDiscarded.clear()
+  }
+
+  /**
+    * Overwrite beforeLogin() and afterLogin() for test-specific tasks
+    */
+  override def beforeAll() {
+    beforeLogin()
+    avoidLogSpam()
+    applyConfiguration(config)
+    login()
+    applyConfiguration(config)
+    afterLogin()
+  }
+
   /**
     * Sets a cookie for the current test. Any cookie set through this method
     * is discarded after a test.
     */
-  def setCookie(name: String, value: String) {
-    prepareCookieContext()
+  def setCookieForSingleTest(name: String, value: String) {
     val cookie: Cookie = new Cookie(name, value)
     webDriver.manage().addCookie(cookie)
+    add cookie (name, value)
     cookiesToBeDiscarded += cookie
-  }
-
-  def prepareCookieContext() {
-    // WebDriver needs to request a HTML page before cookies can be set, as cookies
-    // can only be set for a specific domain
-    if (pageSource isEmpty) {
-      withoutJavascript(withoutCss(webDriver.get))(s"$host/etc/packages.html")
-    }
-  }
-
-  def deleteCookie(name: String) = {
-    webDriver.manage().deleteCookieNamed(name)
   }
 
   /**
@@ -98,74 +138,4 @@ trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with
       go to targetUrl
     }
   }
-
-  def withoutFollowingRedirects[X](f: X => Unit): X => Unit = withFollowingRedirectsInternal(f, enableRedirects = false)
-
-  def withFollowingRedirects[X](f: X => Unit): X => Unit = withFollowingRedirectsInternal(f, enableRedirects = true)
-
-  private def withFollowingRedirectsInternal[X](f: (X) => Unit, enableRedirects: Boolean): (X) => Unit = {
-    x: X => {
-      val redirectionEnabled = webDriver.getOptions.isRedirectEnabled
-      webDriver.getOptions.setRedirectEnabled(enableRedirects)
-      try {
-        f(x)
-      } finally {
-        webDriver.getOptions.setRedirectEnabled(redirectionEnabled)
-      }
-    }
-  }
-
-  def withoutCss[X](f: X => Unit): X => Unit = withCssInternal(f, enableCss = false)
-
-  def withCss[X](f: X => Unit): X => Unit = withCssInternal(f, enableCss = true)
-
-  private def withCssInternal[X](f: (X) => Unit, enableCss: Boolean): (X) => Unit = {
-    x: X => {
-      val wasEnabled = webDriver.getOptions.isCssEnabled
-      webDriver.getOptions.setCssEnabled(enableCss)
-      try {
-        f(x)
-      } finally {
-        webDriver.getOptions.setCssEnabled(wasEnabled)
-      }
-    }
-  }
-
-  def withoutJavascript[X](f: X => Unit): X => Unit = withJavascript(f, enabled = false)
-
-  def withJavascript[X](f: X => Unit): X => Unit = withJavascript(f, enabled = true)
-
-  private def withJavascript[X](f: (X) => Unit, enabled: Boolean): (X) => Unit = {
-    x: X => {
-      val jsEnabled = webDriver.getOptions.isJavaScriptEnabled
-      webDriver.getOptions.setJavaScriptEnabled(enabled)
-      try {
-        f(x)
-      } finally {
-        webDriver.getOptions.setJavaScriptEnabled(jsEnabled)
-      }
-    }
-  }
-
-  override def afterEach() {
-    cookiesToBeDiscarded.foreach(cookie => webDriver.manage().deleteCookieNamed(cookie.getName))
-    cookiesToBeDiscarded.clear()
-  }
-
-  /**
-    * Overwrite beforeLogin() and afterLogin() for test-specific tasks
-    */
-  override def beforeAll() {
-    beforeLogin()
-    avoidLogSpam()
-    login()
-    afterLogin()
-  }
-
-  def avoidLogSpam() {
-    java.util.logging.Logger.getLogger("com.gargoylesoftware").setLevel(Level.OFF)
-    java.util.logging.Logger.getLogger("org.apache.commons.httpclient").setLevel(Level.OFF)
-    java.util.logging.Logger.getLogger("net.lightbody").setLevel(Level.OFF)
-  }
-
 }

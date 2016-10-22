@@ -14,36 +14,67 @@
  */
 package org.scalawebtest.core
 
+import javax.xml.bind.DatatypeConverter
+
+import org.scalatest.concurrent.PatienceConfiguration.Timeout
+import org.scalatest.time.SpanSugar._
+
+import scala.language.postfixOps
+
+/**
+  * Extend this trait when implementing you own login implementation,
+  * to assert identical username, password configuration across all implementations
+  */
 trait Login {
   val username = "admin"
   val password = "admin"
 }
 
-trait FormBasedLogin extends Login { self: IntegrationSpec =>
+/**
+  * Extend the FormBasedLogin trait to provide login information via web form before every request.
+  *
+  * The following configurations are available with this login:
+  *  - username
+  *  - password
+  *
+  *  - usernameFieldName
+  *  - passwordFieldName
+  *  - loginPath
+  *  - loginTimeout
+  */
+trait FormBasedLogin extends Login {
+  self: IntegrationSpec =>
   val username_fieldname = "j_username"
   val password_fieldname = "j_password"
 
-  val loginPath = "/libs/granite/core/content/login.html"
+  val loginPath = "/login"
+
+  def loginTimeout = Timeout(5 seconds)
 
   override def login() = {
-    withoutCss(withoutFollowingRedirects[Any](Any => {
-      eventually(loginTimeout)({
-        go to s"$host$loginPath"
-        click on username_fieldname
-        emailField(username_fieldname).value = username
-        click on password_fieldname
-        pwdField(password_fieldname).value = password
+    eventually(loginTimeout)({
+      go to s"$host$loginPath"
+      click on username_fieldname
+      emailField(username_fieldname).value = username
+      click on password_fieldname
+      pwdField(password_fieldname).value = password
 
-        submit()
-      })
-    }))(())
+      submit()
+    })
   }
 }
 
-trait BasicAuthLogin extends Login { self: IntegrationSpec =>
+/**
+  * Extend the BasicAuthLogin trait to provide credentials via basic authentication with every request.
+  *
+  * The following configurations are available with this login:
+  *  - username
+  *  - password
+  */
 
-}
+trait BasicAuthLogin extends Login {
+  self: IntegrationSpec =>
+  def base64Encode(value: String) = DatatypeConverter.printBase64Binary(value.getBytes())
 
-trait CookieBasedLogin extends Login { self: IntegrationSpec =>
-
+  webDriver.getClient.addRequestHeader("Authorization", "Basic " + base64Encode(username + ":" + password))
 }

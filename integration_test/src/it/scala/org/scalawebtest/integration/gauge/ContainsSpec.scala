@@ -18,8 +18,9 @@ import org.scalawebtest.core.gauge.Gauge.fits
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
 class ContainsSpec extends ScalaWebTestBaseSpec {
+  path = "/navigation.jsp"
+
   "Contains" should "loosely match attributes" in {
-    navigateTo("/navigation.jsp")
     fits(
       <nav>
         <ul>

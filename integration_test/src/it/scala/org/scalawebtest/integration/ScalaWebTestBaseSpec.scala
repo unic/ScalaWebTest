@@ -25,7 +25,7 @@ trait ScalaWebTestBaseSpec extends IntegrationFlatSpec with AemTweaks with FormB
   override val host = "http://localhost:8080"
   override val loginPath = "/fakeLogin.jsp"
 
-  override val projectRoot = "/"
+  override val projectRoot = ""
 
   override def loginTimeout = Timeout(5 seconds)
 }

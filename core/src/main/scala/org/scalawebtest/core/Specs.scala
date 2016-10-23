@@ -19,7 +19,7 @@ import java.util.logging.Level
 import org.openqa.selenium.Cookie
 import org.scalatest._
 import org.scalatest.concurrent.Eventually
-import org.scalatest.selenium.WebBrowser
+import org.scalatest.selenium.{Page, WebBrowser}
 import org.slf4j.LoggerFactory
 
 import scala.collection.mutable.ListBuffer
@@ -29,7 +29,22 @@ abstract class FlatSpecBehavior extends FlatSpec with Matchers with Inspectors
 
 abstract class FreeSpecBehavior extends FreeSpec with Matchers with Inspectors
 
-abstract class IntegrationFlatSpec extends FlatSpecBehavior with IntegrationSpec
+abstract class IntegrationFlatSpec extends FlatSpecBehavior with IntegrationSpec {
+  /**
+    * As the IntegrationSpec will "go to" the defined url, as part of [[BeforeAndAfterEach.beforeEach()]], changing the path
+    * within the test is too late. To change the path for a test and all its successors, you can use afterChangingPathTo in between tests,
+    * providing the new path as parameter.
+    */
+  def afterChangingPathTo(newPath: String): Unit = {
+    val timesChanged = pathChangeCounter.getOrElse(path, 0)
+    //calculate a postfix to make the test name unique
+    val postfix = "_" * timesChanged
+    registerTest("change path to " + newPath + " " + postfix)(path = newPath)
+    pathChangeCounter += newPath -> (timesChanged + 1)
+  }
+
+  var pathChangeCounter: Map[String, Int] = Map()
+}
 
 abstract class IntegrationFreeSpec extends FreeSpecBehavior with IntegrationSpec
 
@@ -56,6 +71,18 @@ trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with
     */
   val config = new Configuration
 
+  /**
+    * Stores the path with prefixed [[IntegrationSettings.host]] and [[IntegrationSpec.projectRoot]] as url.
+    * Before each test [[WebBrowser.goTo()]] with the currently stored url will be executed, but only
+    * if [[WebClientExposingDriver.getCurrentUrl]] doesn't equal url.
+    */
+  def path_=(path: String): Unit = {
+    url = s"$host$projectRoot$path"
+  }
+
+  def path = url.replaceFirst(host, "").replaceFirst(projectRoot, "")
+
+  private var url: String = ""
 
   /**
     * Override to encode your project specific login mechanism.
@@ -94,7 +121,7 @@ trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with
     java.util.logging.Logger.getLogger("net.lightbody").setLevel(Level.OFF)
   }
 
-  override def afterEach() {
+  override def afterEach(): Unit = {
     cookiesToBeDiscarded.foreach(cookie => delete cookie cookie.getName)
     cookiesToBeDiscarded.clear()
   }
@@ -102,13 +129,17 @@ trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with
   /**
     * Overwrite beforeLogin() and afterLogin() for test-specific tasks
     */
-  override def beforeAll() {
+  override def beforeAll(): Unit = {
     beforeLogin()
     avoidLogSpam()
     applyConfiguration(config)
     login()
     applyConfiguration(config)
     afterLogin()
+  }
+
+  override def beforeEach(): Unit = {
+    navigateToUrl(url)
   }
 
   /**
@@ -118,7 +149,7 @@ trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with
   def setCookieForSingleTest(name: String, value: String) {
     val cookie: Cookie = new Cookie(name, value)
     webDriver.manage().addCookie(cookie)
-    add cookie (name, value)
+    add cookie(name, value)
     cookiesToBeDiscarded += cookie
   }
 
@@ -131,11 +162,25 @@ trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with
     afterLogin()
   }
 
-  def navigateTo(path: String) {
-    val targetUrl: String = s"$host$path"
+  /**
+    * To navigate to a path during. For most case calling the setter on path is a better solution.
+    * Only use this function, if you have to change the path during a test.
+    * For all other cases use "path = \"/xyz\"" or afterChangingPathTo("xyz")
+    *
+    * Please be aware that having to change the path during a test is usually a sign, that your test
+    * tests multiple things. Try to focus on one thing per test.
+    */
+  def navigateTo(path: String): Unit = {
+    navigateToUrl(s"$host$projectRoot$path")
+  }
+
+  private def navigateToUrl(targetUrl: String): Unit = {
     if (pageSource == null || !(targetUrl equals webDriver.getCurrentUrl)) {
       logger.info("Going to " + targetUrl)
       go to targetUrl
+    } else {
+      logger.info("Remaining at " + targetUrl + " without refreshing page")
     }
   }
+
 }

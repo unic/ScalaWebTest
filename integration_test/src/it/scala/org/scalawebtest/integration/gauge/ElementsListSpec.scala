@@ -18,8 +18,9 @@ import org.scalawebtest.core.gauge.Gauge.fits
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
 class ElementsListSpec extends ScalaWebTestBaseSpec {
+  path = "/elementsList.jsp"
+
   "List" should "contain three items" in {
-    navigateTo("/elementsList.jsp")
     fits(
       <ul>
         <li class="list_item"/>

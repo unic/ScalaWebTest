@@ -18,8 +18,9 @@ import org.scalawebtest.core.gauge.Gauge.{doesnt, fits}
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
 class ElementOrderSpec extends ScalaWebTestBaseSpec {
+  path = "/textElementOrder.jsp"
+
   "Text element order" should "have a correct main navigation" in {
-    navigateTo("/textElementOrder.jsp")
     fits(
       <div>
         <p>

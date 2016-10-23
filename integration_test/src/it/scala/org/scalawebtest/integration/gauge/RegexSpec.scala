@@ -18,8 +18,9 @@ import org.scalawebtest.core.gauge.Gauge.fits
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
 class RegexSpec extends ScalaWebTestBaseSpec {
+  path = "/navigation.jsp"
+
   "Regex" should "work for path matches" in {
-    navigateTo("/navigation.jsp")
     fits(
       <nav>
         <ul>

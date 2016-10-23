@@ -18,8 +18,8 @@ import org.scalawebtest.core.gauge.Gauge._
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
 class ExactSpec extends ScalaWebTestBaseSpec {
+  path = "/navigation.jsp"
   "The default matcher" should "exactly match attributes" in {
-    navigateTo("/navigation.jsp")
     fits(
       <nav>
         <ul>

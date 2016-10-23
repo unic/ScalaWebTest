@@ -19,10 +19,10 @@ import org.scalawebtest.core.gauge.Gauge.fits
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
 class AjaxSpec extends ScalaWebTestBaseSpec {
+  path = "/simpleAjax.jsp"
   config.enableJavaScript(throwOnError = true)
 
   "A simple webpage loading content with JS" should "be correctly interpreted by HtmlUnit" in {
-    navigateTo("/simpleAjax.jsp")
     eventually(timeout(Span(1, Seconds))) {
       container.text should include("Text loaded with JavaScript")
     }

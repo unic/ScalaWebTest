@@ -19,10 +19,10 @@ import org.scalawebtest.integration.ScalaWebTestBaseSpec
 import play.api.libs.json.Json
 
 class JsonSpec extends ScalaWebTestBaseSpec {
+  path = "/jsonResponse.json.jsp"
   val model = new Scientist
 
   "A computer scientist" should "have the correct firstname" in {
-    navigateTo("/jsonResponse.json.jsp")
     model.firstName should equal("Edsger")
   }
   it should "have the correct lastname" in {
@@ -39,16 +39,15 @@ class JsonSpec extends ScalaWebTestBaseSpec {
       "University of Texas at Austin"
       )
   }
+
+  class Scientist(implicit webDriver: WebDriver) {
+    def json = Json.parse(webDriver.getPageSource)
+    def firstName = (json \ "firstName").as[String]
+    def name = (json \ "name").as[String]
+    def theories = (json \ "theories").as[List[String]]
+    def universityNames = (json \ "universities" \\ "name").map(_.as[String])
+  }
+
 }
 
-class Scientist(implicit webDriver: WebDriver) {
-  def json = Json.parse(webDriver.getPageSource)
 
-  def firstName = (json \ "firstName").as[String]
-
-  def name = (json \ "name").as[String]
-
-  def theories = (json \ "theories").as[List[String]]
-
-  def universityNames = (json \ "universities" \\ "name").map(_.as[String])
-}

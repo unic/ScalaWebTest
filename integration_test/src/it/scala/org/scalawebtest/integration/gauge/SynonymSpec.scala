@@ -18,8 +18,9 @@ import org.scalawebtest.core.gauge.Gauge.{NotFit, doesnt, fit, fits}
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
 class SynonymSpec extends ScalaWebTestBaseSpec {
+  path = "/index.jsp"
+
   "CheckingGauge" should "work with fits" in {
-    navigateTo("/index.jsp")
     fits(<h1>Unic AEM Testing - Mock Server</h1>)
   }
   it should "work with fit (synonym of fits)" in {

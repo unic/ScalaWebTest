@@ -17,8 +17,9 @@ package org.scalawebtest.integration.json
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
 class TrivialJsonSpec extends ScalaWebTestBaseSpec {
+  path = "/jsonResponse.json.jsp"
+
   "A computer scientist" should "have a firstname" in {
-    navigateTo("/jsonResponse.json.jsp")
     webDriver.getPageSource should include("Edsger")
   }
 }

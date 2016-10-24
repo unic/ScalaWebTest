@@ -15,7 +15,7 @@
 package org.scalawebtest.aem
 
 import org.scalawebtest.aem.WcmMode._
-import org.scalawebtest.core.{Configuration, FormBasedLogin, IntegrationSpec, WebClientExposingDriver}
+import org.scalawebtest.core._
 
 /**
   * Extend this trait to inherit useful default configuration for AEM projects.
@@ -29,7 +29,7 @@ trait AemTweaks {
   override val loginPath = "/libs/granite/core/content/login.html"
 
   trait AemConfig {
-    self: Configuration =>
+    self: BaseConfiguration =>
     def setWcmMode(wcmMode: WcmMode) = configurations += "wcmMode" ->
       ((webDriver: WebClientExposingDriver) => setWcmModeCookie(wcmMode))
   }

@@ -19,7 +19,7 @@ import java.util.logging.Level
 import org.openqa.selenium.Cookie
 import org.scalatest._
 import org.scalatest.concurrent.Eventually
-import org.scalatest.selenium.{Page, WebBrowser}
+import org.scalatest.selenium.WebBrowser
 import org.slf4j.LoggerFactory
 
 import scala.collection.mutable.ListBuffer
@@ -29,22 +29,7 @@ abstract class FlatSpecBehavior extends FlatSpec with Matchers with Inspectors
 
 abstract class FreeSpecBehavior extends FreeSpec with Matchers with Inspectors
 
-abstract class IntegrationFlatSpec extends FlatSpecBehavior with IntegrationSpec {
-  /**
-    * As the IntegrationSpec will "go to" the defined url, as part of [[BeforeAndAfterEach.beforeEach()]], changing the path
-    * within the test is too late. To change the path for a test and all its successors, you can use afterChangingPathTo in between tests,
-    * providing the new path as parameter.
-    */
-  def afterChangingPathTo(newPath: String): Unit = {
-    val timesChanged = pathChangeCounter.getOrElse(path, 0)
-    //calculate a postfix to make the test name unique
-    val postfix = "_" * timesChanged
-    registerTest("change path to " + newPath + " " + postfix)(path = newPath)
-    pathChangeCounter += newPath -> (timesChanged + 1)
-  }
-
-  var pathChangeCounter: Map[String, Int] = Map()
-}
+abstract class IntegrationFlatSpec extends FlatSpecBehavior with IntegrationSpec
 
 abstract class IntegrationFreeSpec extends FreeSpecBehavior with IntegrationSpec
 
@@ -64,7 +49,7 @@ trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with
     * Cookies cannot be set in this configuration. The webDriver
     * has to open a connection, before it can set cookies
     */
-  val loginConfig = new Configuration
+  val loginConfig = new LoginConfiguration
   /**
     * Configuration applied after login.
     * Cookies may be added here.
@@ -105,7 +90,7 @@ trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with
     */
   def afterLogin() = {}
 
-  def applyConfiguration(config: Configuration): Unit = {
+  def applyConfiguration(config: BaseConfiguration): Unit = {
     config.configurations.values.foreach(configFunction =>
       try {
         configFunction(webDriver)
@@ -139,7 +124,9 @@ trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with
   }
 
   override def beforeEach(): Unit = {
-    navigateToUrl(url)
+    if (config.navigateToEnabled) {
+      navigateToUrl(url)
+    }
   }
 
   /**
@@ -164,18 +151,20 @@ trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with
 
   /**
     * To navigate to a path during. For most case calling the setter on path is a better solution.
-    * Only use this function, if you have to change the path during a test.
-    * For all other cases use "path = \"/xyz\"" or afterChangingPathTo("xyz")
-    *
-    * Please be aware that having to change the path during a test is usually a sign, that your test
-    * tests multiple things. Try to focus on one thing per test.
+    * Only use this function, if you group tests, which work on different paths/urls. As soon as you
+    * introduce navigateTo for one test, you should call it in all succeeding tests. This to make sure,
+    * that a test may be executed on its own.
     */
-  def navigateTo(path: String): Unit = {
+  def navigateTo(newPath: String): Unit = {
+    path = newPath
     navigateToUrl(s"$host$projectRoot$path")
   }
 
   private def navigateToUrl(targetUrl: String): Unit = {
-    if (pageSource == null || !(targetUrl equals webDriver.getCurrentUrl)) {
+    if (targetUrl.isEmpty) {
+      throw new RuntimeException("NavigateTo was called without path being defined. Either set config.disableNavigateTo or define path")
+    }
+    if (pageSource == null || !(targetUrl equals webDriver.getCurrentUrl) || config.navigateToEnforced) {
       logger.info("Going to " + targetUrl)
       go to targetUrl
     } else {

@@ -11,8 +11,9 @@ class AemTweaksSpec extends ScalaWebTestBaseSpec with AemTweaks {
   config.enableJavaScript(throwOnError = true)
   config.setWcmMode(DISABLED)
 
+  path = "/cookieVisualizing.jsp"
+
   "When wcmmode DISABLED is select webBrowser" should "send the according cookie" in {
-    navigateTo("/cookieVisualizing.jsp")
     implicitlyWait(Span(1, Seconds))
     eventually(timeout(Span(1, Seconds))) {
       fit(<li>@contains wcmmode</li>)

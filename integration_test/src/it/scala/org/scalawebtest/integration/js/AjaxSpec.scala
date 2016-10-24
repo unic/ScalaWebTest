@@ -23,12 +23,12 @@ class AjaxSpec extends ScalaWebTestBaseSpec {
   config.enableJavaScript(throwOnError = true)
 
   "A simple webpage loading content with JS" should "be correctly interpreted by HtmlUnit" in {
-    eventually(timeout(1 second)) {
+    eventually(timeout(3 seconds)) {
       container.text should include("Text loaded with JavaScript")
     }
   }
   it should "work with CheckingGauge" in {
-    eventually(timeout(1 second)) {
+    eventually(timeout(3 seconds)) {
       fits(<div id="container">Text loaded with JavaScript</div>)
     }
   }

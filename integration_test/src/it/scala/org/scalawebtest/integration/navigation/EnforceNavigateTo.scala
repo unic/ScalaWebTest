@@ -9,7 +9,7 @@ class EnforceNavigateTo extends ScalaWebTestBaseSpec{
   config.enforceNavigateTo()
 
   "A simple webpage loading content with JS" should "be correctly interpreted by HtmlUnit" in {
-    eventually(timeout(1 second)) {
+    eventually(timeout(3 seconds)) {
       container.text should include("Text loaded with JavaScript")
     }
   }

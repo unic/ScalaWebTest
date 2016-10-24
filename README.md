@@ -59,7 +59,7 @@ you can user our bill of materials. This is recommended.
 The release process of ScalaWebTest is currently done manually. The process is done as follows:
 
 1. Switch the version in `build.sbt` to that which is to be released (e.g. from `0.0.1-SNAPSHOT` to `1.0.0`)
-2. Commit your changes with the commit message "Release x.x.x" (e.g. `Release 1.0.0`)
+2. Commit and push your changes with the commit message "Release x.x.x" (e.g. `Release 1.0.0`)
 3. In your command line type in the following:
 	1. the fast way:
 		1. `sbt clean compile`
@@ -68,7 +68,7 @@ The release process of ScalaWebTest is currently done manually. The process is d
 		1. `sbt` - enters the sbt interactive mode
 		2. `clean` - deletes all generated files (target)
 		3. `compile` - compiles the main sources
-		4. `inttest` - compiles the integration test sources
+		4. `inttest` - compiles and run the integration tests
 		5. `publishLocal` - creates all of the below plus the poms
 			1. `package` - creates jars
 			2. `packageDoc` - creates javadoc jars

@@ -1,6 +1,6 @@
 lazy val commonSettings = Seq(
   organization := "org.scalawebtest",
-  version := "1.0.1-SNAPSHOT",
+  version := "1.0.1",
   scalaVersion := "2.11.8",
   scalacOptions := Seq("-unchecked", "-deprecation")
 )

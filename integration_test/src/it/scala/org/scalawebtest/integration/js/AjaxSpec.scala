@@ -14,7 +14,7 @@
  */
 package org.scalawebtest.integration.js
 
-import org.scalatest.time.{Seconds, Span}
+import org.scalatest.time.SpanSugar._
 import org.scalawebtest.core.gauge.Gauge.fits
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
@@ -23,12 +23,12 @@ class AjaxSpec extends ScalaWebTestBaseSpec {
   config.enableJavaScript(throwOnError = true)
 
   "A simple webpage loading content with JS" should "be correctly interpreted by HtmlUnit" in {
-    eventually(timeout(Span(1, Seconds))) {
+    eventually(timeout(1 second)) {
       container.text should include("Text loaded with JavaScript")
     }
   }
   it should "work with CheckingGauge" in {
-    eventually(timeout(Span(1, Seconds))) {
+    eventually(timeout(1 second)) {
       fits(<div id="container">Text loaded with JavaScript</div>)
     }
   }

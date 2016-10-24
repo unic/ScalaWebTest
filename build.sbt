@@ -1,6 +1,6 @@
 lazy val commonSettings = Seq(
   organization := "org.scalawebtest",
-  version := "1.0.2",
+  version := "1.0.3-SNAPSHOT",
   scalaVersion := "2.11.8",
   scalacOptions := Seq("-unchecked", "-deprecation"),
   publishMavenStyle := true,

@@ -1,6 +1,6 @@
 lazy val commonSettings = Seq(
   organization := "org.scalawebtest",
-  version := "1.0.3-SNAPSHOT",
+  version := "1.0.2",
   scalaVersion := "2.11.8",
   scalacOptions := Seq("-unchecked", "-deprecation"),
   publishMavenStyle := true,
@@ -65,15 +65,7 @@ lazy val bom = project
     publishArtifact in(Compile, packageDoc) := false,
     publishArtifact in(Compile, packageSrc) := false)
   .settings(
-    pomExtra := (
-      <licenses>
-        <license>
-          <name>The Apache Software License, Version 2.0</name>
-          <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-          <distribution>repo</distribution>
-        </license>
-      </licenses>
-
+  pomExtra := pomExtra.value ++ (
         <dependencyManagement>
           <dependencyManagementDependencies>
             <dependency>

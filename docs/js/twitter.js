@@ -55,7 +55,13 @@
         });
 
         var provider = new Provider({
-            source: "https://cdn.syndication.twimg.com/widgets/timelines/" + widgetId + "?lang=en&t=1560138&callback=loadTweets[" + (loadTweets.length - 1) + "]&suppress_response_codes=true"
+            //old style calls
+            //source: "https://cdn.syndication.twimg.com/widgets/timelines/" + widgetId + "?lang=en&t=1560138&callback=loadTweets[" + (loadTweets.length - 1) + "]&suppress_response_codes=true"
+            //source: "https://cdn.syndication.twimg.com/timeline/profile?callback=__twttr.callbacks.tl_i0_profile_scalawebtest_old&dnt=false&domain=localhost%3A63342&lang=en&screen_name=scalawebtest&suppress_response_codes=true&t=1641760&with_replies=false"
+            //stripped parameters
+            //&domain=localhost%3A63342
+           //&t=1641760
+            source: "https://cdn.syndication.twimg.com/timeline/profile?callback=__twttr.callbacks.tl_i0_profile_scalawebtest_old&dnt=false&lang=en&screen_name=scalawebtest&suppress_response_codes=true&with_replies=false"
         });
 
         provider.load = function (callback) {
@@ -73,7 +79,7 @@
         return  provider;
     };
 
-    TweetsForWidget("787752059021979649").load(function(tweets) {
+    TweetsForWidget("f8bf188a26c0fb191f8cdd1eb88ad3c7").load(function(tweets) {
         if (!tweets.length) return;
         var tweet = tweets[0];
         $("#tweet").find("blockquote").html('<a href="' + tweet.url + '"><img src="/images/tweet.png" />' + new Date(tweet.time).toDateString() + '</a>: &ldquo;' + tweet.message + '&rdquo;')

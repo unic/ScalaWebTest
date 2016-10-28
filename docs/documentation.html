@@ -97,43 +97,43 @@ twitterAuthor: danireych
                 <p>You can add ScalaWebTest to your integration testing dependencies in the build.sbt/scala
                     of your sbt project as follows.</p>
                 {% highlight scala %}
-                libraryDependencies += "org.scalawebtest" %% "core_2.11" % "1.0.2" % "it"
+libraryDependencies += "org.scalawebtest" %% "core_2.11" % "1.0.2" % "it"
                 {% endhighlight %}
 
                 <p>If you want to manage the most important transitive dependencies of ScalaWebTest, you might configure
                     it as follows. Especially selenium-java and selenium-htmlunit-driver should align.</p>
 
                 {% highlight scala %}
-                libraryDependencies ++= Seq(
-                "org.scalawebtest" %% "core_2.11" % "1.0.2" % "it"
-                "org.scalatest" %% "scalatest" % "3.0.0" % "it",
-                "org.seleniumhq.selenium" % "selenium-java" % "2.53.1" % "it",
-                "org.seleniumhq.selenium" % "selenium-htmlunit-driver" % "2.52.0" % "it",
-                )
+libraryDependencies ++= Seq(
+    "org.scalawebtest" %% "core_2.11" % "1.0.2" % "it"
+    "org.scalatest" %% "scalatest" % "3.0.0" % "it",
+    "org.seleniumhq.selenium" % "selenium-java" % "2.53.1" % "it",
+    "org.seleniumhq.selenium" % "selenium-htmlunit-driver" % "2.52.0" % "it",
+)
                 {% endhighlight %}
                 <h4 id="addSWT/maven">Add ScalaWebTest to your maven project</h4>
                 <p>You have to add the following dependency to your maven project to use ScalaWebTest.</p>
 
                 {% highlight xml %}
-                <dependency>
-                    <groupId>org.scalawebtest</groupId>
-                    <artifactId>core_2.11</artifactId>
-                    <version>1.0.2</version>
-                    <scope>test</scope>
-                </dependency>
+<dependency>
+    <groupId>org.scalawebtest</groupId>
+    <artifactId>core_2.11</artifactId>
+    <version>1.0.2</version>
+    <scope>test</scope>
+</dependency>
                 {% endhighlight%}
 
                 <p>In case you want to manage the most important transitive dependencies of ScalaWebTest,
                     you can add our bill-of-materials to your project. You may to so by adding the following dependency</p>
 
                 {% highlight xml %}
-                <dependency>
-                    <groupId>org.scalawebtest</groupId>
-                    <artifactId>bom_2.11</artifactId>
-                    <version>1.0.2</version>
-                    <type>pom</type>
-                    <scope>import</scope>
-                </dependency>
+<dependency>
+    <groupId>org.scalawebtest</groupId>
+    <artifactId>bom_2.11</artifactId>
+    <version>1.0.2</version>
+    <type>pom</type>
+    <scope>import</scope>
+</dependency>
                 {% endhighlight%}
 
 
@@ -144,14 +144,14 @@ twitterAuthor: danireych
                 and call the test HomepageSpec
 
                 {% highlight scala %}
-                class HomepageSpec extends IntegrationFlatSpec {
-                override val host = "http://localhost:8080"
-                override val path "index.html"
+class HomepageSpec extends IntegrationFlatSpec {
+    override val host = "http://localhost:8080"
+    override val path "index.html"
 
-                "Our homepage" should "contain a header with the company name" in {
-                webDriver.findElementByTagName("h1").getText shouldEqual "Unic AG"
-                }
-                }
+    "Our homepage" should "contain a header with the company name" in {
+        webDriver.findElementByTagName("h1").getText shouldEqual "Unic AG"
+    }
+}
                 {% endhighlight%}
 
                 Thats all you need. ScalaWebTest will automatically call http://localhost:8080/index.html before executing a test,

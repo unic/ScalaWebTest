@@ -127,13 +127,17 @@ libraryDependencies ++= Seq(
                     you can add our bill-of-materials to your project. You may to so by adding the following dependency</p>
 
                 {% highlight xml %}
-<dependency>
-    <groupId>org.scalawebtest</groupId>
-    <artifactId>bom_2.11</artifactId>
-    <version>1.0.2</version>
-    <type>pom</type>
-    <scope>import</scope>
-</dependency>
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.scalawebtest</groupId>
+            <artifactId>bom_2.11</artifactId>
+            <version>1.0.0</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
                 {% endhighlight%}
 
 

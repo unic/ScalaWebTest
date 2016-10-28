@@ -7,6 +7,15 @@ Read the full documentation on our website https://unic.github.io/ScalaWebTest/
 
 ## How to Release
 
+### Prerequisites
+Create the following file ~/.sbt/0.13/plugins/gpg.sbt
+
+Add the following line to gpg.sbt
+`addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.0.0")`
+
+Copy the private key (Sonatype PGP Private and Public Key from our company password store), to ~/.sbt/gpg/secring.ast
+
+### Release
 The release process of ScalaWebTest is currently done manually. The process is done as follows:
 
 1. Switch the version in `build.sbt` to that which is to be released (e.g. from `0.0.1-SNAPSHOT` to `1.0.0`)
@@ -14,13 +23,15 @@ The release process of ScalaWebTest is currently done manually. The process is d
 3. In your command line type in the following:
 	1. the fast way:
 		1. `sbt clean compile`
-		2. `sbt publishLocal`
+		2. `sbt publishSigned`
+		3. Enter the Sonatype PGP Key Password as stored in our company password store
 	2. the long way:
 		1. `sbt` - enters the sbt interactive mode
 		2. `clean` - deletes all generated files (target)
 		3. `compile` - compiles the main sources
 		4. `inttest` - compiles and run the integration tests
-		5. `publishLocal` - creates all of the below plus the poms
+		5. `publishSigned` - creates all of the below plus the poms
+		6. Enter the Sonatype PGP Key Password as stored in our company password store
 			1. `package` - creates jars
 			2. `packageDoc` - creates javadoc jars
 			3. `packageSrc` - creates source jars

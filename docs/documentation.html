@@ -1,0 +1,176 @@
+---
+title: Documentation
+description: A comprehensive guide to writing integration tests with ScalaWebTest
+twitterAuthor: danireych
+---
+<!DOCTYPE HTML>
+<html lang="en">
+{% include head.ext %}
+<body>
+{% include header.ext %}
+<!-- Main -->
+<div id="main">
+    <div class="container">
+        <div class="row">
+            <!-- Sidebar -->
+            <div id="sidebar">
+                <div class="row">
+                    <div class="4u">
+                        <section>
+                            <header>
+                                Getting started
+                            </header>
+                            <ul class="default">
+                                <li><a href="#addSWT/sbt">Add ScalaWebTest to your sbt project</a></li>
+                                <li><a href="#addSWT/maven">Add ScalaWebTest to your maven project</a></li>
+                                <li><a href="#firsttest">Write your first test</a></li>
+                                <li><a href="#basetrait">Build your base trait</a></li>
+                                <li><a href="#config">Configure your tests</a></li>
+                            </ul>
+                        </section>
+                        <section>
+                            <header>
+                                Writing gauges
+                            </header>
+                            <ul class="default">
+                                <li><a href="#classes">Test for classes on elements</a></li>
+                                <li><a href="#contains">Test for containment</a></li>
+                                <li><a href="#regex">Test for regex matches</a></li>
+                            </ul>
+                        </section>
+                    </div>
+                    <div class="4u">
+                        <section>
+                            <header>
+                                Using advanced features
+                            </header>
+                            <ul class="default">
+                                <li><a href="#javascript">Executing JavaScript</a></li>
+                                <li><a href="#responsestatus">Accessing response status</a></li>
+                            </ul>
+                        </section>
+                        <section>
+                            <header>
+                                Additional modules
+                            </header>
+                            <ul class="default">
+                                <li><a href="#modules">Modules</a>
+                                <li><a href="#modules/aem">AEM module</a></li>
+                            </ul>
+                        </section>
+                        <section>
+                            <header>Extending ScalaWebTest</header>
+                            <ul class="default">
+                                <li><a href="#extending">Extending ScalaWebTest</a></li>
+                            </ul>
+                        </section>
+                    </div>
+                    <div class="4u">
+                        <section>
+                            <header>
+                                Internal structure
+                            </header>
+                            <ul class="default">
+                                <li><a href="#api/IntegrationSpec">IntegrationSpec</a></li>
+                                <li><a href="#api/IntegrationSpec">Integration*Spec</a></li>
+                                <li><a href="#api/SpecBehavior">*SpecBehavior</a></li>
+                                <li><a href="#api/Matcher">Matcher</a></li>
+                                <li><a href="#api/Login">Login</a></li>
+                                <li><a href="#api/WebDriver">WebDriver</a></li>
+                                <li><a href="#api/WebDriverConfigFixtures">WebDriverConfigFixtures</a></li>
+                            </ul>
+                        </section>
+                    </div>
+                </div>
+            </div>
+
+            <div id="content">
+                <header>
+                    <h2 id="getting_started">Getting started</h2>
+                </header>
+
+                <h3 id="addSWT">Add ScalaWebTest to your project</h3>
+                <p>Before you get to use all the nice features, you have to introduce ScalaWebTest to your project.
+                    All you have to do, is add the core module to your test or integration test dependencies.</p>
+
+                <h4 id="addSWT/sbt">Add ScalaWebTest to your SBT project</h4>
+                <p>You can add ScalaWebTest to your integration testing dependencies in the build.sbt/scala
+                    of your sbt project as follows.</p>
+                {% highlight scala %}
+                libraryDependencies += "org.scalawebtest" %% "core_2.11" % "1.0.2" % "it"
+                {% endhighlight %}
+
+                <p>If you want to manage the most important transitive dependencies of ScalaWebTest, you might configure
+                    it as follows. Especially selenium-java and selenium-htmlunit-driver should align.</p>
+
+                {% highlight scala %}
+                libraryDependencies ++= Seq(
+                "org.scalawebtest" %% "core_2.11" % "1.0.2" % "it"
+                "org.scalatest" %% "scalatest" % "3.0.0" % "it",
+                "org.seleniumhq.selenium" % "selenium-java" % "2.53.1" % "it",
+                "org.seleniumhq.selenium" % "selenium-htmlunit-driver" % "2.52.0" % "it",
+                )
+                {% endhighlight %}
+                <h4 id="addSWT/maven">Add ScalaWebTest to your maven project</h4>
+                <p>You have to add the following dependency to your maven project to use ScalaWebTest.</p>
+
+                {% highlight xml %}
+                <dependency>
+                    <groupId>org.scalawebtest</groupId>
+                    <artifactId>core_2.11</artifactId>
+                    <version>1.0.2</version>
+                    <scope>test</scope>
+                </dependency>
+                {% endhighlight%}
+
+                <p>In case you want to manage the most important transitive dependencies of ScalaWebTest,
+                    you can add our bill-of-materials to your project. You may to so by adding the following dependency</p>
+
+                {% highlight xml %}
+                <dependency>
+                    <groupId>org.scalawebtest</groupId>
+                    <artifactId>bom_2.11</artifactId>
+                    <version>1.0.2</version>
+                    <type>pom</type>
+                    <scope>import</scope>
+                </dependency>
+                {% endhighlight%}
+
+
+                <h3 id="firsttest">Write your first test</h3>
+                To write your first test you have to create a scala file in src/it/scala or src/test/scala,
+                depending on your test setup. You then create a class named TestSubjectSpec which extends IntegrationFlatSpec.
+                Other <a href="#teststyles">styles</a> are available, if you prefer. Lets assume we want to verify our homepage
+                and call the test HomepageSpec
+
+                {% highlight scala %}
+                class HomepageSpec extends IntegrationFlatSpec {
+                override val host = "http://localhost:8080"
+                override val path "index.html"
+
+                "Our homepage" should "contain a header with the company name" in {
+                webDriver.findElementByTagName("h1").getText shouldEqual "Unic AG"
+                }
+                }
+                {% endhighlight%}
+
+                Thats all you need. ScalaWebTest will automatically call http://localhost:8080/index.html before executing a test,
+                call "Our homepage" - "should" - "contain a header with the company name". With the test, we can then access elements
+                within the webDriver. The webDriver emulates a web browser.
+
+                <h3 id="basetrait">Build your base trait</h3>
+
+
+                <h3 id="teststyles">test styles</h3>
+                <!--TODO link to trait and ScalaTest-->
+                <p>one of our *IntegrationSpec traits. This example uses
+                    IntegrationFlatSpec, which is based on the FlatSpec trait from ScalaTest. ScalaTest offers various
+                    testing styles, choose your favorite and use it in ScalaWebTest.</p>
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+

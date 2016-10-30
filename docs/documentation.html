@@ -309,37 +309,139 @@ fit(
 {% endhighlight %}
                 <p>The document then fits our gauge as follows. Matching parts are green, parts in grey have no influence whether the document fits or not.</p>
 
-                <div class="highlight">
-                    <pre>
-                        <code class="language-html" data-lang="html">
-                <span class="n">&lt;!DOCTYPE html&gt;</span>
-                <span class="n">&lt;html&gt;</span>
-                <span class="n">&lt;head&gt;</span>
-                <span class="n">&lt;/head&gt;</span>
-                <span class="n">&lt;body&gt;</span>
-                <span class="s"><b>&lt;nav id=&quot;mainNav&quot;&gt;</b></span>
-                <span class="n">&lt;ul class=&quot;blue_theme&quot;&gt;</span>
+                <div class="highlight"><pre><code class="language-html" data-lang="html"><span class="n">&lt;!DOCTYPE html&gt;</span>
+<span class="n">&lt;html&gt;</span>
+    <span class="n">&lt;head&gt;</span>
+    <span class="n">&lt;/head&gt;</span>
+    <span class="n">&lt;body&gt;</span>
+        <span class="s"><b>&lt;nav id=&quot;mainNav&quot;&gt;</b></span>
+            <span class="n">&lt;ul class=&quot;blue_theme&quot;&gt;</span>
                 <span class="n">&lt;li&gt;</span>
-                <span class="s"><b>&lt;a href=&quot;/path/to/first/element&quot;&gt;</b></span><span class="n">first navigation element</span><span class="s"><b>&lt;/a&gt;</b></span>
+                    <span class="s"><b>&lt;a href=&quot;/path/to/first/element&quot;&gt;</b></span><span class="n">first navigation element</span><span class="s"><b>&lt;/a&gt;</b></span>
                 <span class="n">&lt;/li&gt;</span>
                 <span class="n">&lt;li class=&quot;active&quot;&gt;</span>
-                <span class="s"><b>&lt;a href=&quot;/path/to/second/element&quot;&gt;</b></span><span class="n">second navigation element</span><span class="s"><b>&lt;/a&gt;</b></span>
+                    <span class="s"><b>&lt;a href=&quot;/path/to/second/element&quot;&gt;</b></span><span class="n">second navigation element</span><span class="s"><b>&lt;/a&gt;</b></span>
                 <span class="n">&lt;/li&gt;</span>
                 <span class="n">&lt;/li&gt;</span>
-                <span class="n">&lt;li&gt;</span>
+                    <span class="n">&lt;li&gt;</span>
                 <span class="s"><b>&lt;a href=&quot;/path/to/third/element&quot;&gt;</b></span><span class="n">third navigation element</span><span class="s"><b>&lt;/a&gt;</b></span>
-                <span class="n">&lt;/li&gt;</span>
-                <span class="n">&lt;/ul&gt;</span>
-                <span class="s"><b>&lt;/nav&gt;</b></span>
-                <span class="n">&lt;/body&gt;</span>
-                <span class="n">&lt;/html&gt;</span>
-                            </code>
-                        </pre>
-                    </div>
-                <h4 id="classes">Test for classes on elements</h4>
-                <h4 id="contains">Test for containment</h4>
-                <h4 id="regex">Test for regex matches</h4>
+            <span class="n">&lt;/li&gt;</span>
+        <span class="n">&lt;/ul&gt;</span>
+        <span class="s"><b>&lt;/nav&gt;</b></span>
+    <span class="n">&lt;/body&gt;</span>
+<span class="n">&lt;/html&gt;</span></code></pre></div>
 
+                <p>If the gauge doesn't fit, we get an error. Lets change the test to the following.</p>
+ {% highlight scala %}
+"The navigation" should "contain our navigation links in correct order" in {
+fit(
+<nav id="mainNav">
+    <a href="/path/to/first/element">second navigation element</a>
+    <a href="/path/to/second/element"></a>
+    <a href="/path/to/third/element"></a>
+</nav>)
+}
+{% endhighlight %}
+                <p>This will of course not match, because the text within the first link is wrong and belongs to the second link.
+                    See the different highlighted in the following html block.</p>
+                                <div class="highlight"><pre><code class="language-html" data-lang="html"><span class="n">&lt;!DOCTYPE html&gt;</span>
+<span class="n">&lt;html&gt;</span>
+    <span class="n">&lt;head&gt;</span>
+    <span class="n">&lt;/head&gt;</span>
+    <span class="n">&lt;body&gt;</span>
+        <span class="s"><b>&lt;nav id=&quot;mainNav&quot;&gt;</b></span>
+            <span class="n">&lt;ul class=&quot;blue_theme&quot;&gt;</span>
+                <span class="n">&lt;li&gt;</span>
+                    <span class="s"><b>&lt;a href=&quot;/path/to/first/element&quot;&gt;</b></span><span class="o"><del>second navigation element</del></span> <span class="gr"><b>first navigation element</b></span><span class="s"><b>&lt;/a&gt;</b></span>
+                <span class="n">&lt;/li&gt;</span>
+                <span class="n">&lt;li class=&quot;active&quot;&gt;</span>
+                    <span class="s"><b>&lt;a href=&quot;/path/to/second/element&quot;&gt;</b></span><span class="n">second navigation element</span><span class="s"><b>&lt;/a&gt;</b></span>
+                <span class="n">&lt;/li&gt;</span>
+                <span class="n">&lt;/li&gt;</span>
+                    <span class="n">&lt;li&gt;</span>
+                <span class="s"><b>&lt;a href=&quot;/path/to/third/element&quot;&gt;</b></span><span class="n">third navigation element</span><span class="s"><b>&lt;/a&gt;</b></span>
+            <span class="n">&lt;/li&gt;</span>
+        <span class="n">&lt;/ul&gt;</span>
+        <span class="s"><b>&lt;/nav&gt;</b></span>
+    <span class="n">&lt;/body&gt;</span>
+<span class="n">&lt;/html&gt;</span></code></pre></div>
+
+                <p>This results in the following error message from ScalaWebTest</p>
+                {% highlight text %}
+23:06:37.482 [ScalaTest-run-running-SimpleGaugeSpec] INFO IntegrationSpec - Going to http://localhost:8080/navigation.jsp
+
+Misfitting Text: The text [first navigation element] within [HtmlAnchor[<a href="/path/to/first/element">]] didn't equal [second navigation element]
+Current document does not match provided gauge:
+<nav id="mainNav">
+    <ul>
+        <li>
+            <a href="/path/to/first/element">second navigation element</a>
+        </li>
+        <li>
+            <a href="/path/to/second/element"></a>
+        </li>
+        <li>
+            <a href="/path/to/third/element"></a>
+        </li>
+    </ul>
+</nav>
+ScalaTestFailure
+                {% endhighlight %}
+
+                <h4 id="classes">Test for classes on elements</h4>
+                <p>The class attribute is special, because it is basically an unsorted set of class attributes. Usually
+                we don't bother, if additional classes are present in our HTML and for sure we never care about the order.
+                ScalaWebTest therefore handles the class attribute different from the rest. Per default the attribute content,
+                has to match exactly the one you provided in your gauge, but for classes, it only asserts, that the classes which
+                an element contains within your gauge definition, are all present on that element in the HTML document.
+                The following gauge therefore matches all the elements shown below.</p>
+                {% highlight scala %}
+fit(<div class="container red"></div>)
+                {% endhighlight %}
+                 {% highlight html %}
+<div class="container red"></div>
+                {% endhighlight %}
+                {% highlight html %}
+<div class="red container"></div>
+                {% endhighlight %}
+                {% highlight html %}
+<div class="red important container main"></div>
+                {% endhighlight %}
+
+                <h4 id="contains">Test for containment</h4>
+                <p>It is common that you don't want to verify the complete attribute value, or text of an element.
+                You may use <i>@contains</i> to trigger the ContainsMatcher instead of the DefaultMatcher.
+                Thanks to this matcher, this gauge matches the following HTML element</p>
+                {% highlight scala %}
+fit(<a href="@contains ScalaWebTest"></a>)
+                {% endhighlight %}
+                {% highlight html %}
+<a href="https://github.com/unic/ScalaWebTest"></a>
+                {% endhighlight %}
+                <p>The containsMatcher is also available, when matching text.</p>
+                 {% highlight scala %}
+fit(<a>@contains available</a>)
+                {% endhighlight %}
+                {% highlight html %}
+<a>ScalaWebTest is available on github</a>
+                {% endhighlight %}
+                <p>Hint: always add a space after the matcher annotation. We enforce this space to improve readability of tests.</p>
+                <h4 id="regex">Test for regex matches</h4>
+                <p>When we want to enforce textual rules on our content, we need a more powerful Matcher. The RegexMatcher is our friend.
+                It is trigger using <i>@regex</i></p>
+
+                {% highlight scala %}
+fit(<a href="@regex http:\\/\\/[a-zA-Z]+\.scalawebtest.org.*,"></a>)
+                {% endhighlight %}
+
+                <p>This gauge will fit</p>
+                {% highlight html %}
+<a href="http://www.scalawebtest.org/documentation.html"></a>
+                {% endhighlight %}
+                <p>but it won't fit</p>
+                {% highlight html %}
+<a href="http://scalawebtest.org/documentation.html"></a>
+                {% endhighlight %}
             </div>
         </div>
     </div>

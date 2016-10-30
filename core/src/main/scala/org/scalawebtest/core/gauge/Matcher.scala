@@ -74,7 +74,7 @@ object Matcher {
       if (element.text().trim().equals(expected)) {
         None
       } else {
-        Some(Misfit(element.relevance, "Misfitting Text: The [" + element.text() + "] from [" + element.element + "] didn't equal [" + expected + "]"))
+        Some(Misfit(element.relevance, "Misfitting Text: The text [" + element.text() + "] within [" + element.element.getParentNode + "] didn't equal [" + expected + "]"))
       }
     }
   }

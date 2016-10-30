@@ -24,7 +24,9 @@ twitterAuthor: danireych
                                 <li><a href="#addSWT/sbt">Add ScalaWebTest to your sbt project</a></li>
                                 <li><a href="#addSWT/maven">Add ScalaWebTest to your maven project</a></li>
                                 <li><a href="#firsttest">Write your first test</a></li>
+                                <li><a href="#teststyles">Selecting a style</a></li>
                                 <li><a href="#basetrait">Build your base trait</a></li>
+
                                 <li><a href="#config">Configure your tests</a></li>
                             </ul>
                         </section>
@@ -162,14 +164,181 @@ class HomepageSpec extends IntegrationFlatSpec {
                 call "Our homepage" - "should" - "contain a header with the company name". With the test, we can then access elements
                 within the webDriver. The webDriver emulates a web browser.
 
+                <h3 id="teststyles">Selecting a style</h3>
+                <p>ScalaTest provides a wide variety of testing <a href="http://www.scalatest.org/user_guide/selecting_a_style">styles</a>. ScalaWebTest supports all available styles.
+                    As the ScalaWebTest creators have a JUnit background, most of the examples use FlatSpec style. There is no technical reason behind it, it is simply a matter of taste.
+                    In your BaseTrait extend one of the Integration*Spec/Suite classes from <a href="https://github.com/unic/ScalaWebTest/blob/master/core/src/main/scala/org/scalawebtest/core/Styles.scala">Styles.scala</a></p>
+
                 <h3 id="basetrait">Build your base trait</h3>
+                Configurations, style choice and possible custom extension should be shared across your project. To do so, we recommend
+                to create a BaseTrait. When creating a new Test you then simply extend your BaseTrait. You can find such an
+                example in ScalaWebTest's own integration tests.
 
+                {% highlight scala %}
+trait ScalaWebTestBaseSpec extends IntegrationFlatSpec with AemTweaks with FormBasedLogin {
+  override val host = "http://localhost:8080"
+  override val loginPath = "/fakeLogin.jsp"
 
-                <h3 id="teststyles">test styles</h3>
-                <!--TODO link to trait and ScalaTest-->
-                <p>one of our *IntegrationSpec traits. This example uses
-                    IntegrationFlatSpec, which is based on the FlatSpec trait from ScalaTest. ScalaTest offers various
-                    testing styles, choose your favorite and use it in ScalaWebTest.</p>
+  override val projectRoot = ""
+
+  override def loginTimeout = Timeout(5 seconds)
+}                {% endhighlight %}
+
+                This BaseTrait uses FlatSpec style, adds the tweaks from the AEM module, and uses FormBasedLogin.
+
+                <h3 id="config">Configure your tests</h3>
+                <p>A reasonable default configuration is provided, which can easily get adapted. If you want to change
+                a configuration for all your tests, we recommend to change it in your base trait, otherwise best practice is
+                to change it in the constructor of your TestSpec. Two config objects exist, one which is applied during login
+                and one which is applied during test execution.</p>
+
+                <p>In the following TestSpec JavaScript errors are swallowed during Login phase, no matter if JavaScript execution is enabled or disable.
+                During test execution JavaScript is enabled and JavaScript errors let the test fail.</p>
+                {% highlight scala %}
+class HomepageSpec extends IntegrationFlatSpec {
+    override val host = "http://localhost:8080"
+    override val path "index.html"
+
+    loginConfig.swallowJavaScriptErrors
+    config.enableJavaScript(throwOnError = true)
+
+    "Our homepage" should "contain a header with the company name" in {
+        webDriver.findElementByTagName("h1").getText shouldEqual "Unic AG"
+    }
+}
+                {% endhighlight%}
+
+                <p>By default JavaScript is not executed and JavaScript errors don't throw. Also CSS is not interpreted.
+                This applies to both loginConfig and config.</p>
+
+                <h3 id="gauges">Writing gauges</h3>
+                <p>Using <b>gauges</b> to write your integration tests, is the core idea of ScalaWebTest. We think using org.scalatest.selenium.WebBrowser.Query, i.e CssSelectorQuery,
+                    to select elements in a HTML document and then verifying it is cumbersome and the resulting test is hard to read. Instead we copy a concept from the manufacturing industry.
+                    They build gauges, which they then lay their workpiece into. If the workpiece fits in the gauge, it satisfies the requirements. Gauges are defined in HTML
+                    (technically speaking it is XML, using <a href="http://www.scala-lang.org/api/2.11.8/scala-xml/?_ga=1.231631391.1228626470.1461659856#scala.xml.NodeSeq">scala.xml.NodeSeq</a>)
+                    Let's have a look at a simple example to get an idea how those gauges work.</p>
+
+{% highlight scala %}
+package org.scalawebtest.integration.gauge
+
+import org.scalawebtest.core.gauge.Gauge.fit
+import org.scalawebtest.integration.ScalaWebTestBaseSpec
+
+class SimpleGaugeSpec extends ScalaWebTestBaseSpec {
+
+path = "/navigation.jsp"
+
+"The navigation" should "contain our navigation links in correct structure, order and with the expected text" in {
+    fit(
+    <nav id="mainNav">
+                <ul class="blue_theme">
+                    <li>
+                        <a href="/path/to/first/element">first navigation element</a>
+                    </li>
+                    <li class="active">
+                        <a href="/path/to/second/element">second navigation element</a>
+                    </li>
+                    <li>
+                        <a href="/path/to/third/element">third navigation element</a>
+                    </li>
+                </ul>
+            </nav>)
+    }
+}
+{% endhighlight %}
+
+                <p>This test would be successful, when run against, when <i>navigation.jsp</i> contains the following HTML</p>
+
+{% highlight html %}
+<!DOCTYPE html>
+<html>
+
+<head>
+</head>
+
+<body>
+    <nav id="mainNav">
+        <ul class="blue_theme">
+            <li>
+                <a href="/path/to/first/element">first navigation element</a>
+            </li>
+            <li class="active">
+                <a href="/path/to/second/element">second navigation element</a>
+            </li>
+            <li>
+                <a href="/path/to/third/element">third navigation element</a>
+            </li>
+        </ul>
+    </nav>
+</body>
+</html>
+{% endhighlight %}
+
+                <p>We can already, see that <i>fits()</i> ignored <i>html</i>, <i>head</i> and <i>body</i>, elements before the navigation.
+                    But following the idea from manufacturing, we should strip our <i>gauge</i>, from everything which we don't need.
+                    Let's assume we only want to make sure our navigation contains the correct links. We don't care about classes added for design or
+                    text contained in the links. Therefore we reduce our test to.</p>
+{% highlight scala %}
+"The navigation" should "contain our navigation links in correct structure and order" in {
+fit(
+<nav id="mainNav">
+    <ul>
+        <li>
+            <a href="/path/to/first/element"></a>
+        </li>
+        <li>
+            <a href="/path/to/second/element"></a>
+        </li>
+        <li>
+            <a href="/path/to/third/element"></a>
+        </li>
+    </ul>
+</nav>)
+}
+{% endhighlight %}
+                <p>If we don't care about the unnumbered list, we can reduce our test even further.</p>
+{% highlight scala %}
+"The navigation" should "contain our navigation links in correct order" in {
+fit(
+<nav id="mainNav">
+    <a href="/path/to/first/element"></a>
+    <a href="/path/to/second/element"></a>
+    <a href="/path/to/third/element"></a>
+</nav>)
+}
+{% endhighlight %}
+                <p>The match then basically looks as follows. Matches are color in green, grey is irrelevant.</p>
+
+                <div class="highlight">
+                    <pre>
+                        <code class="language-html" data-lang="html">
+                <span class="n">&lt;!DOCTYPE html&gt;</span>
+                <span class="n">&lt;html&gt;</span>
+                <span class="n">&lt;head&gt;</span>
+                <span class="n">&lt;/head&gt;</span>
+                <span class="n">&lt;body&gt;</span>
+                <span class="s"><b>&lt;nav id=&quot;mainNav&quot;&gt;</b></span>
+                <span class="n">&lt;ul class=&quot;blue_theme&quot;&gt;</span>
+                <span class="n">&lt;li&gt;</span>
+                <span class="s"><b>&lt;a href=&quot;/path/to/first/element&quot;&gt;</b></span><span class="n">first navigation element</span><span class="s"><b>&lt;/a&gt;</b></span>
+                <span class="n">&lt;/li&gt;</span>
+                <span class="n">&lt;li class=&quot;active&quot;&gt;</span>
+                <span class="s"><b>&lt;a href=&quot;/path/to/second/element&quot;&gt;</b></span><span class="n">second navigation element</span><span class="s"><b>&lt;/a&gt;</b></span>
+                <span class="n">&lt;/li&gt;</span>
+                <span class="n">&lt;/li&gt;</span>
+                <span class="n">&lt;li&gt;</span>
+                <span class="s"><b>&lt;a href=&quot;/path/to/third/element&quot;&gt;</b></span><span class="n">third navigation element</span><span class="s"><b>&lt;/a&gt;</b></span>
+                <span class="n">&lt;/li&gt;</span>
+                <span class="n">&lt;/ul&gt;</span>
+                <span class="s"><b>&lt;/nav&gt;</b></span>
+                <span class="n">&lt;/body&gt;</span>
+                <span class="n">&lt;/html&gt;</span>
+                            </code>
+                        </pre>
+                    </div>
+                <h4 id="classes">Test for classes on elements</h4>
+                <h4 id="contains">Test for containment</h4>
+                <h4 id="regex">Test for regex matches</h4>
 
             </div>
         </div>

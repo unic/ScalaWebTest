@@ -25,13 +25,7 @@ import org.slf4j.LoggerFactory
 import scala.collection.mutable.ListBuffer
 import scala.language.postfixOps
 
-abstract class FlatSpecBehavior extends FlatSpec with Matchers with Inspectors
 
-abstract class FreeSpecBehavior extends FreeSpec with Matchers with Inspectors
-
-abstract class IntegrationFlatSpec extends FlatSpecBehavior with IntegrationSpec
-
-abstract class IntegrationFreeSpec extends FreeSpecBehavior with IntegrationSpec
 
 /**
   * This is the base trait for integration specs. The recommended way is to create your own project specific trait, which extends

@@ -7,7 +7,7 @@ class SimpleGaugeSpec extends ScalaWebTestBaseSpec {
 
   path = "/navigation.jsp"
 
-  "The navigation" should "contain our navigation links in correct structure, order and with the expected text" in {
+  "The navigation" should "contain our navigation links in correct order" in {
     fit(
       <nav id="mainNav">
         <ul>

@@ -35,9 +35,12 @@ twitterAuthor: danireych
                                 Writing gauges
                             </header>
                             <ul class="default">
+                                <li><a href="#gauges">Using gauges</a></li>
                                 <li><a href="#classes">Test for classes on elements</a></li>
                                 <li><a href="#contains">Test for containment</a></li>
                                 <li><a href="#regex">Test for regex matches</a></li>
+                                <li><a href="#negation">Negating your tests</a></li>
+                                <li><a href="#process">Testing a complete process</a></li>
                             </ul>
                         </section>
                     </div>
@@ -442,6 +445,119 @@ fit(<a href="@regex http:\\/\\/[a-zA-Z]+\.scalawebtest.org.*,"></a>)
                 {% highlight html %}
 <a href="http://scalawebtest.org/documentation.html"></a>
                 {% endhighlight %}
+
+                <h4 id="negation">Negating your tests</h4>
+                <p>Sometimes you want to make sure that a certain content is not shown. For example you want to make sure, that no login form is shown, after logging in.
+                Or you want to make sure that no private information is shown, when an error is thrown.
+                To do so you may use <i>doesnt fit()</i> or <i>not fit()</i>. They are synonyms. Choose whatever reads better in your current context.</p>
+
+                {% highlight scala %}
+package org.scalawebtest.integration.gauge
+
+import org.scalawebtest.core.gauge.Gauge.NotFit
+import org.scalawebtest.integration.ScalaWebTestBaseSpec
+
+class LoggedInSpec extends ScalaWebTestBaseSpec{
+    path = "/protectedContent.jsp?username=admin&password=secret"
+
+    "When logged in the protectedContent page" should "not show the login form" in {
+        not fit <form name="login_form"></form>
+    }
+
+}
+                {% endhighlight %}
+
+                <p>In case the login form is mistakenly rendered, the following error will appear.</p>
+
+                {% highlight text %}
+Current document matches the provided gauge, although expected not to!
+Fitting node
+<html>
+<head>
+    <title>Mock of a protected content page
+    </title>
+</head>
+<body>
+<form name="login_form" action="protectedContent.jsp" method="get">
+    <label for="username">username
+    </label>
+    <input type="text" name="username" id="username">
+    </input>
+    <label for="password">password
+    </label>
+    <input type="password" name="password" id="password">
+    </input>
+    <button type="submit">login
+    </button>
+</form>
+</body>
+</html> found
+                {% endhighlight %}
+
+                <h4 id="process">Testing a complete process</h4>
+                <p>Todays webapplication are of course not that static. Usually it is more interesting to test a complete process.
+                This is easily possible with Selenium. You can use it to press buttons and even trigger JavaScript functions.
+                As the gauges are based on Selenium, they can be combined with actions as well. As soon as an action is executed,
+                the currentPage is updated and our next call to <i>fit()</i> or <i>doesnt fit()</i> will be executed against the updated page.</p>
+                <p>Lets try this out using a page with protected content. On first load a form will be shown, after logging in the form disappears,
+                    instead the text <i>sensitive information</i> appears.</p>
+                {% highlight scala%}
+package org.scalawebtest.integration.gauge
+
+import org.scalawebtest.core.gauge.Gauge.{NotFit, fits}
+import org.scalawebtest.integration.ScalaWebTestBaseSpec
+
+class LoginSpec extends ScalaWebTestBaseSpec{
+    path = "/protectedContent.jsp"
+
+    "When accessing protectedContent it" should "show the login form" in {
+        fits(<form name="login_form">
+            <input name="username"></input>
+            <input name="password"></input>
+        </form>)
+    }
+    it should "hide the protected content, when not logged in" in {
+        not fit <p>sensitive information</p>
+    }
+    it should "show the protected content, after logging in" in {
+        textField("username").value = "admin"
+        pwdField("password").value = "secret"
+
+        submit()
+
+        fits(<p>sensitive information</p>)
+    }
+}
+                {% endhighlight %}
+
+                <p>This example test was split into three smaller tests. This is technically not necessary, but has the following advantage.
+                When only part of the tests fails, you have a better idea what went wrong. For example, if the login fails, but the login form is correctly shown,
+                the issue has to be your login process. But if the login form isn't shown, the problem has a very different cause. In addition the verbose output
+                from the <i>gauge</i> should help you finding the root cause.</p>
+
+                <h4 id="javascript">Executing JavaScript</h4>
+                <p>Thanks to Selenium executing JavaScript is not an issue. Per default JavaScript is not executed with ScalaWebTest, because tests will be faster without.
+                To execute JavaScript, you have to enable it.</p>
+                {% highlight scala %}
+config.enableJavaScript(throwOnError = true)
+                {% endhighlight %}
+                <p>In addition, you have to decide whether a JavaScript error should cause your test to fail or not. Usually failing on
+                JavaScript errors is good, but sometimes you have to write tests for a web application with major issues in JavaScript.
+                This is one of the rare moments, where you have to disable <i>throwOnError</i> to be able to test the web application.</p>
+                <p>The other thing which is very important with JavaScript, is to remember, that after receiving the document, your browser
+                needs some time to execute JavaScript. The same is true for the Selenium webdriver. We have to wait for it execute
+                the provided JavaScript. ScalaTest provides <i>eventually</i>, which does exactly what we need.
+                It repeats a given test until it succeeds or the given timeout has been surpassed.</p>
+                {% highlight scala %}
+eventually(timeout(3 seconds)) {
+    fits(<div id="container">Text loaded with JavaScript</div>)
+}
+                {% endhighlight %}
+
+                <!--<h4 id="responsestatus">Accessing response status</h4>-->
+                <!--<p>Accessing the response status with Selenium is not possible, most probably because some of the supported browsers-->
+                <!--do not provide this information via their API. Luckily this information is available within the HtmlUnitWebDriver.-->
+                <!--To support tests for response status within ScalaWebTest, a different driver is used, which provides this information.</p>-->
             </div>
         </div>
     </div>

@@ -27,7 +27,7 @@ class AjaxSpec extends ScalaWebTestBaseSpec {
       container.text should include("Text loaded with JavaScript")
     }
   }
-  it should "work with CheckingGauge" in {
+  it should "work with Gauge.fits" in {
     eventually(timeout(3 seconds)) {
       fits(<div id="container">Text loaded with JavaScript</div>)
     }

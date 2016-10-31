@@ -111,14 +111,14 @@ trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with
   override def beforeAll(): Unit = {
     beforeLogin()
     avoidLogSpam()
-    applyConfiguration(config)
+    applyConfiguration(loginConfig)
     login()
     applyConfiguration(config)
     afterLogin()
   }
 
   override def beforeEach(): Unit = {
-    if (config.navigateToEnabled) {
+    if (config.navigateToBeforeEachEnabled) {
       navigateToUrl(url)
     }
   }
@@ -158,7 +158,7 @@ trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with
     if (targetUrl.isEmpty) {
       throw new RuntimeException("NavigateTo was called without path being defined. Either set config.disableNavigateTo or define path")
     }
-    if (pageSource == null || !(targetUrl equals webDriver.getCurrentUrl) || config.navigateToEnforced) {
+    if (pageSource == null || !(targetUrl equals webDriver.getCurrentUrl) || config.reloadOnNavigateToEnforced) {
       logger.info("Going to " + targetUrl)
       go to targetUrl
     } else {

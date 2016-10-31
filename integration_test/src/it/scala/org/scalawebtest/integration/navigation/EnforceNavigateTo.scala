@@ -6,7 +6,7 @@ import org.scalawebtest.integration.ScalaWebTestBaseSpec
 class EnforceNavigateTo extends ScalaWebTestBaseSpec{
   path = "/simpleAjax.jsp"
   config.enableJavaScript(throwOnError = true)
-  config.enforceNavigateTo()
+  config.enforceReloadOnNavigateTo()
 
   "A simple webpage loading content with JS" should "be correctly interpreted by HtmlUnit" in {
     eventually(timeout(3 seconds)) {

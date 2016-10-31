@@ -21,7 +21,7 @@ import org.scalawebtest.core.{FormBasedLogin, IntegrationFlatSpec}
 
 import scala.language.postfixOps
 
-trait ScalaWebTestBaseSpec extends IntegrationFlatSpec with FormBasedLogin {
+trait AemModuleScalaWebTestBaseSpec extends IntegrationFlatSpec with FormBasedLogin with AemTweaks {
   override val host = "http://localhost:8080"
   override val loginPath = "/fakeLogin.jsp"
 

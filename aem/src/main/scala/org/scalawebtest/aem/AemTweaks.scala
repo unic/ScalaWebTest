@@ -30,6 +30,9 @@ trait AemTweaks {
 
   trait AemConfig {
     self: BaseConfiguration =>
+    //add default configuration
+    setWcmMode(DISABLED)
+
     def setWcmMode(wcmMode: WcmMode) = configurations += "wcmMode" ->
       ((webDriver: WebClientExposingDriver) => setWcmModeCookie(wcmMode))
   }

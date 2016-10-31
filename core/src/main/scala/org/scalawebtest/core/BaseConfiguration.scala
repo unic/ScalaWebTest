@@ -70,28 +70,28 @@ class BaseConfiguration() {
 class LoginConfiguration extends BaseConfiguration
 class Configuration extends BaseConfiguration {
   //initialize with sensible default configuration
-  var navigateToEnabled = true
-  var navigateToEnforced = false
+  var navigateToBeforeEachEnabled = true
+  var reloadOnNavigateToEnforced = false
 
   /**
     * Enabling navigateTo is the default. [[org.scalatest.BeforeAndAfterEach.beforeEach]] Test navigateTo is called with the current value of [[IntegrationSpec.path]]
     */
-  def enableNavigateTo(): Unit = navigateToEnabled = true
+  def enableNavigateToBeforeEach(): Unit = navigateToBeforeEachEnabled = true
 
   /**
     * Disables the navigateTo call, which otherwise happens in [[org.scalatest.BeforeAndAfterEach.beforeEach]]
     */
-  def disableNavigateTo(): Unit = navigateToEnabled = false
+  def disableNavigateToBeforeEach(): Unit = navigateToBeforeEachEnabled = false
 
   /**
     * By default navigateTo only navigates to the configured path, if it isn't the same as the currentPage.
     * By enabling enforceNavigateTo, [[org.scalatest.selenium.WebBrowser.goTo()]] is always called.
     */
-  def enforceNavigateTo(): Unit = navigateToEnforced = true
+  def enforceReloadOnNavigateTo(): Unit = reloadOnNavigateToEnforced = true
 
   /**
     * This is the default behavior. NavigateTo only calls [[org.scalatest.selenium.WebBrowser.goTo()]], if the
     * currentPage isn't the same as the configured path.
     */
-  def doNotEnforceNavigateTo(): Unit = navigateToEnforced = false
+  def doNotEnforceReloadOnNavigateTo(): Unit = reloadOnNavigateToEnforced = false
 }

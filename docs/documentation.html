@@ -59,7 +59,7 @@ twitterAuthor: danireych
                                 Additional modules
                             </header>
                             <ul class="default">
-                                <li><a href="#modules">Modules</a>
+                                <li><a href="#modules">Modules</a></li>
                                 <li><a href="#modules/aem">AEM module</a></li>
                             </ul>
                         </section>
@@ -373,7 +373,7 @@ fit(
                 {% highlight text %}
 23:06:37.482 [ScalaTest-run-running-SimpleGaugeSpec] INFO IntegrationSpec - Going to http://localhost:8080/navigation.jsp
 
-Misfitting Text: The text [first navigation element] within [HtmlAnchor[<a href="/path/to/first/element">]] didn't equal [second navigation element]
+Misfitting Text: The text [first navigation element] within [HtmlAnchor[<h4 href="/path/to/first/element">]] didn't equal [second navigation element]
 Current document does not match provided gauge:
 <nav id="mainNav">
     <ul>
@@ -558,6 +558,25 @@ eventually(timeout(3 seconds)) {
                 <!--<p>Accessing the response status with Selenium is not possible, most probably because some of the supported browsers-->
                 <!--do not provide this information via their API. Luckily this information is available within the HtmlUnitWebDriver.-->
                 <!--To support tests for response status within ScalaWebTest, a different driver is used, which provides this information.</p>-->
+                <h4 id="modules">Modules</h4>
+                <p>Every web application framework has its own approaches/concepts, which are relevant for testing.
+                    ScalaWebTest provides this framework specific logic via modules. We encourage other, to create additional
+                    modules for their framework, or use an existing one, if it is already available.</p>
+                <p>What should be shared via modules?</p>
+                <p>We think even simple things such as default login method, ports and urls might be worth sharing.
+                    Functions to create content, update accounts, or requesting a page in debug mode, could be even better candidates for a module.</p>
+                <h4 id="modules/aem">AEM module</h4>
+                <p>As the creators of ScalaWebTest work a lot with Adobe Experience Manager, they decided to create the first module for this CMS</p>
+                <p>To use this module extend <i>AemTweaks</i> from the <i>aem</i> module in your BaseTrait. This will cause the following.</p>
+                <ul>
+                    <li><i>FormBasedLogin</i> is activated</li>
+                    <li><i>loginPath</i> is set to the default AEM 6 login path</li>
+                    <li>pages are requested with <i>wcmmode</i> cookie set to <i>DISABLED</i></li>
+                </ul>
+
+                <h4 id="extending">Extending ScalaWebTest</h4>
+                <p>One of the goals for ScalaWebTest is to make it as as easy as possible, to extend it. Therefore the foreseen extension points
+                are a part of the documentation.</p>
             </div>
         </div>
     </div>

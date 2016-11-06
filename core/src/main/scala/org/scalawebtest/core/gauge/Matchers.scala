@@ -17,10 +17,10 @@ package org.scalawebtest.core.gauge
 /**
   * Verifies element text or attribute values with one of its PluggableMatchers.
   */
-object Matcher {
+object Matchers {
   //Warning! Order within this lists matters. The first Matcher with a valid marker will be used. The marker of the DefaultMatcher is always valid.
-  val textMatchers: List[TextMatcher] = ContainsMatcher :: RegexMatcher :: DefaultMatcher :: Nil
-  val attributeMatchers: List[AttributeMatcher] = ContainsMatcher :: RegexMatcher :: DefaultMatcher :: Nil
+  var textMatchers: List[TextMatcher] = ContainsMatcher :: RegexMatcher :: DefaultMatcher :: Nil
+  var attributeMatchers: List[AttributeMatcher] = ContainsMatcher :: RegexMatcher :: DefaultMatcher :: Nil
 
   def attributeMatches(expectedValue: String, attribute: CandidateAttribute) = {
     val matcher = attributeMatchers.find(m => expectedValue.startsWith(m.marker))

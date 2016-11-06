@@ -51,7 +51,7 @@ twitterAuthor: danireych
                             </header>
                             <ul class="default">
                                 <li><a href="#javascript">Executing JavaScript</a></li>
-                                <li><a href="#responsestatus">Accessing response status</a></li>
+                                <!--<li><a href="#responsestatus">Accessing response status</a></li>-->
                             </ul>
                         </section>
                         <section>
@@ -67,6 +67,9 @@ twitterAuthor: danireych
                             <header>Extending ScalaWebTest</header>
                             <ul class="default">
                                 <li><a href="#extending">Extending ScalaWebTest</a></li>
+                                <li><a href="#extending/matchers">Create a custom matcher</a></li>
+                                <li><a href="#extending/login">Create a custom login</a></li>
+                                <li><a href="#extending/module">Create your own module</a></li>
                             </ul>
                         </section>
                     </div>
@@ -79,7 +82,7 @@ twitterAuthor: danireych
                                 <li><a href="#api/IntegrationSpec">IntegrationSpec</a></li>
                                 <li><a href="#api/IntegrationSpec">Integration*Spec</a></li>
                                 <li><a href="#api/SpecBehavior">*SpecBehavior</a></li>
-                                <li><a href="#api/Matcher">Matcher</a></li>
+                                <li><a href="#api/Matcher">Matchers</a></li>
                                 <li><a href="#api/Login">Login</a></li>
                                 <li><a href="#api/WebDriver">WebDriver</a></li>
                                 <li><a href="#api/WebDriverConfigFixtures">WebDriverConfigFixtures</a></li>
@@ -577,6 +580,19 @@ eventually(timeout(3 seconds)) {
                 <h4 id="extending">Extending ScalaWebTest</h4>
                 <p>One of the goals for ScalaWebTest is to make it as as easy as possible, to extend it. Therefore the foreseen extension points
                 are a part of the documentation.</p>
+                <h4 id="extending/matchers">Create a custom matcher</h4>
+                <p>One of the core extension points for gauge testing, are the matchers. ScalaWebTest uses two types of matchers, one for text and one for attributes.
+                You may create your own <i>TextMatcher</i> or <i>AttributeMatcher</i> by extending those traits. You can then add the your own matcher,
+                by prepending to the list of <i>textMatchers</i> or <i>attributesMatchers</i> in the <i>Matchers</i> object.</p>
+                <p><a href="https://github.com/unic/ScalaWebTest/tree/master/integration_test/src/it/scala/org/scalawebtest/integration/extending/ExtendingMatchers.scala">Here</a> is a full example, of how to implement your own Matcher</p>
+                <h4 id="extending/login">Create a custom login</h4>
+                <p>If the available login mechanisms don't work with your web application. No worries, simply create your own implementation of the <i>Login</i> interface
+                    and extend it in your base trait. Ideally you then contribute it to the project via pull request.</p>
+                <p>The <a href="https://github.com/unic/ScalaWebTest/blob/master/core/src/main/scala/org/scalawebtest/core/Login.scala">FormBasedLogin</a> provides a good example on how to implement your custom login</p>
+                <h4 id="extending/module">Create your own module</h4>
+                <p>If you implement multiple web applications with the same framework, you might want to create a framework specific module. This allows to share
+                framework specific testing code among multiple projects. You can start using it within your company/project and share it later with
+                the rest of the community by creating a pull request. If you provide your own module to ScalaWebTest, we ask you to help maintaining it.</p>
             </div>
         </div>
     </div>

@@ -125,7 +125,7 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
         }
 
         textElement match {
-          case Some(e) => Matcher.textMatches(expectedText, CandidateElement(misfitRelevance, textElement.get)) match {
+          case Some(e) => Matchers.textMatches(expectedText, CandidateElement(misfitRelevance, textElement.get)) match {
             case None => true
             case Some(m) => misfitHolder.addMisfit(m); false
           }
@@ -179,7 +179,7 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
               misfitHolder.addMisfit(attributeMisfitRelevance, "Misfitting Element: element [" + candidate.prettyString() + "] does not have the expected attribute [" + defAttr + "]")
               return false
             }
-            Matcher.attributeMatches(expectedValue, CandidateAttribute(attributeMisfitRelevance, candidate, attr)) match {
+            Matchers.attributeMatches(expectedValue, CandidateAttribute(attributeMisfitRelevance, candidate, attr)) match {
               case None => true
               case Some(m) => misfitHolder.addMisfit(m); false
             }

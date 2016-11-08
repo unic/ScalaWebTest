@@ -80,9 +80,9 @@ twitterAuthor: danireych
                             </header>
                             <ul class="default">
                                 <li><a href="#api/IntegrationSpec">IntegrationSpec</a></li>
-                                <li><a href="#api/IntegrationSpec">Integration*Spec</a></li>
-                                <li><a href="#api/SpecBehavior">*SpecBehavior</a></li>
-                                <li><a href="#api/Matcher">Matchers</a></li>
+                                <li><a href="#api/Integration_Spec">Integration*Spec</a></li>
+                                <li><a href="#api/_SpecBehavior">*SpecBehavior</a></li>
+                                <li><a href="#api/Matchers">Matchers</a></li>
                                 <li><a href="#api/Login">Login</a></li>
                                 <li><a href="#api/WebDriver">WebDriver</a></li>
                                 <li><a href="#api/WebDriverConfigFixtures">WebDriverConfigFixtures</a></li>
@@ -593,6 +593,44 @@ eventually(timeout(3 seconds)) {
                 <p>If you implement multiple web applications with the same framework, you might want to create a framework specific module. This allows to share
                 framework specific testing code among multiple projects. You can start using it within your company/project and share it later with
                 the rest of the community by creating a pull request. If you provide your own module to ScalaWebTest, we ask you to help maintaining it.</p>
+
+                <h4 id="api/IntegrationSpec">IntegrationSpec</h4>
+                <p>The <i>IntegrationSpec</i> is the base trait, which all testing style specific traits extend. When writing a spec you should not extend
+                <i>IntegrationSpec</i>, but one of the testing style specific traits, such as <i>IntegrationFlatSpec</i></p>
+                <p>The base trait extends the following traits</p>
+                <ul>
+                  <li>Webbrowser - Selenium DSL for ScalaTest</li>
+                  <li>Suite - encapsulates a conceptual suite of tests</li>
+                  <li>BeforeAndAfterEach - provides beforeEach and afterEach test hooks</li>
+                  <li>BeforeAndAfterAll - provides beforeAll and AfterAll tests hooks</li>
+                  <li>WebClientExposingHtmlUnit - wrapper for <i>HtmlUnitDriver</i>, which exposes the <i>WebClient</i></li>
+                  <li>IntegrationSettings - a set of fields to configure IntegrationSpec (moving this to <i>Configuration</i> is currently under debate)</li>
+                  <li>Eventually - provides <i>eventually construct</i></li>
+                </ul>
+                <h4 id="api/Integration_Spec">Integration_Spec</h4>
+                <p>There is a complete set of test style specific base traits. Choose a <a href="">testing style</a> and then extend the according style specific
+                <i>Integration_Spec</i> trait to create your test.</p>
+                <p>This traits extend the following traits</p>
+                <ul>
+                    <li>_Spec i.e. FlatSpec - provides the testing style specific DSL</li>
+                    <li>IntegrationSpec - integrates ScalaTest and Selenium with additional features from ScalaWebTest</li>
+                    <li>Matchers - provides DSL for assertions using the word <i>should</i></li>
+                    <li>Inspectors - provides nestable inspector methods that enable assertions to be made about collections</li>
+                </ul>
+                <h4 id="api/_SpecBehavior">_SpecBehavior</h4>
+                <p>One way to share assertions between testing suites, is to use <i>behavior</i>. A behavior contains a set of assertions.
+                You can then use <i>X behaves like SomeBehavior</i> within the suite. Behavior and Suite have to use the same testing style.
+                Therefore ScalaWebTest builds its style specific base traits on the style specific base traits.
+                The following traits, which are part of the Integration_Spec, are in fact inherite from the behavior</p>
+                <ul>
+                    <li>_Spec i.e. FlatSpec</li>
+                    <li>Matchers</li>
+                    <li>Inspectors</li>
+                </ul>
+                <h4 id="api/Matchers">Matchers</h4>
+                <h4 id="api/Login">Login</h4>
+                <h4 id="api/WebDriver">WebDriver</h4>
+                <h4 id="api/WebDriverConfigFixtures">WebDriverConfigFixtures</h4>
             </div>
         </div>
     </div>

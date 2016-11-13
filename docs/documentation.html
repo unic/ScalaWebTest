@@ -82,6 +82,8 @@ twitterAuthor: danireych
                                 <li><a href="#api/IntegrationSpec">IntegrationSpec</a></li>
                                 <li><a href="#api/Integration_Spec">Integration*Spec</a></li>
                                 <li><a href="#api/_SpecBehavior">*SpecBehavior</a></li>
+                                <li><a href="#api/Gauge">Gauge</a></li>
+                                <li><a href="#api/Misfit">Misfit</a></li>
                                 <li><a href="#api/Matchers">Matchers</a></li>
                                 <li><a href="#api/Login">Login</a></li>
                                 <li><a href="#api/WebDriver">WebDriver</a></li>
@@ -627,7 +629,32 @@ eventually(timeout(3 seconds)) {
                     <li>Matchers</li>
                     <li>Inspectors</li>
                 </ul>
+                <h4 id="api/Gauge">Gauge</h4>
+                <p>The <i>Gauge</i> provides the methods <i>fit</i>, <i>fits</i>, <i>doesnt fit</i> and <i>not fit</i>. All of them are used
+                to verify if the current webpage matches the given gauge specification. To do so, the gauge, searches for elements, as defined by
+                the specification, in the current webpage. Elements are found by element name and containing classes. All elements which fulfill the search
+                criteria, are considered candidates. Candidates are then verified for correct attributes and textcontent, using <i>Matchers</i>, next they
+                are verified by checking whether their children match. As soon as something doesn't match a <i>Misfit</i> is reported. If no candidate matches
+                all criteria, the gauge doesn't fit. While verifying the candidates, a list of <i>Misfits</i> was acquired, the gauge will only report the most
+                specific of all <i>Misfits</i>.
+                </p>
+                <h4 id="api/Misfit">Misfit</h4>
+                <p>A <i>Misfit</i> is a container for an error message, when something didn't fit a given Matcher. It contains an error message and a relevance.
+                The deeper the current check in the gauge specification is, the higher its relevance. In the end only the <i>Misfits</i> with the highest relevance
+                will be part of the error message.</p>
                 <h4 id="api/Matchers">Matchers</h4>
+                <p>When working with <i>gauges</i> for testing, <i>Matchers</i> are used to test attributes and text content of elements.
+                By default the following <i>Matchers</i> are available.</p>
+                <ul>
+                    <li>Default Matcher: tests whether an attribute or text exactly matches a given String</li>
+                    <li>Contains Matcher: tests whether an attribute or text contains a given String</li>
+                    <li>Regex Matcher: tests whether an attribute or text matches the given Regex</li>
+                </ul>
+                <p>All <i>Matchers</i>, which are available by default, can be used for attributes and text.
+                When creating a new <i>Matcher</i>, one is not forced to provide both functionalities. For each of the funcionalities
+                a specific trait exists. Extend <i>AttributeMatcher</i> or <i>TextMatcher</i> or both, when creating your own <i>Matcher</i></p>
+                <p>When creating a custom <i>Matcher</i> the most important thing is to provide a detailed <i>Some(Misfit)</i> in case the <i>Matcher</i>
+                doesn't match. In case of a match, the <i>Matcher</i> simply returns None.</p>
                 <h4 id="api/Login">Login</h4>
                 <h4 id="api/WebDriver">WebDriver</h4>
                 <h4 id="api/WebDriverConfigFixtures">WebDriverConfigFixtures</h4>

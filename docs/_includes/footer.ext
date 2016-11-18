@@ -15,7 +15,7 @@
                 <h2>Get in touch</h2>
             </header>
             <p>
-                E-Mail: <script>document.write('<a href="mailto:daniel.rey' + '@unic.com">daniel.rey' + "@unic.com</a>");</script>
+                E-Mail: <script>document.write('<a href="mailto:scalawebtest' + '@unic.com">scalawebtest' + "@unic.com</a>");</script>
             </p>
             <p>
                 Unic AG<br>

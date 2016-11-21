@@ -656,8 +656,21 @@ eventually(timeout(3 seconds)) {
                 <p>When creating a custom <i>Matcher</i> the most important thing is to provide a detailed <i>Some(Misfit)</i> in case the <i>Matcher</i>
                 doesn't match. In case of a match, the <i>Matcher</i> simply returns None.</p>
                 <h4 id="api/Login">Login</h4>
+                <p>
+                    The Login trait is very simple. It only defines what the <i>username</i> and <i>password</i> field should be called. It is used
+                    to mark specific implementations as <i>Login</i> and to assert that <i>username</i> and <i>password</i> are consistent over all implementations.
+                    Depending on the authentication process for which a Login trait was implemented, it might make sense to overwrite the <i>login</i> function from
+                    <a href="documentation.html#api/IntegrationSpec">IntegrationSpec</a>.
+                </p>
                 <h4 id="api/WebDriver">WebDriver</h4>
+                <p>
+                    <i>ScalaWebTest</i> uses a custom web driver, more precisely a wrapper for the HtmlUnitDriver. Thanks to this wrapper, we can expose the
+                    WebClient to enable more control over the WebClient. We also rely on the HtmlUnitDriver, because it has the option to compare Html Elements
+                    their order within the document. This is not available with all WebDriver implementations, but crucial for the implementation of <a href="documentation.html#api/Gauge">Gauge</a>.
+                </p>
                 <h4 id="api/WebDriverConfigFixtures">WebDriverConfigFixtures</h4>
+                <p>The WebDriverConfigFixtures provide the option to execute a <i>closure</i> with a specific configuration. After the <i>closure</i>
+                    is executed, the WebDriver configuration will be reverted to what it was before the call of the fixture.</p>
             </div>
         </div>
     </div>

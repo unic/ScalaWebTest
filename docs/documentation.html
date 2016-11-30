@@ -107,7 +107,7 @@ twitterAuthor: danireych
                 <p>You can add ScalaWebTest to your integration testing dependencies in the build.sbt/scala
                     of your sbt project as follows.</p>
                 {% highlight scala %}
-libraryDependencies += "org.scalawebtest" %% "core_2.11" % "1.0.2" % "it"
+libraryDependencies += "org.scalawebtest" %% "core_2.11" % "1.0.3" % "it"
                 {% endhighlight %}
 
                 <p>If you want to manage the most important transitive dependencies of ScalaWebTest, you might configure
@@ -115,7 +115,7 @@ libraryDependencies += "org.scalawebtest" %% "core_2.11" % "1.0.2" % "it"
 
                 {% highlight scala %}
 libraryDependencies ++= Seq(
-    "org.scalawebtest" %% "core_2.11" % "1.0.2" % "it"
+    "org.scalawebtest" %% "core_2.11" % "1.0.3" % "it"
     "org.scalatest" %% "scalatest" % "3.0.0" % "it",
     "org.seleniumhq.selenium" % "selenium-java" % "2.53.1" % "it",
     "org.seleniumhq.selenium" % "selenium-htmlunit-driver" % "2.52.0" % "it",
@@ -128,7 +128,7 @@ libraryDependencies ++= Seq(
 <dependency>
     <groupId>org.scalawebtest</groupId>
     <artifactId>core_2.11</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <scope>test</scope>
 </dependency>
                 {% endhighlight%}

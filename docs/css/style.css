@@ -59,7 +59,7 @@
 	a
 	{
 		text-decoration: none;
-		color: #80BA8E;
+		color: #c22d40;
 	}
 	
 	a:hover
@@ -271,7 +271,7 @@
 	{
 		position: relative;
 		display: inline-block;
-		background: #80BA8E;
+		background: #c22d40;
 		padding: 0.8em 2em;
 		text-decoration: none !important;
 		font-size: 1.2em;
@@ -288,7 +288,7 @@
 
 	.button:hover
 	{
-		background: #70AA7E;
+		background: #750f1d;
 		color: #FFF !important;
 	}
 
@@ -830,7 +830,7 @@
 
 		#nav-wrapper
 		{
-			background: rgba(0,0,0,.1);
+			background: rgba(255,255,255,.1);
 			position: absolute;
 			top: 0;
 			left: 0;
@@ -848,7 +848,7 @@
 		{
 			display: inline-block;
 			border-right: 1px solid;
-			border-color: rgba(255,255,255,.1);
+			border-color: rgba(255,255,255,0);
 		}
 		
 			#nav > ul > li:last-child
@@ -1036,7 +1036,7 @@
 
 section .info {
 	padding-left: 1em;
-	border-left: 1em solid #aabbff;
+	border-left: 1em solid #9fb4cc;
 }
 
 #nav {
@@ -1046,7 +1046,7 @@ section .info {
 }
 
 .home {
-	background: transparent url("../images/scalawebtest-logo.png") no-repeat scroll center center;
+	background: transparent url("../css/images/scalawebtest-icon.svg") no-repeat scroll center center;
 	border-right: none;
 	position: absolute;
 	left: 0;
@@ -1063,7 +1063,7 @@ section .info {
 #fromtheblog {
 	padding: 6em 0;
 	position: relative;
-	background: #405ba1;
+	background: #9fb4cc;
 	text-align: center;
 }
 
@@ -1098,33 +1098,4 @@ section .info {
 
 #sidebar ul.style li {
 	padding: 0.2em;
-}
-
-/***
- additions for old documentation
-***/
-
-section .versions {
-    padding-left: 1em;
-    border-left: 1em solid #ffa92f;
-}
-
-.versions a.active {
-    color: #777;
-
-    /* disables link */
-    pointer-events: none !important;
-    cursor: default;
-}
-
-#nav-wrapper.notice {
-    background: #ffa92f;
-
-    /* always fixes notice at top of window */
-    position: fixed;
-    z-index: 2;
-}
-
-#nav-wrapper.old {
-    top: 74px;
 }

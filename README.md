@@ -3,7 +3,7 @@ ScalaWebTest is a library for writing ScalaTest/Selenium based integration tests
 
 In manufacturing it is common to use gauges (also called checking gauges or testing gauges) to verify whether a workpiece meets predefined criteria and tolerances. ScalaWebTest transfers this concept to the world of web integration testing. You can define a gauge in HTML, and use it to verify your web application. This greatly improves the readability, simplicity of your integration tests.
 
-Read the full documentation on our website https://unic.github.io/ScalaWebTest/
+Read the full documentation on our website http://www.scalawebtest.org
 
 ## How to Release
 

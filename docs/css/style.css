@@ -848,7 +848,7 @@
 		{
 			display: inline-block;
 			border-right: 1px solid;
-			border-color: rgba(255,255,255,0);
+			border-color: rgba(0,0,0,.1);
 		}
 		
 			#nav > ul > li:last-child
@@ -1031,7 +1031,7 @@
 		}
 
 /***
- NEBA additions
+ ScalaWebTest additions
 **/
 
 section .info {
@@ -1046,7 +1046,8 @@ section .info {
 }
 
 .home {
-	background: transparent url("../css/images/scalawebtest-icon.svg") no-repeat scroll center center;
+	background: transparent url("../css/images/swt-logo-dark.svg") no-repeat scroll center center;
+	background-size: auto 68px;
 	border-right: none;
 	position: absolute;
 	left: 0;

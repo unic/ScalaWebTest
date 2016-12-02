@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="750" height="375" viewBox="0 0 750 375">
+<defs>
+    <style>
+      .cls-1 {
+        font-size: 280px;
+        fill: #fff;
+        font-family: "Montserrat Subrayada";
+        white-space: pre-wrap;
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        text-anchor: middle;
+      }
+
+      .cls-2 {
+        font-size: 100px;
+      }
+
+      .cls-2, .cls-3 {
+        fill: #c22d40;
+        font-family: "Montserrat Alternates";
+      }
+
+      .cls-3 {
+        font-size: 220px;
+      }
+    </style>
+  </defs>
+  <g id="swt-logo-dark" data-name="swt-logo-dark">
+    <text id="_" data-name="&lt;   /&gt;" class="cls-1" x="374.001" y="236">&lt;   /&gt;</text>
+    <text id="ScalaWebTest" class="cls-2" x="373" y="350">ScalaWebTest</text>
+    <text id="_2" data-name="_" class="cls-3" transform="translate(301.431 116.689) scale(1.274 2.406)">_</text>
+  </g>
+</svg>

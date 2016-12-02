@@ -1,4 +1,4 @@
-# [![ScalaWebTest](http://localhost:4000/images/swt-logo-light.png)](http://www.scalawebtest.org)
+# [![ScalaWebTest](http://www.scalawebtest.org/images/swt-logo-light.png)](http://www.scalawebtest.org)
 ###### [![Build Status](https://travis-ci.org/unic/ScalaWebTest.svg?branch=master)](https://travis-ci.org/unic/ScalaWebTest)
 ScalaWebTest is a library for writing ScalaTest/Selenium based integration tests for websites. It helps you with your basic setup and provides a new and very efficient approach to testing.
 

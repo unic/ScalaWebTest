@@ -1,7 +1,8 @@
 github: [Repository metadata]
 markdown: kramdown
-#also change prefix in init.js, when changing the url
 url: http://www.scalawebtest.org
+#for local server instances
+#url: http://localhost:4000
 scalaWebTestVersion: 1.0.0
 collections:
   - mainNavItems

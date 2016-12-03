@@ -1,0 +1,350 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta http-equiv="keywords" content="">
+    <meta http-equiv="description" content="">
+    <script type="text/javascript" src="/etc/clientlibs/foundation/librarymanager.js"></script>
+<script type="text/javascript">
+CQClientLibraryManager.write([{"p":"/etc/clientlibs/foundation/jquery.js","c":[]},{"p":"/etc/clientlibs/foundation/shared.js","c":[]},{"p":"/etc/clientlibs/foundation/main.js","c":[]},{"p":"/etc/clientlibs/foundation/main.css","c":[]},{"p":"/etc/designs/geometrixx/clientlibs.js","c":[]},{"p":"/etc/designs/geometrixx/clientlibs.css","c":[]},{"p":"/etc/designs/geometrixx/clientlibs/themes/default.css","c":[]},{"p":"/etc/designs/geometrixx/clientlibs/ie6/themes/default.css","c":["ie6"]}],false);
+</script>
+<link href="/etc/designs/geometrixx/static.css" rel="stylesheet" type="text/css">
+<link href="/etc/designs/geometrixx.css" rel="stylesheet" type="text/css">
+
+
+    <script type="text/javascript">
+CQClientLibraryManager.write([{"p":"/libs/cq/ui/widgets.js","c":["!touch"]},{"p":"/libs/cq/touch/widgets.js","c":["touch"]},{"p":"/libs/cq/analytics/widgets.js","c":["!touch"]},{"p":"/libs/cq/security/widgets.js","c":["!touch"]},{"p":"/libs/cq/tagging/widgets.js","c":["!touch"]},{"p":"/libs/cq/ui/widgets/themes/default.js","c":["!touch"]},{"p":"/libs/cq/ui/widgets/themes/default.css","c":["!touch"]},{"p":"/libs/cq/touch/widgets/themes/default.css","c":["touch"]},{"p":"/libs/cq/analytics/widgets/themes/default.css","c":["!touch"]},{"p":"/libs/cq/security/widgets/themes/default.js","c":["!touch"]},{"p":"/libs/cq/security/widgets/themes/default.css","c":["!touch"]},{"p":"/libs/cq/tagging/widgets/themes/default.js","c":["!touch"]},{"p":"/libs/cq/tagging/widgets/themes/default.css","c":["!touch"]}],false);
+</script>
+
+    <script type="text/javascript">
+        CQ.WCM.launchSidekick("/content/geometrixx/en/toolbar/profiles/edit", {
+            propsDialog: "",
+            locked: false
+        });
+    </script>
+
+    <script type="text/javascript">
+    {
+        window.setTimeout(function() {
+            $CQ.getScript("http://localhost:4502/libs/wcm/stats/tracker.js?path=/content/geometrixx/en/toolbar/profiles/edit");
+        }, 1);
+    }
+    </script>
+
+<script type="text/javascript">function trackMVTImpression() {
+
+        if (window.randomBannerList) {
+            var trackImg = new Image();
+            trackImg.src = 'http://localhost:4502/libs/wcm/mvt/tracker/view?path=' + encodeURIComponent('/content/geometrixx/en/toolbar/profiles/edit') + '&vars=' + encodeURIComponent(window.randomBannerList);
+        }
+
+    }</script>
+
+    <link rel="icon" type="image/vnd.microsoft.icon" href="/etc/designs/geometrixx/favicon.ico">
+    <link rel="shortcut icon" type="image/vnd.microsoft.icon" href="/etc/designs/geometrixx/favicon.ico">
+
+    <title>Edit Profile</title>
+</head>
+
+<body class="page contentpage ">
+    <div class="clickstreamcloud">
+<script type="text/javascript">
+CQClientLibraryManager.write([{"p":"/libs/cq/personalization/widgets.js","c":["!touch"]},{"p":"/libs/cq/personalization/widgets/themes/default.css","c":[]}],false);
+</script>
+<script type="text/javascript" src="/etc/segmentation.segment.js"></script>
+
+
+<div id="clickstreamcloud-gui"></div></div>
+
+    <div class="bg">
+        <div class="header">
+    <div class="container_16">
+        <div class="grid_8">
+            <div class="logo"><a href="/content/geometrixx/en.html"><img title="" alt="Home" src="/etc/designs/geometrixx/_jcr_content/page/logo.img.png/1282235023667.png"></a></div>
+
+        </div>
+        <div class="grid_8">
+            <div class="search_area">
+                <div class="userinfo"><ul><li class="user"><span id="profile-formattedName-1480805103531">(Administrator)</span><script type="text/javascript">if( CQ_Analytics && CQ_Analytics.CCM) {$CQ(function() {CQ_Analytics.CCM.addListener('storesloaded', function() {var store = CQ_Analytics.CCM.getRegisteredStore('profile');if(store && store.addListener) {store.addListener('update', function() {var name = store.getProperty('formattedName') || '';name = '(' + name + ')';var el = document.getElementById('profile-formattedName-1480805103531');if( el && el.innerHTML != name) {el.innerHTML = name;}});}});});}</script>
+</li>    <li class="profilepage"><a id="myprofile-link" href="/home/users/a/admin/profile.form.html/content/geometrixx/en/toolbar/profiles/view">My Profile</a><script type="text/javascript">if (CQ_Analytics && CQ_Analytics.CCM) {$CQ(function() {CQ_Analytics.CCM.addListener('storesloaded', function() {var store = CQ_Analytics.CCM.getRegisteredStore('profile');if (store && store.addListener) {store.addListener('update', function() {var linkHref = '${profile.path}.form.html/content/geometrixx/en/toolbar/profiles/view';var linkValue = 'My Profile';var p = store.getData();if (p) {linkHref = linkHref.replace(/\$\{profile\.path\}/g, p['path']);}linkValue = '' + linkValue + '';var link = document.getElementById('myprofile-link');if (link && link.href != linkHref) {link.href = linkHref;}if (link && link.innerHTML != linkValue) {link.innerHTML = linkValue;}});}});});}</script>
+</li>
+    <li class="signout"><script type="text/javascript">function logout() {
+
+            if( CQ_Analytics && CQ_Analytics.CCM) {
+                CQ_Analytics.ProfileDataMgr.loadProfile("anonymous");
+                CQ.shared.Util.reload();
+            }
+
+    }</script><a href="javascript:logout();">Sign Out</a></li>
+</ul></div>
+
+                <div class="toptoolbar toolbar"><ul><li class="first last">
+                        <a href="/content/geometrixx/en/toolbar/contacts.html">Contact</a>
+                    </li></ul></div>
+
+                <div class="clear"></div>
+                <form action="/content/geometrixx/en/toolbar/search.html" method="get">
+                    <fieldset>
+                        <div class="input_box">
+                            <label for="h-search-field" style="display: none;">Enter your search query</label>
+                            <input class="cq-auto-clear" type="text" value="Enter Query" name="q"  id="h-search-field">
+                        </div>
+                        <input type="button" onclick="this.form.submit();" class="btn" >
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+        <script type="text/javascript" src="/content/geometrixx/en.topnav.1479335067500.html"></script>
+
+    </div>
+</div>
+
+
+
+<div class="container_16">
+    <div class="grid_16">
+        <div class="breadcrumb"><a href="/content/geometrixx/en.html">English</a>&nbsp;&raquo;&nbsp;<a href="/content/geometrixx/en/toolbar.html">Toolbar</a>&nbsp;&raquo;&nbsp;<a href="/content/geometrixx/en/toolbar/profiles.html">Profiles</a>&nbsp;&raquo;&nbsp;</div>
+
+        <div class="title"><h1>Edit Profile</h1>
+</div>
+
+    </div>
+    <div class="grid_12 body_container">
+
+        <div class="par parsys"><script type="text/javascript">
+  function cq5forms_preCheck_profile(submitid) {
+    var dMsgs = "Please fill out the required field.";
+
+
+
+if (!cq5forms_isEmpty(document.forms["profile"].elements["age"])){
+{var obj =document.forms["profile"].elements["age"];if ( cq5forms_isArray(obj)) {for(i=0;i<obj.length;i++) {if (!cq5forms_regcheck(obj[i].value, /([\d])+/)) {cq5forms_showMsg('profile','age','Field does not contain a number.', i); return false;}}} else {if (!cq5forms_regcheck(obj.value, /([\d])+/)) {cq5forms_showMsg('profile','age','Field does not contain a number.'); return false;}}}
+}
+
+
+
+
+if (!cq5forms_isEmpty(document.forms["profile"].elements["email"])){
+{var obj =document.forms["profile"].elements["email"];if ( cq5forms_isArray(obj)) {for(i=0;i<obj.length;i++) {if (!cq5forms_regcheck(obj[i].value, /^[^@]+([@]{1})[0-9a-zA-Z\._-]+([\.]{1})[0-9a-zA-Z\._-]+$/)) {cq5forms_showMsg('profile','email','Field does not contain a valid email address.', i); return false;}}} else {if (!cq5forms_regcheck(obj.value, /^[^@]+([@]{1})[0-9a-zA-Z\._-]+([\.]{1})[0-9a-zA-Z\._-]+$/)) {cq5forms_showMsg('profile','email','Field does not contain a valid email address.'); return false;}}}
+}
+
+
+
+    return true;
+  }
+</script>
+<form method="POST" action="/home/users/a/admin/profile.form.html/content/geometrixx/en/toolbar/profiles/edit" id="profile" name="profile" enctype="multipart/form-data"><input type="hidden" name=":formid" value="profile"/><input type="hidden" name=":formstart" value="/content/geometrixx/en/toolbar/profiles/edit/jcr:content/par/start"/><input type="hidden" name="_charset_" value="UTF-8"/>
+<input type="hidden" name=":resource" value="/home/users/a/admin/profile">
+
+<div class="form"></div>
+<div class="colctrl section"></div>
+<div class="parsys_column cq-colctrl-lt0"><div class="parsys_column cq-colctrl-lt0-c0"><div class="image section"><div class="form_row">
+        <div class="form_leftcol"><div class="form_leftcollabel"><label for="profile_photos/primary/image">Avatar</label></div><div class="form_leftcolmark">&nbsp;</div></div>
+
+<div class="form_rightcol">Upload image:</div>
+        <div class="form_rightcol"><input id="profile_photos/primary/image" class="form_field form_field_file" name="photos/primary/image" type="file" size="28"></div>
+
+    </div><div class="form_row_description"></div>
+
+</div>
+<div class="hidden section"><input id="profile_photos/jcr:primaryType" name="photos/jcr:primaryType" value="sling:Folder" type="hidden">
+</div>
+<div class="dropdown section">
+    <div class="form_row">
+       <div class="form_leftcol"><div class="form_leftcollabel"><label for="profile_gender">Gender</label></div><div class="form_leftcolmark">&nbsp;</div></div>
+
+       <div class="form_rightcol">
+        <select class="form_field form_field_select" id="profile_gender" name="gender" ><option value=""></option><option value="Female">Female</option><option value="Male">Male</option></select>
+          </div>
+        </div>
+    <div class="form_row_description"></div>
+
+</div>
+<div class="text section"><div class="form_row">
+        <div class="form_leftcol"><div class="form_leftcollabel"><label for="profile_age">Age</label></div><div class="form_leftcolmark">&nbsp;</div></div>
+
+        <div class="form_rightcol" id="age_rightcol"><div id="age_0_wrapper" class="form_rightcol_wrapper"><input class="form_field form_field_text" id="profile_age" name="age" value="" size="35" ></div></div></div><div class="form_row_description"></div>
+
+</div>
+<div class="new section"></div>
+</div><div class="parsys_column cq-colctrl-lt0-c1"><div class="text section"><div class="form_row">
+        <div class="form_leftcol"><div class="form_leftcollabel"><label for="profile_displayName">Display name</label></div><div class="form_leftcolmark">&nbsp;</div></div>
+
+        <div class="form_rightcol" id="displayName_rightcol"><div id="displayName_0_wrapper" class="form_rightcol_wrapper"><input class="form_field form_field_text" id="profile_displayName" name="displayName" value="" size="35" ></div></div></div><div class="form_row_description"></div>
+
+</div>
+<div class="text section"><div class="form_row">
+        <div class="form_leftcol"><div class="form_leftcollabel"><label for="profile_givenName">Given name</label></div><div class="form_leftcolmark">&nbsp;</div></div>
+
+        <div class="form_rightcol" id="givenName_rightcol"><div id="givenName_0_wrapper" class="form_rightcol_wrapper"><input class="form_field form_field_text" id="profile_givenName" name="givenName" value="" size="35" ></div></div></div><div class="form_row_description"></div>
+
+</div>
+<div class="text section"><div class="form_row">
+        <div class="form_leftcol"><div class="form_leftcollabel"><label for="profile_middleName">Middle name</label></div><div class="form_leftcolmark">&nbsp;</div></div>
+
+        <div class="form_rightcol" id="middleName_rightcol"><div id="middleName_0_wrapper" class="form_rightcol_wrapper"><input class="form_field form_field_text" id="profile_middleName" name="middleName" value="" size="35" ></div></div></div><div class="form_row_description"></div>
+
+</div>
+<div class="text section"><div class="form_row">
+        <div class="form_leftcol"><div class="form_leftcollabel"><label for="profile_familyName">Family name</label></div><div class="form_leftcolmark">&nbsp;</div></div>
+
+        <div class="form_rightcol" id="familyName_rightcol"><div id="familyName_0_wrapper" class="form_rightcol_wrapper"><input class="form_field form_field_text" id="profile_familyName" name="familyName" value="Administrator" size="35" ></div></div></div><div class="form_row_description"></div>
+
+</div>
+<div class="text section"><script type="text/javascript">
+    function CQ_form_addMultivalue(name, rows, width) {
+        var wrapper = document.getElementById(name + "_rightcol");
+        var fieldWrapper = document.createElement("div");
+        var index = new Date().getTime();
+        fieldWrapper.id = name + "_" + index + "_wrapper";
+
+
+        var field;
+        if (rows == 1) {
+            field = document.createElement("input");
+            field.className = "form_field form_field_text form_field_multivalued";
+        }
+        else {
+            field = document.createElement("textarea");
+            field.className = "form_field form_field_textarea";
+            field.rows = rows;
+        }
+        field.name = name;
+        if (width) {
+            if (width.indexOf("px")< width.length-2) width +="px";
+            field.style.width = width;
+        }
+
+        var icon = document.createElement("span");
+        icon.className = "form_mv_remove";
+        icon.onclick = function() {
+            CQ_form_removeMultivalue(name, index);
+        };
+        icon.innerHTML = "&nbsp;[&ndash;]";
+
+        fieldWrapper.appendChild(field);
+        fieldWrapper.appendChild(icon);
+        wrapper.appendChild(fieldWrapper);
+    }
+
+    /**
+     * Remove a field from a multivalue text field
+     * @param index
+     */
+    function CQ_form_removeMultivalue(name, index) {
+        var wrapper = document.getElementById(name + "_rightcol");
+        var fieldWrapper = document.getElementById(name + "_" + index + "_wrapper");
+        wrapper.removeChild(fieldWrapper);
+    }
+</script><div class="form_row">
+        <div class="form_leftcol"><div class="form_leftcollabel"><label for="profile_email">E-mail</label></div><div class="form_leftcolmark">&nbsp;</div></div>
+
+        <div class="form_rightcol" id="email_rightcol"><div id="email_0_wrapper" class="form_rightcol_wrapper"><input class="form_field form_field_text form_field_multivalued" id="profile_email" name="email" value="" size="35" ></div></div><span class="form_mv_add" onclick="CQ_form_addMultivalue('email', 1, null);">[+]</span></div><div class="form_row_description"></div>
+
+</div>
+<div class="new section"></div>
+</div></div><div style="clear:both"></div><div class="title section"><h3>Activities</h3>
+</div>
+<div class="text section"><div class="form_row">
+        <div class="form_leftcol"><div class="form_leftcollabel"><label for="profile_hobbies">Hobbies</label></div><div class="form_leftcolmark">&nbsp;</div></div>
+
+        <div class="form_rightcol" id="hobbies_rightcol"><div id="hobbies_0_wrapper" class="form_rightcol_wrapper"><textarea class="form_field form_field_textarea" id="profile_hobbies" name="hobbies" rows="3" cols="35" ></textarea></div></div></div><div class="form_row_description"></div>
+
+</div>
+<div class="text section"><div class="form_row">
+        <div class="form_leftcol"><div class="form_leftcollabel"><label for="profile_aboutMe">About me</label></div><div class="form_leftcolmark">&nbsp;</div></div>
+
+        <div class="form_rightcol" id="aboutMe_rightcol"><div id="aboutMe_0_wrapper" class="form_rightcol_wrapper"><textarea class="form_field form_field_textarea" id="profile_aboutMe" name="aboutMe" rows="3" cols="35" ></textarea></div></div></div><div class="form_row_description"></div>
+
+</div>
+<div class="hidden section"><input id="profile_:redirect" name=":redirect" value="/home/users/a/admin/profile.form.html/content/geometrixx/en/toolbar/profiles/view" type="hidden">
+</div>
+<div class="section end">
+
+<div class="form_row">
+   <div class="form_leftcol"></div>
+   <div class="form_rightcol">
+<input class="form_button_submit" type="button" name=":ignore" value="Save" onclick="if (cq5forms_preCheck_profile(':ignore')) { document.forms['profile'].submit();} else return false;">&nbsp;&nbsp;&nbsp;<input class="form_button_reset" type="reset" value="Reset"></div>
+  </div><div class="form_row_description"></div>
+</div></form><div class="new section"></div>
+</div>
+
+    </div>
+    <div class="grid_4 right_container">
+        <div class="parsys rightpar iparsys"><div class="iparys_inherited"><div class="parsys rightpar iparsys"><div class="section"><div class="parbase teaser"><script type="text/javascript">{initializeTeaserLoader([{"path":"/content/campaigns/geometrixx/scott-recommends","name":"scott-recommends","campainName":"geometrixx","id":"geometrixx_scott-recommends","segments":["/etc/segmentation/geometrixx/male"],"tags":[]},{"path":"/content/campaigns/geometrixx/yolanda-recommends","name":"yolanda-recommends","campainName":"geometrixx","id":"geometrixx_yolanda-recommends","segments":["/etc/segmentation/geometrixx/female"],"tags":[]},{"path":"/content/campaigns/geometrixx/default_teaser","name":"default_teaser","campainName":"geometrixx","id":"geometrixx_default_teaser","segments":[],"tags":[]}], "first", "_content_geometrixx_en_jcr_content_rightpar_teaser", "false", "http://localhost:4502/libs/wcm/stats/tracker.js");
+        }</script><div id="_content_geometrixx_en_jcr_content_rightpar_teaser" class="campaign campaign-geometrixx"></div></div>
+</div></div>
+</div><div class="section"><div class="new"></div>
+</div>
+</div>
+
+    </div>
+    <div class="clear"></div>
+</div>
+
+
+
+
+<div class="footer container_16">
+    <div class="grid_6">
+        <h3>&copy; 2016 Geometrixx Inc.</h3>
+        <div class="toolbar"><ul><li class="first ">
+                        <a href="/content/geometrixx/en/toolbar/feedback.html">Feedback</a>
+                    </li><li class="">
+                        <a href="/content/geometrixx/en/toolbar/newsletter.html">Newsletter</a>
+                    </li><li class="">
+                        <a href="/content/geometrixx/en/toolbar/search.html">Search</a>
+                    </li><li class="">
+                        <a href="/content/geometrixx/en/toolbar/sitemap.html">Sitemap</a>
+                    </li><li class="last">
+                        <a href="/content/geometrixx/en/toolbar/blog.html">Blog</a>
+                    </li></ul></div>
+
+    </div>
+    <div class="grid_6">
+        <h3>Geometrixx Newsletter</h3>
+        <p>We would like to keep in touch with you. Sign up here to receive our monthly newsletter on the latest products and services from Geometrixx.</p>
+        <div class="form_section">
+            <form action="" method="post">
+                <fieldset>
+                    <div class="input_box1">
+                        <label for="f-newsletter-subscription" style="display: none;">Enter your email address</label>
+                        <input class="cq-auto-clear" type="text" value="Your Email Adress" name="" id="f-newsletter-subscription"/>
+                    </div>
+                    <input type="button" value="" name="" class="sign_up"/>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <div class="grid_4">
+        <h3>Follow us</h3>
+        <ul>
+            <li><a href="#"><img class="icon_facebook" src="/etc/designs/default/0.gif" alt=""/> Let&rsquo;s get together on Facebook</a></li>
+            <li><a href="#"><img class="icon_twitter" src="/etc/designs/default/0.gif" alt=""/> Follow us on Twitter</a></li>
+            <li><a href="/content/geometrixx_mobile/en.html"><img class="icon_mobile" src="/etc/designs/default/0.gif" alt=""/> We&rsquo;re mobile!</a></li>
+        </ul>
+    </div>
+    <div class="clear"></div>
+</div>
+
+    </div>
+
+
+
+
+
+
+
+
+<!--
+More detailed timing info is available by uncommenting some code in the timing.jsp component
+Timing chart URL:
+http://chart.apis.google.com/chart?chtt=edit+%2863ms%29&cht=bhs&chxt=x&chco=c6d9fd,4d89f9&chbh=a&chds=0,63,0,63&chxr=0,0,63&chd=t:10,13,15,17,19,21,22,24,24,27,27,28,28,28,29,29,30,30,31,31,31,32,32,33,33,33,34,34,34,35,36,36,36,37,37,37,38,39,40,40,41,42,43,44,45,45,46,47,48,48,49,54,55,55,56,57,57,59,61,62|2,1,1,1,1,0,34,0,14,0,1,0,0,1,0,1,0,0,0,0,1,0,0,0,0,1,0,1,1,0,0,0,0,0,0,1,0,0,0,1,1,1,1,0,0,1,1,0,0,0,4,0,0,1,0,4,4,2,0,1&chly=clickstreamcloud.jsp|logo.jsp|userinfo.jsp|toolbar.jsp|breadcrumb.jsp|title.jsp|parsys.jsp|init.jsp|start.jsp|init.jsp|clientvalidation.jsp|init.jsp|clientvalidation.jsp|init.jsp|clientvalidation.jsp|init.jsp|clientvalidation.jsp|clientvalidation.jsp|init.jsp|clientvalidation.jsp|init.jsp|clientvalidation.jsp|init.jsp|clientvalidation.jsp|init.jsp|clientvalidation.jsp|init.jsp|clientvalidation.jsp|clientvalidation.jsp|init.jsp|clientvalidation.jsp|init.jsp|clientvalidation.jsp|init.jsp|clientvalidation.jsp|formclientvalidation.jsp|addfields.jsp|colctrl.jsp|image.jsp|hidden.jsp|dropdown.jsp|text.jsp|new.jsp|text.jsp|text.jsp|text.jsp|text.jsp|text.jsp|new.jsp|title.jsp|text.jsp|text.jsp|hidden.jsp|end.jsp|new.jsp|par.jsp|iparsys.jsp|teaser.jsp|new.jsp|toolbar.jsp&chs=600x500
+-->
+
+
+    <div class="analytics">
+</div>
+
+</body>
+</html>

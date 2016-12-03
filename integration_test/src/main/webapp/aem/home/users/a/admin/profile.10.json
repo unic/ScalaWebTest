@@ -1,0 +1,1 @@
+{"sling:resourceType":"cq/security/components/profile","jcr:mixinTypes":["rep:AccessControllable"],"jcr:createdBy":"system","jcr:created":"Tue Oct 06 2015 14:14:36 GMT+0200","familyName":"Administrator","Submit":"Edit Profile","jcr:primaryType":"sling:Folder","forum":{"numberOfPosts":4,"jcr:primaryType":"nt:unstructured"}}

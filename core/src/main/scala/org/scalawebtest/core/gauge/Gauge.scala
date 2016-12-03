@@ -21,7 +21,7 @@ import org.scalawebtest.core.WebClientExposingDriver
 import org.w3c._
 
 import scala.collection.JavaConverters._
-import scala.xml.{Elem, Node, NodeSeq, Text}
+import scala.xml._
 
 /**
   * Gauge provides functions to write integration tests with very low effort. For a detailed description of it's usage,
@@ -57,7 +57,7 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
     definition.theSeq.foreach(gaugeElement => {
       val fittingNode = nodeFits(currentPage.getDocumentElement, gaugeElement, None, misfitRelevance)
       if (fittingNode.isDefined) {
-        fail("Current document matches the provided gauge, although expected not to!\n Fitting node " + fittingNode.head.prettyString() + " found")
+        fail("Current document matches the provided gauge, although expected not to!\n Gauge spec: "+ gaugeElement + "\n Fitting node: " + fittingNode.head.prettyString() + " found")
       }
       misfitRelevance += 1
     })
@@ -96,6 +96,8 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
           else {
             false
           }
+        case atom: Atom[_] =>
+          textFits(node, atom.text.trim, previousNode, misfitRelevance + 1)
         case _ => true //everything except text and elements is ignored
       }
     }
@@ -234,10 +236,9 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
       domNode match {
         case t: DomText => t.asText()
         case e: DomElement =>
-
-          indention + "<" + e.getNodeName + e.getAttributesMap.values().asScala.map(e => e.getNodeName + "=\"" + e.getNodeValue + "\"").fold("")(_ + " " + _) + ">" +
-            e.getChildren.asScala.map(_.prettyString(depth + 1)).fold("")(_ + _) +
-            indention + "</" + domNode.getNodeName + ">"
+          indention + s"<${e.getNodeName + e.getAttributesMap.values().asScala.map(e => e.getNodeName + "=\"" + e.getNodeValue + "\"").fold("")(_ + " " + _)}>" +
+          e.getChildren.asScala.map(_.prettyString(depth + 1)).fold("")(_ + _) +
+          indention + s"</${e.getNodeName}>"
         case default => ""
       }
     }

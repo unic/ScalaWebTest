@@ -3,7 +3,7 @@ crossScalaVersions := Seq("2.12.0", "2.11.8", "2.10.6")
 lazy val commonSettings = Seq(
   organization := "org.scalawebtest",
   version := "1.0.4-SNAPSHOT",
-  scalaVersion := "2.12.0",
+  scalaVersion := "2.11.8",
   scalacOptions := Seq("-unchecked", "-deprecation"),
   publishMavenStyle := true,
   publishTo := {
@@ -30,6 +30,7 @@ lazy val core = project
 
 lazy val aem = project
   .settings(commonSettings: _*)
+  .settings(libraryDependencies ++= scalaVersion(playJsonDependency(scope = None)).value)
   .dependsOn(core)
 
 lazy val bom = project
@@ -77,7 +78,7 @@ lazy val integration_test = project
       "org.slf4j" % "slf4j-api" % "1.7.20" % "it"
     )
   )
-  .settings(libraryDependencies ++= scalaVersion(playJsonDependency).value)
+  .settings(libraryDependencies ++= scalaVersion(playJsonDependency(Some("it"))).value)
   .enablePlugins(JettyPlugin)
   .dependsOn(core)
   .dependsOn(aem)

@@ -61,7 +61,7 @@ trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with
 
   def path = url.replaceFirst(host, "").replaceFirst(projectRoot, "")
 
-  private var url: String = ""
+  protected var url: String = ""
 
   /**
     * Override to encode your project specific login mechanism.
@@ -154,7 +154,7 @@ trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with
     navigateToUrl(s"$host$projectRoot$path")
   }
 
-  private def navigateToUrl(targetUrl: String): Unit = {
+  protected def navigateToUrl(targetUrl: String): Unit = {
     if (targetUrl.isEmpty) {
       throw new RuntimeException("NavigateTo was called without path being defined. Either set config.disableNavigateTo or define path")
     }

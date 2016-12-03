@@ -3,8 +3,11 @@ import sbt._
 import scala.xml.{Elem, NodeSeq}
 
 object ScalaWebTestBuild extends Build {
-  def playJsonDependency(scalaVersion: String): Seq[ModuleID] = scalaVersion match {
-    case "2.11.8" => Seq("com.typesafe.play" % "play-json_2.11" % "2.5.9" % "it")
+  def playJsonDependency(scope: Option[String])(scalaVersion: String): Seq[ModuleID] = scalaVersion match {
+    case "2.11.8" => scope match {
+      case None => Seq("com.typesafe.play" % "play-json_2.11" % "2.5.9")
+      case Some(s) => Seq("com.typesafe.play" % "play-json_2.11" % "2.5.9" % s)
+    }
     case _ => Seq()
   }
 

@@ -2,7 +2,7 @@ crossScalaVersions := Seq("2.12.0", "2.11.8", "2.10.6")
 
 lazy val commonSettings = Seq(
   organization := "org.scalawebtest",
-  version := "1.0.4-SNAPSHOT",
+  version := "1.0.4",
   scalaVersion := "2.11.8",
   scalacOptions := Seq("-unchecked", "-deprecation"),
   publishMavenStyle := true,

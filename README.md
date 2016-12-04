@@ -20,8 +20,10 @@ Copy the private key (Sonatype PGP Private and Public Key from our company passw
 The release process of ScalaWebTest is currently done manually. The process is done as follows:
 
 1. Switch the version in `build.sbt` to that which is to be released (e.g. from `0.0.1-SNAPSHOT` to `1.0.0`)
-2. Commit and push your changes with the commit message "Release x.x.x" (e.g. `Release 1.0.0`)
-3. In your command line type in the following:
+2. Commit your changes with the commit message "Release x.x.x" (e.g. `Release 1.0.0`)
+3. Tag this commit with the release version
+4. Push you changes and the tag
+5. In your command line type in the following:
 	1. the fast way:
 		1. `sbt clean compile`
 		2. `sbt publishSigned`
@@ -37,7 +39,7 @@ The release process of ScalaWebTest is currently done manually. The process is d
 			2. `packageDoc` - creates javadoc jars
 			3. `packageSrc` - creates source jars
 		6. `exit` - exits the sbt interactive mode
-4. On GitHub go to the releases page, click "Draft a new release", and type in the to-be-released version (e.g. `1.0.0`)
-5. Add all the binaries that were created above for the core and aem modules (can be found in the respective target directory) and click "Publish release"
-7. Switch the version in `build.sbt` to the snapshot version (e.g. from `1.0.0` to `1.0.0-SNAPSHOT`) and update the documentation if needed
-8. Finally commit those changes with the commit message "Release x.x.x complete" (e.g. `Release 1.0.0 complete`)
+6. On GitHub go to the releases page, click "Draft a new release", and type in the to-be-released version (e.g. `1.0.0`)
+7. Add all the binaries that were created above for the core and aem modules (can be found in the respective target directory) and click "Publish release"
+8. Switch the version in `build.sbt` to the snapshot version (e.g. from `1.0.0` to `1.0.0-SNAPSHOT`) and update the documentation if needed
+9. Finally commit those changes with the commit message "Release x.x.x complete" (e.g. `Release 1.0.0 complete`)

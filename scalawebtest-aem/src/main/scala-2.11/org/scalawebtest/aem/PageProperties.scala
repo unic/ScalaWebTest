@@ -78,6 +78,7 @@ trait PageProperties {
     * Populates the [[pageProperties]] field with a [[play.api.libs.json.JsValue]], which represents the properties of the currentPage.
     * In case the [[url]] points to something below jcr:content, the [[componentProperties]] will be populate with the properties of the component,
     * and the [[pageProperties]] with those of the containing page.
+    * In case the [[url]] contains a suffix, the [[suffixProperties]] will be populated with the properties of the page referenced in the suffix.
     * It does so by manipulating the [[url]] field, to request the JSON representation of the currentPage from CQ/AEM. This
     * feature is available on CQ/AEM author instances by default.
     * The enable.json property of the org.apache.sling.servlets.get.DefaultGetServlet of your CQ/AEM instance has to be set to true.

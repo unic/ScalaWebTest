@@ -410,176 +410,176 @@ twitterAuthor: danireych
                     23:06:37.482 [ScalaTest-run-running-SimpleGaugeSpec] INFO IntegrationSpec - Going to http://localhost:8080/navigation.jsp
 
                     Misfitting Text: The text [first navigation element] within [HtmlAnchor[<h4 href="/path/to/first/element"></h4>]] didn't equal [second navigation element]
-                        Current document does not match provided gauge:
-                        <nav id="mainNav">
-                            <ul>
-                                <li>
-                                    <a href="/path/to/first/element">second navigation element</a>
-                                </li>
-                                <li>
-                                    <a href="/path/to/second/element"></a>
-                                </li>
-                                <li>
-                                    <a href="/path/to/third/element"></a>
-                                </li>
-                            </ul>
-                        </nav>
-                        ScalaTestFailure
-                        {% endhighlight %}
+                    Current document does not match provided gauge:
+                    <nav id="mainNav">
+                        <ul>
+                            <li>
+                                <a href="/path/to/first/element">second navigation element</a>
+                            </li>
+                            <li>
+                                <a href="/path/to/second/element"></a>
+                            </li>
+                            <li>
+                                <a href="/path/to/third/element"></a>
+                            </li>
+                        </ul>
+                    </nav>
+                    ScalaTestFailure
+                    {% endhighlight %}
 
-                        <h3 id="classes">Test for classes on elements</h3>
-                        <p>The class attribute is special, because it is basically an unsorted set of class attributes. Usually
-                            we don't bother, if additional classes are present in our HTML and for sure we never care about the order.
-                            ScalaWebTest therefore handles the class attribute different from the rest. Per default the attribute content,
-                            has to match exactly the one you provided in your gauge, but for classes, it only asserts, that the classes which
-                            an element contains within your gauge definition, are all present on that element in the HTML document.
-                            The following gauge therefore matches all the elements shown below.</p>
-                        {% highlight scala %}
-                        fit(
-                        <div class="container red"></div>
-                        )
-                        {% endhighlight %}
-                        {% highlight html %}
-                        <div class="container red"></div>
-                        {% endhighlight %}
-                        {% highlight html %}
-                        <div class="red container"></div>
-                        {% endhighlight %}
-                        {% highlight html %}
-                        <div class="red important container main"></div>
-                        {% endhighlight %}
+                    <h3 id="classes">Test for classes on elements</h3>
+                    <p>The class attribute is special, because it is basically an unsorted set of class attributes. Usually
+                        we don't bother, if additional classes are present in our HTML and for sure we never care about the order.
+                        ScalaWebTest therefore handles the class attribute different from the rest. Per default the attribute content,
+                        has to match exactly the one you provided in your gauge, but for classes, it only asserts, that the classes which
+                        an element contains within your gauge definition, are all present on that element in the HTML document.
+                        The following gauge therefore matches all the elements shown below.</p>
+                    {% highlight scala %}
+                    fit(
+                    <div class="container red"></div>
+                    )
+                    {% endhighlight %}
+                    {% highlight html %}
+                    <div class="container red"></div>
+                    {% endhighlight %}
+                    {% highlight html %}
+                    <div class="red container"></div>
+                    {% endhighlight %}
+                    {% highlight html %}
+                    <div class="red important container main"></div>
+                    {% endhighlight %}
 
-                        <h3 id="contains">Test for containment</h3>
-                        <p>It is common that you don't want to verify the complete attribute value, or text of an element.
-                            You may use <i>@contains</i> to trigger the ContainsMatcher instead of the DefaultMatcher.
-                            Thanks to this matcher, this gauge matches the following HTML element</p>
-                        {% highlight scala %}
-                        fit(<a href="@contains ScalaWebTest"></a>)
-                        {% endhighlight %}
-                        {% highlight html %}
-                        <a href="https://github.com/unic/ScalaWebTest"></a>
-                        {% endhighlight %}
-                        <p>The containsMatcher is also available, when matching text.</p>
-                        {% highlight scala %}
-                        fit(<a>@contains available</a>)
-                        {% endhighlight %}
-                        {% highlight html %}
-                        <a>ScalaWebTest is available on github</a>
-                        {% endhighlight %}
-                        <p>Hint: always add a space after the matcher annotation. We enforce this space to improve readability of tests.</p>
-                        <h3 id="regex">Test for regex matches</h3>
-                        <p>When we want to enforce textual rules on our content, we need a more powerful Matcher. The RegexMatcher is our
-                            friend.
-                            It is trigger using <i>@regex</i></p>
+                    <h3 id="contains">Test for containment</h3>
+                    <p>It is common that you don't want to verify the complete attribute value, or text of an element.
+                        You may use <i>@contains</i> to trigger the ContainsMatcher instead of the DefaultMatcher.
+                        Thanks to this matcher, this gauge matches the following HTML element</p>
+                    {% highlight scala %}
+                    fit(<a href="@contains ScalaWebTest"></a>)
+                    {% endhighlight %}
+                    {% highlight html %}
+                    <a href="https://github.com/unic/ScalaWebTest"></a>
+                    {% endhighlight %}
+                    <p>The containsMatcher is also available, when matching text.</p>
+                    {% highlight scala %}
+                    fit(<a>@contains available</a>)
+                    {% endhighlight %}
+                    {% highlight html %}
+                    <a>ScalaWebTest is available on github</a>
+                    {% endhighlight %}
+                    <p>Hint: always add a space after the matcher annotation. We enforce this space to improve readability of tests.</p>
+                    <h3 id="regex">Test for regex matches</h3>
+                    <p>When we want to enforce textual rules on our content, we need a more powerful Matcher. The RegexMatcher is our
+                        friend.
+                        It is trigger using <i>@regex</i></p>
 
-                        {% highlight scala %}
-                        fit(<a href="@regex http:\\/\\/[a-zA-Z]+\.scalawebtest.org.*,"></a>)
-                        {% endhighlight %}
+                    {% highlight scala %}
+                    fit(<a href="@regex http:\\/\\/[a-zA-Z]+\.scalawebtest.org.*,"></a>)
+                    {% endhighlight %}
 
-                        <p>This gauge will fit</p>
-                        {% highlight html %}
-                        <a href="http://www.scalawebtest.org/documentation.html"></a>
-                        {% endhighlight %}
-                        <p>but it won't fit</p>
-                        {% highlight html %}
-                        <a href="http://scalawebtest.org/documentation.html"></a>
-                        {% endhighlight %}
+                    <p>This gauge will fit</p>
+                    {% highlight html %}
+                    <a href="http://www.scalawebtest.org/documentation.html"></a>
+                    {% endhighlight %}
+                    <p>but it won't fit</p>
+                    {% highlight html %}
+                    <a href="http://scalawebtest.org/documentation.html"></a>
+                    {% endhighlight %}
 
-                        <h3 id="negation">Negating your tests</h3>
-                        <p>Sometimes you want to make sure that a certain content is not shown. For example you want to make sure, that no login
-                            form is shown, after logging in. Or you want to make sure that no private information is shown, when an error is
-                            thrown. To do so you may use <i>doesnt fit()</i> or <i>not fit()</i>. They are synonyms. Choose whatever reads
-                            better in your current context.</p>
+                    <h3 id="negation">Negating your tests</h3>
+                    <p>Sometimes you want to make sure that a certain content is not shown. For example you want to make sure, that no login
+                        form is shown, after logging in. Or you want to make sure that no private information is shown, when an error is
+                        thrown. To do so you may use <i>doesnt fit()</i> or <i>not fit()</i>. They are synonyms. Choose whatever reads
+                        better in your current context.</p>
 
-                        {% highlight scala %}
-                        package org.scalawebtest.integration.gauge
+                    {% highlight scala %}
+                    package org.scalawebtest.integration.gauge
 
-                        import org.scalawebtest.core.gauge.Gauge.NotFit
-                        import org.scalawebtest.integration.ScalaWebTestBaseSpec
+                    import org.scalawebtest.core.gauge.Gauge.NotFit
+                    import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
-                        class LoggedInSpec extends ScalaWebTestBaseSpec{
-                        path = "/protectedContent.jsp?username=admin&password=secret"
+                    class LoggedInSpec extends ScalaWebTestBaseSpec{
+                    path = "/protectedContent.jsp?username=admin&password=secret"
 
-                        "When logged in the protectedContent page" should "not show the login form" in {
-                        not fit
-                        <form name="login_form"></form>
-                        }
+                    "When logged in the protectedContent page" should "not show the login form" in {
+                    not fit
+                    <form name="login_form"></form>
+                    }
 
-                        }
-                        {% endhighlight %}
+                    }
+                    {% endhighlight %}
 
-                        <p>In case the login form is mistakenly rendered, the following error will appear.</p>
+                    <p>In case the login form is mistakenly rendered, the following error will appear.</p>
 
-                        {% highlight text %}
-                        Current document matches the provided gauge, although expected not to!
-                        Fitting node
-                        <html>
-                        <head>
-                            <title>Mock of a protected content page
-                            </title>
-                        </head>
-                        <body>
-                        <form name="login_form" action="protectedContent.jsp" method="get">
-                            <label for="username">username
-                            </label>
-                            <input type="text" name="username" id="username">
-                            </input>
-                            <label for="password">password
-                            </label>
-                            <input type="password" name="password" id="password">
-                            </input>
-                            <button type="submit">login
-                            </button>
-                        </form>
-                        </body>
-                        </html>
-                        found
-                        {% endhighlight %}
+                    {% highlight text %}
+                    Current document matches the provided gauge, although expected not to!
+                    Fitting node
+                    <html>
+                    <head>
+                        <title>Mock of a protected content page
+                        </title>
+                    </head>
+                    <body>
+                    <form name="login_form" action="protectedContent.jsp" method="get">
+                        <label for="username">username
+                        </label>
+                        <input type="text" name="username" id="username">
+                        </input>
+                        <label for="password">password
+                        </label>
+                        <input type="password" name="password" id="password">
+                        </input>
+                        <button type="submit">login
+                        </button>
+                    </form>
+                    </body>
+                    </html>
+                    found
+                    {% endhighlight %}
 
-                        <h3 id="process">Testing a complete process</h3>
-                        <p>Todays webapplication are of course not that static. Usually it is more interesting to test a complete process.
-                            This is easily possible with Selenium. You can use it to press buttons and even trigger JavaScript functions.
-                            As the gauges are based on Selenium, they can be combined with actions as well. As soon as an action is executed,
-                            the currentPage is updated and our next call to <i>fit()</i> or <i>doesnt fit()</i> will be executed against the
-                            updated page.</p>
-                        <p>Lets try this out using a page with protected content. On first load a form will be shown, after logging in the form
-                            disappears, instead the text <i>sensitive information</i> appears.</p>
-                        {% highlight scala%}
-                        package org.scalawebtest.integration.gauge
+                    <h3 id="process">Testing a complete process</h3>
+                    <p>Todays webapplication are of course not that static. Usually it is more interesting to test a complete process.
+                        This is easily possible with Selenium. You can use it to press buttons and even trigger JavaScript functions.
+                        As the gauges are based on Selenium, they can be combined with actions as well. As soon as an action is executed,
+                        the currentPage is updated and our next call to <i>fit()</i> or <i>doesnt fit()</i> will be executed against the
+                        updated page.</p>
+                    <p>Lets try this out using a page with protected content. On first load a form will be shown, after logging in the form
+                        disappears, instead the text <i>sensitive information</i> appears.</p>
+                    {% highlight scala%}
+                    package org.scalawebtest.integration.gauge
 
-                        import org.scalawebtest.core.gauge.Gauge.{NotFit, fits}
-                        import org.scalawebtest.integration.ScalaWebTestBaseSpec
+                    import org.scalawebtest.core.gauge.Gauge.{NotFit, fits}
+                    import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
-                        class LoginSpec extends ScalaWebTestBaseSpec{
-                        path = "/protectedContent.jsp"
+                    class LoginSpec extends ScalaWebTestBaseSpec{
+                    path = "/protectedContent.jsp"
 
-                        "When accessing protectedContent it" should "show the login form" in {
-                        fits(
-                        <form name="login_form">
-                            <input name="username"></input>
-                            <input name="password"></input>
-                        </form>
-                        )
-                        }
-                        it should "hide the protected content, when not logged in" in {
-                        not fit <p>sensitive information</p>
-                        }
-                        it should "show the protected content, after logging in" in {
-                        textField("username").value = "admin"
-                        pwdField("password").value = "secret"
+                    "When accessing protectedContent it" should "show the login form" in {
+                    fits(
+                    <form name="login_form">
+                        <input name="username"></input>
+                        <input name="password"></input>
+                    </form>
+                    )
+                    }
+                    it should "hide the protected content, when not logged in" in {
+                    not fit <p>sensitive information</p>
+                    }
+                    it should "show the protected content, after logging in" in {
+                    textField("username").value = "admin"
+                    pwdField("password").value = "secret"
 
-                        submit()
+                    submit()
 
-                        fits(<p>sensitive information</p>)
-                        }
-                        }
-                        {% endhighlight %}
+                    fits(<p>sensitive information</p>)
+                    }
+                    }
+                    {% endhighlight %}
 
-                        <p>This example test was split into three smaller tests. This is technically not necessary, but has the following
-                            advantage. When only part of the tests fails, you have a better idea what went wrong. For example, if the login
-                            fails, but the login form is correctly shown, the issue has to be your login process. But if the login form isn't
-                            shown, the problem has a very different cause. In addition the verbose output from the <i>gauge</i> should help you
-                            finding the root cause.</p>
+                    <p>This example test was split into three smaller tests. This is technically not necessary, but has the following
+                        advantage. When only part of the tests fails, you have a better idea what went wrong. For example, if the login
+                        fails, but the login form is correctly shown, the issue has to be your login process. But if the login form isn't
+                        shown, the problem has a very different cause. In addition the verbose output from the <i>gauge</i> should help you
+                        finding the root cause.</p>
                 </section>
 
                 <section>
@@ -638,6 +638,33 @@ twitterAuthor: danireych
                         <li><i>loginPath</i> is set to the default AEM 6 login path</li>
                         <li>pages are requested with <i>wcmmode</i> cookie set to <i>DISABLED</i></li>
                     </ul>
+                    <h4 id="modules/aem/pageproperties">PageProperties</h4>
+                    <p>Disclaimer: This trait is currently only available in scalawebtest-aem_2.11, due to dependencies on play-json which wasn't yet released for 2.12</p>
+                    <p>
+                        The <a href="https://github.com/unic/ScalaWebTest/blob/master/scalawebtest-aem/src/main/scala-2.11/org/scalawebtest/aem/PageProperties.scala">PageProperties</a> trait populates the pageProperties,
+                        and if applicable componentProperties and suffixProperties fields with a <a href="https://www.playframework.com/documentation/2.5.x/api/scala/index.html#play.api.libs.json.JsValue">JsValue</a>
+                        representing the properties of the currentPage, component and suffix respectively. It does so by retrieving the JSON representation of
+                        the currentPage. This works by default on all CQ/AEM author instances. In addition it provides convenience methods to access the pageProperties content.
+                    </p>
+                    <ul>
+                        <li>pageProperties(name: String) - retrieve a page property by name</li>
+                        <li>jcrContent(name: String) - retrieve a property from jcr:content by name</li>
+                        <li>findByResourceType(value: String) - search through a parsys field in the pageProperties and find all component with given resourceType</li>
+                        <li>findByProperty(name: String)(value: String) - search through a parsys field in the pageProperties and find all component with given property name and value</li>
+                    </ul>
+
+                    <p>
+                        It populates the <i>pageProperties</i> field with a <i>play.api.libs.json.JsValue</i>, which represents the properties of the currentPage.
+                        In case the <i>url/path</i> points to something below jcr:content, the <i>componentProperties</i> will be populated with the properties
+                        of the component, and the <i>pageProperties</i> with those of the containing page.
+                        In case the <i>url/path</i> contains a suffix, the <i>suffixProperties</i> will be populated with the properties of the page referenced in the suffix.
+                        It does so by manipulating the <i>url</i> field, to request the JSON representation of the currentPage from CQ/AEM.
+                        This feature is available on CQ/AEM author instances by default. The <i>enable.json</i> property of the
+                        <i>org.apache.sling.servlets.get.DefaultGetServlet</i> of your CQ/AEM instance has to be set to true.
+
+                        Only extend this trait in tests which need the feature, as it otherwise unnecessarily slows down your tests,
+                        due to additional requests for page properties.
+                    </p>
                 </section>
 
                 <section>

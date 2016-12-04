@@ -1,0 +1,72 @@
+---
+title: ScalaWebTest 1.0.4
+layout: post
+twitterAuthor: danireych
+description: ScalaWebTest 1.0.4 Release notes
+abstract: ScalaWebTest 1.0.4 supports Scala 2.12, 2.11 and 2.10, has new artifact ids and new features in the aem module
+---
+
+<section>
+    <header><h2>Highlights of this release</h2></header>
+
+    <section>
+        <header><h3>Update from ScalaWebTest <= 1.0.3</h3></header>
+        <p>
+            We changed the artifact ids, for better autocompletion in your IDE. Therefore you have to change the artifact id in your dependencies.
+            Just add the prefix <i>scalawebtest-</i> to all your dependencies. For example, change
+
+            {% highlight scala %}
+            libraryDependencies += "org.scalawebtest" %% "core" % "1.0.3" % "it"
+            {% endhighlight %}
+
+            to
+
+            {% highlight scala %}
+            libraryDependencies += "org.scalawebtest" %% "scalawebtest-core" % "1.0.4" % "it"
+            {% endhighlight %}
+
+            Or in a maven project from
+
+            {% highlight xml %}
+            <dependency>
+                <groupId>org.scalawebtest</groupId>
+                <artifactId>core_2.11</artifactId>
+                <version>1.0.3</version>
+                <scope>test</scope>
+            </dependency>
+            {% endhighlight%}
+
+            to
+
+            {% highlight xml %}
+            <dependency>
+                <groupId>org.scalawebtest</groupId>
+                <artifactId>scalawebtest-core_2.11</artifactId>
+                <version>1.0.4</version>
+                <scope>test</scope>
+            </dependency>
+            {% endhighlight%}
+
+            You might change from <i>core_2.11</i> to <i>scalawebtest-core_2.12</i>, in case you want to upgrade from Scala 2.11 to 2.12 aswell.
+        </p>
+    </section>
+
+    <section>
+        <header><h3>ScalaWebTest now supports all relevant Scala versions</h3></header>
+        <p>
+            ScalaWebTest now supports Scala 2.12, 2.11 and 2.10. Our Scala cross version build uses Scala 2.12.0, 2.11.8 and 2.10.6.
+            If you start a new project or introduce Scala in to your project, we recommend to use 2.12. If you introduce ScalaWebTest into
+            an AEM (Adobe Experience Manager) project, we recommend to stay on 2.11 because the <i>PageProperties</i> trait is not available with
+            2.12 yet, as it depends on <a href="https://www.playframework.com/documentation/2.5.x/ScalaJson">play-json</a>, which isn't released for 2.12 yet.
+        </p>
+    </section>
+
+    <section>
+        <header><h3>We introduced a new feature in the AEM module</h3></header>
+        <p>
+            You can add the new trait <a href="https://github.com/unic/ScalaWebTest/blob/master/scalawebtest-aem/src/main/scala-2.11/org/scalawebtest/aem/PageProperties.scala">PageProperties</a> to your test, to get the field <i>pageProperties</i> populated with a
+            <a href="https://www.playframework.com/documentation/2.5.x/api/scala/index.html#play.api.libs.json.JsValue">JsValue</a>,
+            which represents the properties of the current page. For further details read the documentation to the <a href="https://github.com/unic/ScalaWebTest/blob/master/scalawebtest-aem/src/main/scala-2.11/org/scalawebtest/aem/PageProperties.scala">PageProperties</a> trait.
+        </p>
+    </section>
+</section>

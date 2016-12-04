@@ -158,6 +158,12 @@
 			margin-bottom: 0;
 		}
 
+		section > ul
+		{
+			list-style: circle;
+			padding-left: 2em;
+		}
+
 	/* Images */
 
 		.image

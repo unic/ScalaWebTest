@@ -17,7 +17,7 @@ lazy val commonSettings = Seq(
   pomExtra := scalaWebTestPomExtra
 )
 
-lazy val core = project
+lazy val core = Project(id = "scalawebtest-core", base = file("scalawebtest-core"))
   .settings(commonSettings: _*)
   .settings(
     libraryDependencies ++= Seq(
@@ -28,12 +28,12 @@ lazy val core = project
     )
   )
 
-lazy val aem = project
+lazy val aem = Project(id = "scalawebtest-aem", base = file("scalawebtest-aem"))
   .settings(commonSettings: _*)
   .settings(libraryDependencies ++= scalaVersion(playJsonDependency(scope = None)).value)
   .dependsOn(core)
 
-lazy val bom = project
+lazy val bom = Project(id= "scalawebtest-bom", base = file("scalawebtest-bom"))
   .settings(description := "ScalaWebTest (Bill of Materials)")
   .settings(commonSettings: _*)
   .settings(
@@ -65,7 +65,7 @@ lazy val bom = project
     transformer.transform(node).head
   })
 
-lazy val integration_test = project
+lazy val integration_test = Project(id="scalawebtest-integration", base = file("scalawebtest-integration"))
   .configs(IntegrationTest)
   .settings(commonSettings: _*)
   .settings(Defaults.itSettings: _*)

@@ -110,49 +110,49 @@ twitterAuthor: danireych
                     <h4 id="addSWT/sbt">Add ScalaWebTest to your SBT project</h4>
                     <p>You can add ScalaWebTest to your integration testing dependencies in the build.sbt/scala
                         of your sbt project as follows.</p>
-                    {% highlight scala %}
-                    libraryDependencies += "org.scalawebtest" %% "scalawebtest-core_2.11" % "1.0.3" % "it"
-                    {% endhighlight %}
+{% highlight scala %}
+libraryDependencies += "org.scalawebtest" %% "scalawebtest-core_2.11" % "1.0.3" % "it"
+{% endhighlight %}
 
                     <p>If you want to manage the most important transitive dependencies of ScalaWebTest, you might configure
                         it as follows. Especially selenium-java and selenium-htmlunit-driver should align.</p>
 
-                    {% highlight scala %}
-                    libraryDependencies ++= Seq(
-                    "org.scalawebtest" %% "scalawebtest-core" % "1.0.3" % "it"
-                    "org.scalatest" %% "scalatest" % "3.0.0" % "it",
-                    "org.seleniumhq.selenium" % "selenium-java" % "2.53.1" % "it",
-                    "org.seleniumhq.selenium" % "selenium-htmlunit-driver" % "2.52.0" % "it",
-                    )
-                    {% endhighlight %}
+{% highlight scala %}
+libraryDependencies ++= Seq(
+  "org.scalawebtest" %% "scalawebtest-core" % "1.0.3" % "it"
+  "org.scalatest" %% "scalatest" % "3.0.0" % "it",
+  "org.seleniumhq.selenium" % "selenium-java" % "2.53.1" % "it",
+  "org.seleniumhq.selenium" % "selenium-htmlunit-driver" % "2.52.0" % "it",
+)
+{% endhighlight %}
                     <h4 id="addSWT/maven">Add ScalaWebTest to your maven project</h4>
                     <p>You have to add the following dependency to your maven project to use ScalaWebTest.</p>
 
-                    {% highlight xml %}
-                    <dependency>
-                        <groupId>org.scalawebtest</groupId>
-                        <artifactId>scalawebtest-core_2.11</artifactId>
-                        <version>1.0.4</version>
-                        <scope>test</scope>
-                    </dependency>
-                    {% endhighlight%}
+{% highlight xml %}
+<dependency>
+    <groupId>org.scalawebtest</groupId>
+    <artifactId>scalawebtest-core_2.11</artifactId>
+    <version>1.0.4</version>
+    <scope>test</scope>
+</dependency>
+{% endhighlight%}
 
                     <p id="bom">In case you want to manage the most important transitive dependencies of ScalaWebTest,
                         you can add our bill-of-materials to your project. You may to so by adding the following dependency</p>
 
-                    {% highlight xml %}
-                    <dependencyManagement>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.scalawebtest</groupId>
-                                <artifactId>bom_2.11</artifactId>
-                                <version>1.0.0</version>
-                                <type>pom</type>
-                                <scope>import</scope>
-                            </dependency>
-                        </dependencies>
-                    </dependencyManagement>
-                    {% endhighlight%}
+{% highlight xml %}
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.scalawebtest</groupId>
+            <artifactId>bom_2.11</artifactId>
+            <version>1.0.0</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+{% endhighlight%}
 
 
                     <h3 id="firsttest">Write your first test</h3>
@@ -161,16 +161,16 @@ twitterAuthor: danireych
                     Other <a href="#teststyles">styles</a> are available, if you prefer. Lets assume we want to verify our homepage
                     and call the test HomepageSpec
 
-                    {% highlight scala %}
-                    class HomepageSpec extends IntegrationFlatSpec {
-                    override val host = "http://localhost:8080"
-                    override val path "index.html"
+{% highlight scala %}
+class HomepageSpec extends IntegrationFlatSpec {
+    override val host = "http://localhost:8080"
+    override val path "index.html"
 
-                    "Our homepage" should "contain a header with the company name" in {
-                    webDriver.findElementByTagName("h1").getText shouldEqual "Unic AG"
-                    }
-                    }
-                    {% endhighlight%}
+    "Our homepage" should "contain a header with the company name" in {
+        webDriver.findElementByTagName("h1").getText shouldEqual "Unic AG"
+    }
+}
+{% endhighlight%}
 
                     Thats all you need. ScalaWebTest will automatically call http://localhost:8080/index.html before executing a test,
                     call "Our homepage" - "should" - "contain a header with the company name". With the test, we can then access elements
@@ -190,15 +190,15 @@ twitterAuthor: danireych
                     to create a BaseTrait. When creating a new Test you then simply extend your BaseTrait. You can find such an
                     example in ScalaWebTest's own integration tests.
 
-                    {% highlight scala %}
-                    trait ScalaWebTestBaseSpec extends IntegrationFlatSpec with AemTweaks with FormBasedLogin {
-                    override val host = "http://localhost:8080"
-                    override val loginPath = "/fakeLogin.jsp"
+{% highlight scala %}
+trait ScalaWebTestBaseSpec extends IntegrationFlatSpec with AemTweaks with FormBasedLogin {
+override val host = "http://localhost:8080"
+override val loginPath = "/fakeLogin.jsp"
 
-                    override val projectRoot = ""
+override val projectRoot = ""
 
-                    override def loginTimeout = Timeout(5 seconds)
-                    } {% endhighlight %}
+override def loginTimeout = Timeout(5 seconds)
+} {% endhighlight %}
 
                     This BaseTrait uses FlatSpec style, adds the tweaks from the AEM module, and uses FormBasedLogin.
 
@@ -211,19 +211,19 @@ twitterAuthor: danireych
                     <p>In the following TestSpec JavaScript errors are swallowed during Login phase, no matter if JavaScript execution is
                         enabled or disable.
                         During test execution JavaScript is enabled and JavaScript errors let the test fail.</p>
-                    {% highlight scala %}
-                    class HomepageSpec extends IntegrationFlatSpec {
-                    override val host = "http://localhost:8080"
-                    override val path "index.html"
+{% highlight scala %}
+class HomepageSpec extends IntegrationFlatSpec {
+    override val host = "http://localhost:8080"
+    override val path "index.html"
 
-                    loginConfig.swallowJavaScriptErrors
-                    config.enableJavaScript(throwOnError = true)
+    loginConfig.swallowJavaScriptErrors
+    config.enableJavaScript(throwOnError = true)
 
-                    "Our homepage" should "contain a header with the company name" in {
-                    webDriver.findElementByTagName("h1").getText shouldEqual "Unic AG"
-                    }
-                    }
-                    {% endhighlight%}
+    "Our homepage" should "contain a header with the company name" in {
+        webDriver.findElementByTagName("h1").getText shouldEqual "Unic AG"
+    }
+}
+{% endhighlight%}
 
                     <p>By default JavaScript is not executed and JavaScript errors don't throw. Also CSS is not interpreted.
                         This applies to both loginConfig and config.</p>
@@ -244,98 +244,98 @@ twitterAuthor: danireych
                                 href="http://www.scala-lang.org/api/2.11.8/scala-xml/?_ga=1.231631391.1228626470.1461659856#scala.xml.NodeSeq">scala.xml.NodeSeq</a>)
                         Let's have a look at a simple example to get an idea how those gauges work.</p>
 
-                    {% highlight scala %}
-                    package org.scalawebtest.integration.gauge
+{% highlight scala %}
+package org.scalawebtest.integration.gauge
 
-                    import org.scalawebtest.core.gauge.Gauge.fit
-                    import org.scalawebtest.integration.ScalaWebTestBaseSpec
+import org.scalawebtest.core.gauge.Gauge.fit
+import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
-                    class SimpleGaugeSpec extends ScalaWebTestBaseSpec {
+class SimpleGaugeSpec extends ScalaWebTestBaseSpec {
 
-                    path = "/navigation.jsp"
+    path = "/navigation.jsp"
 
-                    "The navigation" should "contain our navigation links in correct structure, order and with the expected text" in {
-                    fit(
-                    <nav id="mainNav">
-                        <ul class="blue_theme">
-                            <li>
-                                <a href="/path/to/first/element">first navigation element</a>
-                            </li>
-                            <li class="active">
-                                <a href="/path/to/second/element">second navigation element</a>
-                            </li>
-                            <li>
-                                <a href="/path/to/third/element">third navigation element</a>
-                            </li>
-                        </ul>
-                    </nav>
-                    )
-                    }
-                    }
-                    {% endhighlight %}
+    "The navigation" should "contain our navigation links in correct structure, order and with the expected text" in {
+        fit(
+        <nav id="mainNav">
+            <ul class="blue_theme">
+                <li>
+                    <a href="/path/to/first/element">first navigation element</a>
+                </li>
+                <li class="active">
+                    <a href="/path/to/second/element">second navigation element</a>
+                </li>
+                <li>
+                    <a href="/path/to/third/element">third navigation element</a>
+                </li>
+            </ul>
+        </nav>
+        )
+    }
+}
+{% endhighlight %}
 
                     <p>This test would be successful, when run against, when <i>navigation.jsp</i> contains the following HTML</p>
 
-                    {% highlight html %}
-                    <!DOCTYPE html>
-                    <html>
+{% highlight html %}
+<!DOCTYPE html>
+<html>
 
-                    <head>
-                    </head>
+<head>
+</head>
 
-                    <body>
-                    <nav id="mainNav">
-                        <ul class="blue_theme">
-                            <li>
-                                <a href="/path/to/first/element">first navigation element</a>
-                            </li>
-                            <li class="active">
-                                <a href="/path/to/second/element">second navigation element</a>
-                            </li>
-                            <li>
-                                <a href="/path/to/third/element">third navigation element</a>
-                            </li>
-                        </ul>
-                    </nav>
-                    </body>
-                    </html>
-                    {% endhighlight %}
+<body>
+<nav id="mainNav">
+    <ul class="blue_theme">
+        <li>
+            <a href="/path/to/first/element">first navigation element</a>
+        </li>
+        <li class="active">
+            <a href="/path/to/second/element">second navigation element</a>
+        </li>
+        <li>
+            <a href="/path/to/third/element">third navigation element</a>
+        </li>
+    </ul>
+</nav>
+</body>
+</html>
+{% endhighlight %}
 
                     <p>We can already, see that <i>fits()</i> ignored <i>html</i>, <i>head</i> and <i>body</i>, elements before the navigation.
                         But following the idea from manufacturing, we should strip our <i>gauge</i>, from everything which we don't need.
                         Let's assume we only want to make sure our navigation contains the correct links. We don't care about classes added for
                         design or text contained in the links. Therefore we reduce our test to.</p>
-                    {% highlight scala %}
-                    "The navigation" should "contain our navigation links in correct structure and order" in {
-                    fit(
-                    <nav id="mainNav">
-                        <ul>
-                            <li>
-                                <a href="/path/to/first/element"></a>
-                            </li>
-                            <li>
-                                <a href="/path/to/second/element"></a>
-                            </li>
-                            <li>
-                                <a href="/path/to/third/element"></a>
-                            </li>
-                        </ul>
-                    </nav>
-                    )
-                    }
-                    {% endhighlight %}
+{% highlight scala %}
+"The navigation" should "contain our navigation links in correct structure and order" in {
+    fit(
+    <nav id="mainNav">
+        <ul>
+            <li>
+                <a href="/path/to/first/element"></a>
+            </li>
+            <li>
+                <a href="/path/to/second/element"></a>
+            </li>
+            <li>
+                <a href="/path/to/third/element"></a>
+            </li>
+        </ul>
+    </nav>
+    )
+}
+{% endhighlight %}
                     <p>If we don't care about the unnumbered list, we can reduce our test even further.</p>
-                    {% highlight scala %}
-                    "The navigation" should "contain our navigation links in correct order" in {
-                    fit(
-                    <nav id="mainNav">
-                        <a href="/path/to/first/element"></a>
-                        <a href="/path/to/second/element"></a>
-                        <a href="/path/to/third/element"></a>
-                    </nav>
-                    )
-                    }
-                    {% endhighlight %}
+{% highlight scala %}
+"The navigation" should "contain our navigation links in correct order" in {
+    fit(
+    <nav id="mainNav">
+        <a href="/path/to/first/element"></a>
+        <a href="/path/to/second/element"></a>
+        <a href="/path/to/third/element"></a>
+    </nav>
+    )
+}
+{% endhighlight %}
                     <p>The document then fits our gauge as follows. Matching parts are green, parts in grey have no influence whether the
                         document fits or not.</p>
 
@@ -366,17 +366,17 @@ twitterAuthor: danireych
                     </div>
 
                     <p>If the gauge doesn't fit, we get an error. Lets change the test to the following.</p>
-                    {% highlight scala %}
-                    "The navigation" should "contain our navigation links in correct order" in {
-                    fit(
-                    <nav id="mainNav">
-                        <a href="/path/to/first/element">second navigation element</a>
-                        <a href="/path/to/second/element"></a>
-                        <a href="/path/to/third/element"></a>
-                    </nav>
-                    )
-                    }
-                    {% endhighlight %}
+{% highlight scala %}
+"The navigation" should "contain our navigation links in correct order" in {
+    fit(
+    <nav id="mainNav">
+        <a href="/path/to/first/element">second navigation element</a>
+        <a href="/path/to/second/element"></a>
+        <a href="/path/to/third/element"></a>
+    </nav>
+    )
+}
+{% endhighlight %}
                     <p>This will of course not match, because the text within the first link is wrong and belongs to the second link.
                         See the different highlighted in the following html block.</p>
                     <div class="highlight"><pre><code class="language-html" data-lang="html"><span class="n">&lt;!DOCTYPE html&gt;</span>
@@ -406,26 +406,26 @@ twitterAuthor: danireych
                     </div>
 
                     <p>This results in the following error message from ScalaWebTest</p>
-                    {% highlight text %}
-                    23:06:37.482 [ScalaTest-run-running-SimpleGaugeSpec] INFO IntegrationSpec - Going to http://localhost:8080/navigation.jsp
+{% highlight text %}
+23:06:37.482 [ScalaTest-run-running-SimpleGaugeSpec] INFO IntegrationSpec - Going to http://localhost:8080/navigation.jsp
 
-                    Misfitting Text: The text [first navigation element] within [HtmlAnchor[<h4 href="/path/to/first/element"></h4>]] didn't equal [second navigation element]
-                    Current document does not match provided gauge:
-                    <nav id="mainNav">
-                        <ul>
-                            <li>
-                                <a href="/path/to/first/element">second navigation element</a>
-                            </li>
-                            <li>
-                                <a href="/path/to/second/element"></a>
-                            </li>
-                            <li>
-                                <a href="/path/to/third/element"></a>
-                            </li>
-                        </ul>
-                    </nav>
-                    ScalaTestFailure
-                    {% endhighlight %}
+Misfitting Text: The text [first navigation element] within [HtmlAnchor[<h4 href="/path/to/first/element"></h4>]] didn't equal [second navigation element]
+Current document does not match provided gauge:
+<nav id="mainNav">
+    <ul>
+        <li>
+            <a href="/path/to/first/element">second navigation element</a>
+        </li>
+        <li>
+            <a href="/path/to/second/element"></a>
+        </li>
+        <li>
+            <a href="/path/to/third/element"></a>
+        </li>
+    </ul>
+</nav>
+ScalaTestFailure
+{% endhighlight %}
 
                     <h3 id="classes">Test for classes on elements</h3>
                     <p>The class attribute is special, because it is basically an unsorted set of class attributes. Usually
@@ -434,56 +434,56 @@ twitterAuthor: danireych
                         has to match exactly the one you provided in your gauge, but for classes, it only asserts, that the classes which
                         an element contains within your gauge definition, are all present on that element in the HTML document.
                         The following gauge therefore matches all the elements shown below.</p>
-                    {% highlight scala %}
-                    fit(
-                    <div class="container red"></div>
-                    )
-                    {% endhighlight %}
-                    {% highlight html %}
-                    <div class="container red"></div>
-                    {% endhighlight %}
-                    {% highlight html %}
-                    <div class="red container"></div>
-                    {% endhighlight %}
-                    {% highlight html %}
-                    <div class="red important container main"></div>
-                    {% endhighlight %}
+{% highlight scala %}
+    fit(
+    <div class="container red"></div>
+    )
+{% endhighlight %}
+{% highlight html %}
+<div class="container red"></div>
+{% endhighlight %}
+{% highlight html %}
+<div class="red container"></div>
+{% endhighlight %}
+{% highlight html %}
+<div class="red important container main"></div>
+{% endhighlight %}
 
                     <h3 id="contains">Test for containment</h3>
                     <p>It is common that you don't want to verify the complete attribute value, or text of an element.
                         You may use <i>@contains</i> to trigger the ContainsMatcher instead of the DefaultMatcher.
                         Thanks to this matcher, this gauge matches the following HTML element</p>
-                    {% highlight scala %}
-                    fit(<a href="@contains ScalaWebTest"></a>)
-                    {% endhighlight %}
-                    {% highlight html %}
-                    <a href="https://github.com/unic/ScalaWebTest"></a>
-                    {% endhighlight %}
+{% highlight scala %}
+fit(<a href="@contains ScalaWebTest"></a>)
+{% endhighlight %}
+{% highlight html %}
+<a href="https://github.com/unic/ScalaWebTest"></a>
+{% endhighlight %}
                     <p>The containsMatcher is also available, when matching text.</p>
-                    {% highlight scala %}
-                    fit(<a>@contains available</a>)
-                    {% endhighlight %}
-                    {% highlight html %}
-                    <a>ScalaWebTest is available on github</a>
-                    {% endhighlight %}
+{% highlight scala %}
+fit(<a>@contains available</a>)
+{% endhighlight %}
+{% highlight html %}
+<a>ScalaWebTest is available on github</a>
+{% endhighlight %}
                     <p>Hint: always add a space after the matcher annotation. We enforce this space to improve readability of tests.</p>
                     <h3 id="regex">Test for regex matches</h3>
                     <p>When we want to enforce textual rules on our content, we need a more powerful Matcher. The RegexMatcher is our
                         friend.
                         It is trigger using <i>@regex</i></p>
 
-                    {% highlight scala %}
-                    fit(<a href="@regex http:\\/\\/[a-zA-Z]+\.scalawebtest.org.*,"></a>)
-                    {% endhighlight %}
+{% highlight scala %}
+fit(<a href="@regex http:\\/\\/[a-zA-Z]+\.scalawebtest.org.*,"></a>)
+{% endhighlight %}
 
                     <p>This gauge will fit</p>
-                    {% highlight html %}
-                    <a href="http://www.scalawebtest.org/documentation.html"></a>
-                    {% endhighlight %}
+{% highlight html %}
+<a href="http://www.scalawebtest.org/documentation.html"></a>
+{% endhighlight %}
                     <p>but it won't fit</p>
-                    {% highlight html %}
-                    <a href="http://scalawebtest.org/documentation.html"></a>
-                    {% endhighlight %}
+{% highlight html %}
+<a href="http://scalawebtest.org/documentation.html"></a>
+{% endhighlight %}
 
                     <h3 id="negation">Negating your tests</h3>
                     <p>Sometimes you want to make sure that a certain content is not shown. For example you want to make sure, that no login
@@ -491,50 +491,49 @@ twitterAuthor: danireych
                         thrown. To do so you may use <i>doesnt fit()</i> or <i>not fit()</i>. They are synonyms. Choose whatever reads
                         better in your current context.</p>
 
-                    {% highlight scala %}
-                    package org.scalawebtest.integration.gauge
+{% highlight scala %}
+package org.scalawebtest.integration.gauge
 
-                    import org.scalawebtest.core.gauge.Gauge.NotFit
-                    import org.scalawebtest.integration.ScalaWebTestBaseSpec
+import org.scalawebtest.core.gauge.Gauge.NotFit
+import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
-                    class LoggedInSpec extends ScalaWebTestBaseSpec{
-                    path = "/protectedContent.jsp?username=admin&password=secret"
+class LoggedInSpec extends ScalaWebTestBaseSpec{
+path = "/protectedContent.jsp?username=admin&password=secret"
 
-                    "When logged in the protectedContent page" should "not show the login form" in {
-                    not fit
-                    <form name="login_form"></form>
-                    }
-
-                    }
-                    {% endhighlight %}
+"When logged in the protectedContent page" should "not show the login form" in {
+    not fit
+        <form name="login_form"></form>
+    }
+}
+{% endhighlight %}
 
                     <p>In case the login form is mistakenly rendered, the following error will appear.</p>
 
-                    {% highlight text %}
-                    Current document matches the provided gauge, although expected not to!
-                    Fitting node
-                    <html>
-                    <head>
-                        <title>Mock of a protected content page
-                        </title>
-                    </head>
-                    <body>
-                    <form name="login_form" action="protectedContent.jsp" method="get">
-                        <label for="username">username
-                        </label>
-                        <input type="text" name="username" id="username">
-                        </input>
-                        <label for="password">password
-                        </label>
-                        <input type="password" name="password" id="password">
-                        </input>
-                        <button type="submit">login
-                        </button>
-                    </form>
-                    </body>
-                    </html>
-                    found
-                    {% endhighlight %}
+{% highlight text %}
+Current document matches the provided gauge, although expected not to!
+Fitting node
+<html>
+<head>
+    <title>Mock of a protected content page
+    </title>
+</head>
+<body>
+<form name="login_form" action="protectedContent.jsp" method="get">
+    <label for="username">username
+    </label>
+    <input type="text" name="username" id="username">
+    </input>
+    <label for="password">password
+    </label>
+    <input type="password" name="password" id="password">
+    </input>
+    <button type="submit">login
+    </button>
+</form>
+</body>
+</html>
+found
+{% endhighlight %}
 
                     <h3 id="process">Testing a complete process</h3>
                     <p>Todays webapplication are of course not that static. Usually it is more interesting to test a complete process.
@@ -544,36 +543,38 @@ twitterAuthor: danireych
                         updated page.</p>
                     <p>Lets try this out using a page with protected content. On first load a form will be shown, after logging in the form
                         disappears, instead the text <i>sensitive information</i> appears.</p>
-                    {% highlight scala%}
-                    package org.scalawebtest.integration.gauge
+{% highlight scala%}
+package org.scalawebtest.integration.gauge
 
-                    import org.scalawebtest.core.gauge.Gauge.{NotFit, fits}
-                    import org.scalawebtest.integration.ScalaWebTestBaseSpec
+import org.scalawebtest.core.gauge.Gauge.{NotFit, fits}
+import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
-                    class LoginSpec extends ScalaWebTestBaseSpec{
-                    path = "/protectedContent.jsp"
+class LoginSpec extends ScalaWebTestBaseSpec{
+    path = "/protectedContent.jsp"
 
-                    "When accessing protectedContent it" should "show the login form" in {
-                    fits(
-                    <form name="login_form">
-                        <input name="username"></input>
-                        <input name="password"></input>
-                    </form>
-                    )
-                    }
-                    it should "hide the protected content, when not logged in" in {
-                    not fit <p>sensitive information</p>
-                    }
-                    it should "show the protected content, after logging in" in {
-                    textField("username").value = "admin"
-                    pwdField("password").value = "secret"
+    "When accessing protectedContent it" should "show the login form" in {
+        fits(
+            <form name="login_form">
+                <input name="username"></input>
+                <input name="password"></input>
+            </form>
+        )
+    }
 
-                    submit()
+    it should "hide the protected content, when not logged in" in {
+        not fit <p>sensitive information</p>
+    }
 
-                    fits(<p>sensitive information</p>)
-                    }
-                    }
-                    {% endhighlight %}
+    it should "show the protected content, after logging in" in {
+        textField("username").value = "admin"
+        pwdField("password").value = "secret"
+
+        submit()
+
+        fits(<p>sensitive information</p>)
+    }
+}
+{% endhighlight %}
 
                     <p>This example test was split into three smaller tests. This is technically not necessary, but has the following
                         advantage. When only part of the tests fails, you have a better idea what went wrong. For example, if the login
@@ -589,9 +590,9 @@ twitterAuthor: danireych
 
                     <p>Thanks to Selenium executing JavaScript is not an issue. Per default JavaScript is not executed with ScalaWebTest,
                         because tests will be faster without. To execute JavaScript, you have to enable it.</p>
-                    {% highlight scala %}
-                    config.enableJavaScript(throwOnError = true)
-                    {% endhighlight %}
+{% highlight scala %}
+config.enableJavaScript(throwOnError = true)
+{% endhighlight %}
                     <p>In addition, you have to decide whether a JavaScript error should cause your test to fail or not. Usually failing on
                         JavaScript errors is good, but sometimes you have to write tests for a web application with major issues in
                         JavaScript. This is one of the rare moments, where you have to disable <i>throwOnError</i> to be able to test the
@@ -600,13 +601,13 @@ twitterAuthor: danireych
                         browser needs some time to execute JavaScript. The same is true for the Selenium webdriver. We have to wait for it
                         execute the provided JavaScript. ScalaTest provides <i>eventually</i>, which does exactly what we need. It repeats a
                         given test until it succeeds or the given timeout has been surpassed.</p>
-                    {% highlight scala %}
-                    eventually(timeout(3 seconds)) {
-                    fits(
-                    <div id="container">Text loaded with JavaScript</div>
-                    )
-                    }
-                    {% endhighlight %}
+{% highlight scala %}
+eventually(timeout(3 seconds)) {
+    fits(
+        <div id="container">Text loaded with JavaScript</div>
+    )
+}
+{% endhighlight %}
                 </section>
 
 

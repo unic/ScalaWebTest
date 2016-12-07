@@ -14,17 +14,21 @@
  */
 package org.scalawebtest.core.gauge
 
-case class Misfit(relevance: Int, reason: String)
+case class Misfit(relevance: Int, topic: String, detail: String)
 
 class MisfitHolder {
   var misfits: List[Misfit] = Nil
 
-  def addMisfit(relevance: Int, reason: String): Unit = {
-    misfits = Misfit(relevance, reason) :: misfits
+  def addMisfit(relevance: Int, topic: String, detail: String): Unit = {
+    misfits = Misfit(relevance, topic, detail) :: misfits
   }
 
   def addMisfit(misfit: Misfit): Unit = {
     misfits = misfit :: misfits
+  }
+
+  def dropLastMisfit(): Unit = {
+    misfits = misfits.tail
   }
 
   def mostRelevant() = misfits.map(_.relevance).max

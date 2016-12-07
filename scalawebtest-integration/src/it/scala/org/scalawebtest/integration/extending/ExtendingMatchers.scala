@@ -17,7 +17,7 @@ class ExtendingMatchers extends ScalaWebTestBaseSpec {
       if (element.text().matches(emailRegex)) {
         None
       } else {
-        Some(Misfit(element.relevance, "Misfitting Text: The [" + element.text() + "] from [" + element.element + "] is not an email address"))
+        Some(Misfit(element.relevance, "Misfitting Text", "The [" + element.text() + "] from [" + element.element + "] is not an email address"))
       }
     }
 
@@ -27,7 +27,7 @@ class ExtendingMatchers extends ScalaWebTestBaseSpec {
       if (attribute.value().matches(emailOrMailToRegex)) {
         None
       } else {
-        Some(Misfit(attribute.relevance, "Misfitting Attribute: [" + attribute.name() + "] in [" + attribute.containingElement + "] with value[" + attribute.value() + "] is not an email address or mailto: link"))
+        Some(Misfit(attribute.relevance, "Misfitting Attribute", "[" + attribute.name() + "] in [" + attribute.containingElement + "] with value[" + attribute.value() + "] is not an email address or mailto: link"))
       }
     }
 

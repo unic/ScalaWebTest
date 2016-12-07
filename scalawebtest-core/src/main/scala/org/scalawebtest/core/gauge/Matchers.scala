@@ -39,7 +39,7 @@ object Matchers {
   }
 
   private def noMatcherFoundMisfit(relevance: Int, expectedValue: String, matchers: List[PluggableMatcher]): Misfit = {
-    Misfit(relevance, "No matcher found for checkingGauge definition [" + expectedValue + "]. None of the registered matchers [" + matchers + "] contained a matching marked [" + matchers.map(_.marker) + "]")
+    Misfit(relevance, "Matcher not found", "No matcher found for checkingGauge definition [" + expectedValue + "]. None of the registered matchers [" + matchers + "] contained a matching marked [" + matchers.map(_.marker) + "]")
   }
 
   /**
@@ -66,7 +66,7 @@ object Matchers {
       if (attribute.value().equals(expected)) {
         None
       } else {
-        Some(Misfit(attribute.relevance, "Misfitting Attribute: [" + attribute.name() + "] in [" + attribute.containingElement + "] with value[" + attribute.value() + "] didn't equal [" + expected + "]"))
+        Some(Misfit(attribute.relevance, "Misfitting Attribute", "[" + attribute.name() + "] in [" + attribute.containingElement + "] with value[" + attribute.value() + "] didn't equal [" + expected + "]"))
       }
     }
 
@@ -74,7 +74,7 @@ object Matchers {
       if (element.text().trim().equals(expected)) {
         None
       } else {
-        Some(Misfit(element.relevance, "Misfitting Text: The text [" + element.text() + "] within [" + element.element.getParentNode + "] didn't equal [" + expected + "]"))
+        Some(Misfit(element.relevance, "Misfitting Text", "The text [" + element.text() + "] within [" + element.element.getParentNode + "] didn't equal [" + expected + "]"))
       }
     }
   }
@@ -86,7 +86,7 @@ object Matchers {
       if (attribute.value().matches(expected)) {
         None
       } else {
-        Some(Misfit(attribute.relevance, "Misfitting Attribute: [" + attribute.name() + "] in [" + attribute.containingElement + "] with value[" + attribute.value() + "] didn't match regex pattern [" + expected + "]"))
+        Some(Misfit(attribute.relevance, "Misfitting Attribute", "[" + attribute.name() + "] in [" + attribute.containingElement + "] with value[" + attribute.value() + "] didn't match regex pattern [" + expected + "]"))
       }
     }
 
@@ -94,7 +94,7 @@ object Matchers {
       if (element.text().matches(expected)) {
         None
       } else {
-        Some(Misfit(element.relevance, "Misfitting Text: The [" + element.text() + "] from [" + element.element + "] didn't match regex pattern [" + expected + "]"))
+        Some(Misfit(element.relevance, "Misfitting Text", "The [" + element.text() + "] from [" + element.element + "] didn't match regex pattern [" + expected + "]"))
       }
     }
   }
@@ -107,7 +107,7 @@ object Matchers {
         None
       }
       else {
-        Some(Misfit(attribute.relevance, "Misfitting Attribute: [" + attribute.name() + "] in [" + attribute.containingElement + "] with value[" + attribute.value() + "] didn't contain [" + expected + "]"))
+        Some(Misfit(attribute.relevance, "Misfitting Attribute", "[" + attribute.name() + "] in [" + attribute.containingElement + "] with value[" + attribute.value() + "] didn't contain [" + expected + "]"))
       }
     }
 
@@ -115,7 +115,7 @@ object Matchers {
       if (element.text().contains(expected)) {
         None
       } else {
-        Some(Misfit(element.relevance, "Misfitting Text: The [" + element.text + "] from [" + element.element + "] didn't contain [" + expected + "]"))
+        Some(Misfit(element.relevance, "Misfitting Text", "The [" + element.text + "] from [" + element.element + "] didn't contain [" + expected + "]"))
       }
     }
   }

@@ -164,7 +164,7 @@ libraryDependencies ++= Seq(
 {% highlight scala %}
 class HomepageSpec extends IntegrationFlatSpec {
     override val host = "http://localhost:8080"
-    override val path "index.html"
+    path = "/index.html"
 
     "Our homepage" should "contain a header with the company name" in {
         webDriver.findElementByTagName("h1").getText shouldEqual "Unic AG"
@@ -214,7 +214,7 @@ override def loginTimeout = Timeout(5 seconds)
 {% highlight scala %}
 class HomepageSpec extends IntegrationFlatSpec {
     override val host = "http://localhost:8080"
-    override val path "index.html"
+    path = "/index.html"
 
     loginConfig.swallowJavaScriptErrors
     config.enableJavaScript(throwOnError = true)

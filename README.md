@@ -6,6 +6,53 @@ In manufacturing it is common to use gauges (also called checking gauges or test
 
 Read the full documentation on our website http://www.scalawebtest.org
 
+## Getting Started with development
+
+### Prerequisites
+
+* Java 8
+* Scala 2.12
+* Sbt 0.13.x
+
+Get familiar with the sbt build tool because this is used to manage the project.
+
+See Getting Started Guide here: http://www.scala-sbt.org/0.13/docs/Getting-Started.html
+
+### Compile, test, package
+
+```
+#> sbt compile test package
+```
+
+### Run whole integration test
+
+```
+#> sbt inttest
+```
+
+This will start a Jetty server, executes the integration tests and stops the server again.
+
+### Start Jetty server and run single tests
+
+If you would like to run the Jetty server and in parallel work on integration tests and some code changes,
+you can do the following:
+
+```
+# Enter the sbt console first, enter 'sbt' in root folder
+#> sbt
+
+# Start Jetty server
+#sbt> jetty:start
+
+# Or if you would like that sbt automatically restarts Jetty after code changes then do:
+#sbt> ~jetty:start
+
+# Open separate command window and enter the sbt console again 
+# Run a single integration tests
+#sbt> it:testOnly org.scalawebtest.integration.gauge.ContainsSpec
+
+```
+
 ## How to Release
 
 ### Prerequisites

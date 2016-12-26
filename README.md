@@ -11,7 +11,6 @@ Read the full documentation on our website http://www.scalawebtest.org
 ### Prerequisites
 
 * Java 8
-* Scala 2.12
 * Sbt 0.13.x
 
 Get familiar with the sbt build tool because this is used to manage the project.

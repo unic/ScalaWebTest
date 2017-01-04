@@ -1,4 +1,4 @@
-crossScalaVersions := Seq("2.12.0", "2.11.8", "2.10.6")
+crossScalaVersions := Seq("2.12.1", "2.11.8", "2.10.6")
 
 lazy val root = (project in file("."))
   .settings(commonSettings: _*)
@@ -8,7 +8,7 @@ lazy val root = (project in file("."))
 lazy val commonSettings = Seq(
   organization := "org.scalawebtest",
   version := "1.0.5-SNAPSHOT",
-  scalaVersion := "2.11.8",
+  scalaVersion := "2.12.1",
   scalacOptions := Seq("-unchecked", "-deprecation"),
   publishMavenStyle := true,
   publishTo := {
@@ -20,7 +20,7 @@ lazy val commonSettings = Seq(
   },
   pomIncludeRepository := { _ => false },
   pomExtra := scalaWebTestPomExtra
-)
+) ++ crossVersionSharedSources(Seq(Test, Compile))
 
 lazy val core = Project(id = "scalawebtest-core", base = file("scalawebtest-core"))
   .settings(commonSettings: _*)
@@ -72,8 +72,9 @@ lazy val bom = Project(id = "scalawebtest-bom", base = file("scalawebtest-bom"))
 
 lazy val integration_test = Project(id = "scalawebtest-integration", base = file("scalawebtest-integration"))
   .configs(IntegrationTest)
-  .settings(commonSettings: _*)
   .settings(Defaults.itSettings: _*)
+  .settings(commonSettings: _*)
+  .settings(crossVersionSharedSources(Seq(IntegrationTest)): _*)
   .settings(
     libraryDependencies ++= Seq(
       "javax.servlet" % "javax.servlet-api" % "3.0.1" % "provided",
@@ -85,6 +86,7 @@ lazy val integration_test = Project(id = "scalawebtest-integration", base = file
   )
   .settings(libraryDependencies ++= scalaVersion(playJsonDependency(Some("it"))).value)
   .enablePlugins(JettyPlugin)
+  .settings(containerPort in Jetty := 9090)
   .dependsOn(core)
   .dependsOn(aem)
 

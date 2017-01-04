@@ -22,7 +22,7 @@ import org.scalawebtest.core.{FormBasedLogin, IntegrationFlatSpec}
 import scala.language.postfixOps
 
 trait ScalaWebTestBaseSpec extends IntegrationFlatSpec with FormBasedLogin {
-  override val host = "http://localhost:8080"
+  override val host = "http://localhost:9090"
   override val loginPath = "/fakeLogin.jsp"
 
   override val projectRoot = ""

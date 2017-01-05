@@ -111,7 +111,7 @@ twitterAuthor: danireych
                     <p>You can add ScalaWebTest to your integration testing dependencies in the build.sbt/scala
                         of your sbt project as follows.</p>
 {% highlight scala %}
-libraryDependencies += "org.scalawebtest" %% "scalawebtest-core_2.11" % "1.0.4" % "it"
+libraryDependencies += "org.scalawebtest" %% "scalawebtest-core" % "1.0.4" % "it"
 {% endhighlight %}
 
                     <p>If you want to manage the most important transitive dependencies of ScalaWebTest, you might configure
@@ -131,6 +131,18 @@ libraryDependencies ++= Seq(
 {% highlight xml %}
 <dependency>
     <groupId>org.scalawebtest</groupId>
+    <artifactId>scalawebtest-core_2.12</artifactId>
+    <version>1.0.4</version>
+    <scope>test</scope>
+</dependency>
+{% endhighlight%}
+
+                    <p>ScalaWebTest is also available for Scala 2.10 and 2.11, change the version after the underscore,
+                        to get a ScalaWebTest version which is binary compatible with the Scala version which you use.</p>
+
+{% highlight xml %}
+<dependency>
+    <groupId>org.scalawebtest</groupId>
     <artifactId>scalawebtest-core_2.11</artifactId>
     <version>1.0.4</version>
     <scope>test</scope>
@@ -145,7 +157,7 @@ libraryDependencies ++= Seq(
     <dependencies>
         <dependency>
             <groupId>org.scalawebtest</groupId>
-            <artifactId>bom_2.11</artifactId>
+            <artifactId>bom_2.12</artifactId>
             <version>1.0.0</version>
             <type>pom</type>
             <scope>import</scope>
@@ -241,7 +253,7 @@ class HomepageSpec extends IntegrationFlatSpec {
                         They build gauges, which they then lay their workpiece into. If the workpiece fits in the gauge, it satisfies the
                         requirements. Gauges are defined in HTML
                         (technically speaking it is XML, using <a
-                                href="http://www.scala-lang.org/api/2.11.8/scala-xml/?_ga=1.231631391.1228626470.1461659856#scala.xml.NodeSeq">scala.xml.NodeSeq</a>)
+                                href="http://www.scala-lang.org/files/archive/api/2.12.1/scala-xml/scala/xml/NodeSeq$.html">scala.xml.NodeSeq</a>)
                         Let's have a look at a simple example to get an idea how those gauges work.</p>
 
 {% highlight scala %}

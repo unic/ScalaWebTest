@@ -38,6 +38,11 @@ lazy val aem = Project(id = "scalawebtest-aem", base = file("scalawebtest-aem"))
   .settings(libraryDependencies ++= scalaVersion(playJsonDependency(scope = None)).value)
   .dependsOn(core)
 
+lazy val json = Project(id = "scalawebtest-json", base = file("scalawebtest-json"))
+    .settings(commonSettings: _*)
+    .settings(libraryDependencies ++= scalaVersion(playJsonDependency(scope = None)).value)
+    .dependsOn(core)
+
 lazy val bom = Project(id = "scalawebtest-bom", base = file("scalawebtest-bom"))
   .settings(description := "ScalaWebTest (Bill of Materials)")
   .settings(commonSettings: _*)
@@ -89,5 +94,6 @@ lazy val integration_test = Project(id = "scalawebtest-integration", base = file
   .settings(containerPort in Jetty := 9090)
   .dependsOn(core)
   .dependsOn(aem)
+  .dependsOn(json)
 
 addCommandAlias("inttest", "; jetty:start ; it:test ; jetty:stop")

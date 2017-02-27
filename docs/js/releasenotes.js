@@ -5,7 +5,7 @@
             labels = $placeholder.data("labels");
 
         $.ajax({
-            url: "https://api.github.com/repos/unic/scalawebtest/issues",
+            url: "https://api.github.com/repos/unic/ScalaWebTest/issues",
             data: {
                 "state" : "closed",
                 "labels" : labels,

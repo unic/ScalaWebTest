@@ -26,7 +26,7 @@
 
             <ul class="contact">
                 <li><a href="https://twitter.com/scalawebtest" class="fa fa-twitter"><span>Twitter</span></a></li>
-                <li><a href="https://github.com/unic/scalawebtest" class="fa fa-github"><span>Github</span></a></li>
+                <li><a href="https://github.com/unic/ScalaWebTest" class="fa fa-github"><span>Github</span></a></li>
             </ul>
         </section>
     </div>

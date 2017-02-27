@@ -22,7 +22,7 @@ object Matchers {
   var textMatchers: List[TextMatcher] = ContainsMatcher :: RegexMatcher :: DefaultMatcher :: Nil
   var attributeMatchers: List[AttributeMatcher] = ContainsMatcher :: RegexMatcher :: DefaultMatcher :: Nil
 
-  def attributeMatches(expectedValue: String, attribute: CandidateAttribute) = {
+  def attributeMatches(expectedValue: String, attribute: CandidateAttribute): Option[Misfit] = {
     val matcher = attributeMatchers.find(m => expectedValue.startsWith(m.marker))
     matcher match {
       case None => Some(noMatcherFoundMisfit(attribute.relevance, expectedValue, attributeMatchers))
@@ -30,7 +30,7 @@ object Matchers {
     }
   }
 
-  def textMatches(expectedValue: String, element: CandidateElement) = {
+  def textMatches(expectedValue: String, element: CandidateElement): Option[Misfit] = {
     val matcher = textMatchers.find(m => expectedValue.startsWith(m.marker))
     matcher match {
       case None => Some(noMatcherFoundMisfit(element.relevance, expectedValue, textMatchers))
@@ -62,7 +62,7 @@ object Matchers {
   object DefaultMatcher extends TextMatcher with AttributeMatcher {
     override val marker = ""
 
-    override def attributeMatches(expected: String, attribute: CandidateAttribute) = {
+    override def attributeMatches(expected: String, attribute: CandidateAttribute): Option[Misfit] = {
       if (attribute.value().equals(expected)) {
         None
       } else {
@@ -70,7 +70,7 @@ object Matchers {
       }
     }
 
-    override def textMatches(expected: String, element: CandidateElement) = {
+    override def textMatches(expected: String, element: CandidateElement): Option[Misfit] = {
       if (element.text().trim().equals(expected)) {
         None
       } else {
@@ -82,7 +82,7 @@ object Matchers {
   object RegexMatcher extends TextMatcher with AttributeMatcher {
     override val marker = "@regex "
 
-    override def attributeMatches(expected: String, attribute: CandidateAttribute) = {
+    override def attributeMatches(expected: String, attribute: CandidateAttribute): Option[Misfit] = {
       if (attribute.value().matches(expected)) {
         None
       } else {
@@ -90,7 +90,7 @@ object Matchers {
       }
     }
 
-    override def textMatches(expected: String, element: CandidateElement) = {
+    override def textMatches(expected: String, element: CandidateElement): Option[Misfit] = {
       if (element.text().matches(expected)) {
         None
       } else {
@@ -102,7 +102,7 @@ object Matchers {
   object ContainsMatcher extends TextMatcher with AttributeMatcher {
     override val marker = "@contains "
 
-    override def attributeMatches(expected: String, attribute: CandidateAttribute) = {
+    override def attributeMatches(expected: String, attribute: CandidateAttribute): Option[Misfit] = {
       if (attribute.value().contains(expected)) {
         None
       }
@@ -111,7 +111,7 @@ object Matchers {
       }
     }
 
-    override def textMatches(expected: String, element: CandidateElement) = {
+    override def textMatches(expected: String, element: CandidateElement): Option[Misfit] = {
       if (element.text().contains(expected)) {
         None
       } else {

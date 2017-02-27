@@ -9,8 +9,8 @@ class FindByResourceTypeSpec extends AemModuleScalaWebTestBaseSpec with PageProp
   path = "/aem/geometrixx-outdoors/en/company/our-story.html"
 
   case class ContentPage(pageProperties: JsValue) {
-    def sidebarParsys = (pageProperties \ "jcr:content" \ "sidebar").as[JsObject]
-    def sidebarImageAltText = {
+    def sidebarParsys: JsObject = (pageProperties \ "jcr:content" \ "sidebar").as[JsObject]
+    def sidebarImageAltText: String = {
       val sidebarImages = sidebarParsys findByResourceType "foundation/components/image"
       (sidebarImages.head \ "alt").as[String]
     }

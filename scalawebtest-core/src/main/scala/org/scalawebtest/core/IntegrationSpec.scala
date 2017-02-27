@@ -20,7 +20,7 @@ import org.openqa.selenium.Cookie
 import org.scalatest._
 import org.scalatest.concurrent.Eventually
 import org.scalatest.selenium.WebBrowser
-import org.slf4j.LoggerFactory
+import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.mutable.ListBuffer
 import scala.language.postfixOps
@@ -36,7 +36,7 @@ import scala.language.postfixOps
   * and extend one of the Login traits if applicable.
   */
 trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with BeforeAndAfterAll with WebClientExposingHtmlUnit with IntegrationSettings with Eventually {
-  val logger = LoggerFactory.getLogger("IntegrationSpec")
+  val logger: Logger = LoggerFactory.getLogger("IntegrationSpec")
   val cookiesToBeDiscarded = new ListBuffer[Cookie]()
   /**
     * Configuration applied before login.
@@ -59,7 +59,7 @@ trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with
     url = s"$host$projectRoot$path"
   }
 
-  def path = url.replaceFirst(host, "").replaceFirst(projectRoot, "")
+  def path: String = url.replaceFirst(host, "").replaceFirst(projectRoot, "")
 
   protected var url: String = ""
 
@@ -77,12 +77,12 @@ trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with
   /**
     * Executed during beforeAll(), before performing any tasks
     */
-  def beforeLogin() = {}
+  def beforeLogin(): Unit = {}
 
   /**
     * Executed during beforeAll(), after logging in.
     */
-  def afterLogin() = {}
+  def afterLogin(): Unit = {}
 
   def applyConfiguration(config: BaseConfiguration): Unit = {
     config.configurations.values.foreach(configFunction =>
@@ -137,7 +137,7 @@ trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with
   /**
     * Resets all cookies, sets the WCM mode to disabled and logs in again
     */
-  def resetCookies() = {
+  def resetCookies(): Unit = {
     webDriver.manage().deleteAllCookies()
     login()
     afterLogin()

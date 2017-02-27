@@ -27,7 +27,7 @@ class MisfitHolder {
     misfits = misfit :: misfits
   }
 
-  def mostRelevant() = misfits.map(_.relevance).max
+  def mostRelevant(): Int = misfits.map(_.relevance).max
 
-  def relevantMisfits() = misfits.filter(_.relevance == mostRelevant())
+  def relevantMisfits(): List[Misfit] = misfits.filter(_.relevance == mostRelevant())
 }

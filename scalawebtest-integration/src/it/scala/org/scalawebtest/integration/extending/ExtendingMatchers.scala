@@ -11,7 +11,7 @@ class ExtendingMatchers extends ScalaWebTestBaseSpec {
   object EmailMatcher extends TextMatcher with AttributeMatcher {
     val emailRegexCore = "[A-Za-z]+[A-Za-z0-9._%-]?@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"
 
-    override def textMatches(expected: String, element: CandidateElement) = {
+    override def textMatches(expected: String, element: CandidateElement): Option[Misfit] = {
       val emailRegex = s"^$emailRegexCore$$"
 
       if (element.text().matches(emailRegex)) {
@@ -21,7 +21,7 @@ class ExtendingMatchers extends ScalaWebTestBaseSpec {
       }
     }
 
-    override def attributeMatches(expected: String, attribute: CandidateAttribute) = {
+    override def attributeMatches(expected: String, attribute: CandidateAttribute): Option[Misfit] = {
       val emailOrMailToRegex = s"^(mailto:)?$emailRegexCore$$"
 
       if (attribute.value().matches(emailOrMailToRegex)) {

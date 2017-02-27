@@ -33,7 +33,7 @@ class AjaxSpec extends ScalaWebTestBaseSpec {
     }
   }
 
-  def container = {
+  def container: Element = {
     find(cssSelector("div#container")).get
   }
 }

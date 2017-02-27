@@ -17,7 +17,7 @@ class EnforceNavigateTo extends ScalaWebTestBaseSpec{
     container.text should not include "Text loaded with JavaScript"
   }
 
-  def container = {
+  def container: Element = {
     find(cssSelector("div#container")).get
   }
 }

@@ -127,7 +127,7 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
         }
 
         textElement match {
-          case Some(e) => Matchers.textMatches(expectedText, CandidateElement(misfitRelevance, textElement.get)) match {
+          case Some(_) => Matchers.textMatches(expectedText, CandidateElement(misfitRelevance, textElement.get)) match {
             case None => true
             case Some(m) => misfitHolder.addMisfit(m); false
           }
@@ -212,13 +212,13 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
   }
 
   implicit class OrderableDomNode(domNode: DomNode) {
-    def before(other: DomNode) = {
+    def before(other: DomNode): Boolean = {
       val following = org.w3c.dom.Node.DOCUMENT_POSITION_FOLLOWING
       val order = domNode.compareDocumentPosition(other)
       (order & following) == following
     }
 
-    def contains(other: DomNode) = {
+    def contains(other: DomNode): Boolean = {
       val containedBy = org.w3c.dom.Node.DOCUMENT_POSITION_CONTAINED_BY
       val order = domNode.compareDocumentPosition(other)
       (order & containedBy) == containedBy
@@ -230,7 +230,7 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
 
     private def prettyString(depth: Int): String = {
       def indention: String = {
-        "\n" + (0 to depth).map(x => " ").fold("")(_ + _)
+        "\n" + (0 to depth).map(_ => " ").fold("")(_ + _)
       }
 
       domNode match {
@@ -239,7 +239,7 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
           indention + s"<${e.getNodeName + e.getAttributesMap.values().asScala.map(e => e.getNodeName + "=\"" + e.getNodeValue + "\"").fold("")(_ + " " + _)}>" +
           e.getChildren.asScala.map(_.prettyString(depth + 1)).fold("")(_ + _) +
           indention + s"</${e.getNodeName}>"
-        case default => ""
+        case _ => ""
       }
     }
   }
@@ -276,7 +276,7 @@ object Gauge {
     *   <a href="/index.html">Home</a>
     * }}}
     *
-    * but doens't match
+    * but doesn't match
     *
     * {{{
     *   <a href="/home.html">Home</a>

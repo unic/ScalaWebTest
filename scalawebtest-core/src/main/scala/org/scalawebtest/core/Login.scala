@@ -51,7 +51,7 @@ trait FormBasedLogin extends Login {
 
   def loginTimeout = Timeout(5 seconds)
 
-  override def login() = {
+  override def login(): Unit = {
     eventually(loginTimeout)({
       go to s"$host$loginPath"
       click on username_fieldname
@@ -74,7 +74,7 @@ trait FormBasedLogin extends Login {
 
 trait BasicAuthLogin extends Login {
   self: IntegrationSpec =>
-  def base64Encode(value: String) = DatatypeConverter.printBase64Binary(value.getBytes())
+  def base64Encode(value: String): String = DatatypeConverter.printBase64Binary(value.getBytes())
 
   webDriver.getClient.addRequestHeader("Authorization", "Basic " + base64Encode(username + ":" + password))
 }

@@ -45,7 +45,7 @@ trait PageProperties {
       *
       * @return all values which are of the given sling:resourceType
       */
-    def findByResourceType = findByProperty("sling:resourceType")(_)
+    def findByResourceType: (String) => Iterable[JsValue] = findByProperty("sling:resourceType")(_)
 
     /**
       * Tries to transform a JsValue to a JsObject. If possible, it searches through
@@ -131,33 +131,33 @@ trait PageProperties {
     //we are not interested in anchor and request parameters
     private val decomposable = substringBefore(substringBefore(link, "?"), "#")
     private val beginOfPath = decomposable.indexOf("/", "https://".length)
-    val protocolHostPort = decomposable.substring(0, beginOfPath)
+    val protocolHostPort: String = decomposable.substring(0, beginOfPath)
     private val pathSelectorsExtensionSuffix = decomposable.substring(beginOfPath)
     private val selectorsExtensionSuffix = substringAfter(pathSelectorsExtensionSuffix, ".")
-    val suffix = selectorsExtensionSuffix.indexOf("/") match {
+    val suffix: String = selectorsExtensionSuffix.indexOf("/") match {
       case -1 => ""
       case i => selectorsExtensionSuffix.substring(i)
     }
     private val selectorsExtension = selectorsExtensionSuffix.stripSuffix(suffix)
-    val extension = substringAfterLast(selectorsExtension, ".")
-    val path = substringBefore(pathSelectorsExtensionSuffix, ".")
-    val pagePath = substringBefore(path, "/_jcr_content")
+    val extension: String = substringAfterLast(selectorsExtension, ".")
+    val path: String = substringBefore(pathSelectorsExtensionSuffix, ".")
+    val pagePath: String = substringBefore(path, "/_jcr_content")
 
-    def substringAfter(s: String, k: String) = {
+    def substringAfter(s: String, k: String): String = {
       s.indexOf(k) match {
         case -1 => s
         case i => s.substring(i + k.length)
       }
     }
 
-    def substringAfterLast(s: String, k: String) = {
+    def substringAfterLast(s: String, k: String): String = {
       s.lastIndexOf(k) match {
         case -1 => s
         case i => s.substring(i + k.length)
       }
     }
 
-    def substringBefore(s: String, k: String) = {
+    def substringBefore(s: String, k: String): String = {
       s.indexOf(k) match {
         case -1 => s
         case i => s.substring(0, i)

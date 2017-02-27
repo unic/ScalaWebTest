@@ -23,17 +23,16 @@ import org.scalawebtest.core._
   * In addition it allows for convenient selection of the wcmmode.
   */
 trait AemTweaks {
-  self: IntegrationSpec with FormBasedLogin =>
+  self: IntegrationSpec =>
 
   override val config = new Configuration() with AemConfig
-  override val loginPath = "/libs/granite/core/content/login.html"
 
   trait AemConfig {
     self: BaseConfiguration =>
     //add default configuration
     setWcmMode(DISABLED)
 
-    def setWcmMode(wcmMode: WcmMode) = configurations += "wcmMode" ->
+    def setWcmMode(wcmMode: WcmMode): Unit = configurations += "wcmMode" ->
       ((webDriver: WebClientExposingDriver) => setWcmModeCookie(wcmMode))
   }
 
@@ -44,7 +43,7 @@ trait AemTweaks {
   /**
     * Fixture to set the wccmode for the given function call
     */
-  def withWcmMode[X](mode: WcmMode) = withWcmModeInternal(mode, _: X => Unit)
+  def withWcmMode[X](mode: WcmMode): ((X) => Unit) => (X) => Unit = withWcmModeInternal(mode, _: X => Unit)
 
   private def withWcmModeInternal[X](mode: WcmMode, f: X => Unit): X => Unit = {
     x: X => {
@@ -56,5 +55,4 @@ trait AemTweaks {
       }
     }
   }
-
 }

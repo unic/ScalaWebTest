@@ -16,12 +16,12 @@ package org.scalawebtest.integration.extensions.aem
 
 import org.scalatest.concurrent.PatienceConfiguration.Timeout
 import org.scalatest.time.SpanSugar._
-import org.scalawebtest.aem.AemTweaks
+import org.scalawebtest.aem.{AemTweaks, AuthorLogin}
 import org.scalawebtest.core.{FormBasedLogin, IntegrationFlatSpec}
 
 import scala.language.postfixOps
 
-trait AemModuleScalaWebTestBaseSpec extends IntegrationFlatSpec with FormBasedLogin with AemTweaks {
+trait AemModuleScalaWebTestBaseSpec extends IntegrationFlatSpec with FormBasedLogin with AemTweaks with AuthorLogin {
   override val host = "http://localhost:9090"
   override val loginPath = "/fakeLogin.jsp"
 

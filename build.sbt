@@ -1,3 +1,5 @@
+import ScalaWebTestBuild._
+
 crossScalaVersions := Seq("2.12.1", "2.11.8", "2.10.6")
 
 lazy val root = (project in file("."))
@@ -26,7 +28,7 @@ lazy val core = Project(id = "scalawebtest-core", base = file("scalawebtest-core
   .settings(commonSettings: _*)
   .settings(
     libraryDependencies ++= Seq(
-      "org.scalatest" %% "scalatest" % "3.0.0",
+      "org.scalatest" %% "scalatest" % "3.0.1",
       "org.seleniumhq.selenium" % "selenium-java" % "2.53.1",
       "org.seleniumhq.selenium" % "selenium-htmlunit-driver" % "2.52.0",
       "org.slf4j" % "slf4j-api" % "1.7.20"

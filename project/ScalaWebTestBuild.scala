@@ -3,15 +3,15 @@ import sbt._
 
 import scala.xml.{Elem, NodeSeq}
 
-object ScalaWebTestBuild extends Build {
+object ScalaWebTestBuild {
   def playJsonDependency(scope: Option[String])(scalaVersion: String): Seq[ModuleID] = scalaVersion match {
     case "2.11.8" => scope match {
       case None => Seq("com.typesafe.play" % "play-json_2.11" % "2.5.9")
       case Some(s) => Seq("com.typesafe.play" % "play-json_2.11" % "2.5.9" % s)
     }
     case "2.12.1" => scope match {
-      case None => Seq("com.typesafe.play" % "play-json_2.12" % "2.6.0-M1")
-      case Some(s) => Seq("com.typesafe.play" % "play-json_2.12" % "2.6.0-M1" % s)
+      case None => Seq("com.typesafe.play" % "play-json_2.12" % "2.6.0-M4")
+      case Some(s) => Seq("com.typesafe.play" % "play-json_2.12" % "2.6.0-M4" % s)
     }
     case _ => Seq()
   }
@@ -19,7 +19,7 @@ object ScalaWebTestBuild extends Build {
   def crossVersionSharedSources(configurations: Seq[Configuration]): Seq[Setting[_]] =
     configurations.map { sc =>
       (unmanagedSourceDirectories in sc) ++= {
-        (unmanagedSourceDirectories in sc ).value.map { dir: File =>
+        (unmanagedSourceDirectories in sc).value.map { dir: File =>
           CrossVersion.partialVersion(scalaVersion.value) match {
             case Some((2, y)) if y == 10 => new File(dir.getPath + "_2.10")
             case Some((2, y)) if y >= 11 => new File(dir.getPath + "_2.11+")
@@ -28,32 +28,29 @@ object ScalaWebTestBuild extends Build {
       }
     }
 
-    def bomDependencies(scalaVersion: String): Elem = {
+  def bomDependencies(scalaVersion: String): Elem = {
     val scalaMajorVersion = scalaVersion.substring(0, "2.XX".length)
     val dependencies = <dependencyManagement>
-        <dependencyManagementDependencies>
-          <dependency>
-            <groupId>org.scalatest</groupId>
-            <artifactId>scalatest_{scalaMajorVersion}</artifactId>
-            <version>3.0.0</version>
-          </dependency>
-          <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-java</artifactId>
-            <version>2.53.1</version>
-          </dependency>
-          <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-htmlunit-driver</artifactId>
-            <version>2.52.0</version>
-          </dependency>
-          <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.20</version>
-          </dependency>
-        </dependencyManagementDependencies>
-      </dependencyManagement>
+      <dependencyManagementDependencies>
+        <dependency>
+          <groupId>org.scalatest</groupId>
+          <artifactId>scalatest_
+            {scalaMajorVersion}
+          </artifactId>
+          <version>3.0.1</version>
+        </dependency>
+        <dependency>
+          <groupId>org.seleniumhq.selenium</groupId>
+          <artifactId>selenium-java</artifactId>
+          <version>2.53.1</version>
+        </dependency>
+        <dependency>
+          <groupId>org.seleniumhq.selenium</groupId>
+          <artifactId>selenium-htmlunit-driver</artifactId>
+          <version>2.52.0</version>
+        </dependency>
+      </dependencyManagementDependencies>
+    </dependencyManagement>
     dependencies
   }
 

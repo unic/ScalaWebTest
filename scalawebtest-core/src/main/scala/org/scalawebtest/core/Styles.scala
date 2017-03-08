@@ -5,10 +5,10 @@ import org.scalatest.refspec.RefSpec
 
 /**
   * ScalaTest provides a wide variety of styles. To make the creation of your BaseTrait easier,
-  * ScalaWebTest extends to needed combination of traits for you and provides style specific abstract classes to extend.
+  * ScalaWebTest extends the needed combination of traits for you and provides style specific abstract classes to extend.
   */
 
-abstract class IntegrationFunSuite extends FlatSpecBehavior with IntegrationSpec
+abstract class IntegrationFunSuite extends FunSuiteBehavior with IntegrationSpec
 abstract class FunSuiteBehavior extends FunSuite with Matchers with Inspectors
 
 abstract class IntegrationFlatSpec extends FlatSpecBehavior with IntegrationSpec

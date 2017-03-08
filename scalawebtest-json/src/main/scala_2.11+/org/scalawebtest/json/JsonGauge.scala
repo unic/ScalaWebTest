@@ -20,16 +20,16 @@ import play.api.libs.json._
 import scala.language.implicitConversions
 
 /**
-  * One should not have to create an instance of [[JsonGaugeInternal]] manually. Use one of the provided Builder.
+  * One should not have to create an instance of [[JsonGauge]] manually. Use one of the provided Builder.
   * Either [[JsonGaugeBuilder]] or [[JsonGaugeFromResponse]]
   *
   * @param testee JsValue to be tested with the gauge
   * @param fitValues whether the [[testee]] is expected to fit the gauge values
   * @param fitArraySizes whether the [[testee]] is expected to fit the sizes of contained arrays
   */
-case class JsonGaugeInternal(testee: JsValue, fitValues: Boolean, fitArraySizes: Boolean) extends Assertions with AppendedClues with Matchers {
+case class JsonGauge(testee: JsValue, fitValues: Boolean, fitArraySizes: Boolean) extends Assertions with AppendedClues with Matchers {
 
-  def withTestee(testee: JsValue) = JsonGaugeInternal(testee, this.fitValues, this.fitArraySizes)
+  def withTestee(testee: JsValue) = JsonGauge(testee, this.fitValues, this.fitArraySizes)
 
   def fits(definition: JsValue) {
     definition match {

@@ -23,17 +23,17 @@ import play.api.libs.json.Json
 object JsonGaugeFromResponse {
   def fitsTypes(definition: String)(implicit webDriver: WebDriver): Unit = {
     def document = Json.parse(webDriver.getPageSource)
-    JsonGaugeInternal(document, fitValues = false, fitArraySizes = false).fits(Json.parse(definition))
+    JsonGauge(document, fitValues = false, fitArraySizes = false).fits(Json.parse(definition))
   }
 
   def fitsTypesAndArraySizes(definition: String)(implicit webDriver: WebDriver): Unit = {
     def document = Json.parse(webDriver.getPageSource)
-    JsonGaugeInternal(document, fitValues = false, fitArraySizes = true).fits(Json.parse(definition))
+    JsonGauge(document, fitValues = false, fitArraySizes = true).fits(Json.parse(definition))
   }
 
   def fitsValues(definition: String)(implicit webDriver: WebDriver): Unit = {
     def document = Json.parse(webDriver.getPageSource)
-    JsonGaugeInternal(document, fitValues = true, fitArraySizes = true).fits(Json.parse(definition))
+    JsonGauge(document, fitValues = true, fitArraySizes = true).fits(Json.parse(definition))
   }
 }
 

@@ -42,19 +42,19 @@ object JsonGaugeBuilder {
   }
 
   class JsonGaugeFromPlayJson(json: JsValue) {
-    protected def gaugeByType(gaugeType: GaugeType): JsonGaugeInternal = gaugeType match {
+    protected def gaugeByType(gaugeType: GaugeType): JsonGauge = gaugeType match {
       case `types` =>
-        JsonGaugeInternal(
+        JsonGauge(
           testee = json,
           fitValues = false,
           fitArraySizes = false)
       case `typesAndArraySizes` =>
-        JsonGaugeInternal(
+        JsonGauge(
           testee = json,
           fitValues = false,
           fitArraySizes = true)
       case `values` =>
-        JsonGaugeInternal(
+        JsonGauge(
           testee = json,
           fitValues = true,
           fitArraySizes = true)
@@ -71,11 +71,11 @@ object JsonGaugeBuilder {
 
 }
 
-case class JsonGaugeFits(gauge: JsonGaugeInternal) {
+case class JsonGaugeFits(gauge: JsonGauge) {
   def of(definition: String): Unit = gauge.fits(Json.parse(definition))
 }
 
-case class JsonGaugeArrayContains(gauge: JsonGaugeInternal) extends Assertions with AppendedClues with Matchers {
+case class JsonGaugeArrayContains(gauge: JsonGauge) extends Assertions with AppendedClues with Matchers {
   def of(definition: String): Unit = {
     gauge.testee match {
       case array: JsArray =>

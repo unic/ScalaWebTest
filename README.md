@@ -62,6 +62,16 @@ Add the following line to gpg.sbt
 
 Copy the private key (Sonatype PGP Private and Public Key from our company password store), to ~/.sbt/gpg/secring.ast
 
+Create the file  ~/.sbt/0.13/sonatype.sbt
+
+Add the following content and replace username, password
+```
+credentials += Credentials("Sonatype Nexus Repository Manager",
+                           "oss.sonatype.org",
+                           "<your username>",
+                           "<your password>")
+```
+
 ### Release
 The release process of ScalaWebTest is currently done manually. The process is done as follows:
 

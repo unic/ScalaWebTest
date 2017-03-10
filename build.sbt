@@ -29,9 +29,9 @@ lazy val core = Project(id = "scalawebtest-core", base = file("scalawebtest-core
   .settings(
     libraryDependencies ++= Seq(
       "org.scalatest" %% "scalatest" % "3.0.1",
-      "org.seleniumhq.selenium" % "selenium-java" % "2.53.1",
-      "org.seleniumhq.selenium" % "selenium-htmlunit-driver" % "2.52.0",
-      "org.slf4j" % "slf4j-api" % "1.7.20"
+      "org.seleniumhq.selenium" % "selenium-java" % "3.3.0",
+      "org.seleniumhq.selenium" % "htmlunit-driver" % "2.25",
+      "org.slf4j" % "slf4j-api" % "1.7.24"
     )
   )
 
@@ -81,9 +81,9 @@ lazy val integration_test = Project(id = "scalawebtest-integration", base = file
     libraryDependencies ++= Seq(
       "javax.servlet" % "javax.servlet-api" % "3.0.1" % "provided",
       "org.scalatest" %% "scalatest" % "3.0.0" % "it",
-      "org.seleniumhq.selenium" % "selenium-java" % "2.53.1" % "it",
-      "org.seleniumhq.selenium" % "selenium-htmlunit-driver" % "2.52.0" % "it",
-      "org.slf4j" % "slf4j-api" % "1.7.20" % "it"
+      "org.seleniumhq.selenium" % "selenium-java" % "3.3.0" % "it",
+      "org.seleniumhq.selenium" % "htmlunit-driver" % "2.25" % "it",
+      "org.slf4j" % "slf4j-api" % "1.7.24" % "it"
     )
   )
   .settings(libraryDependencies ++= scalaVersion(playJsonDependency(Some("it"))).value)

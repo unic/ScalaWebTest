@@ -2,6 +2,13 @@ import ScalaWebTestBuild._
 
 crossScalaVersions := Seq("2.12.1", "2.11.8", "2.10.6")
 
+val projectVersion = "1.0.5-SNAPSHOT"
+val scalaTestVersion = "3.0.1"
+val seleniumVersion = "3.3.0"
+val htmlUnitVersion = "2.25"
+
+val versions = Map("scalaWebTest" -> projectVersion, "scalaTest" -> scalaTestVersion, "selenium" -> seleniumVersion, "htmlUnit" -> htmlUnitVersion)
+
 lazy val root = (project in file("."))
   .settings(commonSettings: _*)
   .settings(publishArtifact := false)
@@ -9,7 +16,7 @@ lazy val root = (project in file("."))
 
 lazy val commonSettings = Seq(
   organization := "org.scalawebtest",
-  version := "1.0.5-SNAPSHOT",
+  version := projectVersion,
   scalaVersion := "2.12.1",
   scalacOptions := Seq("-unchecked", "-deprecation"),
   publishMavenStyle := true,
@@ -28,9 +35,9 @@ lazy val core = Project(id = "scalawebtest-core", base = file("scalawebtest-core
   .settings(commonSettings: _*)
   .settings(
     libraryDependencies ++= Seq(
-      "org.scalatest" %% "scalatest" % "3.0.1",
-      "org.seleniumhq.selenium" % "selenium-java" % "3.3.0",
-      "org.seleniumhq.selenium" % "htmlunit-driver" % "2.25",
+      "org.scalatest" %% "scalatest" % scalaTestVersion,
+      "org.seleniumhq.selenium" % "selenium-java" % seleniumVersion,
+      "org.seleniumhq.selenium" % "htmlunit-driver" % htmlUnitVersion,
       "org.slf4j" % "slf4j-api" % "1.7.24"
     )
   )
@@ -48,7 +55,7 @@ lazy val bom = Project(id = "scalawebtest-bom", base = file("scalawebtest-bom"))
     publishArtifact in(Compile, packageDoc) := false,
     publishArtifact in(Compile, packageSrc) := false)
   .settings(
-    pomExtra := pomExtra.value ++ scalaVersion(bomDependencies).value
+    pomExtra := pomExtra.value ++ scalaVersion(bomDependencies(versions)).value
   )
   .settings(pomPostProcess := { (node: scala.xml.Node) =>
     val rewriteRule =
@@ -80,9 +87,9 @@ lazy val integration_test = Project(id = "scalawebtest-integration", base = file
   .settings(
     libraryDependencies ++= Seq(
       "javax.servlet" % "javax.servlet-api" % "3.0.1" % "provided",
-      "org.scalatest" %% "scalatest" % "3.0.0" % "it",
-      "org.seleniumhq.selenium" % "selenium-java" % "3.3.0" % "it",
-      "org.seleniumhq.selenium" % "htmlunit-driver" % "2.25" % "it",
+      "org.scalatest" %% "scalatest" % scalaTestVersion % "it",
+      "org.seleniumhq.selenium" % "selenium-java" % seleniumVersion % "it",
+      "org.seleniumhq.selenium" % "htmlunit-driver" % htmlUnitVersion % "it",
       "org.slf4j" % "slf4j-api" % "1.7.24" % "it"
     )
   )

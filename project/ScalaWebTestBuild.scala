@@ -28,26 +28,29 @@ object ScalaWebTestBuild {
       }
     }
 
-  def bomDependencies(scalaVersion: String): Elem = {
+  def bomDependencies(versions: Map[String, String])(scalaVersion: String): Elem = {
     val scalaMajorVersion = scalaVersion.substring(0, "2.XX".length)
     val dependencies = <dependencyManagement>
       <dependencyManagementDependencies>
         <dependency>
+          <groupId>org.scalawebtest</groupId>
+          <artifactId>scalawebtest-core_{scalaMajorVersion}</artifactId>
+          <version>{versions("scalaWebTest")}</version>
+        </dependency>
+        <dependency>
           <groupId>org.scalatest</groupId>
-          <artifactId>scalatest_
-            {scalaMajorVersion}
-          </artifactId>
-          <version>3.0.1</version>
+          <artifactId>scalatest_{scalaMajorVersion}</artifactId>
+          <version>{versions("scalaTest")}</version>
         </dependency>
         <dependency>
           <groupId>org.seleniumhq.selenium</groupId>
           <artifactId>selenium-java</artifactId>
-          <version>2.53.1</version>
+          <version>{versions("selenium")}</version>
         </dependency>
         <dependency>
           <groupId>org.seleniumhq.selenium</groupId>
-          <artifactId>selenium-htmlunit-driver</artifactId>
-          <version>2.52.0</version>
+          <artifactId>htmlunit-driver</artifactId>
+          <version>{versions("htmlUnit")}</version>
         </dependency>
       </dependencyManagementDependencies>
     </dependencyManagement>

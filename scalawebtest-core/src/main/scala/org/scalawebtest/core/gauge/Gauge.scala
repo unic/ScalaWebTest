@@ -45,8 +45,9 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
       }
       else {
         fittingNodes = fittingNode.get :: fittingNodes
+        //when proceeding to the next definition, old misfits do not matter anymore
+        misfitHolder.wipe()
       }
-      misfitRelevance += 1
     })
   }
 
@@ -59,7 +60,8 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
       if (fittingNode.isDefined) {
         fail("Current document matches the provided gauge, although expected not to!\n Gauge spec: "+ gaugeElement + "\n Fitting node: " + fittingNode.head.prettyString() + " found")
       }
-      misfitRelevance += 1
+      //when proceeding to the next definition, old misfits do not matter anymore
+      misfitHolder.wipe()
     })
   }
 
@@ -79,13 +81,15 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
     var nodeFits = true
     var firstFittingSubNode: Option[DomNode] = None
     var previousNode = previousSibling
+    var nodeMisfitRelevance = misfitRelevance
 
     while (nodeFits && definitionIt.hasNext) {
+      nodeMisfitRelevance += 1
       nodeFits = definitionIt.next() match {
         case textDef: Text =>
-          textFits(node, textDef.text.trim, previousNode, misfitRelevance + 1)
+          textFits(node, textDef.text.trim, previousNode, nodeMisfitRelevance)
         case nodeDef: Elem =>
-          val fittingDomNode = findFittingNode(node, nodeDef, previousNode, misfitRelevance + 1)
+          val fittingDomNode = findFittingNode(node, nodeDef, previousNode, nodeMisfitRelevance)
           if (fittingDomNode.isDefined) {
             previousNode = fittingDomNode
             if (firstFittingSubNode.isEmpty) {
@@ -97,7 +101,7 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
             false
           }
         case atom: Atom[_] =>
-          textFits(node, atom.text.trim, previousNode, misfitRelevance + 1)
+          textFits(node, atom.text.trim, previousNode, nodeMisfitRelevance)
         case _ => true //everything except text and elements is ignored
       }
     }

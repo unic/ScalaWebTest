@@ -30,4 +30,6 @@ class MisfitHolder {
   def mostRelevant(): Int = misfits.map(_.relevance).max
 
   def relevantMisfits(): List[Misfit] = misfits.filter(_.relevance == mostRelevant())
+
+  def wipe(): Unit = misfits = Nil
 }

@@ -64,6 +64,7 @@ twitterAuthor: danireych
                             <ul class="default">
                                 <li><a href="#modules">Modules</a></li>
                                 <li><a href="#modules/aem">AEM module</a></li>
+                                <li><a href="#modules/json">JSON module</a></li>
                             </ul>
                         </section>
                         <section>
@@ -677,6 +678,255 @@ eventually(timeout(3 seconds)) {
 
                         Only extend this trait in tests which need the feature, as it otherwise unnecessarily slows down your tests,
                         due to additional requests for page properties.
+                    </p>
+                    <h3 id="modules/json">JSON module</h3>
+                    <p>JSON is currently the most important data exchange format in the web. We think writing integration tests for web-services, which return JSON, should be as easy as for websites.
+                        Therefore we created the <i>JsonGauge</i>, which provides functionality comparable to the HTML <a href="#gauges">gauge</a>. All its magic is exposed via the according builder, which
+                        provides implicit conversions for JsValue, JsLookup and functions retrieving the currentPage from the webDriver.
+                        We choose to use <a href="https://www.playframework.com/documentation/2.5.x/ScalaJson">play-json</a> to parse the JSON response. To keep the core module clean from additional dependencies,
+                        a separate module was introduced.
+                    </p>
+                    <h4 id="modules/json/fewValues">few values</h4>
+                    <p>To verify the value or type of a few values, we consider standard play-json sufficient. Just use <i>Json.parse</i> to parse the response and then use <i>\</i> and <i>\\</i> to navigate the json structure.</p>
+{% highlight scala %}
+import org.scalawebtest.integration.ScalaWebTestBaseSpec
+import play.api.libs.json.Json
+
+class ReducedJsonSpec extends ScalaWebTestBaseSpec {
+    path = "/dijkstra.json"
+    def json = Json.parse(webDriver.getPageSource)
+
+    "Dijkstra" should "have the correct firstname" in {
+        def firstName = (json \ "firstName").as[String]
+        firstName should equal("Edsger")
+    }
+}
+{% endhighlight %}
+                    <p>All JSON tests will work with the following JSON response</p>
+<div id="modules/json/testResponse">
+{% highlight json %}
+{
+  "name": "Dijkstra",
+  "firstName": "Edsger",
+  "yearOfBirth": 1930,
+  "theories": [
+    "shortest path",
+    "graph theory"
+  ],
+  "isTuringAwardWinner": true,
+  "universities": [
+    {
+      "name": "Universität Leiden",
+      "begin": 1948,
+      "end": 1956
+    },
+    {
+      "name": "Mathematisch Centrum Amsterdam",
+      "begin": 1951,
+      "end": 1959
+    },
+    {
+      "name": "Technische Universiteit Eindhoven",
+      "begin": 1962,
+      "end": 1984
+    },
+    {
+      "name": "University of Texas at Austin",
+      "begin": 1984,
+      "end": 1999
+    }
+  ]
+}
+{% endhighlight %}
+</div>
+                    <p>Of course this way of verifying JSON responses reaches its limitations very soon. Therefore we created <i>JsonGauge</i></p>
+                    <h4 id="modules/json/gauge">JsonGauge</h4>
+                    <p>Same as when verifying HTML, we think the easiest and most natural way to formulate your expectation is using the same language, as the tested response itself.
+                        With the JSON gauge you can use JSON to specify the gauge, into which the JSON response has to fit.
+                    </p>
+{% highlight scala %}
+import org.scalawebtest.integration.ScalaWebTestBaseSpec
+import org.scalawebtest.json.JsonGaugeFromResponse.fitsValues
+
+class DocumentFitsValuesSpec extends ScalaWebTestBaseSpec {
+  path = "/jsonResponse.json.jsp"
+
+  "FitsValues" should "report success, when the json gauge contains the same values as the response it is tested against" in {
+    fitsValues(
+      """{
+        "name": "Dijkstra",
+        "firstName": "Edsger",
+        "yearOfBirth": 1930,
+        "isTuringAwardWinner": true,
+        "theories": [
+          "shortest path",
+          "graph theory"
+        ]
+      }"""
+    )
+  }
+}
+{% endhighlight %}
+                    <p>Often verifying the complete response isn't ideal. We recommend to parse and traverse the document using <a href="https://www.playframework.com/documentation/2.5.x/ScalaJson">play-json</a> and then verify if the <i>JsLookup</i> or <i>JsValue</i> <i>fits</i> the defined gauge.</p>
+{% highlight scala %}
+import org.scalatest.exceptions.TestFailedException
+import org.scalawebtest.integration.ScalaWebTestBaseSpec
+import org.scalawebtest.json.JsonGaugeBuilder._
+import play.api.libs.json.{JsValue, Json}
+
+class DijkstraJsonGaugeSpec extends ScalaWebTestBaseSpec {
+  path = "/dijkstra.json"
+  def dijkstra = Json.parse(webDriver.getPageSource)
+
+  "The response for Dijkstra" should "contain the expected values" in {
+    dijkstra fits values of
+      """{
+         "firstName": "Edsger",
+         "name": "Dijkstra",
+         "yearOfBirth": 1930,
+         "theories": [
+           "shortest path",
+           "graph theory"
+         ]
+        }
+      """
+  }
+  it should "contain the correct universities" in {
+    val universities = dijkstra \ "universities"
+    universities fit values of
+      """
+        [
+          { "name": "Universität Leiden","begin": 1948, "end": 1956 },
+          { "name": "Mathematisch Centrum Amsterdam", "begin": 1951, "end": 1959 },
+          { "name": "Technische Universiteit Eindhoven", "begin": 1962, "end": 1984 },
+          { "name": "University of Texas at Austin", "begin": 1984, "end": 1999 }
+        ]
+      """
+  }
+{% endhighlight %}
+                    <p>As with the HTML gauge, controlled variance is allowed. The original <a href="#modules/json/testResponse">response</a> contains additional key/value pairs (<i>isTuringAwardWinner</i> and <i>universities</i>).
+                    Also the order of the <i>name</i> and <i>firstName</i> is the other way around. Nevertheless this test would report success, when run. It would report an error, if the response would:</p>
+                    <ul>
+                        <li>contain a different value for one of the keys</li>>
+                        <li>miss a key, which is contained in the gauge</li>
+                        <li>contain a different hierarchy of the key/value pairs</li>
+                    </ul>
+                    <p><a href="http://www.scalatest.org/user_guide/sharing_tests">Behaviors</a> are a good way to share tests. In this case, verifying values is too specific. Therefore we provide
+                    <i>fits types of</i> in addition to <i>fits values of</i>.
+                    </p>
+{% highlight scala %}
+import org.scalatest.exceptions.TestFailedException
+import org.scalawebtest.integration.ScalaWebTestBaseSpec
+import org.scalawebtest.json.JsonGaugeBuilder._
+import play.api.libs.json.{JsValue, Json}
+
+class DijkstraJsonGaugeFitsTypesSpec extends ScalaWebTestBaseSpec {
+  path = "/dijkstra.json"
+  def dijkstra = Json.parse(webDriver.getPageSource)
+
+  "The response for Dijkstra" should "contain the expected types" in {
+    dijkstra fits values of
+      """{
+         "firstName": "",
+         "name": "",
+         "yearOfBirth": 0,
+         "theories": [ "" ]
+        }
+      """
+  }
+{% endhighlight %}
+                    <p>Now the values no longer matter. They are only used to determine the expected type. Therefore we recommend to use values, which indicate that only the type matters. Use empty strings and 0.
+                    This test would report success. It would fail, when the response would:</p>
+                    <ul>
+                        <li>contain a value with a type different from the one expected for the given key</li>
+                        <li>miss a key, which is contained in the gauge</li>
+                        <li>contain a different hierarchy of the key/value pairs</li>
+                        <li>when an array value would contain an element with a mismatching type</li>
+                    </ul>
+                    <p>Lets have a closer look at arrays. Usually we expect all array elements to match certain expectations. When using <i>fits types of</i>, you only have to define those expectations once.
+                    All array elements then have to fulfill them. Lets have a look at an example. Lets assume the test of the previous example would be replaced with the following</p>
+ {% highlight scala %}
+  "The response for Dijkstra" should "contain the expected types" in {
+    dijkstra fits types of
+      """{
+         "firstName": "",
+         "name": "",
+         "yearOfBirth": 0,
+         "theories": [ "" ]
+         "universities":
+         [{
+           "name": "",
+           "begin": 0,
+           "end": 0
+         }]
+        }
+      """
+  }
+{% endhighlight %}
+                    <p>This would enforce all elements of the <i>universities</i> array to contain a key <i>name</i> with a value of type <i>string</i> and the keys <i>begin</i> and <i>end</i> with a value of type <i>number</i>.
+                        The elements might contain additional keys, such as <i>department</i>, but no contradictions. Sometimes this is not the behavior one is looking for. Two more options exist to verify arrays.
+                        One common scenario is, that the size of the array matters, i.e. coordinates in a <a href="http://geojson.org/">GeoJson</a> document. To test this use <i>fits typesAndArraySizes of</i>.
+                        In this case every array element is considered unique, you have to provide specific expectations for every element, but those expectations are allowed to differ.
+                        For example, we expect Martin to have studied and worked at three universities. For the first two an <i>end</i> is known. This isn't the case for the last one.</p>
+{% highlight scala %}
+  "The response for Odersky" should "contain the expected types and array sizes" in {
+    odersky fits typesAndArraySizes of
+      """{
+         "firstName": "",
+         "name": "",
+         "universities":
+         [{
+           "name": "",
+           "begin": 0,
+           "end": 0
+         },{
+           "name": "",
+           "begin": 0,
+           "end": 0
+         },{
+           "name": "",
+           "begin": 0
+         }]
+        }
+      """
+  }
+{% endhighlight %}
+                    <p>One more common situation exists with arrays. Often the array elements are not sorted. Although we expect the array to contain a specific element, we don't know it's position.
+                    For this situation <i>containsElementFitting values/types/typesAndArraySizes of</i> exists.</p>
+{% highlight scala %}
+import org.scalawebtest.integration.ScalaWebTestBaseSpec
+import org.scalawebtest.json.JsonGaugeBuilder._
+import play.api.libs.json.{JsLookupResult, JsValue, Json}
+
+class ContainsElementFittingSpec extends ScalaWebTestBaseSpec {
+  path = "/jsonResponse.json.jsp"
+  def dijkstra: JsValue = Json.parse(webDriver.getPageSource)
+  def universities: JsLookupResult = { dijkstra \ "universities" }
+
+  "The universities array" should "contain an element with the expected types" in {
+    universities containsElementFitting types of
+      """{
+        | "name": "",
+        | "begin": 0,
+        | "end": 0
+        | } """.stripMargin
+  }
+  it should "contain an element with the expected values" in {
+    universities containsElementFitting values of
+      """{
+        | "name": "Technische Universiteit Eindhoven",
+        | "begin": 1962,
+        | "end": 1984
+        | }""".stripMargin
+  }
+}
+{% endhighlight %}
+                    <h4 id="modules/json/alternatives"></h4>
+                    <p>
+                        Because of its simplicity we prefer <a href="https://www.playframework.com/documentation/2.5.x/ScalaJson">play-json</a> over <a href="http://argonaut.io/">Argonaut</a> and <a href="https://circe.github.io/circe/">Circe</a>.
+                        A good alternative to our JSON module is <a href="http://agourlay.github.io/cornichon/">cornichon</a>. Cornichon requires your tests to be a bit more specific then the ScalaWebTest ones, but it provides nice ways to do so.
+                        As cornichon uses Akka Http instead of HtmlUnit to retrieve the JSON response, it is only partially compatible with ScalaWebTest. They might coexist in the same codebase and both are based on <a href="http://www.scalatest.org/">ScalaTest</a>,
+                        but cornichon can't make much use of the automatisation provided by ScalaWebTests (login, navigation, ...).
                     </p>
                 </section>
 

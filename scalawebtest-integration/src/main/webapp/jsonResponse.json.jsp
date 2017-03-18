@@ -2,10 +2,12 @@
 {
   "name": "Dijkstra",
   "firstName": "Edsger",
+  "yearOfBirth": 1930,
   "theories": [
     "shortest path",
     "graph theory"
   ],
+  "isTuringAwardWinner": true,
   "universities": [
     {
       "name": "Universität Leiden",

@@ -104,7 +104,7 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
         if (verifyClassesOnCandidate(domNode, elem, MISFIT_RELEVANCE_START_VALUE)) {
           val fittingNode = verifyCandidate(domNode, elem, None, MISFIT_RELEVANCE_START_VALUE)
           if (fittingNode.isDefined) {
-            fail(s"Current document matches the provided gauge, although expected not to!\n Gauge spec: $elem\n Fitting node: ${fittingNode.get.prettyString()} found")
+            fail(s"Current element matches the provided gauge, although expected not to!\n Gauge spec: $elem\n Fitting node: ${fittingNode.get.prettyString()} found")
           }
         }
       //only element allowed as top level gauge definition, when using elementFits

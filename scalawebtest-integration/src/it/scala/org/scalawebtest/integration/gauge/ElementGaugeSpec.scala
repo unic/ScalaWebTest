@@ -18,9 +18,10 @@ import org.scalawebtest.integration.ScalaWebTestBaseSpec
 import org.scalawebtest.core.gauge.ElementGaugeBuilder.GaugeFromElement
 
 class ElementGaugeSpec extends ScalaWebTestBaseSpec {
+  def images = findAll(CssSelectorQuery("ul div.image_columns"))
+
   path = "/galleryOverview.jsp"
   "The element gauge" should "successfully verify if single elements fit the given gauge" in {
-    val images = findAll(CssSelectorQuery("ul div.image_columns"))
 
     images.size should be > 5 withClue " - gallery didn't contain the expected amount of images"
 
@@ -38,5 +39,19 @@ class ElementGaugeSpec extends ScalaWebTestBaseSpec {
         </div>
     }
   }
-
+  it should "work with the fit synonym as well" in {
+    for (image <- images) {
+      image fit <div class="columns image_columns"></div>
+    }
+  }
+  it should "work with negative checks" in {
+    for (image <- images) {
+      image doesntFit  <div class="noImage"></div>
+    }
+  }
+  it should "and the doesNotFit synonym" in {
+    for (image <- images) {
+      image doesNotFit  <div class="noImage"></div>
+    }
+  }
 }

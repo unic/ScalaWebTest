@@ -26,8 +26,8 @@ import scala.xml._
 
 /**
   * Gauge provides functions to write integration tests with very low effort. For a detailed description of it's usage,
-  * see [[org.scalawebtest.core.gauge.Gauge.fits]]
-  * and [[org.scalawebtest.core.gauge.Gauge.doesnt.fit]]
+  * see [[org.scalawebtest.core.gauge.Gauge.fits]] and [[org.scalawebtest.core.gauge.Gauge.doesnt.fit]]
+  * as well as [[org.scalawebtest.core.gauge.ElementGaugeBuilder.GaugeFromElement.fits]] and [[org.scalawebtest.core.gauge.ElementGaugeBuilder.GaugeFromElement.fits]]
   */
 class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) extends Assertions {
   val MISFIT_RELEVANCE_START_VALUE: Int = 0
@@ -38,10 +38,8 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
     var fittingNodes = List[DomNode]()
     if (webDriver.getCurrentHtmlPage.isEmpty) fail("Current page is not of type HtmlPage. At the moment only Html documents are supported")
     val currentPage = webDriver.getCurrentHtmlPage.get
-    var misfitRelevance = MISFIT_RELEVANCE_START_VALUE
-
     definition.theSeq.foreach(gaugeElement => {
-      val fittingNode = nodeFits(currentPage.getDocumentElement, gaugeElement, None, misfitRelevance)
+      val fittingNode = nodeFits(currentPage.getDocumentElement, gaugeElement, None, MISFIT_RELEVANCE_START_VALUE)
       if (fittingNode.isEmpty) {
         failAndReportMisfit()
       }
@@ -56,9 +54,8 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
   def doesNotFit(): Unit = {
     if (webDriver.getCurrentHtmlPage.isEmpty) fail("Current page is not of type HtmlPage. At the moment only Html documents are supported")
     val currentPage = webDriver.getCurrentHtmlPage.get
-    var misfitRelevance = MISFIT_RELEVANCE_START_VALUE
     definition.theSeq.foreach(gaugeElement => {
-      val fittingNode = nodeFits(currentPage.getDocumentElement, gaugeElement, None, misfitRelevance)
+      val fittingNode = nodeFits(currentPage.getDocumentElement, gaugeElement, None, MISFIT_RELEVANCE_START_VALUE)
       if (fittingNode.isDefined) {
         fail(s"Current document matches the provided gauge, although expected not to!\n Gauge spec: $gaugeElement\n Fitting node: ${fittingNode.head.prettyString()} found")
       }
@@ -112,7 +109,7 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
     }
   }
 
-  def verifyClassesOnCandidate(domNode: DomNode, elem: Elem, misfitRelevance: Int): Boolean = {
+  private def verifyClassesOnCandidate(domNode: DomNode, elem: Elem, misfitRelevance: Int): Boolean = {
     val definitionAttributes = elem.attributes.asAttrMap
 
     def assertContainsClass(domNode: DomNode, clazz: String): Boolean = {
@@ -336,7 +333,10 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
 
 object Gauge {
   /**
-    * Assert that the current document `fits` the html snippet provided as definition for the `Gauge`.
+    * Assert that the current document `fits` the HTML snippet provided as definition for the `Gauge`.
+    *
+    * Technically the HTML snippet has to be XML. You might have to add some closing tags for this. This XML is then used to create an abstract syntax tree (AST),
+    * which is used as gauge definition.
     *
     * ==Overview==
     * For example:
@@ -345,8 +345,12 @@ object Gauge {
     * fits (<table class="zebra"><tr><td><a href="/path/to/node">something</a></td></tr></table>)
     * }}}
     *
-    * The provided XML is expected to match the current document, as loosely as possible. Without further markers everything is matched using contains methods.
-    * The parent - child relationship is enforced, but missing siblings are ignored.
+    * The current document is expected to `fit` the provided `gauge` definition (the NodeSeq/XML parameter of the `fits` method).
+    * The current document may contain additional elements, before the section which `fits` the `gauge`. The document may contain additional elements in between the one, resembled in the `gauge`.
+    * Without special markers attributes and text, after being trimmed, have to be equal to the once in the `gauge`. The only exception is the class attribute.
+    * The classes listed in the gauge, are expected to be available on the test node, but order as well as additional classes do not matter.
+    *
+    * The parent child relationships, as well as the order between the elements has to be the same, as in the `gauge`.
     *
     * You may use the following refinements:
     *

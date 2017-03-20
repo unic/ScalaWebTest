@@ -21,11 +21,31 @@ import play.api.libs.json._
 import scala.language.implicitConversions
 
 /**
-  * The JsonGauge shall provide comparable functionality to the HTML Gauge.
+  * Helper object to provide functions to fluently build a [[org.scalawebtest.json.JsonGauge]].
+  *
+  * ==Overview==
+  * Import [[JsonGaugeBuilder$.JsonGaugeFromJsLookup]] or [[JsonGaugeBuilder$.JsonGaugeFromJsValue]], then start
+  * with a [[play.api.libs.json.JsLookupResult]]  followed by [[JsonGaugeBuilder$.JsonGaugeFromJsLookup#fits]], [[JsonGaugeBuilder$.JsonGaugeFromJsValue#fit]] or [[JsonGaugeBuilder$.JsonGaugeFromJsValue#containsElementFitting]]
+  * or [[play.api.libs.json.JsValue]] followed by [[JsonGaugeBuilder.JsonGaugeFromJsValue#fits]] or [[JsonGaugeBuilder$.JsonGaugeFromJsValue#fit]]
+  *
+  * Next you choose the [[JsonGaugeBuilder$.GaugeType]], which has to be one of the following [[JsonGaugeBuilder.types$]], [[JsonGaugeBuilder.typesAndArraySizes$]], [[JsonGaugeBuilder.values$]] or [[JsonGaugeBuilder$.JsonGaugeFromJsLookup#containsElementFitting]]
+  *
+  * Last is the definition of the JSON `gauge` wrapped in [[JsonGaugeFits#of]]. The definition has to be a String, which contains a valid JSON document.
+  *
+  * ==Example==
+  * {{{
+  * val dijkstra: JsValue = Json.parse("""{"name": "Dijkstra", "firstName": "Edsger"}""")
+  * dijkstra fits values of """{"firstName": "Edsger"}"""
+  * }}}
+  *
   */
 object JsonGaugeBuilder {
 
+  /**
+    * Import this implicit class, to build a JsonGauge from a JsLookupResult
+    */
   implicit class JsonGaugeFromJsLookup(jsLookup: JsLookupResult) extends JsonGaugeFromPlayJson(json = jsLookup.get) {
+
     def fits(gaugeType: GaugeType): JsonGaugeFits = JsonGaugeFits(gaugeByType(gaugeType))
 
     def fit(gaugeType: GaugeType): JsonGaugeFits = fits(gaugeType)
@@ -33,6 +53,9 @@ object JsonGaugeBuilder {
     def containsElementFitting(gaugeType: GaugeType): JsonGaugeArrayContains = JsonGaugeArrayContains(gaugeByType(gaugeType))
   }
 
+  /**
+    * Import this implicit class, to build a JsonGauge from a JsValue
+    */
   implicit class JsonGaugeFromJsValue(jsValue: JsValue) extends JsonGaugeFromPlayJson(json = jsValue) {
     def fits(gaugeType: GaugeType): JsonGaugeFits = JsonGaugeFits(gaugeByType(gaugeType))
 
@@ -67,7 +90,7 @@ object JsonGaugeBuilder {
 
   object values extends GaugeType
 
-  class GaugeType
+  sealed class GaugeType
 
 }
 

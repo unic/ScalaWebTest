@@ -14,29 +14,31 @@
  */
 package org.scalawebtest.integration.gauge
 
+import org.scalatest.exceptions.TestFailedException
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
 import org.scalawebtest.core.gauge.ElementGaugeBuilder.GaugeFromElement
 
 class ElementGaugeSpec extends ScalaWebTestBaseSpec {
+  path = "/galleryOverview.jsp"
+
   def images = findAll(CssSelectorQuery("ul div.image_columns"))
 
-  path = "/galleryOverview.jsp"
-  "The element gauge" should "successfully verify if single elements fit the given gauge" in {
+  val imageGauge = <div class="columns image_columns">
+    <a href="@regex \/gallery\/image\/\d">
+      <figure class="obj_aspect_ratio">
+        <noscript>
+          <img class="obj_full" src="@regex \/image\/\d\.jpg\?w=600"></img>
+        </noscript>
+        <img class="obj_full lazyload" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-sizes="auto"></img>
+      </figure>
+    </a>
+  </div>
 
+  "The element gauge" should "successfully verify if single elements fit the given gauge" in {
     images.size should be > 5 withClue " - gallery didn't contain the expected amount of images"
 
     for (image <- images) {
-      image fits
-        <div class="columns image_columns">
-          <a href="@regex \/gallery\/image\/\d">
-            <figure class="obj_aspect_ratio">
-              <noscript>
-                <img class="obj_full" src="@regex \/image\/\d\.jpg\?w=600"></img>
-              </noscript>
-              <img class="obj_full lazyload" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-sizes="auto"></img>
-            </figure>
-          </a>
-        </div>
+      image fits imageGauge
     }
   }
   it should "work with the fit synonym as well" in {
@@ -46,12 +48,36 @@ class ElementGaugeSpec extends ScalaWebTestBaseSpec {
   }
   it should "work with negative checks" in {
     for (image <- images) {
-      image doesntFit  <div class="noImage"></div>
+      image doesntFit <div class="noImage"></div>
     }
   }
   it should "and the doesNotFit synonym" in {
     for (image <- images) {
-      image doesNotFit  <div class="noImage"></div>
+      image doesNotFit <div class="noImage"></div>
+    }
+  }
+  it should "fail if expected to fit but doesn't" in {
+    assertThrows[TestFailedException] {
+      for (image <- images) {
+        image fits <div class="noImage"></div>
+      }
+    }
+  }
+  it should "fail if expected not to fit but does" in {
+    assertThrows[TestFailedException] {
+      for (image <- images) {
+        image doesntFit imageGauge
+      }
+    }
+  }
+  it should "fail if the gauge contains more then one top level element" in {
+    assertThrows[TestFailedException] {
+      images.next() fits <div class="columns_image"></div> <div class="columns_image"></div>
+    }
+  }
+  it should "fail if the top level element in the gauge is not the same as the one tested" in {
+    assertThrows[TestFailedException] {
+      images.next() fits <a></a>
     }
   }
 }

@@ -21,25 +21,25 @@ import org.scalawebtest.core.WebClientExposingDriver
 import org.w3c._
 
 import scala.collection.JavaConverters._
+import scala.language.reflectiveCalls
 import scala.xml._
 
 /**
   * Gauge provides functions to write integration tests with very low effort. For a detailed description of it's usage,
-  * see [[org.scalawebtest.core.gauge.Gauge.fits]]
-  * and [[org.scalawebtest.core.gauge.Gauge.doesnt.fit]]
+  * see [[org.scalawebtest.core.gauge.Gauge.fits]] and [[org.scalawebtest.core.gauge.Gauge.doesnt.fit]]
+  * as well as [[org.scalawebtest.core.gauge.ElementGaugeBuilder.GaugeFromElement.fits]] and [[org.scalawebtest.core.gauge.ElementGaugeBuilder.GaugeFromElement.fits]]
   */
 class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) extends Assertions {
   val MISFIT_RELEVANCE_START_VALUE: Int = 0
   val misfitHolder = new MisfitHolder
 
+
   def fits(): Unit = {
     var fittingNodes = List[DomNode]()
     if (webDriver.getCurrentHtmlPage.isEmpty) fail("Current page is not of type HtmlPage. At the moment only Html documents are supported")
     val currentPage = webDriver.getCurrentHtmlPage.get
-    var misfitRelevance = MISFIT_RELEVANCE_START_VALUE
-
     definition.theSeq.foreach(gaugeElement => {
-      val fittingNode = nodeFits(currentPage.getDocumentElement, gaugeElement, None, misfitRelevance)
+      val fittingNode = nodeFits(currentPage.getDocumentElement, gaugeElement, None, MISFIT_RELEVANCE_START_VALUE)
       if (fittingNode.isEmpty) {
         failAndReportMisfit()
       }
@@ -54,15 +54,85 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
   def doesNotFit(): Unit = {
     if (webDriver.getCurrentHtmlPage.isEmpty) fail("Current page is not of type HtmlPage. At the moment only Html documents are supported")
     val currentPage = webDriver.getCurrentHtmlPage.get
-    var misfitRelevance = MISFIT_RELEVANCE_START_VALUE
     definition.theSeq.foreach(gaugeElement => {
-      val fittingNode = nodeFits(currentPage.getDocumentElement, gaugeElement, None, misfitRelevance)
+      val fittingNode = nodeFits(currentPage.getDocumentElement, gaugeElement, None, MISFIT_RELEVANCE_START_VALUE)
       if (fittingNode.isDefined) {
-        fail("Current document matches the provided gauge, although expected not to!\n Gauge spec: "+ gaugeElement + "\n Fitting node: " + fittingNode.head.prettyString() + " found")
+        fail(s"Current document matches the provided gauge, although expected not to!\n Gauge spec: $gaugeElement\n Fitting node: ${fittingNode.head.prettyString()} found")
       }
       //when proceeding to the next definition, old misfits do not matter anymore
       misfitHolder.wipe()
     })
+  }
+
+  def elementFits(domNode: DomNode): Unit = {
+    if (definition.theSeq.length != 1) {
+      fail("Exactly one top level node expected, in the gauge definition.")
+    }
+
+    definition.theSeq.head match {
+      case elem: Elem =>
+        if (domNode.getLocalName != elem.label) {
+          misfitHolder.addMisfit(Misfit(MISFIT_RELEVANCE_START_VALUE, s"Expected <${elem.label}>, but was <${domNode.getLocalName}> in ${domNode.prettyString()}"))
+          failAndReportMisfit()
+        }
+        if (!verifyClassesOnCandidate(domNode, elem, MISFIT_RELEVANCE_START_VALUE)) {
+          failAndReportMisfit()
+        }
+        val fittingNode = verifyCandidate(domNode, elem, None, MISFIT_RELEVANCE_START_VALUE)
+        if (fittingNode.isEmpty) {
+          failAndReportMisfit()
+        }
+      //only element allowed as top level gauge definition, when using elementFits
+      case invalid => fail("Gauge definition contained invalid top level element " + invalid)
+    }
+  }
+
+  def elementDoesNotFit(domNode: DomNode): Unit = {
+    if (definition.theSeq.length != 1) {
+      fail("Exactly one top level node expected, in the gauge definition.")
+    }
+
+    definition.theSeq.head match {
+      case elem: Elem =>
+        if (domNode.getLocalName != elem.label) {
+          misfitHolder.addMisfit(Misfit(MISFIT_RELEVANCE_START_VALUE, s"Expected <${elem.label}>, but was <${domNode.getLocalName}> in ${domNode.prettyString()}"))
+          failAndReportMisfit()
+        }
+        if (verifyClassesOnCandidate(domNode, elem, MISFIT_RELEVANCE_START_VALUE)) {
+          val fittingNode = verifyCandidate(domNode, elem, None, MISFIT_RELEVANCE_START_VALUE)
+          if (fittingNode.isDefined) {
+            fail(s"Current element matches the provided gauge, although expected not to!\n Gauge spec: $elem\n Fitting node: ${fittingNode.get.prettyString()} found")
+          }
+        }
+      //only element allowed as top level gauge definition, when using elementFits
+      case invalid => fail("Gauge definition contained invalid top level element " + invalid)
+    }
+  }
+
+  private def verifyClassesOnCandidate(domNode: DomNode, elem: Elem, misfitRelevance: Int): Boolean = {
+    val definitionAttributes = elem.attributes.asAttrMap
+
+    def assertContainsClass(domNode: DomNode, clazz: String): Boolean = {
+      val domNodeClass = domNode.getAttributes.getNamedItem("class")
+      if (domNodeClass == null) {
+        misfitHolder.addMisfit(Misfit(misfitRelevance, s"Expected element to contain the class $clazz, but didn't contain any class attribute in ${domNode.prettyString()}"))
+        false
+      } else {
+        val containsClass = domNodeClass.getNodeValue.split(" ").map(_.trim).filter(_.nonEmpty).contains(clazz)
+        if (!containsClass) {
+          misfitHolder.addMisfit(Misfit(misfitRelevance, s"Expected element to contain the class $clazz, but only contained ${domNodeClass.getNodeValue} in ${domNode.prettyString()}"))
+        }
+        containsClass
+      }
+    }
+
+    definitionAttributes.get("class").map(
+      _.split(" ")
+        .map(_.trim)
+        .filter(_.nonEmpty)
+        .map(clazz => assertContainsClass(domNode, clazz)
+        ).forall(identity)
+    ).forall(identity)
   }
 
   private def nodeToCssSelector(node: Node) = {
@@ -73,8 +143,10 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
         case None => ""
       }
     }
+
     node.label + classSelector
   }
+
 
   private def nodeFits(node: DomNode, gaugeDefinition: Seq[Node], previousSibling: Option[DomNode], misfitRelevance: Int): Option[DomNode] = {
     val definitionIt = gaugeDefinition.iterator
@@ -86,8 +158,6 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
     while (nodeFits && definitionIt.hasNext) {
       nodeMisfitRelevance += 1
       nodeFits = definitionIt.next() match {
-        case textDef: Text =>
-          textFits(node, textDef.text.trim, previousNode, nodeMisfitRelevance)
         case nodeDef: Elem =>
           val fittingDomNode = findFittingNode(node, nodeDef, previousNode, nodeMisfitRelevance)
           if (fittingDomNode.isDefined) {
@@ -100,6 +170,8 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
           else {
             false
           }
+        case textDef: Text =>
+          textFits(node, textDef.text.trim, previousNode, nodeMisfitRelevance)
         case atom: Atom[_] =>
           textFits(node, atom.text.trim, previousNode, nodeMisfitRelevance)
         case _ => true //everything except text and elements is ignored
@@ -143,6 +215,7 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
             false
         }
       }
+
       elementFits
     }
   }
@@ -160,46 +233,54 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
     //test all candidate elements, whether they match given attribute expectations
     while (fittingNode.isEmpty && candidatesIt.hasNext) {
       val candidate = candidatesIt.next()
-      val definitionAttributes = gaugeElement.attributes.asAttrMap
-
-      var matchesAllAttributes = true
-      var attributeMisfitRelevance = misfitRelevance
-
-      //verify if the current candidate matches all attribute expectations
-      for (defAttr <- definitionAttributes
-           if matchesAllAttributes) {
-        val expectedKey = defAttr._1
-        val expectedValue = defAttr._2.trim
-
-        //don't test for class attribute, as it is used in the CSS selector to find candidates
-        if (expectedKey != "class" && expectedValue.nonEmpty) {
-          attributeMisfitRelevance += 1
-          def matchesAttribute(): Boolean = {
-            val attributes: dom.NamedNodeMap = candidate.getAttributes
-            if (attributes == null) {
-              misfitHolder.addMisfit(attributeMisfitRelevance, "Misfitting Element: element [" + candidate.prettyString() + "] does not have any attributes, but attribute [" + defAttr + "] expected")
-              return false
-            }
-            val attr: dom.Node = attributes.getNamedItem(expectedKey)
-            if (attr == null) {
-              misfitHolder.addMisfit(attributeMisfitRelevance, "Misfitting Element: element [" + candidate.prettyString() + "] does not have the expected attribute [" + defAttr + "]")
-              return false
-            }
-            Matchers.attributeMatches(expectedValue, CandidateAttribute(attributeMisfitRelevance, candidate, attr)) match {
-              case None => true
-              case Some(m) => misfitHolder.addMisfit(m); false
-            }
-          }
-          matchesAllAttributes &= matchesAttribute()
-        }
-      }
-      //if the current element matches all attributes and is in correct order, we will test child elements
-      if (matchesAllAttributes && elementOrderCorrect(candidate, previousSibling, attributeMisfitRelevance)) {
-        val noPreviousSibling = None
-        fittingNode = nodeFits(candidate, gaugeElement.child, noPreviousSibling, attributeMisfitRelevance + 1)
-      }
+      fittingNode = verifyCandidate(candidate, gaugeElement, previousSibling, misfitRelevance)
     }
     fittingNode
+  }
+
+  private def verifyCandidate(candidate: DomNode, gaugeElement: Elem, previousSibling: Option[DomNode], misfitRelevance: Int): Option[DomNode] = {
+    val definitionAttributes = gaugeElement.attributes.asAttrMap
+
+    var matchesAllAttributes = true
+    var attributeMisfitRelevance = misfitRelevance
+
+    //verify if the current candidate matches all attribute expectations
+    for (defAttr <- definitionAttributes
+         if matchesAllAttributes) {
+      val expectedKey = defAttr._1
+      val expectedValue = defAttr._2.trim
+
+      //don't test for class attribute, as it is used in the CSS selector to find candidates
+      if (expectedKey != "class" && expectedValue.nonEmpty) {
+        attributeMisfitRelevance += 1
+
+        def matchesAttribute(): Boolean = {
+          val attributes: dom.NamedNodeMap = candidate.getAttributes
+          if (attributes == null) {
+            misfitHolder.addMisfit(attributeMisfitRelevance, "Misfitting Element: element [" + candidate.prettyString() + "] does not have any attributes, but attribute [" + defAttr + "] expected")
+            return false
+          }
+          val attr: dom.Node = attributes.getNamedItem(expectedKey)
+          if (attr == null) {
+            misfitHolder.addMisfit(attributeMisfitRelevance, "Misfitting Element: element [" + candidate.prettyString() + "] does not have the expected attribute [" + defAttr + "]")
+            return false
+          }
+          Matchers.attributeMatches(expectedValue, CandidateAttribute(attributeMisfitRelevance, candidate, attr)) match {
+            case None => true
+            case Some(m) => misfitHolder.addMisfit(m); false
+          }
+        }
+
+        matchesAllAttributes &= matchesAttribute()
+      }
+    }
+    //if the current element matches all attributes and is in correct order, we will test child elements
+    if (matchesAllAttributes && elementOrderCorrect(candidate, previousSibling, attributeMisfitRelevance)) {
+      val noPreviousSibling = None
+      nodeFits(candidate, gaugeElement.child, noPreviousSibling, attributeMisfitRelevance + 1)
+    } else {
+      None
+    }
   }
 
   private def failAndReportMisfit() = {
@@ -241,8 +322,8 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
         case t: DomText => t.asText()
         case e: DomElement =>
           indention + s"<${e.getNodeName + e.getAttributesMap.values().asScala.map(e => e.getNodeName + "=\"" + e.getNodeValue + "\"").fold("")(_ + " " + _)}>" +
-          e.getChildren.asScala.map(_.prettyString(depth + 1)).fold("")(_ + _) +
-          indention + s"</${e.getNodeName}>"
+            e.getChildren.asScala.map(_.prettyString(depth + 1)).fold("")(_ + _) +
+            indention + s"</${e.getNodeName}>"
         case _ => ""
       }
     }
@@ -252,7 +333,10 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
 
 object Gauge {
   /**
-    * Assert that the current document `fits` the html snippet provided as definition for the `Gauge`.
+    * Assert that the current document `fits` the HTML snippet provided as definition for the `Gauge`.
+    *
+    * Technically the HTML snippet has to be XML. You might have to add some closing tags for this. This XML is then used to create an abstract syntax tree (AST),
+    * which is used as gauge definition.
     *
     * ==Overview==
     * For example:
@@ -261,8 +345,12 @@ object Gauge {
     * fits (<table class="zebra"><tr><td><a href="/path/to/node">something</a></td></tr></table>)
     * }}}
     *
-    * The provided XML is expected to match the current document, as loosely as possible. Without further markers everything is matched using contains methods.
-    * The parent - child relationship is enforced, but missing siblings are ignored.
+    * The current document is expected to `fit` the provided `gauge` definition (the NodeSeq/XML parameter of the `fits` method).
+    * The current document may contain additional elements, before the section which `fits` the `gauge`. The document may contain additional elements in between the one, resembled in the `gauge`.
+    * Without special markers attributes and text, after being trimmed, have to be equal to the once in the `gauge`. The only exception is the class attribute.
+    * The classes listed in the gauge, are expected to be available on the test node, but order as well as additional classes do not matter.
+    *
+    * The parent child relationships, as well as the order between the elements has to be the same, as in the `gauge`.
     *
     * You may use the following refinements:
     *

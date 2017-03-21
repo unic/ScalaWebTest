@@ -40,6 +40,7 @@ twitterAuthor: danireych
                             <ul class="default">
                                 <li><a href="#gauges">Using gauges</a></li>
                                 <li><a href="#classes">Test for classes on elements</a></li>
+                                <li><a href="#singleElements">Test single elements</a></li>
                                 <li><a href="#contains">Test for containment</a></li>
                                 <li><a href="#regex">Test for regex matches</a></li>
                                 <li><a href="#negation">Negating your tests</a></li>
@@ -175,6 +176,8 @@ libraryDependencies ++= Seq(
                     and call the test HomepageSpec
 
 {% highlight scala %}
+import org.scalawebtest.core.IntegrationFlatSpec
+
 class HomepageSpec extends IntegrationFlatSpec {
     override val host = "http://localhost:8080"
     path = "/index.html"
@@ -204,7 +207,9 @@ class HomepageSpec extends IntegrationFlatSpec {
                     example in ScalaWebTest's own integration tests.
 
 {% highlight scala %}
-trait ScalaWebTestBaseSpec extends IntegrationFlatSpec with AemTweaks with FormBasedLogin {
+import org.scalawebtest.core.{FormBasedLogin, IntegrationFlatSpec}
+
+trait ScalaWebTestBaseSpec extends IntegrationFlatSpec with FormBasedLogin {
 override val host = "http://localhost:8080"
 override val loginPath = "/fakeLogin.jsp"
 
@@ -225,6 +230,8 @@ override def loginTimeout = Timeout(5 seconds)
                         enabled or disable.
                         During test execution JavaScript is enabled and JavaScript errors let the test fail.</p>
 {% highlight scala %}
+import org.scalawebtest.core.IntegrationFlatSpec
+
 class HomepageSpec extends IntegrationFlatSpec {
     override val host = "http://localhost:8080"
     path = "/index.html"
@@ -258,8 +265,6 @@ class HomepageSpec extends IntegrationFlatSpec {
                         Let's have a look at a simple example to get an idea how those gauges work.</p>
 
 {% highlight scala %}
-package org.scalawebtest.integration.gauge
-
 import org.scalawebtest.core.gauge.Gauge.fit
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
@@ -461,7 +466,49 @@ ScalaTestFailure
 {% highlight html %}
 <div class="red important container main"></div>
 {% endhighlight %}
+                    <h3 id="singleElements">Test single elements</h3>
+                    <p>Often times trying to fit the complete document into the defined <i>gauge</i> isn't the most natural and efficient thing to do.
+                    Especially when a website contains multiple elements of the same kind, such as content cards, gallery images and tabs, <i>finding all</i>
+                        those elements first, and then trying to fit each element with the <i>gauge</i>, is better.</p>
+{% highlight scala %}
+import org.scalatest.exceptions.TestFailedException
+import org.scalawebtest.integration.ScalaWebTestBaseSpec
+import org.scalawebtest.core.gauge.ElementGaugeBuilder.GaugeFromElement
 
+class ElementGaugeSpec extends ScalaWebTestBaseSpec {
+  path = "/galleryOverview.jsp"
+
+  def images = findAll(CssSelectorQuery("ul div.image_columns"))
+
+  val imageGauge = <div class="columns image_columns">
+    <a>
+      <figure class="obj_aspect_ratio">
+        <noscript>
+          <img class="obj_full"></img>
+        </noscript>
+        <img class="obj_full lazyload" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-sizes="auto"></img>
+      </figure>
+    </a>
+  </div>
+
+  "The gallery" should "contain the expected HTML for every image" in {
+    images.size should be > 5 withClue " - gallery didn't contain the expected amount of images"
+
+    for (image <- images) {
+      image fits imageGauge
+    }
+  }
+{% endhighlight %}
+                    <p>When using <a href="http://www.scalatest.org/user_guide/using_selenium">findAll</a> with a
+                        <a href="http://docs.scala-lang.org/tutorials/tour/sequence-comprehensions.html">for-comprehension</a>,
+                    one should always verify, that the expected amount of elements was found.</p>
+                    <p>When using <i>fits</i> or <i>doesntFit</i>, the same features are available, no matter if the whole document, or a single
+                    element is checked. Therefore the following chapters apply to both usecases.
+                        There are two restrictions when using gauges for single elements (built using <a href="https://github.com/unic/ScalaWebTest/tree/master/scalawebtest-core/src/main/scala/org/scalawebtest/core/gauge/ElementGaugeBuilder.GaugeFromElement">ElementGaugeBuilder.GaugeFromElement</a>)</p>
+                    <ul>
+                        <li>the gauge may only contain one top level element</li>
+                        <li>the top level element of the gauge has to be the same, as the one which is checked (not one of its children)</li>
+                    </ul>
                     <h3 id="contains">Test for containment</h3>
                     <p>It is common that you don't want to verify the complete attribute value, or text of an element.
                         You may use <i>@contains</i> to trigger the ContainsMatcher instead of the DefaultMatcher.
@@ -505,8 +552,6 @@ fit(<a href="@regex http:\\/\\/[a-zA-Z]+\.scalawebtest.org.*,"></a>)
                         better in your current context.</p>
 
 {% highlight scala %}
-package org.scalawebtest.integration.gauge
-
 import org.scalawebtest.core.gauge.Gauge.NotFit
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
@@ -557,8 +602,6 @@ found
                     <p>Lets try this out using a page with protected content. On first load a form will be shown, after logging in the form
                         disappears, instead the text <i>sensitive information</i> appears.</p>
 {% highlight scala%}
-package org.scalawebtest.integration.gauge
-
 import org.scalawebtest.core.gauge.Gauge.{NotFit, fits}
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
 

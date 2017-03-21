@@ -1,0 +1,70 @@
+---
+title: ScalaWebTest 1.1.0
+layout: post
+twitterAuthor: danireych
+description: ScalaWebTest 1.1.0 Release notes
+abstract: ScalaWebTest 1.1.0 provides a new json module and a gauge for single html elements
+---
+
+<section>
+    <header><h2>Highlights of this release</h2></header>
+
+    <section>
+        <header><h3>Update from ScalaWebTest <= 1.0.4</h3></header>
+        <p>
+            The AEM module is the only one containing breaking changes.
+        </p>
+        <p>
+            The <i>AemTweaks</i> trait no longer forces users to extend the <i>FormsLogin</i> trait. In turn
+            it is longer able to provide the correct configuration for the <i>loginPath</i>. The <i>loginPath</i>
+            is now configured by the <i>AuthorLogin</i> trait, which extends the <i>FormsLogin</i>.
+
+            Therefore we recommend to adapt your code from
+            {% highlight scala %}
+            class MyAemSpec extends IntegrationFlatSpec with AemTeaks with FormLogin
+            {% endhighlight %}
+
+            to
+
+            {% highlight scala %}
+            class MyAemSpec extends IntegrationFlatSpec with AemTeaks with AuthorLogin
+            {% endhighlight %}
+        </p>
+    </section>
+
+    <section>
+        <header><h3>The all new JSON module</h3></header>
+        <p>The all new JSON module extends the concept of gauges from HTML to JSON. It provides a readable and easy to
+            write integration tests for JSON responses.</p>
+        {% highlight scala %}
+import org.scalatest.exceptions.TestFailedException
+import org.scalawebtest.integration.ScalaWebTestBaseSpec
+import org.scalawebtest.json.JsonGaugeBuilder._
+import play.api.libs.json.{JsValue, Json}
+
+class DijkstraJsonGaugeSpec extends ScalaWebTestBaseSpec {
+  path = "/dijkstra.json"
+  def dijkstra = Json.parse(webDriver.getPageSource)
+
+  "The response for Dijkstra" should "contain the expected values" in {
+    dijkstra fits values of
+      """{
+         "firstName": "Edsger",
+         "name": "Dijkstra",
+         "yearOfBirth": 1930,
+         "theories": [
+           "shortest path",
+           "graph theory"
+         ]
+        }
+      """
+  }
+}
+{% endhighlight %}
+        <p>The <a href="/documentation.html#modules/json">detailed documentation</a> introduces all features, such as fitting by <i>type</i>, <i>value</i> and verifying <i>array elements</i>.</p>
+    </section>
+
+    <section>
+        <header><h3>Gauges for single HTML elements</h3></header>
+    </section>
+</section>

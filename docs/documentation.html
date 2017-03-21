@@ -686,7 +686,7 @@ eventually(timeout(3 seconds)) {
                         We choose to use <a href="https://www.playframework.com/documentation/2.5.x/ScalaJson">play-json</a> to parse the JSON response. To keep the core module clean from additional dependencies,
                         a separate module was introduced.
                     </p>
-                    <h4 id="modules/json/fewValues">few values</h4>
+                    <h4 id="modules/json/aFewValues">Only verifying a few values</h4>
                     <p>To verify the value or type of a few values, we consider standard play-json sufficient. Just use <i>Json.parse</i> to parse the response and then use <i>\</i> and <i>\\</i> to navigate the json structure.</p>
 {% highlight scala %}
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
@@ -740,7 +740,7 @@ class ReducedJsonSpec extends ScalaWebTestBaseSpec {
 {% endhighlight %}
 </div>
                     <p>Of course this way of verifying JSON responses reaches its limitations very soon. Therefore we created <i>JsonGauge</i></p>
-                    <h4 id="modules/json/gauge">JsonGauge</h4>
+                    <h4 id="modules/json/gauge">JsonGauge - the ScalaWebTest way</h4>
                     <p>Same as when verifying HTML, we think the easiest and most natural way to formulate your expectation is using the same language, as the tested response itself.
                         With the JSON gauge you can use JSON to specify the gauge, into which the JSON response has to fit.
                     </p>
@@ -825,7 +825,7 @@ class DijkstraJsonGaugeFitsTypesSpec extends ScalaWebTestBaseSpec {
   def dijkstra = Json.parse(webDriver.getPageSource)
 
   "The response for Dijkstra" should "contain the expected types" in {
-    dijkstra fits values of
+    dijkstra fits types of
       """{
          "firstName": "",
          "name": "",

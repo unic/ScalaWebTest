@@ -14,7 +14,6 @@
  */
 package org.scalawebtest.integration.gauge
 
-import org.scalawebtest.core.gauge.Gauge.NotFit
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
 class LoggedInSpec extends ScalaWebTestBaseSpec{

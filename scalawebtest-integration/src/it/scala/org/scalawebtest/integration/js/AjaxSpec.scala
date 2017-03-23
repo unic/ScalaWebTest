@@ -15,7 +15,6 @@
 package org.scalawebtest.integration.js
 
 import org.scalatest.time.SpanSugar._
-import org.scalawebtest.core.gauge.Gauge.fits
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
 class AjaxSpec extends ScalaWebTestBaseSpec {

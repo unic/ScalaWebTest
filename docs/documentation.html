@@ -207,16 +207,23 @@ class HomepageSpec extends IntegrationFlatSpec {
                     example in ScalaWebTest's own integration tests.
 
 {% highlight scala %}
+import org.scalatest.AppendedClues
+import org.scalatest.concurrent.PatienceConfiguration.Timeout
+import org.scalatest.time.SpanSugar._
+import org.scalawebtest.core.gauge.HtmlGauge
 import org.scalawebtest.core.{FormBasedLogin, IntegrationFlatSpec}
 
-trait ScalaWebTestBaseSpec extends IntegrationFlatSpec with FormBasedLogin {
-override val host = "http://localhost:8080"
-override val loginPath = "/fakeLogin.jsp"
+import scala.language.postfixOps
 
-override val projectRoot = ""
+trait ScalaWebTestBaseSpec extends IntegrationFlatSpec with AemTweaks with FormBasedLogin with HtmlGauge {
+    override val host = "http://localhost:8080"
+    override val loginPath = "/fakeLogin.jsp"
 
-override def loginTimeout = Timeout(5 seconds)
-} {% endhighlight %}
+    override val projectRoot = ""
+
+    override def loginTimeout = Timeout(5 seconds)
+}
+{% endhighlight %}
 
                     This BaseTrait uses FlatSpec style, adds the tweaks from the AEM module, and uses FormBasedLogin.
 
@@ -265,7 +272,8 @@ class HomepageSpec extends IntegrationFlatSpec {
                         Let's have a look at a simple example to get an idea how those gauges work.</p>
 
 {% highlight scala %}
-import org.scalawebtest.core.gauge.Gauge.fit
+package org.scalawebtest.integration.gauge
+
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
 class SimpleGaugeSpec extends ScalaWebTestBaseSpec {
@@ -473,9 +481,9 @@ ScalaTestFailure
 {% highlight scala %}
 import org.scalatest.exceptions.TestFailedException
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
-import org.scalawebtest.core.gauge.ElementGaugeBuilder.GaugeFromElement
+import org.scalawebtest.core.gauge.HtmlElementGauge
 
-class ElementGaugeSpec extends ScalaWebTestBaseSpec {
+class ElementGaugeSpec extends ScalaWebTestBaseSpec with HtmlElementGauge {
   path = "/galleryOverview.jsp"
 
   def images = findAll(CssSelectorQuery("ul div.image_columns"))
@@ -552,7 +560,8 @@ fit(<a href="@regex http:\\/\\/[a-zA-Z]+\.scalawebtest.org.*,"></a>)
                         better in your current context.</p>
 
 {% highlight scala %}
-import org.scalawebtest.core.gauge.Gauge.NotFit
+package org.scalawebtest.integration.gauge
+
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
 class LoggedInSpec extends ScalaWebTestBaseSpec{
@@ -602,10 +611,11 @@ found
                     <p>Lets try this out using a page with protected content. On first load a form will be shown, after logging in the form
                         disappears, instead the text <i>sensitive information</i> appears.</p>
 {% highlight scala%}
-import org.scalawebtest.core.gauge.Gauge.{NotFit, fits}
+package org.scalawebtest.integration.gauge
+
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
-class LoginSpec extends ScalaWebTestBaseSpec{
+class LoginSpec extends ScalaWebTestBaseSpec {
     path = "/protectedContent.jsp"
 
     "When accessing protectedContent it" should "show the login form" in {
@@ -789,9 +799,9 @@ class ReducedJsonSpec extends ScalaWebTestBaseSpec {
                     </p>
 {% highlight scala %}
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
-import org.scalawebtest.json.JsonGaugeFromResponse.fitsValues
+import org.scalawebtest.json.JsonGauge
 
-class DocumentFitsValuesSpec extends ScalaWebTestBaseSpec {
+class DocumentFitsValuesSpec extends ScalaWebTestBaseSpec extends JsonGauge {
   path = "/jsonResponse.json.jsp"
 
   "FitsValues" should "report success, when the json gauge contains the same values as the response it is tested against" in {
@@ -814,10 +824,10 @@ class DocumentFitsValuesSpec extends ScalaWebTestBaseSpec {
 {% highlight scala %}
 import org.scalatest.exceptions.TestFailedException
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
-import org.scalawebtest.json.JsonGaugeBuilder._
+import org.scalawebtest.json.JsonGauge
 import play.api.libs.json.{JsValue, Json}
 
-class DijkstraJsonGaugeSpec extends ScalaWebTestBaseSpec {
+class DijkstraJsonGaugeSpec extends ScalaWebTestBaseSpec extends JsonGauge {
   path = "/dijkstra.json"
   def dijkstra = Json.parse(webDriver.getPageSource)
 
@@ -860,10 +870,10 @@ class DijkstraJsonGaugeSpec extends ScalaWebTestBaseSpec {
 {% highlight scala %}
 import org.scalatest.exceptions.TestFailedException
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
-import org.scalawebtest.json.JsonGaugeBuilder._
+import org.scalawebtest.json.JsonGauge
 import play.api.libs.json.{JsValue, Json}
 
-class DijkstraJsonGaugeFitsTypesSpec extends ScalaWebTestBaseSpec {
+class DijkstraJsonGaugeFitsTypesSpec extends ScalaWebTestBaseSpec extends JsonGauge {
   path = "/dijkstra.json"
   def dijkstra = Json.parse(webDriver.getPageSource)
 
@@ -938,10 +948,10 @@ class DijkstraJsonGaugeFitsTypesSpec extends ScalaWebTestBaseSpec {
                     For this situation <i>containsElementFitting values/types/typesAndArraySizes of</i> exists.</p>
 {% highlight scala %}
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
-import org.scalawebtest.json.JsonGaugeBuilder._
+import org.scalawebtest.json.JsonGauge
 import play.api.libs.json.{JsLookupResult, JsValue, Json}
 
-class ContainsElementFittingSpec extends ScalaWebTestBaseSpec {
+class ContainsElementFittingSpec extends ScalaWebTestBaseSpec extends JsonGauge {
   path = "/jsonResponse.json.jsp"
   def dijkstra: JsValue = Json.parse(webDriver.getPageSource)
   def universities: JsLookupResult = { dijkstra \ "universities" }

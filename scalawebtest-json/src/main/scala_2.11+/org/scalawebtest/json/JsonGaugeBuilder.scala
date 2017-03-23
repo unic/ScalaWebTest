@@ -21,14 +21,23 @@ import play.api.libs.json._
 import scala.language.implicitConversions
 
 /**
-  * Helper object to provide functions to fluently build a [[org.scalawebtest.json.JsonGauge]].
+  * Helper object to provide functions to fluently build a [[org.scalawebtest.json.Gauge]]. Which in turn is used to test if
+  * a [[play.api.libs.json.JsLookupResult]] or [[play.api.libs.json.JsValue]] fits the gauge definition.
   *
   * ==Overview==
-  * Import [[JsonGaugeBuilder$.JsonGaugeFromJsLookup]] or [[JsonGaugeBuilder$.JsonGaugeFromJsValue]], then start
-  * with a [[play.api.libs.json.JsLookupResult]]  followed by [[JsonGaugeBuilder$.JsonGaugeFromJsLookup#fits]], [[JsonGaugeBuilder$.JsonGaugeFromJsValue#fit]] or [[JsonGaugeBuilder$.JsonGaugeFromJsValue#containsElementFitting]]
-  * or [[play.api.libs.json.JsValue]] followed by [[JsonGaugeBuilder.JsonGaugeFromJsValue#fits]] or [[JsonGaugeBuilder$.JsonGaugeFromJsValue#fit]]
+  * Import [[JsonGauge$.JsonGaugeFromJsLookup]] or [[JsonGauge$.JsonGaugeFromJsValue]], then follow the documentation of the [[JsonGauge]] trait.
+  */
+object JsonGauge extends JsonGauge
+
+/**
+  * Trait which provides functions to fluently build a [[org.scalawebtest.json.Gauge]]. Which in turn is used to test if
+  * a [[play.api.libs.json.JsLookupResult]] or [[play.api.libs.json.JsValue]] fits the provided gauge definition.
   *
-  * Next you choose the [[JsonGaugeBuilder$.GaugeType]], which has to be one of the following [[JsonGaugeBuilder.types$]], [[JsonGaugeBuilder.typesAndArraySizes$]], [[JsonGaugeBuilder.values$]] or [[JsonGaugeBuilder$.JsonGaugeFromJsLookup#containsElementFitting]]
+  * ==Overview==
+  * Start with a [[play.api.libs.json.JsLookupResult]] followed by [[JsonGauge.JsonGaugeFromJsLookup#fits]], [[JsonGauge.JsonGaugeFromJsLookup#fit]] or [[JsonGauge.JsonGaugeFromJsLookup#containsElementFitting]]
+  * or [[play.api.libs.json.JsValue]] followed by [[JsonGauge.JsonGaugeFromJsValue#fits]], [[JsonGauge.JsonGaugeFromJsValue#fit]] or [[JsonGauge.JsonGaugeFromJsValue#containsElementFitting]]
+  *
+  * Next you choose the [[JsonGauge.GaugeType]], which has to be one of the following [[JsonGauge.types$]], [[JsonGauge.typesAndArraySizes$]], [[JsonGauge.values$]] or [[JsonGauge.JsonGaugeFromJsLookup#containsElementFitting]]
   *
   * Last is the definition of the JSON `gauge` wrapped in [[JsonGaugeFits#of]]. The definition has to be a String, which contains a valid JSON document.
   *
@@ -39,66 +48,74 @@ import scala.language.implicitConversions
   * }}}
   *
   */
-object JsonGaugeBuilder {
+trait JsonGauge {
 
   /**
-    * Import this implicit class, to build a JsonGauge from a JsLookupResult
+    * Implicit class, to build a Gauge from a JsLookupResult
     */
   implicit class JsonGaugeFromJsLookup(jsLookup: JsLookupResult) extends JsonGaugeFromPlayJson(json = jsLookup.get) {
-
-    def fits(gaugeType: GaugeType): JsonGaugeFits = JsonGaugeFits(gaugeByType(gaugeType))
-
-    def fit(gaugeType: GaugeType): JsonGaugeFits = fits(gaugeType)
-
-    def containsElementFitting(gaugeType: GaugeType): JsonGaugeArrayContains = JsonGaugeArrayContains(gaugeByType(gaugeType))
   }
 
   /**
-    * Import this implicit class, to build a JsonGauge from a JsValue
+    * Implicit class, to build a Gauge from a JsValue
     */
   implicit class JsonGaugeFromJsValue(jsValue: JsValue) extends JsonGaugeFromPlayJson(json = jsValue) {
-    def fits(gaugeType: GaugeType): JsonGaugeFits = JsonGaugeFits(gaugeByType(gaugeType))
-
-    def fit(gaugeType: GaugeType): JsonGaugeFits = fits(gaugeType)
-
-    def containsElementFitting(gaugeType: GaugeType): JsonGaugeArrayContains = JsonGaugeArrayContains(gaugeByType(gaugeType))
   }
 
   class JsonGaugeFromPlayJson(json: JsValue) {
-    protected def gaugeByType(gaugeType: GaugeType): JsonGauge = gaugeType match {
+    def fits(gaugeType: GaugeType): JsonGaugeFits = JsonGaugeFits(gaugeByType(gaugeType))
+
+    def fit(gaugeType: GaugeType): JsonGaugeFits = fits(gaugeType)
+
+    def containsElementFitting(gaugeType: GaugeType): JsonGaugeArrayContains = JsonGaugeArrayContains(gaugeByType(gaugeType))
+
+    protected def gaugeByType(gaugeType: GaugeType): Gauge = gaugeType match {
       case `types` =>
-        JsonGauge(
+        Gauge(
           testee = json,
           fitValues = false,
           fitArraySizes = false)
       case `typesAndArraySizes` =>
-        JsonGauge(
+        Gauge(
           testee = json,
           fitValues = false,
           fitArraySizes = true)
       case `values` =>
-        JsonGauge(
+        Gauge(
           testee = json,
           fitValues = true,
           fitArraySizes = true)
     }
   }
 
+  /**
+    * marker object to build a gauge, which only verifies by type
+    */
   object types extends GaugeType
 
+  /**
+    * marker object to build a gauge, which only verifies by type,
+    * but checks array sizes as well
+    */
   object typesAndArraySizes extends GaugeType
 
+  /**
+    * marker object to build a gauge, which verifies values
+    */
   object values extends GaugeType
 
-  sealed class GaugeType
+  /**
+    * base trait for the marker objects, which are used to select the behavior of the [[org.scalawebtest.json.Gauge]]
+    */
+  sealed trait GaugeType
 
 }
 
-case class JsonGaugeFits(gauge: JsonGauge) {
+case class JsonGaugeFits(gauge: Gauge) {
   def of(definition: String): Unit = gauge.fits(Json.parse(definition))
 }
 
-case class JsonGaugeArrayContains(gauge: JsonGauge) extends Assertions with AppendedClues with Matchers {
+case class JsonGaugeArrayContains(gauge: Gauge) extends Assertions with AppendedClues with Matchers {
   def of(definition: String): Unit = {
     gauge.testee match {
       case array: JsArray =>
@@ -113,10 +130,11 @@ case class JsonGaugeArrayContains(gauge: JsonGauge) extends Assertions with Appe
     array.value.exists(e => {
       try {
         gauge.withTestee(e).fits(Json.parse(definition))
-        //the next line is only reached, if all array elements fitted the definition
+        //the next line is only reached, if all array elements fit the definition
         true
       } catch {
-        case e: TestFailedException => false //silent catch
+        //silent catch, it is expected that some elements to not fit the provided gauge
+        case e: TestFailedException => false
       }
     })
   }

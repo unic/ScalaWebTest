@@ -14,7 +14,6 @@
  */
 package org.scalawebtest.integration.gauge
 
-import org.scalawebtest.core.gauge.Gauge.{doesnt, fits}
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
 class ElementOrderSpec extends ScalaWebTestBaseSpec {

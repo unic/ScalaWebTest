@@ -2,7 +2,7 @@ import ScalaWebTestBuild._
 
 crossScalaVersions := Seq("2.12.1", "2.11.8", "2.10.6")
 
-val projectVersion = "1.1.0-SNAPSHOT"
+val projectVersion = "1.1.0"
 val scalaTestVersion = "3.0.1"
 val seleniumVersion = "3.3.0"
 val htmlUnitVersion = "2.25"
@@ -12,7 +12,7 @@ val versions = Map("scalaWebTest" -> projectVersion, "scalaTest" -> scalaTestVer
 lazy val root = (project in file("."))
   .settings(commonSettings: _*)
   .settings(publishArtifact := false)
-  .aggregate(core, aem, bom, integration_test)
+  .aggregate(core, aem, json, bom, integration_test)
 
 lazy val commonSettings = Seq(
   organization := "org.scalawebtest",

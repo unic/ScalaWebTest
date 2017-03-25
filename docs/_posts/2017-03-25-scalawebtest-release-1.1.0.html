@@ -3,7 +3,7 @@ title: ScalaWebTest 1.1.0
 layout: post
 twitterAuthor: danireych
 description: ScalaWebTest 1.1.0 Release notes
-abstract: ScalaWebTest 1.1.0 provides a new json module and a gauge for single html elements
+abstract: ScalaWebTest 1.1.0 provides a new json module, a gauge for single html elements and convenience traits
 ---
 
 <section>
@@ -66,5 +66,45 @@ class DijkstraJsonGaugeSpec extends ScalaWebTestBaseSpec {
 
     <section>
         <header><h3>Gauges for single HTML elements</h3></header>
+        <p>It is now possible to check single HTML elements with the <a href="/documentation.html#singleElements">HtmlElementGauge</a>.
+        Often trying to fit the complete document into the defined <i>gauge</i> isn't the most natural and efficient thing to do.
+        Especially when a website contains multiple elements of the same kind, such as content cards, gallery images or items of a product list, <i>finding all</i>
+            those elements first, and then trying to fit each element with the <i>gauge</i>, is better.</p>
+{% highlight scala %}
+import org.scalatest.exceptions.TestFailedException
+import org.scalawebtest.integration.ScalaWebTestBaseSpec
+import org.scalawebtest.core.gauge.HtmlElementGauge
+
+class ElementGaugeSpec extends ScalaWebTestBaseSpec with HtmlElementGauge {
+  path = "/galleryOverview.jsp"
+
+  def images = findAll(CssSelectorQuery("ul div.image_columns"))
+
+  val imageGauge = <div class="columns image_columns">
+    <a>
+      <figure class="obj_aspect_ratio">
+        <noscript>
+          <img class="obj_full"></img>
+        </noscript>
+        <img class="obj_full lazyload" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-sizes="auto"></img>
+      </figure>
+    </a>
+  </div>
+
+  "The gallery" should "contain the expected HTML for every image" in {
+    images.size should be > 5 withClue " - gallery didn't contain the expected amount of images"
+
+    for (image <- images) {
+      image fits imageGauge
+    }
+  }
+{% endhighlight %}
+    </section>
+
+    <section>
+        <header><h3>Convenience traits providing gauge functions</h3></header>
+        <p>ScalaWebTest now contains four traits, which provide the functions of the four different gauge types, namely <a href="/documentation.html#gauges">HtmlGauge</a>, <a href="/documentation.html#singleElements">HtmlElementGauge</a>, <a href="/documentation.html#modules/json/gauge">JsonGauge</a> and <a href="/documentation.html#modules/json/gauge">JsonGaugeFromResponse</a>
+        Its recommended to extend one of those traits, to avoid having to manually handle imports of the gauge functions, which one wants to use.
+        </p>
     </section>
 </section>

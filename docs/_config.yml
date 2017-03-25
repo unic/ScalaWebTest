@@ -3,7 +3,12 @@ markdown: kramdown
 url: http://www.scalawebtest.org
 #for local server instances
 #url: http://localhost:4000
-scalaWebTestVersion: 1.0.0
+defaults:
+  -
+    scope:
+      path: ""
+    values:
+      scalaWebTestVersion: 1.1.0
 collections:
   - mainNavItems
 contextpath:

@@ -2,7 +2,7 @@ package org.scalawebtest.integration.extensions.aem
 
 import org.scalatest.time.SpanSugar._
 import org.scalawebtest.aem.WcmMode
-import org.scalawebtest.core.gauge.Gauge.fit
+import org.scalawebtest.core.gauge.HtmlGauge.fit
 
 import scala.language.postfixOps
 

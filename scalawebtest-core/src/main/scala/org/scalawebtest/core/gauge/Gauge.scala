@@ -27,7 +27,7 @@ import scala.xml._
 /**
   * Gauge provides functions to write integration tests with very low effort. For a detailed description of it's usage,
   * see [[org.scalawebtest.core.gauge.Gauge.fits]] and [[org.scalawebtest.core.gauge.Gauge.doesnt.fit]]
-  * as well as [[org.scalawebtest.core.gauge.ElementGaugeBuilder.GaugeFromElement.fits]] and [[org.scalawebtest.core.gauge.ElementGaugeBuilder.GaugeFromElement.fits]]
+  * as well as [[org.scalawebtest.core.gauge.HtmlElementGauge$.GaugeFromElement.fits]] and [[org.scalawebtest.core.gauge.HtmlElementGauge$.GaugeFromElement.fits]]
   */
 class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) extends Assertions {
   val MISFIT_RELEVANCE_START_VALUE: Int = 0
@@ -331,7 +331,11 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
 
 }
 
-object Gauge {
+@deprecated("Please switch to the HtmlGauge object or extend the HtmlGauge trait. The Gauge object will be removed in a future version, for clear disambiguation between HtmlGauge and JsonGauge", "ScalaWebTest 1.1.0")
+object Gauge extends HtmlGauge
+object HtmlGauge extends HtmlGauge
+
+trait HtmlGauge {
   /**
     * Assert that the current document `fits` the HTML snippet provided as definition for the `Gauge`.
     *

@@ -17,23 +17,35 @@ package org.scalawebtest.json
 import org.openqa.selenium.WebDriver
 import play.api.libs.json.Json
 
+
+object JsonGaugeFromResponse extends JsonGaugeFromResponse
+
 /**
-  *
+  * Allows to test if the complete response fits the provided [[org.scalawebtest.json.Gauge]] definition.
   */
-object JsonGaugeFromResponse {
+trait JsonGaugeFromResponse {
+  /**
+    * Test if all types of the response fit the provided [[org.scalawebtest.json.Gauge]] definition.
+    */
   def fitsTypes(definition: String)(implicit webDriver: WebDriver): Unit = {
     def document = Json.parse(webDriver.getPageSource)
-    JsonGauge(document, fitValues = false, fitArraySizes = false).fits(Json.parse(definition))
+    Gauge(document, fitValues = false, fitArraySizes = false).fits(Json.parse(definition))
   }
 
+  /**
+    * Test if all types and array sizes of the response fit the provided [[org.scalawebtest.json.Gauge]] definition.
+    */
   def fitsTypesAndArraySizes(definition: String)(implicit webDriver: WebDriver): Unit = {
     def document = Json.parse(webDriver.getPageSource)
-    JsonGauge(document, fitValues = false, fitArraySizes = true).fits(Json.parse(definition))
+    Gauge(document, fitValues = false, fitArraySizes = true).fits(Json.parse(definition))
   }
 
+  /**
+    * Test if all values of the response fit the provided [[org.scalawebtest.json.Gauge]] definition.
+    */
   def fitsValues(definition: String)(implicit webDriver: WebDriver): Unit = {
     def document = Json.parse(webDriver.getPageSource)
-    JsonGauge(document, fitValues = true, fitArraySizes = true).fits(Json.parse(definition))
+    Gauge(document, fitValues = true, fitArraySizes = true).fits(Json.parse(definition))
   }
 }
 

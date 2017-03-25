@@ -1,6 +1,6 @@
 package org.scalawebtest.integration.gauge
 
-import org.scalawebtest.core.gauge.Gauge.{NotFit, fits}
+import org.scalawebtest.core.gauge.HtmlGauge.{NotFit, fits}
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
 class LoginSpec extends ScalaWebTestBaseSpec{

@@ -1,6 +1,6 @@
 package org.scalawebtest.integration.extending
 
-import org.scalawebtest.core.gauge.Gauge.{doesnt, fits}
+import org.scalawebtest.core.gauge.HtmlGauge.{doesnt, fits}
 import org.scalawebtest.core.gauge._
 import org.scalawebtest.core.gauge.Matchers.{AttributeMatcher, TextMatcher}
 import org.scalawebtest.integration.ScalaWebTestBaseSpec

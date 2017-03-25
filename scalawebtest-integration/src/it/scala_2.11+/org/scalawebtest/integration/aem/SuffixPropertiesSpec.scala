@@ -1,7 +1,7 @@
 package org.scalawebtest.integration.aem
 
 import org.scalawebtest.aem.PageProperties
-import org.scalawebtest.core.gauge.Gauge.fits
+import org.scalawebtest.core.gauge.HtmlGauge.fits
 import org.scalawebtest.integration.extensions.aem.AemModuleScalaWebTestBaseSpec
 
 class SuffixPropertiesSpec extends AemModuleScalaWebTestBaseSpec with PageProperties {

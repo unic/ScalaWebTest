@@ -1,8 +1,9 @@
 package org.scalawebtest.integration.json
 
-import org.scalawebtest.json.JsonGaugeFromResponse.fitsValues
+import org.scalawebtest.integration.ScalaWebTestBaseSpec
+import org.scalawebtest.json.JsonGaugeFromResponse._
 
-class DocumentFitsValuesSpec extends ScalaWebTestJsonBaseSpec {
+class JsonGaugeFromResponseObjectSpec extends ScalaWebTestBaseSpec {
   path = "/jsonResponse.json.jsp"
 
   "FitsValues" should "report success, when the json gauge contains the same values as the response it is tested against" in {

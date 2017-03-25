@@ -1,13 +1,11 @@
 package org.scalawebtest.integration.json
 
 import org.scalatest.exceptions.TestFailedException
-import org.scalawebtest.integration.ScalaWebTestBaseSpec
-import org.scalawebtest.json.JsonGaugeBuilder._
 import play.api.libs.json.Json
 
 //Can only be used in specs which request /jsonResponse.json.jsp
 trait FitsTypeMismatchBehavior {
-  self: ScalaWebTestBaseSpec =>
+  self: ScalaWebTestJsonBaseSpec =>
 
   def jsonGaugeFitting(gaugeType: GaugeType): Unit = {
     def dijkstra = Json.parse(webDriver.getPageSource)

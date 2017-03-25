@@ -14,30 +14,24 @@
  */
 package org.scalawebtest.integration.gauge
 
-import org.scalawebtest.integration.ScalaWebTestBaseSpec
+import org.scalawebtest.core.IntegrationFlatSpec
+import org.scalawebtest.core.gauge.HtmlGauge._
 
-class ExactSpec extends ScalaWebTestBaseSpec {
-  path = "/navigation.jsp"
-  "The default matcher" should "exactly match attributes" in {
-    fits(
-      <nav>
-        <ul>
-          <li>
-            <a href="/path/to/first/element">first navigation element</a>
-          </li>
-        </ul>
-      </nav>
-    )
+class HtmlGaugeObjectSpec extends IntegrationFlatSpec {
+  override val host = "http://localhost:9090"
+
+  path = "/index.jsp"
+
+  "CheckingGauge" should "work with fits" in {
+    fits(<h1>Unic AEM Testing - Mock Server</h1>)
   }
-  it should "exactly match text" in {
-    fits(
-      <nav>
-        <ul>
-          <li>
-            <a href="/path/to/first/element">first navigation element</a>
-          </li>
-        </ul>
-      </nav>
-    )
+  it should "work with fit (synonym of fits)" in {
+    fit(<h1>Unic AEM Testing - Mock Server</h1>)
+  }
+  it should "work with doesnt fit" in {
+    doesnt fit <h2>Unic AEM Testing - False Text and Tag</h2>
+  }
+  it should "work with not fit (synonym of doesnt fit)" in {
+    not fit <h2>Unic AEM Testing - False Text and Tag</h2>
   }
 }

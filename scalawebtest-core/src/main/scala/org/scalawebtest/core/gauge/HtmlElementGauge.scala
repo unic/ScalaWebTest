@@ -22,10 +22,16 @@ import org.scalawebtest.core.WebClientExposingDriver
 import scala.language.reflectiveCalls
 import scala.xml.NodeSeq
 
+
 /**
   * Helper object to provide functions to fluently build a [[org.scalawebtest.core.gauge.Gauge]], to verify an [[org.scalatest.selenium.WebBrowser.Element]] instead of a complete document.
   */
-object ElementGaugeBuilder {
+object HtmlElementGauge extends HtmlElementGauge
+
+/**
+  * Helper trait to provide functions to fluently build a [[org.scalawebtest.core.gauge.Gauge]], to verify an [[org.scalatest.selenium.WebBrowser.Element]] instead of a complete document.
+  */
+trait HtmlElementGauge {
   type Element = {def underlying: WebElement}
 
   implicit class GaugeFromElement(element: Element) {

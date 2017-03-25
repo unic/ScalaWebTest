@@ -15,10 +15,10 @@
 package org.scalawebtest.integration.gauge
 
 import org.scalatest.exceptions.TestFailedException
+import org.scalawebtest.core.gauge.HtmlElementGauge
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
-import org.scalawebtest.core.gauge.ElementGaugeBuilder.GaugeFromElement
 
-class ElementGaugeSpec extends ScalaWebTestBaseSpec {
+class HtmlElementGaugeSpec extends ScalaWebTestBaseSpec with HtmlElementGauge {
   path = "/galleryOverview.jsp"
 
   def images = findAll(CssSelectorQuery("ul div.image_columns"))

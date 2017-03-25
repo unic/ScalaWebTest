@@ -1,10 +1,8 @@
 package org.scalawebtest.integration.json
 
-import org.scalawebtest.integration.ScalaWebTestBaseSpec
-import org.scalawebtest.json.JsonGaugeBuilder._
 import play.api.libs.json.{JsLookupResult, JsValue, Json}
 
-class ContainsElementFittingSpec extends ScalaWebTestBaseSpec {
+class ContainsElementFittingSpec extends ScalaWebTestJsonBaseSpec {
   path = "/jsonResponse.json.jsp"
   def dijkstra: JsValue = Json.parse(webDriver.getPageSource)
   def universities: JsLookupResult = { dijkstra \ "universities" }

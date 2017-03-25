@@ -14,7 +14,6 @@
  */
 package org.scalawebtest.integration.gauge
 
-import org.scalawebtest.core.gauge.Gauge.fits
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
 class ElementsListSpec extends ScalaWebTestBaseSpec {

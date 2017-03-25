@@ -1,10 +1,8 @@
 package org.scalawebtest.integration.json
 
-import org.scalawebtest.integration.ScalaWebTestBaseSpec
-import org.scalawebtest.json.JsonGaugeBuilder._
 import play.api.libs.json.{JsValue, Json}
 
-class FitsTypesSpec extends ScalaWebTestBaseSpec with FitsTypeMismatchBehavior {
+class FitsTypesSpec extends ScalaWebTestJsonBaseSpec with FitsTypeMismatchBehavior {
   path = "/jsonResponse.json.jsp"
   def dijkstra: JsValue = Json.parse(webDriver.getPageSource)
 

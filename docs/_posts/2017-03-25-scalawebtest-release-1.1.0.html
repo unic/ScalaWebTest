@@ -30,6 +30,15 @@ abstract: ScalaWebTest 1.1.0 provides a new json module, a gauge for single html
             class MyAemSpec extends IntegrationFlatSpec with AemTeaks with AuthorLogin
             {% endhighlight %}
         </p>
+
+        <p>
+            Upgrade of ScalaTest, Selenium and Selenium HtmlUnit dependencies
+        </p>
+        <p>
+            In case you manage the ScalaTest, Selenium and Selenium HtmlUnit dependencies in your project, we recommend that you
+            upgrade them to the same versions as ScalaWebTest depends on. In case you use Maven as build tool, we recommend to make
+            use of the <a href="https://oss.sonatype.org/service/local/repositories/releases/content/org/scalawebtest/scalawebtest-bom_2.12/1.1.0/scalawebtest-bom_2.12-1.1.0.pom">BOM</a> (bill of materials) provided by ScalaWebTest
+        </p>
     </section>
 
     <section>
@@ -106,5 +115,17 @@ class ElementGaugeSpec extends ScalaWebTestBaseSpec with HtmlElementGauge {
         <p>ScalaWebTest now contains four traits, which provide the functions of the four different gauge types, namely <a href="/documentation.html#gauges">HtmlGauge</a>, <a href="/documentation.html#singleElements">HtmlElementGauge</a>, <a href="/documentation.html#modules/json/gauge">JsonGauge</a> and <a href="/documentation.html#modules/json/gauge">JsonGaugeFromResponse</a>
         Its recommended to extend one of those traits, to avoid having to manually handle imports of the gauge functions, which one wants to use.
         </p>
+    </section>
+
+    <section>
+        <header><h3>Upgrade of ScalaTest and Selenium dependencies</h3></header>
+        <p>
+            We upgraded our dependencies
+        </p>
+        <ul>
+            <li>ScalaTest from 3.3.0 to 3.3.1</li>
+            <li>Selenium from 2.53.1 to 3.3.0</li>
+            <li>Selenium HtmlUnit Driver from 2.52.0 (selenium-htmlunit-driver) to 2.25 (htmlunit-driver)</li>
+        </ul>
     </section>
 </section>

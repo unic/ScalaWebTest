@@ -58,7 +58,7 @@ object ScalaWebTestBuild {
   }
 
   def scalaWebTestPomExtra: NodeSeq = {
-    <url>http://www.scalatest.org</url>
+      <url>http://www.scalawebtest.org</url>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>

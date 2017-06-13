@@ -278,7 +278,7 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
       }
     }
     //if the current element matches all attributes and is in correct order, we will test child elements
-    if (matchesAllAttributes && elementOrderCorrect(candidate, previousSibling, attributeMisfitRelevance)) {
+    if (matchesAllAttributes && elementOrderCorrect(candidate, previousSibling, gaugeElement, attributeMisfitRelevance)) {
       val noPreviousSibling = None
       nodeFits(candidate, gaugeElement.child, noPreviousSibling, attributeMisfitRelevance + 1)
     } else {
@@ -291,9 +291,9 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
     fail(relevantMisfitsReason + "\nCurrent document does not match provided gauge:\n" + definition.toString)
   }
 
-  private def elementOrderCorrect(current: DomNode, previousSibling: Option[DomNode], misfitRelevance: MisfitRelevance): Boolean = {
+  private def elementOrderCorrect(current: DomNode, previousSibling: Option[DomNode], gaugeElement: Elem, misfitRelevance: MisfitRelevance): Boolean = {
     if (previousSibling.isDefined && (current before previousSibling.get)) {
-      misfitHolder.addMisfit(misfitRelevance, "Misfitting Element Order: Wrong order of elements [" + current.prettyString() + "\n] was found before [" + previousSibling.get.prettyString() + "\n] but expected the other way")
+      misfitHolder.addMisfit(misfitRelevance, "Misfitting Element Order: Found [" + current.prettyString() + "\n] when looking for an element matching [\n" + gaugeElement + "\n]. It didn't fit, because it was found before [" + previousSibling.get.prettyString() + "\n] but was expected after it.")
       false
     }
     else true

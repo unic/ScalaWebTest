@@ -1,0 +1,27 @@
+---
+title: ScalaWebTest 1.1.1
+layout: post
+twitterAuthor: danireych
+description: ScalaWebTest 1.1.1 Release notes
+abstract: ScalaWebTest 1.1.1 fixes a bug in misfit relevance calculation
+---
+
+<section>
+    <header><h2>Highlights of this release</h2></header>
+
+    <section>
+        <header><h3>Update from ScalaWebTest <= 1.1.0</h3></header>
+        <p>
+            No action is required when upgrading from ScalaWebTest 1.1.0.
+        </p>
+    </section>
+
+    <section>
+        <header><h3>Fixed a bug in the misfit relevance calculation</h3></header>
+        <p>We found an error in the calculation of the misfit relevance, see <a href="https://github.com/unic/ScalaWebTest/issues/38">issue 38</a> for details.
+            Although this didn't effect whether a <i>HtmlPage</i> or <i>HtmlElement</i> fitted the provided gauge, it sometimes led to the wrong reason being shown,
+            in case it didn't fit the gauge.
+            This might be very misleading, therefore an upgrade to version 1.1.0 is highly recommended.
+        </p>
+    </section>
+</section>

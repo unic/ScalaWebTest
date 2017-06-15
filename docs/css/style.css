@@ -2333,11 +2333,30 @@ section .info {
 #sidebar {
     margin-top: 5px;
     margin-left: 8px;
-    left: 0px;
+    left: 0;
+}
+
+#sidebar li {
+    text-align: center;
+    display: inline-block;
+}
+
+#sidebar li a {
+    display: block;
+    padding: 6px 6px 6px 6px;
+    margin: 0;
+}
+
+#sidebar button {
+    display: block;
 }
 
 #sidebar Header {
-    text-align: center;
+    text-align: left;
+    padding: 5px 5px 5px 10px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 #sidebar a:link {

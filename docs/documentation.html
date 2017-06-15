@@ -26,7 +26,7 @@ twitterAuthor: danireych
                     <p>Before you get to use all the nice features, you have to introduce ScalaWebTest to your project.
                         All you have to do, is add the core module to your test or integration test dependencies.</p>
 
-                    <h4 id="addSWT/sbt">Add ScalaWebTest to your SBT project</h4>
+                    <h4 id="swt_sbt">Add ScalaWebTest to your SBT project</h4>
                     <p>You can add ScalaWebTest to your integration testing dependencies in the build.sbt/scala
                         of your sbt project as follows.</p>
                     {% highlight scala %}
@@ -46,7 +46,7 @@ twitterAuthor: danireych
                     "org.seleniumhq.selenium" % "selenium-htmlunit-driver" % "2.52.0" % "it",
                     )
                     {% endhighlight %}
-                    <h4 id="addSWT/maven">Add ScalaWebTest to your maven project</h4>
+                    <h4 id="swt_maven">Add ScalaWebTest to your maven project</h4>
                     <p>You have to add the following dependency to your maven project to use ScalaWebTest.</p>
 
                     {% highlight xml %}
@@ -687,7 +687,7 @@ twitterAuthor: danireych
                         Functions to create content, update accounts, or requesting a page in debug mode, could be even
                         better candidates
                         for a module.</p>
-                    <h3 id="modules/aem">AEM module</h3>
+                    <h3 id="modules_aem">AEM module</h3>
                     <p>As the creators of ScalaWebTest work a lot with Adobe Experience Manager, they decided to create
                         the first module for
                         this CMS</p>
@@ -743,7 +743,7 @@ twitterAuthor: danireych
                         your tests,
                         due to additional requests for page properties.
                     </p>
-                    <h3 id="modules/json">JSON module</h3>
+                    <h3 id="modules_json">JSON module</h3>
                     <p>JSON is currently the most important data exchange format in the web. We think writing
                         integration tests for web-services, which return JSON, should be as easy as for websites.
                         Therefore we created the <i>JsonGauge</i>, which provides functionality comparable to the HTML
@@ -1033,47 +1033,47 @@ twitterAuthor: danireych
                 </section>
 
                 <section>
-                        <header>
-                            <h2 id="extendingScalaWeText">Extending ScalaWebTest</h2>
-                        </header>
+                    <header>
+                        <h2 id="extendingScalaWeText">Extending ScalaWebTest</h2>
+                    </header>
 
-                        <p>One of the goals for ScalaWebTest is to make it as as easy as possible, to extend it.
-                            Therefore
-                            the foreseen
-                            extension points
-                            are a part of the documentation.</p>
-                        <h3 id="extending/matchers">Create a custom matcher</h3>
-                        <p>One of the core extension points for gauge testing, are the matchers. ScalaWebTest uses two
-                            types
-                            of matchers, one
-                            for text and one for attributes. You may create your own <i>TextMatcher</i> or <i>AttributeMatcher</i>
-                            by extending
-                            those traits. You can then add the your own matcher, by prepending to the list of <i>textMatchers</i>
-                            or
-                            <i>attributesMatchers</i> in the <i>Matchers</i> object.</p>
-                        <p>
-                            <a href="https://github.com/unic/ScalaWebTest/tree/master/scalawebtest-integration/src/it/scala/org/scalawebtest/integration/extending/ExtendingMatchers.scala">Here</a>
-                            is a full example, of how to implement your own Matcher</p>
-                        <h3 id="extending/login">Create a custom login</h3>
-                        <p>If the available login mechanisms don't work with your web application. No worries, simply
-                            create
-                            your own
-                            implementation of the <i>Login</i> interface
-                            and extend it in your base trait. Ideally you then contribute it to the project via pull
-                            request.</p>
-                        <p>The <a
-                                href="https://github.com/unic/ScalaWebTest/blob/master/scalawebtest-core/src/main/scala/org/scalawebtest/core/Login.scala">FormBasedLogin</a>
-                            provides a good example on how to implement your custom login</p>
-                        <h3 id="extending/module">Create your own module</h3>
-                        <p>If you implement multiple web applications with the same framework, you might want to create
-                            a
-                            framework specific
-                            module. This allows to share framework specific testing code among multiple projects. You
-                            can
-                            start using it within
-                            your company/project and share it later with the rest of the community by creating a pull
-                            request. If you provide
-                            your own module to ScalaWebTest, we ask you to help maintaining it.</p>
+                    <p>One of the goals for ScalaWebTest is to make it as as easy as possible, to extend it.
+                        Therefore
+                        the foreseen
+                        extension points
+                        are a part of the documentation.</p>
+                    <h3 id="extending_matchers">Create a custom matcher</h3>
+                    <p>One of the core extension points for gauge testing, are the matchers. ScalaWebTest uses two
+                        types
+                        of matchers, one
+                        for text and one for attributes. You may create your own <i>TextMatcher</i> or <i>AttributeMatcher</i>
+                        by extending
+                        those traits. You can then add the your own matcher, by prepending to the list of <i>textMatchers</i>
+                        or
+                        <i>attributesMatchers</i> in the <i>Matchers</i> object.</p>
+                    <p>
+                        <a href="https://github.com/unic/ScalaWebTest/tree/master/scalawebtest-integration/src/it/scala/org/scalawebtest/integration/extending/ExtendingMatchers.scala">Here</a>
+                        is a full example, of how to implement your own Matcher</p>
+                    <h3 id="extending_login">Create a custom login</h3>
+                    <p>If the available login mechanisms don't work with your web application. No worries, simply
+                        create
+                        your own
+                        implementation of the <i>Login</i> interface
+                        and extend it in your base trait. Ideally you then contribute it to the project via pull
+                        request.</p>
+                    <p>The <a
+                            href="https://github.com/unic/ScalaWebTest/blob/master/scalawebtest-core/src/main/scala/org/scalawebtest/core/Login.scala">FormBasedLogin</a>
+                        provides a good example on how to implement your custom login</p>
+                    <h3 id="extending_module">Create your own module</h3>
+                    <p>If you implement multiple web applications with the same framework, you might want to create
+                        a
+                        framework specific
+                        module. This allows to share framework specific testing code among multiple projects. You
+                        can
+                        start using it within
+                        your company/project and share it later with the rest of the community by creating a pull
+                        request. If you provide
+                        your own module to ScalaWebTest, we ask you to help maintaining it.</p>
                 </section>
 
                 <section>
@@ -1082,7 +1082,7 @@ twitterAuthor: danireych
                         <h2 id="internalStructure">Internal Structure</h2>
                     </header>
 
-                    <h3 id="api/IntegrationSpec">IntegrationSpec</h3>
+                    <h3 id="api_IntegrationSpec">IntegrationSpec</h3>
 
                     <p>The <i>IntegrationSpec</i> is the base trait, which all testing style specific traits extend.
                         When writing a spec you
@@ -1102,7 +1102,7 @@ twitterAuthor: danireych
                         </li>
                         <li>Eventually - provides <i>eventually construct</i></li>
                     </ul>
-                    <h3 id="api/Integration_Spec">Integration_Spec</h3>
+                    <h3 id="api_Integration_Spec">Integration_Spec</h3>
                     <p>There is a complete set of test style specific base traits. Choose a <a href="">testing style</a>
                         and then extend the
                         according style specific <i>Integration_Spec</i> trait to create your test.</p>
@@ -1117,7 +1117,7 @@ twitterAuthor: danireych
                             collections
                         </li>
                     </ul>
-                    <h3 id="api/_SpecBehavior">_SpecBehavior</h3>
+                    <h3 id="api_SpecBehavior">_SpecBehavior</h3>
                     <p>One way to share assertions between testing suites, is to use <i>behavior</i>. A behavior
                         contains a set of
                         assertions. You can then use <i>X behaves like SomeBehavior</i> within the suite. Behavior and
@@ -1131,7 +1131,7 @@ twitterAuthor: danireych
                         <li>Matchers</li>
                         <li>Inspectors</li>
                     </ul>
-                    <h3 id="api/Gauge">Gauge</h3>
+                    <h3 id="api_Gauge">Gauge</h3>
                     <p>The <i>Gauge</i> provides the methods <i>fit</i>, <i>fits</i>, <i>doesnt fit</i> and <i>not
                         fit</i>. All of them are
                         used to verify if the current webpage matches the given gauge specification. To do so, the
@@ -1148,14 +1148,14 @@ twitterAuthor: danireych
                         gauge will only report
                         the most specific of all <i>Misfits</i>.
                     </p>
-                    <h3 id="api/Misfit">Misfit</h3>
+                    <h3 id="api_Misfit">Misfit</h3>
                     <p>A <i>Misfit</i> is a container for an error message, when something didn't fit a given Matcher.
                         It contains an error
                         message and a relevance. The deeper the current check in the gauge specification is, the higher
                         its relevance. In
                         the end only the <i>Misfits</i> with the highest relevance will be part of the error message.
                     </p>
-                    <h3 id="api/Matchers">Matchers</h3>
+                    <h3 id="api_Matchers">Matchers</h3>
                     <p>When working with <i>gauges</i> for testing, <i>Matchers</i> are used to test attributes and text
                         content of
                         elements. By default the following <i>Matchers</i> are available.</p>
@@ -1175,7 +1175,7 @@ twitterAuthor: danireych
                         in case
                         the <i>Matcher</i> doesn't match. In case of a match, the <i>Matcher</i> simply returns None.
                     </p>
-                    <h3 id="api/Login">Login</h3>
+                    <h3 id="api_Login">Login</h3>
                     <p>
                         The Login trait is very simple. It only defines what the <i>username</i> and <i>password</i>
                         field should be called.
@@ -1186,7 +1186,7 @@ twitterAuthor: danireych
                         implemented, it might make sense to overwrite the <i>login</i> function from
                         <a href="documentation.html#api/IntegrationSpec">IntegrationSpec</a>.
                     </p>
-                    <h3 id="api/WebDriver">WebDriver</h3>
+                    <h3 id="api_WebDriver">WebDriver</h3>
                     <p>
                         <i>ScalaWebTest</i> uses a custom web driver, more precisely a wrapper for the HtmlUnitDriver.
                         Thanks to this
@@ -1197,7 +1197,7 @@ twitterAuthor: danireych
                         WebDriver implementations, but crucial for the implementation of <a
                             href="documentation.html#api/Gauge">Gauge</a>.
                     </p>
-                    <h3 id="api/WebDriverConfigFixtures">WebDriverConfigFixtures</h3>
+                    <h3 id="api_WebDriverConfigFixtures">WebDriverConfigFixtures</h3>
                     <p>The WebDriverConfigFixtures provide the option to execute a <i>closure</i> with a specific
                         configuration. After the
                         <i>closure</i> is executed, the WebDriver configuration will be reverted to what it was before
@@ -1210,106 +1210,96 @@ twitterAuthor: danireych
 </div>
 
 <div id="sidebar" class="sticky">
-    <div class="smoothGttBtn">
-        <button onclick="topFunction()" class="smoothScroll" id="gttBtn">Go to Top!</button>
+    <div>
+        <a href="#header">
+            <button id="gttBtn">Go to Top!</button>
+        </a>
     </div>
 
     <section>
         <ul class="default">
-            <li class="parent">
+            <ul class="parent">
                 <header>
                     <a href="#gettingStarted">Getting started</a>
                 </header>
-                <ul class="child">
-                    <li><a href="#addSWT/sbt">Add ScalaWebTest to your sbt project</a></li>
-                    <li><a href="#addSWT/maven">Add ScalaWebTest to your maven project</a></li>
-                    <li><a href="#firsttest">Write your first test</a></li>
-                    <li><a href="#teststyles">Selecting a style</a></li>
-                    <li><a href="#basetrait">Build your base trait</a></li>
-                    <li><a href="#config">Configure your tests</a></li>
-                </ul>
-            </li>
+                <!--<li class="child"><a href="#swt_sbt">Add ScalaWebTest to your sbt project</a></li>
+                <li class="child"><a href="#swt_maven">Add ScalaWebTest to your maven project</a></li><-->
+                <li class="child"><a href="#firsttest">Write your first test</a></li>
+                <li class="child"><a href="#teststyles">Selecting a style</a></li>
+                <li class="child"><a href="#basetrait">Build your base trait</a></li>
+                <li class="child"><a href="#config">Configure your tests</a></li>
+            </ul>
         </ul>
     </section>
     <section>
         <ul class="default">
-            <li class="parent">
+            <ul class="parent">
                 <header>
                     <a href="#writingGauges">Writing gauges</a>
                 </header>
-                <ul class="child">
-                    <li><a href="#usingGauges">Using gauges</a></li>
-                    <li><a href="#classes">Test for classes on elements</a></li>
-                    <li><a href="#singleElements">Test single elements</a></li>
-                    <li><a href="#contains">Test for containment</a></li>
-                    <li><a href="#regex">Test for regex matches</a></li>
-                    <li><a href="#negation">Negating your tests</a></li>
-                    <li><a href="#process">Testing a complete process</a></li>
-                </ul>
-            </li>
+                <li class="child"><a href="#usingGauges">Using gauges</a></li>
+                <li class="child"><a href="#classes">Test for classes on elements</a></li>
+                <li class="child"><a href="#singleElements">Test single elements</a></li>
+                <li class="child"><a href="#contains">Test for containment</a></li>
+                <li class="child"><a href="#regex">Test for regex matches</a></li>
+                <li class="child"><a href="#negation">Negating your tests</a></li>
+                <li class="child"><a href="#process">Testing a complete process</a></li>
+            </ul>
         </ul>
     </section>
     <section>
         <ul class="default">
-            <li class="parent">
+            <ul class="parent">
                 <header>
                     <a href="#usingAdvancedFeatures">Using advanced features</a>
                 </header>
-                <ul class="child">
-                    <li><a href="#executingJavascript">Executing JavaScript</a></li>
-                    <!--<li><a href="#responsestatus">Accessing response status</a></li>-->
-                </ul>
-            </li>
+                <li class="child"><a href="#executingJavascript">Executing JavaScript</a></li>
+                <!--<li><a href="#responsestatus">Accessing response status</a></li>-->
+            </ul>
         </ul>
     </section>
 
     <section>
         <ul class="default">
-            <li class="parent">
+            <ul class="parent">
                 <header>
                     <a href="#additionalModules">Additional modules</a>
                 </header>
-                <ul class="child">
-                    <li><a href="#modules">Modules</a></li>
-                    <li><a href="#modules/aem">AEM module</a></li>
-                    <li><a href="#modules/json">JSON module</a></li>
-                </ul>
-            </li>
+                <li class="child"><a href="#modules">Modules</a></li>
+                <li class="child"><a href="#modules_aem">AEM module</a></li>
+                <li class="child"><a href="#modules_json">JSON module</a></li>
+            </ul>
         </ul>
     </section>
     <section>
         <ul class="default">
-            <li class="parent">
+            <ul class="parent">
                 <header>
                     <a href="#extendingScalaWeText">Extending ScalaWebTest</a>
                 </header>
-                <ul class="child">
-                    <li><a href="#extending/matchers">Create a custom matcher</a></li>
-                    <li><a href="#extending/login">Create a custom login</a></li>
-                    <li><a href="#extending/module">Create your own module</a></li>
-                </ul>
-            </li>
+                <li class="child"><a href="#extending_matchers">Create a custom matcher</a></li>
+                <li class="child"><a href="#extending_login">Create a custom login</a></li>
+                <li class="child"><a href="#extending_module">Create your own module</a></li>
+            </ul>
         </ul>
     </section>
 
     <section>
         <ul class="default">
-            <li class="parent">
+            <ul class="parent">
                 <header>
                     <a href="#internalStructure">Internal structure</a>
                 </header>
-                <ul class="child">
-                    <li><a href="#api/IntegrationSpec">IntegrationSpec</a></li>
-                    <li><a href="#api/Integration_Spec">Integration*Spec</a></li>
-                    <li><a href="#api/_SpecBehavior">*SpecBehavior</a></li>
-                    <li><a href="#api/Gauge">Gauge</a></li>
-                    <li><a href="#api/Misfit">Misfit</a></li>
-                    <li><a href="#api/Matchers">Matchers</a></li>
-                    <li><a href="#api/Login">Login</a></li>
-                    <li><a href="#api/WebDriver">WebDriver</a></li>
-                    <li><a href="#api/WebDriverConfigFixtures">WebDriverConfigFixtures</a></li>
-                </ul>
-            </li>
+                <li class="child"><a href="#api_IntegrationSpec">IntegrationSpec</a></li>
+                <li class="child"><a href="#api_Integration_Spec">Integration*Spec</a></li>
+                <li class="child"><a href="#api_SpecBehavior">*SpecBehavior</a></li>
+                <li class="child"><a href="#api_Gauge">Gauge</a></li>
+                <li class="child"><a href="#api_Misfit">Misfit</a></li>
+                <li class="child"><a href="#api_Matchers">Matchers</a></li>
+                <li class="child"><a href="#api_Login">Login</a></li>
+                <li class="child"><a href="#api_WebDriver">WebDriver</a></li>
+                <li class="child"><a href="#api_WebDriverConfigFixtures">WebDriverConfigFixtures</a></li>
+            </ul>
         </ul>
     </section>
 </div>

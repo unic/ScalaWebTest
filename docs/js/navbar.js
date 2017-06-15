@@ -1,13 +1,29 @@
 $(document).ready(function () {
     var sidebar = $("#sidebar");
+
+    var foldingTriggeringTitles = $("h2");
+    var highlightingTriggeringTitles = $("h2, h3");
+
+    //user nav
+    var child = $('.child');
+    var parent = $('.parent');
+
+    child.hide();
+    parent.click(function () {
+        foldToggle(this);
+    });
+
     var navigationEntries = sidebar.find("header a, li a").toArray().reduce(function (map, element) {
         var href = $(element).attr("href");
         map[href] = $(element).parent();
         return map;
     }, {});
 
-    var currentlyHighlightedHeading = $("h2, h3, h4")[0];
-    $(navigationEntries["#" + currentlyHighlightedHeading.id]).addClass('highlight');
+    var currentlyHighlightedHeading = highlightingTriggeringTitles[0];
+    navigationEntries["#" + currentlyHighlightedHeading.id].addClass('highlight');
+
+    var currentlyUnfoldedHeading = foldingTriggeringTitles[0];
+    foldToggle(navigationEntries["#" + currentlyUnfoldedHeading.id]);
 
 
     $(window).scroll(function () {
@@ -24,11 +40,10 @@ $(document).ready(function () {
             sidebar.addClass('pre-sidebar');
         }
 
-        //highlight navigation
         var topMostViewable;
         var bottomMostAboveView;
-
-        $("h2, h3, h4").each(function (index, heading) {
+        //(un)fold navigation
+        foldingTriggeringTitles.each(function (index, heading) {
             if (isAboveView(heading)) {
                 bottomMostAboveView = heading;
             }
@@ -37,16 +52,30 @@ $(document).ready(function () {
             }
         });
 
+
+        var headingToUnfold = topMostViewable ? topMostViewable : bottomMostAboveView;
+        if (headingToUnfold && currentlyUnfoldedHeading !== headingToUnfold) {
+            fold(navigationEntries["#" + currentlyUnfoldedHeading.id]);
+            unfold(navigationEntries["#" + headingToUnfold.id]);
+            currentlyUnfoldedHeading = headingToUnfold;
+        }
+
+        //highlight navigation
+        highlightingTriggeringTitles.each(function (index, heading) {
+            if (isAboveView(heading)) {
+                bottomMostAboveView = heading;
+            }
+            if (isScrolledIntoView(heading) && !topMostViewable) {
+                topMostViewable = heading;
+            }
+        });
+
+
         var headingToHighlight = topMostViewable ? topMostViewable : bottomMostAboveView;
         if (headingToHighlight && currentlyHighlightedHeading !== headingToHighlight) {
-            if (navigationEntries["#" + currentlyHighlightedHeading.id]) {
-                removeClass('highlight');
-            }
-            else if (navigationEntries["#" + headingToHighlight.id]) {
-                addClass('highlight');
-
-            }
-
+            navigationEntries["#" + currentlyHighlightedHeading.id].removeClass('highlight');
+            navigationEntries["#" + headingToHighlight.id].addClass('highlight');
+            currentlyHighlightedHeading = headingToHighlight;
         }
 
         function isScrolledIntoView(elem) {
@@ -67,10 +96,41 @@ $(document).ready(function () {
         }
     });
 
-    //user nav
-    $('.child').hide();
-    $('.parent').click(function () {
-        $(this).siblings('.parent').find('ul').slideUp();
-        $(this).find('ul').slideToggle();
+    function foldToggle(navElement) {
+        var navTopLevelElement = findNavTopLevel(navElement);
+        if (navTopLevelElement) {
+            navTopLevelElement.find('li').slideToggle();
+        }
+    }
+
+    function fold(navElement) {
+        var navTopLevelElement = findNavTopLevel(navElement);
+        if (navTopLevelElement) {
+            navTopLevelElement.find('li').slideUp();
+        }
+    }
+
+    function unfold(navElement) {
+        var navTopLevelElement = findNavTopLevel(navElement);
+        if (navTopLevelElement) {
+            navTopLevelElement.find('li').slideDown();
+        }
+    }
+
+    function findNavTopLevel(navElement) {
+        if (!navElement || navElement.hasClass("parent")) {
+            return navElement;
+        } else {
+            return navElement.parents(".parent");
+        }
+    }
+
+    //smooth scroll
+    $(" ul, li, a").click(function () {
+        $('html, body').animate({
+            scrollTop: $($.attr(this, 'href')).offset().top
+        }, 1000);
+        return false;
     });
+
 });

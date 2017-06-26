@@ -1,14 +1,78 @@
+(function (global, $, app) {
+
+    /**
+     * TODO documentation
+     */
+    app.DocContentView = function (selector) {
+
+        // Private variables and functions
+        var $docContentView = $(selector);
+
+        var h2Elements = $docContentView.find('h2');
+
+        var getH2Elements = function () {
+            return h2Elements;
+        };
+
+        var init = function () {
+            // TODO
+        };
+
+        // Public API
+        return {
+            init: init,
+            getH2Elements: getH2Elements
+        };
+
+    };
+
+    /**
+     * TODO documentation
+     */
+    app.Sidebar = function (selector, docContentView) {
+
+        // Private variables and functions
+        var $sidebar = $(selector);
+
+        var childLiElements = $sidebar.find('li.child');
+
+        var hideAllLiChildElements = function () {
+            childLiElements.hide();
+        };
+
+        var init = function () {
+            // TODO
+            hideAllLiChildElements();
+        };
+
+        // Public API
+        return {
+            init: init
+        };
+
+    };
+
+
+})(window, jQuery, window.ScalaWebTest || (window.ScalaWebTest = {}));
+
+
+// Startup application
 $(document).ready(function () {
+
+    var docContentView = new ScalaWebTest.DocContentView("#content");
+    var sidebar2 = new ScalaWebTest.Sidebar("#sidebar", docContentView);
+
+    sidebar2.init();
+
     var sidebar = $("#sidebar");
 
-    var foldingTriggeringTitles = $("h2");
+    var foldingTriggeringTitles = docContentView.getH2Elements();
     var highlightingTriggeringTitles = $("h2, h3");
 
+
     //user nav
-    var child = $('.child');
     var parent = $('.parent');
 
-    child.hide();
     parent.click(function () {
         foldToggle(this);
     });

@@ -2421,3 +2421,11 @@ section .info {
     color: white;
     -webkit-transition-duration: 1s;
 }
+
+#gettingStarted {
+    margin-top: 1px;
+}
+
+#topspace {
+    margin-bottom: 900px;
+}

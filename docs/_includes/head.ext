@@ -49,8 +49,6 @@
     <script src="{{site.url}}/js/skel-panels.min.js"></script>
     <script src="{{site.url}}/js/init.js"></script>
     <script src="{{site.url}}/js/twitter.js" async></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.5/ScrollMagic.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.5/plugins/debug.addIndicators.min.js"></script>
     <link rel="stylesheet" href="{{site.url}}/css/highlight.css" />
     <noscript>
         <link rel="stylesheet" href="{{site.url}}/css/skel-noscript.css" />

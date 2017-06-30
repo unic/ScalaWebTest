@@ -13,35 +13,43 @@ keywords: Scala,ScalaTest,Selenium,integration testing,web development,web testi
 
 {% include header.ext %}
 
+
 <!-- Featured -->
 <div id="featured">
     <div class="container">
+
         <header>
             <h2>Reduce the effort needed to write integration tests</h2>
         </header>
         <p>
-           ScalaWebTests helps you to set up integration tests in no time and provides useful functions in order to reduce the effort needed to write integration tests for web applications.
+            ScalaWebTests helps you to set up integration tests in no time and provides useful functions in order to
+            reduce the effort needed to write integration tests for web applications.
         </p>
-        <hr />
+        <hr/>
         <div class="row">
             <section class="4u">
                 <span class="pennant"><span class="fa fa-fast-forward"></span></span>
                 <h3>Ready in minutes</h3>
-                <p>Add one dependency to your project and start writing your integration tests. We manage the transitive dependencies for you and provide the functions every web project needs for testing</p>
-                <a href="/documentation.html#getting_started" class="button button-style1">Get started</a>
+                <p>Add one dependency to your project and start writing your integration tests. We manage the transitive
+                    dependencies for you and provide the functions every web project needs for testing</p>
+                <a href="/documentation.html#gettingStarted" class="button button-style1">Get started</a>
             </section>
             <section class="4u">
                 <span class="pennant"><span class="fa fa-heart-o"></span></span>
                 <h3>Simple Gauges</h3>
-                <p>Gauges or templates are used in manufacturing to quickly verify a workpiece. If it fits the gauge, it fulfills the requirements.
-                An essential part of this concept is, to only verify what's needed and with the needed precision.</p>
-                <a href="/documentation.html#gauges" class="button button-style1">Read More</a>
+                <p>Gauges or templates are used in manufacturing to quickly verify a workpiece. If it fits the gauge, it
+                    fulfills the requirements.
+                    An essential part of this concept is, to only verify what's needed and with the needed
+                    precision.</p>
+                <a href="/documentation.html#writingGauges" class="button button-style1">Read More</a>
             </section>
             <section class="4u">
                 <span class="pennant"><span class="fa fa-copy"></span></span>
                 <h3>Great examples</h3>
-                <p>Imitation is a key process when learning new concepts. ScalaWebTest's own integration tests are there to provide a great example on how to structure and build your integration tests.</p>
-                <a href="https://github.com/unic/ScalaWebTest/tree/master/scalawebtest-integration/src/it/scala/org/scalawebtest/integration" class="button button-style1">Learn More</a>
+                <p>Imitation is a key process when learning new concepts. ScalaWebTest's own integration tests are there
+                    to provide a great example on how to structure and build your integration tests.</p>
+                <a href="https://github.com/unic/ScalaWebTest/tree/master/scalawebtest-integration/src/it/scala/org/scalawebtest/integration"
+                   class="button button-style1">Learn More</a>
             </section>
         </div>
     </div>
@@ -53,16 +61,17 @@ keywords: Scala,ScalaTest,Selenium,integration testing,web development,web testi
             <h2>Release announcements</h2>
         </header>
         <p>
-            <a href="/2017/03/25/scalawebtest-release-1.1.0.html" class="button">Latest version: ScalaWebTest {{page.scalaWebTestVersion}}</a>
+            <a href="/2017/03/25/scalawebtest-release-1.1.0.html" class="button">Latest version: ScalaWebTest
+                {{page.scalaWebTestVersion}}</a>
         </p>
         <div class="row">
-        {% for post in site.posts limit:3 %}
+            {% for post in site.posts limit:3 %}
             <section class="4u">
                 <h3>{{post.title}}</h3>
                 <p>{{post.abstract}}</p>
                 <a href="{{ post.url }}" class="button">Read more</a>
             </section>
-        {% endfor %}
+            {% endfor %}
         </div>
     </div>
 </div>

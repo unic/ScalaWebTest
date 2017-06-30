@@ -1,4 +1,4 @@
-(function (global, $, app) {
+(function ($, app) {
 
     /**
      * TODO documentation
@@ -9,9 +9,14 @@
         var $docContentView = $(selector);
 
         var h2Elements = $docContentView.find('h2');
+        var highlightingTriggeringTitles = $docContentView.find('h2, h3');
 
         var getH2Elements = function () {
             return h2Elements;
+        };
+
+        var getHighlightingTriggeringTitles = function () {
+            return highlightingTriggeringTitles;
         };
 
         var init = function () {
@@ -21,7 +26,8 @@
         // Public API
         return {
             init: init,
-            getH2Elements: getH2Elements
+            getH2Elements: getH2Elements,
+            getHighlightingTriggeringTitles: getHighlightingTriggeringTitles
         };
 
     };
@@ -34,95 +40,138 @@
         // Private variables and functions
         var $sidebar = $(selector);
 
+        var sidebarHeadings = $sidebar.find('ul.sidebarHeadings');
         var childLiElements = $sidebar.find('li.child');
 
         var hideAllLiChildElements = function () {
             childLiElements.hide();
         };
 
+        var foldToggle = function (navElement) {
+            var navTopLevelElement = findNavTopLevel(navElement);
+            if (navTopLevelElement) {
+                navTopLevelElement.find('li').slideToggle();
+            }
+        };
+
+        var fold = function (navElement) {
+            var navTopLevelElement = findNavTopLevel(navElement);
+            if (navTopLevelElement) {
+                navTopLevelElement.find('li').slideUp();
+            }
+        };
+
+        var unfold = function (navElement) {
+            var navTopLevelElement = findNavTopLevel(navElement);
+            if (navTopLevelElement) {
+                navTopLevelElement.find('li').slideDown();
+            }
+        };
+
+        var highlight = function (navElement) {
+            navElement.addClass('highlight');
+        };
+
+        var unhighlight = function (navElement) {
+            navElement.removeClass('highlight');
+        };
+
+        var findNavTopLevel = function (navElement) {
+            if (!navElement || navElement.hasClass("sidebarHeadings")) {
+                return navElement;
+            } else {
+                return navElement.parents(".sidebarHeadings");
+            }
+        };
+
+        var headingToNavigationEntryMap = $sidebar.find("header a, li a").toArray().reduce(function (map, element) {
+            var href = $(element).attr("href");
+            map[href] = $(element).parent();
+            return map;
+        }, {});
+
+        var headingToNavigationEntry = function (id) {
+            return headingToNavigationEntryMap["#" + id];
+        };
+
+        var headingToTopLevelNavigationEntryMap =
+            $sidebar.find("li a").toArray().reduce(function (map, element) {
+                var href = $(element).attr("href");
+                map[href] = $(element).parent().siblings("header");
+                return map;
+            }, new $.extend({}, headingToNavigationEntryMap));
+
+        var headingToTopLevelNavigationEntry = function (id) {
+            return headingToTopLevelNavigationEntryMap["#" + id];
+        };
+
+
+        var adjustPosition = function () {
+            //make navigation stick to the top
+            if ($(window).scrollTop() > 350) {
+                $sidebar.addClass('sidebar-fixed');
+            }
+            else if ($(window).scrollTop() < 345) {
+                $sidebar.removeClass('sidebar-fixed');
+                gttBtn.removeClass('gttBtn');
+                $sidebar.addClass('pre-sidebar');
+            }
+        };
+
+        var gttBtn = $("#gttBtn");
+
         var init = function () {
-            // TODO
             hideAllLiChildElements();
+
+            sidebarHeadings.click(function () {
+                foldToggle(this);
+            });
         };
 
         // Public API
         return {
-            init: init
+            init: init,
+            foldToggle: foldToggle,
+            fold: fold,
+            unfold: unfold,
+            findNavTopLevel: findNavTopLevel,
+            headingToNavigationEntry: headingToNavigationEntry,
+            headingToTopLevelNavigationEntry: headingToTopLevelNavigationEntry,
+            adjustPosition: adjustPosition,
+            highlight: highlight,
+            unhighlight: unhighlight,
         };
 
     };
 
 
-})(window, jQuery, window.ScalaWebTest || (window.ScalaWebTest = {}));
+})(jQuery, window.ScalaWebTest || (window.ScalaWebTest = {}));
 
 
 // Startup application
 $(document).ready(function () {
 
     var docContentView = new ScalaWebTest.DocContentView("#content");
-    var sidebar2 = new ScalaWebTest.Sidebar("#sidebar", docContentView);
 
-    sidebar2.init();
-
-    var sidebar = $("#sidebar");
+    var sidebar = new ScalaWebTest.Sidebar("#sidebar", docContentView);
+    sidebar.init();
 
     var foldingTriggeringTitles = docContentView.getH2Elements();
-    var highlightingTriggeringTitles = $("h2, h3");
+    var highlightingTriggeringTitles = docContentView.getHighlightingTriggeringTitles();
 
+    var currentlyHightlightedNavEntry = sidebar.headingToNavigationEntry(highlightingTriggeringTitles[0].id);
+    sidebar.highlight(currentlyHightlightedNavEntry);
 
-    //user nav
-    var parent = $('.parent');
-
-    parent.click(function () {
-        foldToggle(this);
-    });
-
-    var navigationEntries = sidebar.find("header a, li a").toArray().reduce(function (map, element) {
-        var href = $(element).attr("href");
-        map[href] = $(element).parent();
-        return map;
-    }, {});
-
-    var currentlyHighlightedHeading = highlightingTriggeringTitles[0];
-    navigationEntries["#" + currentlyHighlightedHeading.id].addClass('highlight');
-
-    var currentlyUnfoldedHeading = foldingTriggeringTitles[0];
-    foldToggle(navigationEntries["#" + currentlyUnfoldedHeading.id]);
-
+    var currentlyUnfoldedNavEntry = sidebar.headingToTopLevelNavigationEntry(foldingTriggeringTitles[0].id);
+    sidebar.foldToggle(currentlyUnfoldedNavEntry);
 
     $(window).scroll(function () {
 
-        var gttBtn = $("#gttBtn");
 
-        //make navigation stick to the top
-        if ($(window).scrollTop() > 350) {
-            sidebar.addClass('sidebar-fixed');
-        }
-        else if ($(window).scrollTop() < 345) {
-            sidebar.removeClass('sidebar-fixed');
-            gttBtn.removeClass('gttBtn');
-            sidebar.addClass('pre-sidebar');
-        }
+        sidebar.adjustPosition();
 
         var topMostViewable;
         var bottomMostAboveView;
-        //(un)fold navigation
-        foldingTriggeringTitles.each(function (index, heading) {
-            if (isAboveView(heading)) {
-                bottomMostAboveView = heading;
-            }
-            if (isScrolledIntoView(heading) && !topMostViewable) {
-                topMostViewable = heading;
-            }
-        });
-
-
-        var headingToUnfold = topMostViewable ? topMostViewable : bottomMostAboveView;
-        if (headingToUnfold && currentlyUnfoldedHeading !== headingToUnfold) {
-            fold(navigationEntries["#" + currentlyUnfoldedHeading.id]);
-            unfold(navigationEntries["#" + headingToUnfold.id]);
-            currentlyUnfoldedHeading = headingToUnfold;
-        }
 
         //highlight navigation
         highlightingTriggeringTitles.each(function (index, heading) {
@@ -134,12 +183,22 @@ $(document).ready(function () {
             }
         });
 
-
         var headingToHighlight = topMostViewable ? topMostViewable : bottomMostAboveView;
-        if (headingToHighlight && currentlyHighlightedHeading !== headingToHighlight) {
-            navigationEntries["#" + currentlyHighlightedHeading.id].removeClass('highlight');
-            navigationEntries["#" + headingToHighlight.id].addClass('highlight');
-            currentlyHighlightedHeading = headingToHighlight;
+        var navEntryToHighlight = sidebar.headingToNavigationEntry(headingToHighlight.id);
+
+        if (navEntryToHighlight && !currentlyHightlightedNavEntry.is(navEntryToHighlight)) {
+            var navEntryToUnfold = sidebar.headingToTopLevelNavigationEntry(headingToHighlight.id);
+            //(un)fold navigation
+            if (navEntryToUnfold && !currentlyUnfoldedNavEntry.is(navEntryToUnfold)) {
+                sidebar.fold(currentlyUnfoldedNavEntry);
+                sidebar.unfold(navEntryToUnfold);
+                currentlyUnfoldedNavEntry = navEntryToUnfold;
+            }
+
+            sidebar.highlight(navEntryToHighlight);
+            sidebar.unhighlight(currentlyHightlightedNavEntry);
+
+            currentlyHightlightedNavEntry = navEntryToHighlight;
         }
 
         function isScrolledIntoView(elem) {
@@ -160,36 +219,8 @@ $(document).ready(function () {
         }
     });
 
-    function foldToggle(navElement) {
-        var navTopLevelElement = findNavTopLevel(navElement);
-        if (navTopLevelElement) {
-            navTopLevelElement.find('li').slideToggle();
-        }
-    }
 
-    function fold(navElement) {
-        var navTopLevelElement = findNavTopLevel(navElement);
-        if (navTopLevelElement) {
-            navTopLevelElement.find('li').slideUp();
-        }
-    }
-
-    function unfold(navElement) {
-        var navTopLevelElement = findNavTopLevel(navElement);
-        if (navTopLevelElement) {
-            navTopLevelElement.find('li').slideDown();
-        }
-    }
-
-    function findNavTopLevel(navElement) {
-        if (!navElement || navElement.hasClass("parent")) {
-            return navElement;
-        } else {
-            return navElement.parents(".parent");
-        }
-    }
-
-    //smooth scroll
+//smooth scroll
     $(" ul, li, a").click(function () {
         $('html, body').animate({
             scrollTop: $($.attr(this, 'href')).offset().top
@@ -197,4 +228,5 @@ $(document).ready(function () {
         return false;
     });
 
-});
+})
+;

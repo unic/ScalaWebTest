@@ -2139,7 +2139,7 @@ ul.contact li a:hover {
 
 #content {
     width: 90%;
-    margin-left: 10px;
+    margin-left: 7%;
 }
 
 .homepage #content {
@@ -2351,9 +2351,11 @@ section .info {
     display: block;
 }
 
-#sidebar Header {
+#sidebar header {
     text-align: left;
-    padding: 5px 5px 5px 10px;
+    padding: 0.60em 0.60em;
+    border-top: 1px solid;
+    border-color: rgba(0, 0, 0, .1);
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -2364,17 +2366,14 @@ section .info {
 }
 
 #sidebar li:hover, #sidebar header:hover {
-    background-color: Tomato;
+    background-color: lightgrey;
     color: black;
     font-weight: bold;
-    border-radius: 10px;
 }
 
 #sidebar li.highlight, #sidebar header.highlight {
-    background-color: Tomato;
+    background-color: lightgrey;
     color: black;
-    border-radius: 10px;
-    padding: 5px 5px 5px 10px;
 }
 
 .pre-sidebar {
@@ -2392,7 +2391,7 @@ section .info {
     top: 5px;
     bottom: 1px;
     position: fixed;
-    overflow-y: scroll;
+    overflow-y: hidden;
 }
 
 #gttBtn {
@@ -2417,7 +2416,7 @@ section .info {
 }
 
 #gttBtn:hover {
-    background-color: Tomato;
+    background-color: #c22d40;
     color: white;
     -webkit-transition-duration: 1s;
 }
@@ -2427,5 +2426,5 @@ section .info {
 }
 
 #topspace {
-    margin-bottom: 900px;
+    margin-bottom: 700px;
 }

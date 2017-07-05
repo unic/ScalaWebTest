@@ -30,12 +30,14 @@ import scala.xml._
   * as well as [[org.scalawebtest.core.gauge.HtmlElementGauge$.GaugeFromElement.fits]] and [[org.scalawebtest.core.gauge.HtmlElementGauge$.GaugeFromElement.fits]]
   */
 class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) extends Assertions {
-  val MISFIT_RELEVANCE_START_VALUE: Int = 0
+  type MisfitRelevance = Int
+  val MISFIT_RELEVANCE_START_VALUE: MisfitRelevance = 0
   val misfitHolder = new MisfitHolder
 
+  case class Fit(domNode: DomNode, misfitRelevance: MisfitRelevance)
 
   def fits(): Unit = {
-    var fittingNodes = List[DomNode]()
+    var fittingNodes = List[Fit]()
     if (webDriver.getCurrentHtmlPage.isEmpty) fail("Current page is not of type HtmlPage. At the moment only Html documents are supported")
     val currentPage = webDriver.getCurrentHtmlPage.get
     definition.theSeq.foreach(gaugeElement => {
@@ -55,9 +57,9 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
     if (webDriver.getCurrentHtmlPage.isEmpty) fail("Current page is not of type HtmlPage. At the moment only Html documents are supported")
     val currentPage = webDriver.getCurrentHtmlPage.get
     definition.theSeq.foreach(gaugeElement => {
-      val fittingNode = nodeFits(currentPage.getDocumentElement, gaugeElement, None, MISFIT_RELEVANCE_START_VALUE)
-      if (fittingNode.isDefined) {
-        fail(s"Current document matches the provided gauge, although expected not to!\n Gauge spec: $gaugeElement\n Fitting node: ${fittingNode.head.prettyString()} found")
+      val fit = nodeFits(currentPage.getDocumentElement, gaugeElement, None, MISFIT_RELEVANCE_START_VALUE)
+      if (fit.isDefined) {
+        fail(s"Current document matches the provided gauge, although expected not to!\n Gauge spec: $gaugeElement\n Fitting node: ${fit.get.domNode.prettyString()} found")
       }
       //when proceeding to the next definition, old misfits do not matter anymore
       misfitHolder.wipe()
@@ -101,7 +103,7 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
         if (verifyClassesOnCandidate(domNode, elem, MISFIT_RELEVANCE_START_VALUE)) {
           val fittingNode = verifyCandidate(domNode, elem, None, MISFIT_RELEVANCE_START_VALUE)
           if (fittingNode.isDefined) {
-            fail(s"Current element matches the provided gauge, although expected not to!\n Gauge spec: $elem\n Fitting node: ${fittingNode.get.prettyString()} found")
+            fail(s"Current element matches the provided gauge, although expected not to!\n Gauge spec: $elem\n Fitting node: ${fittingNode.get.domNode.prettyString()} found")
           }
         }
       //only element allowed as top level gauge definition, when using elementFits
@@ -109,7 +111,7 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
     }
   }
 
-  private def verifyClassesOnCandidate(domNode: DomNode, elem: Elem, misfitRelevance: Int): Boolean = {
+  private def verifyClassesOnCandidate(domNode: DomNode, elem: Elem, misfitRelevance: MisfitRelevance): Boolean = {
     val definitionAttributes = elem.attributes.asAttrMap
 
     def assertContainsClass(domNode: DomNode, clazz: String): Boolean = {
@@ -148,10 +150,10 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
   }
 
 
-  private def nodeFits(node: DomNode, gaugeDefinition: Seq[Node], previousSibling: Option[DomNode], misfitRelevance: Int): Option[DomNode] = {
+  private def nodeFits(node: DomNode, gaugeDefinition: Seq[Node], previousSibling: Option[DomNode], misfitRelevance: MisfitRelevance): Option[Fit] = {
     val definitionIt = gaugeDefinition.iterator
     var nodeFits = true
-    var firstFittingSubNode: Option[DomNode] = None
+    var firstFittingSubNode: Option[Fit] = None
     var previousNode = previousSibling
     var nodeMisfitRelevance = misfitRelevance
 
@@ -159,11 +161,12 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
       nodeMisfitRelevance += 1
       nodeFits = definitionIt.next() match {
         case nodeDef: Elem =>
-          val fittingDomNode = findFittingNode(node, nodeDef, previousNode, nodeMisfitRelevance)
-          if (fittingDomNode.isDefined) {
-            previousNode = fittingDomNode
+          val fit = findFittingNode(node, nodeDef, previousNode, nodeMisfitRelevance)
+          if (fit.isDefined) {
+            previousNode = fit.map(_.domNode)
+            nodeMisfitRelevance = fit.get.misfitRelevance
             if (firstFittingSubNode.isEmpty) {
-              firstFittingSubNode = fittingDomNode
+              firstFittingSubNode = fit
             }
             true
           }
@@ -182,12 +185,12 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
         firstFittingSubNode
       }
       else {
-        Some(node)
+        Some(Fit(node, nodeMisfitRelevance))
       }
     } else None
   }
 
-  private def textFits(nodeExpectedToContainText: DomNode, expectedText: String, previousSibling: Option[DomNode], misfitRelevance: Int): Boolean = {
+  private def textFits(nodeExpectedToContainText: DomNode, expectedText: String, previousSibling: Option[DomNode], misfitRelevance: MisfitRelevance): Boolean = {
     if (expectedText.isEmpty) {
       true
     }
@@ -220,25 +223,25 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
     }
   }
 
-  private def findFittingNode(currentNode: DomNode, gaugeElement: Elem, previousSibling: Option[DomNode], misfitRelevance: Int): Option[DomNode] = {
+  private def findFittingNode(currentNode: DomNode, gaugeElement: Elem, previousSibling: Option[DomNode], misfitRelevance: MisfitRelevance): Option[Fit] = {
     val cssSelector: String = nodeToCssSelector(gaugeElement)
     //search nodes below current Node in document that is being checked
     val candidates = currentNode.querySelectorAll(cssSelector)
     val candidatesIt = candidates.iterator()
-    var fittingNode: Option[DomNode] = None
+    var fit: Option[Fit] = None
 
     if (!candidatesIt.hasNext) {
       misfitHolder.addMisfit(misfitRelevance, "Misfitting Element: No element matching cssSelector [" + cssSelector + "] found below " + currentNode.prettyString)
     }
     //test all candidate elements, whether they match given attribute expectations
-    while (fittingNode.isEmpty && candidatesIt.hasNext) {
+    while (fit.isEmpty && candidatesIt.hasNext) {
       val candidate = candidatesIt.next()
-      fittingNode = verifyCandidate(candidate, gaugeElement, previousSibling, misfitRelevance)
+      fit = verifyCandidate(candidate, gaugeElement, previousSibling, misfitRelevance)
     }
-    fittingNode
+    fit
   }
 
-  private def verifyCandidate(candidate: DomNode, gaugeElement: Elem, previousSibling: Option[DomNode], misfitRelevance: Int): Option[DomNode] = {
+  private def verifyCandidate(candidate: DomNode, gaugeElement: Elem, previousSibling: Option[DomNode], misfitRelevance: MisfitRelevance): Option[Fit] = {
     val definitionAttributes = gaugeElement.attributes.asAttrMap
 
     var matchesAllAttributes = true
@@ -275,7 +278,7 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
       }
     }
     //if the current element matches all attributes and is in correct order, we will test child elements
-    if (matchesAllAttributes && elementOrderCorrect(candidate, previousSibling, attributeMisfitRelevance)) {
+    if (matchesAllAttributes && elementOrderCorrect(candidate, previousSibling, gaugeElement, attributeMisfitRelevance)) {
       val noPreviousSibling = None
       nodeFits(candidate, gaugeElement.child, noPreviousSibling, attributeMisfitRelevance + 1)
     } else {
@@ -288,9 +291,9 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
     fail(relevantMisfitsReason + "\nCurrent document does not match provided gauge:\n" + definition.toString)
   }
 
-  private def elementOrderCorrect(current: DomNode, previousSibling: Option[DomNode], misfitRelevance: Int): Boolean = {
+  private def elementOrderCorrect(current: DomNode, previousSibling: Option[DomNode], gaugeElement: Elem, misfitRelevance: MisfitRelevance): Boolean = {
     if (previousSibling.isDefined && (current before previousSibling.get)) {
-      misfitHolder.addMisfit(misfitRelevance, "Misfitting Element Order: Wrong order of elements [" + current.prettyString() + "\n] was found before [" + previousSibling.get.prettyString() + "\n] but expected the other way")
+      misfitHolder.addMisfit(misfitRelevance, "Misfitting Element Order: Found [" + current.prettyString() + "\n] when looking for an element matching [\n" + gaugeElement + "\n]. It didn't fit, because it was found before [" + previousSibling.get.prettyString() + "\n] but was expected after it.")
       false
     }
     else true

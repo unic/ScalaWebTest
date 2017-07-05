@@ -8,125 +8,121 @@
 /* Basic                                                                         */
 /*********************************************************************************/
 
-	body
-	{
-	}
+body {
+}
 
-	body,input,textarea,select
-	{
-	}
+body, input, textarea, select {
+}
 
-	h2 {
-		font-size: 2.5em;
-		line-height: 1em;
-		margin: 1.5em 0 1em 0;
-	}
+h2 {
+    font-size: 2.5em;
+    line-height: 1em;
+    margin: 1.5em 0 1em 0;
+}
 
-	h3 {
-		font-size: 2em;
-		line-height: 1em;
-		margin: 1.5em 0 1em 0;
-	}
+h3 {
+    font-size: 2em;
+    line-height: 1em;
+    margin: 1.5em 0 1em 0;
+}
 
-	h4 {
-		font-size: 1.5em;
-		line-height: 1em;
-		margin: 1em 0 .5em 0;
-	}
+h4 {
+    font-size: 1.5em;
+    line-height: 1em;
+    margin: 1em 0 .5em 0;
+}
 
-header
-	{
-		margin-bottom: 1.6em;
-	}
-	
-		header h2
-		{
-			font-size: 3.4em;
-			line-height: 1em;
-		}
+header {
+    margin-bottom: 1.6em;
+}
 
-		header .byline
-		{
-			font-size: 1.7em;
-		}
+header h2 {
+    font-size: 3.4em;
+    line-height: 1em;
+}
+
+header .byline {
+    font-size: 1.7em;
+}
 
 /*********************************************************************************/
 /* Header                                                                        */
 /*********************************************************************************/
 
-	#header
-	{
-		padding: 10em 0 6em 0;
-	}
+#header {
+    padding: 10em 0 6em 0;
+}
 
-	.homepage #header
-	{
-		padding: 16em 0 12em 0;
-	}
+.homepage #header {
+    padding: 16em 0 12em 0;
+}
 
 /*********************************************************************************/
 /* Main                                                                          */
 /*********************************************************************************/
 
-	#main
-	{
-		padding: 6em 0em;
-	}
-	
-	.homepage #content header h2
-	{
-		padding: 0.70em 0em;
-		font-size: 2.2em;
-	}
+#main {
+    padding: 6em 0em;
+}
+
+.homepage #content header h2 {
+    padding: 0.70em 0em;
+    font-size: 2.2em;
+}
 
 /*********************************************************************************/
 /* Footer                                                                        */
 /*********************************************************************************/
-	
-	#footer
-	{
-		padding: 6em 0em;
-	}
-	
+
+#footer {
+    padding: 6em 0em;
+}
+
 /*********************************************************************************/
 /* Featured                                                                      */
 /*********************************************************************************/
-	
-	#featured
-	{
-		padding: 6em 0em;
-	}
-	
-	#featured h3
-	{
-		padding: 1.5em 0em;
-		font-size: 1.6em;
-	}
 
-	#featured header
-	{
-		margin-bottom: 3em;
-	}
-	
-	#featured p
-	{
-		line-height: 2em;
-		font-size: 1.2em;
-	}
-	
+#featured {
+    padding: 6em 0em;
+}
+
+#featured h3 {
+    padding: 1.5em 0em;
+    font-size: 1.6em;
+}
+
+#featured header {
+    margin-bottom: 3em;
+}
+
+#featured p {
+    line-height: 2em;
+    font-size: 1.2em;
+}
+
 /*********************************************************************************/
 /* Tweet                                                                         */
 /*********************************************************************************/
-	
-	#tweet
-	{
-		padding: 6em 0em;
-	}
 
-	#tweet blockquote
-	{
-		margin: 0;
-		padding: 1em 4em;
-		line-height: 1.5em;
-		font-size: 1.8em;
-	}	
+#tweet {
+    padding: 6em 0em;
+}
+
+#tweet blockquote {
+    margin: 0;
+    padding: 1em 4em;
+    line-height: 1.5em;
+    font-size: 1.8em;
+}
+
+/*********************************************************************************/
+/* Additions                                                                     */
+/*********************************************************************************/
+
+.pre-sidebar {
+    width: 13%;
+}
+
+.sidebar-fixed {
+    width: 13%;
+}

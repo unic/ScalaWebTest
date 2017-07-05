@@ -1,6 +1,6 @@
 (function() {
     // Global for JSONP tweet callback
-    window.loadTweets = window.loadTweets || [];
+    window.__twttr_loadTweets = window.__twttr_loadTweets || [];
 
     var PATTERN_TWITTER_TIMESTAMP = /([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9]{2}):([0-9]{2}):([0-9]+)\+[0-9]+/;
 
@@ -19,11 +19,11 @@
     // Tweets. Since there is no authentication-free tweet search API and we've got
     // no server-side component, we'll use a twitter widget as the data source.
     // this means we have to parse the widget HTML to retrieve data.
-    var TweetsForWidget = function (widgetId) {
+    var TweetsOfUser = function (screenName) {
         var result = [];
         var knownTweets = [];
 
-        loadTweets.push(function (data) {
+        __twttr_loadTweets.push(function (data) {
             $(data.body).find("li.timeline-TweetList-tweet").each(function (_, elem) {
                 var tweet = {
                     type: "tweet"
@@ -55,13 +55,7 @@
         });
 
         var provider = new Provider({
-            //old style calls
-            //source: "https://cdn.syndication.twimg.com/widgets/timelines/" + widgetId + "?lang=en&t=1560138&callback=loadTweets[" + (loadTweets.length - 1) + "]&suppress_response_codes=true"
-            //source: "https://cdn.syndication.twimg.com/timeline/profile?callback=__twttr.callbacks.tl_i0_profile_scalawebtest_old&dnt=false&domain=localhost%3A63342&lang=en&screen_name=scalawebtest&suppress_response_codes=true&t=1641760&with_replies=false"
-            //stripped parameters
-            //&domain=localhost%3A63342
-           //&t=1641760
-            source: "https://cdn.syndication.twimg.com/timeline/profile?callback=__twttr.callbacks.tl_i0_profile_scalawebtest_old&dnt=false&lang=en&screen_name=scalawebtest&suppress_response_codes=true&with_replies=false"
+            source: "https://cdn.syndication.twimg.com/timeline/profile?callback=__twttr_loadTweets[" + (__twttr_loadTweets.length - 1) + "]&dnt=false&lang=en&screen_name=" + screenName + "&suppress_response_codes=true&t=1664724&with_replies=false",
         });
 
         provider.load = function (callback) {
@@ -79,9 +73,9 @@
         return  provider;
     };
 
-    TweetsForWidget("f8bf188a26c0fb191f8cdd1eb88ad3c7").load(function(tweets) {
+    TweetsOfUser("scalawebtest").load(function(tweets) {
         if (!tweets.length) return;
         var tweet = tweets[0];
-        $("#tweet").find("blockquote").html('<a href="' + tweet.url + '"><img src="/images/tweet.png" />' + new Date(tweet.time).toDateString() + '</a>: &ldquo;' + tweet.message + '&rdquo;')
+        $("#tweet").find("blockquote").html('<a href="' + tweet.url + '"><img src="/images/tweet.svg" width="25" height="25" />' + new Date(tweet.time).toDateString() + '</a>: &ldquo;' + tweet.message + '&rdquo;')
     });
 })();

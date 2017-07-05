@@ -1,5 +1,4 @@
-/*
-	Linear by TEMPLATED
+/*	Linear by TEMPLATED
     templated.co @templatedco
     Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
 */
@@ -8,57 +7,67 @@
 /* Basic                                                                         */
 /*********************************************************************************/
 
-	body
-	{
-	}
+body {
+}
 
-	body,input,textarea,select
-	{
-		font-size: 11pt;
-	}
+body, input, textarea, select {
+    font-size: 11pt;
+}
 
-	header
-	{
-		margin-bottom: 1.6em;
-	}
-	
-		header h2
-		{
-			font-size: 2.8em;
-		}
+header {
+    margin-bottom: 1.6em;
+}
 
-		header .byline
-		{
-			font-size: 1.2em;
-		}
+header h2 {
+    font-size: 2.8em;
+}
+
+header .byline {
+    font-size: 1.2em;
+}
 
 /*********************************************************************************/
 /* Main                                                                          */
 /*********************************************************************************/
 
-	#main
-	{
-	}
-	
-	.homepage #content header h2
-	{
-		font-size: 1.8em;
-	}
+#main {
+}
 
-	#sidebar h2
-	{
-		font-size: 2em;
-	}
+.homepage #content header h2 {
+    font-size: 1.8em;
+}
+
+#sidebar h2 {
+    font-size: 2em;
+}
 
 /*********************************************************************************/
 /* Tweet                                                                         */
 /*********************************************************************************/
-	
-	#tweet
-	{
-	}
 
-	#tweet blockquote
-	{
-		font-size: 1.6em;
-	}	
+#tweet {
+}
+
+#tweet blockquote {
+    font-size: 1.6em;
+}
+
+/*********************************************************************************/
+/* Additions                                                                     */
+/*********************************************************************************/
+
+.pre-sidebar {
+    width: 14%;
+}
+
+.sidebar-fixed {
+    width: 14%;
+}
+
+#sidebar #gttBtn {
+    display: none;
+}
+
+.row > * {
+    padding: 5% 0 0 5%;
+}

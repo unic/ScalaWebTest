@@ -2138,8 +2138,8 @@ ul.contact li a:hover {
 }
 
 #content {
-    width: 90%;
-    margin-left: 7%;
+    width: 70%;
+    margin-left: 11%;
 }
 
 .homepage #content {
@@ -2269,13 +2269,16 @@ ul.contact li a:hover {
  ScalaWebTest additions
 **/
 
+.row {
+    padding: 0 5%;
+}
+
 section .info {
     padding-left: 1em;
     border-left: 1em solid #9fb4cc;
 }
 
 #nav {
-    width: 1200px;
     position: relative;
     margin: auto;
 }
@@ -2339,11 +2342,12 @@ section .info {
 #sidebar li {
     text-align: center;
     display: inline-block;
+    padding: 6px 6px 6px 6px;
 }
 
 #sidebar li a {
     display: block;
-    padding: 6px 6px 6px 6px;
+    padding: 3px 3px 3px 3px;
     margin: 0;
 }
 
@@ -2377,7 +2381,7 @@ section .info {
 }
 
 .pre-sidebar {
-    width: 16%;
+    width: 14%;
     max-height: 1400px;
     height: 1400px;
     top: 353px;
@@ -2386,7 +2390,7 @@ section .info {
 }
 
 .sidebar-fixed {
-    width: 17%;
+    width: 14%;
     max-height: 1103px;
     top: 5px;
     bottom: 1px;
@@ -2427,4 +2431,10 @@ section .info {
 
 #topspace {
     margin-bottom: 700px;
+}
+
+.container {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
 }

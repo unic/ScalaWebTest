@@ -232,14 +232,7 @@ header .byline {
 /*********************************************************************************/
 /* Tweet                                                                         */
 /*********************************************************************************/
-<
-<
-<
-<
-<
-<
-<
-Updated upstream
+
 #tweet {
     padding: 3em 0em 1em 0em;
     background-position: center center;
@@ -264,35 +257,6 @@ Updated upstream
     display: none;
 }
 
-=
-=
-=
-=
-=
-=
-=
-
-#tweet {
-    padding: 3em 0em 1em 0em;
-    background-position: center center;
-    background-attachment: scroll;
+#header {
+    height: 10em;
 }
-
-#tweet blockquote {
-    margin: 0;
-    padding: 1em 1em;
-    font-size: 1.2em;
-}
-
-#sidebar {
-    display: none;
-}
-
->
->
->
->
->
->
->
-Stashed changes

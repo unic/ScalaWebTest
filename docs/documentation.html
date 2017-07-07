@@ -38,10 +38,10 @@ twitterAuthor: danireych
 
                     {% highlight scala %}
                     libraryDependencies ++= Seq(
-                    "org.scalawebtest" %% "scalawebtest-core" % "{{page.scalaWebTestVersion}}" % "it"
-                    "org.scalatest" %% "scalatest" % "3.0.0" % "it",
-                    "org.seleniumhq.selenium" % "selenium-java" % "2.53.1" % "it",
-                    "org.seleniumhq.selenium" % "selenium-htmlunit-driver" % "2.52.0" % "it",
+                        "org.scalawebtest" %% "scalawebtest-core" % "{{page.scalaWebTestVersion}}" % "it"
+                        "org.scalatest" %% "scalatest" % "3.0.0" % "it",
+                        "org.seleniumhq.selenium" % "selenium-java" % "2.53.1" % "it",
+                        "org.seleniumhq.selenium" % "selenium-htmlunit-driver" % "2.52.0" % "it",
                     )
                     {% endhighlight %}
                     <h4 id="swt_maven">Add ScalaWebTest to your maven project</h4>
@@ -100,11 +100,11 @@ twitterAuthor: danireych
                     import org.scalawebtest.core.IntegrationFlatSpec
 
                     class HomepageSpec extends IntegrationFlatSpec {
-                    override val host = "http://localhost:8080"
-                    path = "/index.html"
+                        override val host = "http://localhost:8080"
+                        path = "/index.html"
 
                     "Our homepage" should "contain a header with the company name" in {
-                    webDriver.findElementByTagName("h1").getText shouldEqual "Unic AG"
+                        webDriver.findElementByTagName("h1").getText shouldEqual "Unic AG"
                     }
                     }
                     {% endhighlight%}
@@ -144,12 +144,12 @@ twitterAuthor: danireych
 
                     trait ScalaWebTestBaseSpec extends IntegrationFlatSpec with AemTweaks with FormBasedLogin with
                     HtmlGauge {
-                    override val host = "http://localhost:8080"
-                    override val loginPath = "/fakeLogin.jsp"
+                        override val host = "http://localhost:8080"
+                        override val loginPath = "/fakeLogin.jsp"
 
-                    override val projectRoot = ""
+                        override val projectRoot = ""
 
-                    override def loginTimeout = Timeout(5 seconds)
+                        override def loginTimeout = Timeout(5 seconds)
                     }
                     {% endhighlight %}
 
@@ -172,14 +172,14 @@ twitterAuthor: danireych
                     import org.scalawebtest.core.IntegrationFlatSpec
 
                     class HomepageSpec extends IntegrationFlatSpec {
-                    override val host = "http://localhost:8080"
-                    path = "/index.html"
+                        override val host = "http://localhost:8080"
+                        path = "/index.html"
 
-                    loginConfig.swallowJavaScriptErrors
-                    config.enableJavaScript(throwOnError = true)
+                        loginConfig.swallowJavaScriptErrors
+                        config.enableJavaScript(throwOnError = true)
 
                     "Our homepage" should "contain a header with the company name" in {
-                    webDriver.findElementByTagName("h1").getText shouldEqual "Unic AG"
+                        webDriver.findElementByTagName("h1").getText shouldEqual "Unic AG"
                     }
                     }
                     {% endhighlight%}
@@ -216,24 +216,24 @@ twitterAuthor: danireych
 
                     class SimpleGaugeSpec extends ScalaWebTestBaseSpec {
 
-                    path = "/navigation.jsp"
+                        path = "/navigation.jsp"
 
-                    "The navigation" should "contain our navigation links in correct structure, order and with the
-                    expected text" in {
-                    fit(
-                    <nav id="mainNav">
-                        <ul class="blue_theme">
-                            <li>
-                                <a href="/path/to/first/element">first navigation element</a>
-                            </li>
-                            <li class="active">
-                                <a href="/path/to/second/element">second navigation element</a>
-                            </li>
-                            <li>
-                                <a href="/path/to/third/element">third navigation element</a>
-                            </li>
-                        </ul>
-                    </nav>
+                        "The navigation" should "contain our navigation links in correct structure, order and with the
+                        expected text" in {
+                            fit(
+                                <nav id="mainNav">
+                                    <ul class="blue_theme">
+                                         <li>
+                                              <a href="/path/to/first/element">first navigation element</a>
+                                         </li>
+                                         <li class="active">
+                                              <a href="/path/to/second/element">second navigation element</a>
+                                         </li>
+                                         <li>
+                                              <a href="/path/to/third/element">third navigation element</a>
+                                         </li>
+                                    </ul>
+                                 </nav>
                     )
                     }
                     }
@@ -415,7 +415,7 @@ twitterAuthor: danireych
                         The following gauge therefore matches all the elements shown below.</p>
                     {% highlight scala %}
                     fit(
-                    <div class="container red"></div>
+                        <div class="container red"></div>
                     )
                     {% endhighlight %}
                     {% highlight html %}
@@ -439,7 +439,7 @@ twitterAuthor: danireych
                     import org.scalawebtest.core.gauge.HtmlElementGauge
 
                     class ElementGaugeSpec extends ScalaWebTestBaseSpec with HtmlElementGauge {
-                    path = "/galleryOverview.jsp"
+                        path = "/galleryOverview.jsp"
 
                     def images = findAll(CssSelectorQuery("ul div.image_columns"))
 
@@ -458,10 +458,10 @@ twitterAuthor: danireych
                     </div>
 
                     "The gallery" should "contain the expected HTML for every image" in {
-                    images.size should be > 5 withClue " - gallery didn't contain the expected amount of images"
+                        images.size should be > 5 withClue " - gallery didn't contain the expected amount of images"
 
                     for (image <- images) {
-                    image fits imageGauge
+                        image fits imageGauge
                     }
                     }
                     {% endhighlight %}
@@ -533,10 +533,10 @@ twitterAuthor: danireych
                     import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
                     class LoggedInSpec extends ScalaWebTestBaseSpec{
-                    path = "/protectedContent.jsp?username=admin&password=secret"
+                        path = "/protectedContent.jsp?username=admin&password=secret"
 
                     "When logged in the protectedContent page" should "not show the login form" in {
-                    not fit
+                        not fit
                     <form name="login_form"></form>
                     }
                     }
@@ -589,28 +589,28 @@ twitterAuthor: danireych
                     import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
                     class LoginSpec extends ScalaWebTestBaseSpec {
-                    path = "/protectedContent.jsp"
+                        path = "/protectedContent.jsp"
 
                     "When accessing protectedContent it" should "show the login form" in {
-                    fits(
-                    <form name="login_form">
-                        <input name="username"></input>
-                        <input name="password"></input>
-                    </form>
+                        fits(
+                            <form name="login_form">
+                                <input name="username"></input>
+                                <input name="password"></input>
+                            </form>
                     )
                     }
 
                     it should "hide the protected content, when not logged in" in {
-                    not fit <p>sensitive information</p>
+                        not fit <p>sensitive information</p>
                     }
 
                     it should "show the protected content, after logging in" in {
-                    textField("username").value = "admin"
-                    pwdField("password").value = "secret"
+                        textField("username").value = "admin"
+                        pwdField("password").value = "secret"
 
-                    submit()
+                        submit()
 
-                    fits(<p>sensitive information</p>)
+                        fits(<p>sensitive information</p>)
                     }
                     }
                     {% endhighlight %}
@@ -655,8 +655,8 @@ twitterAuthor: danireych
                         given test until it succeeds or the given timeout has been surpassed.</p>
                     {% highlight scala %}
                     eventually(timeout(3 seconds)) {
-                    fits(
-                    <div id="container">Text loaded with JavaScript</div>
+                        fits(
+                            <div id="container">Text loaded with JavaScript</div>
                     )
                     }
                     {% endhighlight %}
@@ -762,12 +762,12 @@ twitterAuthor: danireych
                     import play.api.libs.json.Json
 
                     class ReducedJsonSpec extends ScalaWebTestBaseSpec {
-                    path = "/dijkstra.json"
-                    def json = Json.parse(webDriver.getPageSource)
+                        path = "/dijkstra.json"
+                        def json = Json.parse(webDriver.getPageSource)
 
-                    "Dijkstra" should "have the correct firstname" in {
-                    def firstName = (json \ "firstName").as[String]
-                    firstName should equal("Edsger")
+                        "Dijkstra" should "have the correct firstname" in {
+                            def firstName = (json \ "firstName").as[String]
+                            firstName should equal("Edsger")
                     }
                     }
                     {% endhighlight %}
@@ -775,34 +775,34 @@ twitterAuthor: danireych
                     <div id="modules/json/testResponse">
                         {% highlight json %}
                         {
-                        "name": "Dijkstra",
-                        "firstName": "Edsger",
-                        "yearOfBirth": 1930,
-                        "theories": [
-                        "shortest path",
-                        "graph theory"
+                            "name": "Dijkstra",
+                            "firstName": "Edsger",
+                            "yearOfBirth": 1930,
+                            "theories": [
+                            "shortest path",
+                            "graph theory"
                         ],
-                        "isTuringAwardWinner": true,
-                        "universities": [
+                            "isTuringAwardWinner": true,
+                            "universities": [
                         {
-                        "name": "Universität Leiden",
-                        "begin": 1948,
-                        "end": 1956
+                            "name": "Universität Leiden",
+                            "begin": 1948,
+                            "end": 1956
                         },
                         {
-                        "name": "Mathematisch Centrum Amsterdam",
-                        "begin": 1951,
-                        "end": 1959
+                            "name": "Mathematisch Centrum Amsterdam",
+                            "begin": 1951,
+                            "end": 1959
                         },
                         {
-                        "name": "Technische Universiteit Eindhoven",
-                        "begin": 1962,
-                        "end": 1984
+                            "name": "Technische Universiteit Eindhoven",
+                            "begin": 1962,
+                            "end": 1984
                         },
                         {
-                        "name": "University of Texas at Austin",
-                        "begin": 1984,
-                        "end": 1999
+                            "name": "University of Texas at Austin",
+                            "begin": 1984,
+                            "end": 1999
                         }
                         ]
                         }
@@ -821,23 +821,23 @@ twitterAuthor: danireych
                     import org.scalawebtest.json.JsonGauge
 
                     class DocumentFitsValuesSpec extends ScalaWebTestBaseSpec extends JsonGauge {
-                    path = "/jsonResponse.json.jsp"
+                        path = "/jsonResponse.json.jsp"
 
                     "FitsValues" should "report success, when the json gauge contains the same values as the response it
                     is tested against" in {
-                    fitsValues(
-                    """{
-                    "name": "Dijkstra",
-                    "firstName": "Edsger",
-                    "yearOfBirth": 1930,
-                    "isTuringAwardWinner": true,
-                    "theories": [
-                    "shortest path",
-                    "graph theory"
-                    ]
-                    }"""
-                    )
-                    }
+                        fitsValues(
+                                    """{
+                                        "name": "Dijkstra",
+                                        "firstName": "Edsger",
+                                        "yearOfBirth": 1930,
+                                        "isTuringAwardWinner": true,
+                                        "theories": [
+                                        "shortest path",
+                                        "graph theory"
+                                        ]
+                                    }"""
+                                )
+                        }
                     }
                     {% endhighlight %}
                     <p>Often verifying the complete response isn't ideal. We recommend to parse and traverse the
@@ -851,31 +851,31 @@ twitterAuthor: danireych
                     import play.api.libs.json.{JsValue, Json}
 
                     class DijkstraJsonGaugeSpec extends ScalaWebTestBaseSpec extends JsonGauge {
-                    path = "/dijkstra.json"
-                    def dijkstra = Json.parse(webDriver.getPageSource)
+                        path = "/dijkstra.json"
+                        def dijkstra = Json.parse(webDriver.getPageSource)
 
-                    "The response for Dijkstra" should "contain the expected values" in {
-                    dijkstra fits values of
-                    """{
-                    "firstName": "Edsger",
-                    "name": "Dijkstra",
-                    "yearOfBirth": 1930,
-                    "theories": [
-                    "shortest path",
-                    "graph theory"
-                    ]
-                    }
-                    """
-                    }
+                        "The response for Dijkstra" should "contain the expected values" in {
+                            dijkstra fits values of
+                                """{
+                                    "firstName": "Edsger",
+                                    "name": "Dijkstra",
+                                    "yearOfBirth": 1930,
+                                    "theories": [
+                                        "shortest path",
+                                        "graph theory"
+                                        ]
+                                    }
+                                """
+                            }
                     it should "contain the correct universities" in {
-                    val universities = dijkstra \ "universities"
-                    universities fit values of
+                        val universities = dijkstra \ "universities"
+                        universities fit values of
                     """
                     [
-                    { "name": "Universität Leiden","begin": 1948, "end": 1956 },
-                    { "name": "Mathematisch Centrum Amsterdam", "begin": 1951, "end": 1959 },
-                    { "name": "Technische Universiteit Eindhoven", "begin": 1962, "end": 1984 },
-                    { "name": "University of Texas at Austin", "begin": 1984, "end": 1999 }
+                        { "name": "Universität Leiden","begin": 1948, "end": 1956 },
+                        { "name": "Mathematisch Centrum Amsterdam", "begin": 1951, "end": 1959 },
+                        { "name": "Technische Universiteit Eindhoven", "begin": 1962, "end": 1984 },
+                        { "name": "University of Texas at Austin", "begin": 1984, "end": 1999 }
                     ]
                     """
                     }
@@ -902,18 +902,18 @@ twitterAuthor: danireych
                     import play.api.libs.json.{JsValue, Json}
 
                     class DijkstraJsonGaugeFitsTypesSpec extends ScalaWebTestBaseSpec extends JsonGauge {
-                    path = "/dijkstra.json"
-                    def dijkstra = Json.parse(webDriver.getPageSource)
+                        path = "/dijkstra.json"
+                        def dijkstra = Json.parse(webDriver.getPageSource)
 
                     "The response for Dijkstra" should "contain the expected types" in {
-                    dijkstra fits types of
-                    """{
-                    "firstName": "",
-                    "name": "",
-                    "yearOfBirth": 0,
-                    "theories": [ "" ]
-                    }
-                    """
+                        dijkstra fits types of
+                            """{
+                                "firstName": "",
+                                "name": "",
+                                "yearOfBirth": 0,
+                                "theories": [ "" ]
+                            }
+                        """
                     }
                     {% endhighlight %}
                     <p>Now the values no longer matter. They are only used to determine the expected type. Therefore we
@@ -931,19 +931,19 @@ twitterAuthor: danireych
                         test of the previous example would be replaced with the following</p>
                     {% highlight scala %}
                     "The response for Dijkstra" should "contain the expected types" in {
-                    dijkstra fits types of
-                    """{
-                    "firstName": "",
-                    "name": "",
-                    "yearOfBirth": 0,
-                    "theories": [ "" ]
-                    "universities":
-                    [{
-                    "name": "",
-                    "begin": 0,
-                    "end": 0
-                    }]
-                    }
+                        dijkstra fits types of
+                            """{
+                                "firstName": "",
+                                "name": "",
+                                "yearOfBirth": 0,
+                                "theories": [ "" ]
+                                "universities":
+                            [{
+                                "name": "",
+                                "begin": 0,
+                                "end": 0
+                            }]
+                        }
                     """
                     }
                     {% endhighlight %}
@@ -963,20 +963,20 @@ twitterAuthor: danireych
                     "The response for Odersky" should "contain the expected types and array sizes" in {
                     odersky fits typesAndArraySizes of
                     """{
-                    "firstName": "",
-                    "name": "",
-                    "universities":
+                        "firstName": "",
+                        "name": "",
+                        "universities":
                     [{
-                    "name": "",
-                    "begin": 0,
-                    "end": 0
+                        "name": "",
+                        "begin": 0,
+                        "end": 0
                     },{
-                    "name": "",
-                    "begin": 0,
-                    "end": 0
+                        "name": "",
+                        "begin": 0,
+                        "end": 0
                     },{
-                    "name": "",
-                    "begin": 0
+                        "name": "",
+                        "begin": 0
                     }]
                     }
                     """
@@ -991,26 +991,26 @@ twitterAuthor: danireych
                     import play.api.libs.json.{JsLookupResult, JsValue, Json}
 
                     class ContainsElementFittingSpec extends ScalaWebTestBaseSpec extends JsonGauge {
-                    path = "/jsonResponse.json.jsp"
-                    def dijkstra: JsValue = Json.parse(webDriver.getPageSource)
-                    def universities: JsLookupResult = { dijkstra \ "universities" }
+                        path = "/jsonResponse.json.jsp"
+                        def dijkstra: JsValue = Json.parse(webDriver.getPageSource)
+                        def universities: JsLookupResult = { dijkstra \ "universities" }
 
-                    "The universities array" should "contain an element with the expected types" in {
-                    universities containsElementFitting types of
-                    """{
-                    | "name": "",
-                    | "begin": 0,
-                    | "end": 0
-                    | } """.stripMargin
+                        "The universities array" should "contain an element with the expected types" in {
+                            universities containsElementFitting types of
+                                """{
+                                    | "name": "",
+                                    | "begin": 0,
+                                    | "end": 0
+                                    | } """.stripMargin
                     }
-                    it should "contain an element with the expected values" in {
-                    universities containsElementFitting values of
-                    """{
-                    | "name": "Technische Universiteit Eindhoven",
-                    | "begin": 1962,
-                    | "end": 1984
-                    | }""".stripMargin
-                    }
+                        it should "contain an element with the expected values" in {
+                            universities containsElementFitting values of
+                                """{
+                                    | "name": "Technische Universiteit Eindhoven",
+                                    | "begin": 1962,
+                                    | "end": 1984
+                                    | }""".stripMargin
+                                }
                     }
                     {% endhighlight %}
                     <h4 id="modules/json/alternatives"></h4>

@@ -84,6 +84,16 @@
             }
         };
 
+        var isScrolledIntoView = function (elem) {
+            var docViewTop = $(window).scrollTop();
+            var docViewBottom = docViewTop + $(window).height();
+
+            var elemTop = $(elem).offset().top;
+            var elemBottom = elemTop + $(elem).height();
+
+            return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
+        }
+
         var headingToNavigationEntryMap = $sidebar.find("header a, li a").toArray().reduce(function (map, element) {
             var href = $(element).attr("href");
             map[href] = $(element).parent();
@@ -140,6 +150,7 @@
             adjustPosition: adjustPosition,
             highlight: highlight,
             unhighlight: unhighlight,
+            isScrolledIntoView: isScrolledIntoView,
         };
 
     };
@@ -178,7 +189,7 @@ $(document).ready(function () {
             if (isAboveView(heading)) {
                 bottomMostAboveView = heading;
             }
-            if (isScrolledIntoView(heading) && !topMostViewable) {
+            if (sidebar.isScrolledIntoView(heading) && !topMostViewable) {
                 topMostViewable = heading;
             }
         });
@@ -201,15 +212,6 @@ $(document).ready(function () {
             currentlyHightlightedNavEntry = navEntryToHighlight;
         }
 
-        function isScrolledIntoView(elem) {
-            var docViewTop = $(window).scrollTop();
-            var docViewBottom = docViewTop + $(window).height();
-
-            var elemTop = $(elem).offset().top;
-            var elemBottom = elemTop + $(elem).height();
-
-            return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
-        }
 
         function isAboveView(elem) {
             var docViewTop = $(window).scrollTop();

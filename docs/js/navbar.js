@@ -19,6 +19,13 @@
             return highlightingTriggeringTitles;
         };
 
+        var smoothScroll = $(" ul, li, a").click(function () {
+                $('html, body').animate({
+                    scrollTop: $($.attr(this, 'href')).offset().top
+                }, 1000);
+                return false;
+        });
+
         var init = function () {
             // TODO
         };
@@ -92,13 +99,20 @@
             var elemBottom = elemTop + $(elem).height();
 
             return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
-        }
+        };
 
         var headingToNavigationEntryMap = $sidebar.find("header a, li a").toArray().reduce(function (map, element) {
             var href = $(element).attr("href");
             map[href] = $(element).parent();
             return map;
         }, {});
+
+        var isAboveView = function isAboveView(elem) {
+            var docViewTop = $(window).scrollTop();
+            var elemTop = $(elem).offset().top;
+
+            return ((elemTop <= docViewTop));
+        };
 
         var headingToNavigationEntry = function (id) {
             return headingToNavigationEntryMap["#" + id];
@@ -151,6 +165,7 @@
             highlight: highlight,
             unhighlight: unhighlight,
             isScrolledIntoView: isScrolledIntoView,
+            isAboveView: isAboveView
         };
 
     };
@@ -186,7 +201,7 @@ $(document).ready(function () {
 
         //highlight navigation
         highlightingTriggeringTitles.each(function (index, heading) {
-            if (isAboveView(heading)) {
+            if (sidebar.isAboveView(heading)) {
                 bottomMostAboveView = heading;
             }
             if (sidebar.isScrolledIntoView(heading) && !topMostViewable) {
@@ -212,23 +227,6 @@ $(document).ready(function () {
             currentlyHightlightedNavEntry = navEntryToHighlight;
         }
 
-
-        function isAboveView(elem) {
-            var docViewTop = $(window).scrollTop();
-            var elemTop = $(elem).offset().top;
-
-            return ((elemTop <= docViewTop));
-        }
     });
-
-
-//smooth scroll
-    $(" ul, li, a").click(function () {
-        $('html, body').animate({
-            scrollTop: $($.attr(this, 'href')).offset().top
-        }, 1000);
-        return false;
-    });
-
 })
 ;

@@ -246,7 +246,7 @@ header .byline {
 }
 
 /*********************************************************************************/
-/* Sidebar                                                                         */
+/* Sidebar                                                                       */
 /*********************************************************************************/
 
 #sidebar {
@@ -259,4 +259,62 @@ header .byline {
 
 #header {
     height: 10em;
+}
+
+#contentNavButtonLeft {
+    display: block;
+    position: fixed;
+    margin: 8px 0px 0px 20px;
+    border: none;
+}
+
+#contentNavButtonLeft button {
+    padding: 0;
+    background-color: transparent;
+    border: none;
+}
+
+#contentNavButtonRight {
+    display: block;
+    position: fixed;
+    float: right;
+    margin: 8px 0 0 355px;
+    border: none;
+}
+
+#contentNavButtonRight button {
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    display: none;
+}
+
+#contentNavButtonRight a, #contentNavButtonLeft a {
+    display: block;
+    color: #888;
+    text-decoration: none;
+    height: 44px;
+    line-height: 44px;
+    border-top: solid 1px;
+    border-color: rgba(255, 255, 255, .05);
+    padding: 0 1em 0 1em;
+    letter-spacing: 1px;
+}
+
+.sidebarHeadings a {
+    margin-left: 20px;
+}
+
+.sidebarHeadings header a {
+    font-size: 18px;
+}
+
+#leftPanel a {
+    margin: 10px 0 3px 20px;
+    font-size: 16px;
+}
+
+#leftPanel a:hover, #rightPanel a:hover {
+    text-decoration: none;
+    font-weight: bolder;
 }

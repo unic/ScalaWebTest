@@ -33,12 +33,19 @@ skel.init({
 }, {
     panels: {
         panels: {
-            navPanel: {
+            leftPanel: {
                 breakpoints: 'mobile',
                 position: 'left',
                 style: 'reveal',
-                size: '50%',
+                size: '60%',
                 html: '<div data-action="navList" data-args="nav"></div>'
+            },
+            rightPanel: {
+                breakpoints: 'mobile',
+                position: 'right',
+                style: 'reveal',
+                size: '60%',
+                html: '<div data-action="copyHTML" data-args="sidebar"></div>'
             }
         },
         overlays: {
@@ -47,7 +54,8 @@ skel.init({
                 position: 'top-left',
                 height: 44,
                 width: '100%',
-                html: '<span class="toggle" data-action="togglePanel" data-args="navPanel"></span>' +
+                html: '<div id="contentNavButtonLeft"><button data-action="togglePanel" data-args="leftPanel"><i class="material-icons" style="color:#8B8B8B">more_horiz</i></button></div>' +
+                '<div id="contentNavButtonRight"><button data-action="togglePanel" data-args="rightPanel"><i class="material-icons" style="color:#8B8B8B">menu</i></button></div>' +
                 '<span class="title" data-action="copyHTML" data-args="logo"></span>'
             }
         }

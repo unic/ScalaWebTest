@@ -50,6 +50,7 @@
     <script src="{{site.url}}/js/init.js"></script>
     <script src="{{site.url}}/js/twitter.js" async></script>
     <link rel="stylesheet" href="{{site.url}}/css/highlight.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <noscript>
         <link rel="stylesheet" href="{{site.url}}/css/skel-noscript.css" />
         <link rel="stylesheet" href="{{site.url}}/css/style.css" />

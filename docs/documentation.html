@@ -6,6 +6,7 @@ twitterAuthor: danireych
 ---
 <!DOCTYPE HTML>
 <html lang="en">
+
 {% include head.ext %}
 <body>
 {% include header.ext %}
@@ -1305,5 +1306,19 @@ twitterAuthor: danireych
         </ul>
     </section>
 </div>
+<script>
+    $(document).ready(function () {
+
+        var docContentView = new ScalaWebTest.DocContentView("#content");
+        var sidebar = new ScalaWebTest.Sidebar("#sidebar", docContentView);
+        sidebar.init();
+
+    });
+</script>
+<style>
+    #contentNavButtonRight button{
+        display: block;
+    }
+</style>
 </body>
 </html>

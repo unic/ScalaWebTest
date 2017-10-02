@@ -66,49 +66,30 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
     })
   }
 
-  def elementFits(domNode: DomNode): Unit = {
-    if (definition.theSeq.length != 1) {
-      fail("Exactly one top level node expected, in the gauge definition.")
-    }
-
-    definition.theSeq.head match {
-      case elem: Elem =>
-        if (domNode.getLocalName != elem.label) {
-          misfitHolder.addMisfit(Misfit(MISFIT_RELEVANCE_START_VALUE, s"Expected <${elem.label}>, but was <${domNode.getLocalName}> in ${domNode.prettyString()}"))
-          failAndReportMisfit()
-        }
-        if (!verifyClassesOnCandidate(domNode, elem, MISFIT_RELEVANCE_START_VALUE)) {
-          failAndReportMisfit()
-        }
-        val fittingNode = verifyCandidate(domNode, elem, None, MISFIT_RELEVANCE_START_VALUE)
-        if (fittingNode.isEmpty) {
-          failAndReportMisfit()
-        }
-      //only element allowed as top level gauge definition, when using elementFits
-      case invalid => fail("Gauge definition contained invalid top level element " + invalid)
-    }
+  def fits(domNode: DomNode): Unit = {
+    var fittingNodes = List[Fit]()
+    definition.theSeq.foreach(gaugeElement => {
+      val fittingNode = nodeFits(Option(domNode.getParentNode).getOrElse(domNode), gaugeElement, None, MISFIT_RELEVANCE_START_VALUE)
+      if (fittingNode.isEmpty) {
+        failAndReportMisfit()
+      }
+      else {
+        fittingNodes = fittingNode.get :: fittingNodes
+        //when proceeding to the next definition, old misfits do not matter anymore
+        misfitHolder.wipe()
+      }
+    })
   }
 
-  def elementDoesNotFit(domNode: DomNode): Unit = {
-    if (definition.theSeq.length != 1) {
-      fail("Exactly one top level node expected, in the gauge definition.")
-    }
-
-    definition.theSeq.head match {
-      case elem: Elem =>
-        if (domNode.getLocalName != elem.label) {
-          misfitHolder.addMisfit(Misfit(MISFIT_RELEVANCE_START_VALUE, s"Expected <${elem.label}>, but was <${domNode.getLocalName}> in ${domNode.prettyString()}"))
-          failAndReportMisfit()
-        }
-        if (verifyClassesOnCandidate(domNode, elem, MISFIT_RELEVANCE_START_VALUE)) {
-          val fittingNode = verifyCandidate(domNode, elem, None, MISFIT_RELEVANCE_START_VALUE)
-          if (fittingNode.isDefined) {
-            fail(s"Current element matches the provided gauge, although expected not to!\n Gauge spec: $elem\n Fitting node: ${fittingNode.get.domNode.prettyString()} found")
-          }
-        }
-      //only element allowed as top level gauge definition, when using elementFits
-      case invalid => fail("Gauge definition contained invalid top level element " + invalid)
-    }
+  def doesNotFit(domNode: DomNode): Unit = {
+    definition.theSeq.foreach(gaugeElement => {
+      val fit = nodeFits(Option(domNode.getParentNode).getOrElse(domNode), gaugeElement, None, MISFIT_RELEVANCE_START_VALUE)
+      if (fit.isDefined) {
+        fail(s"Current document matches the provided gauge, although expected not to!\n Gauge spec: $gaugeElement\n Fitting node: ${fit.get.domNode.prettyString()} found")
+      }
+      //when proceeding to the next definition, old misfits do not matter anymore
+      misfitHolder.wipe()
+    })
   }
 
   private def verifyClassesOnCandidate(domNode: DomNode, elem: Elem, misfitRelevance: MisfitRelevance): Boolean = {
@@ -148,7 +129,6 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
 
     node.label + classSelector
   }
-
 
   private def nodeFits(node: DomNode, gaugeDefinition: Seq[Node], previousSibling: Option[DomNode], misfitRelevance: MisfitRelevance): Option[Fit] = {
     val definitionIt = gaugeDefinition.iterator

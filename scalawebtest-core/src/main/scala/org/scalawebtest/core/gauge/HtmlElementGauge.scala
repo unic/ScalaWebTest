@@ -56,12 +56,12 @@ trait HtmlElementGauge {
       */
     def fits(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver): Unit = {
       val domNode: DomNode = extractDomNode(element: Element)
-      new Gauge(definition).elementFits(domNode)
+      new Gauge(definition).fits(domNode)
     }
 
     def doesNotFit(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver): Unit = {
       val domNode: DomNode = extractDomNode(element: Element)
-      new Gauge(definition).elementDoesNotFit(domNode)
+      new Gauge(definition).doesNotFit(domNode)
     }
 
     def fit(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver): Unit = {

@@ -33,11 +33,18 @@ class ElementGaugeObjectSpec extends ScalaWebTestBaseSpec {
     </a>
   </div>
 
+  /**
+    * Since it possible to run partial matches for the DOM of an entire page, the same should be true for
+    * gauges for parts of the page. Otherwise, the user experience feels inconsistent.
+    *
+    */
+  val partialImageGauge = <figure class="obj_aspect_ratio"></figure>
+
   "The element gauge" should "successfully verify if single elements fit the given gauge" in {
     images.size should be > 5 withClue " - gallery didn't contain the expected amount of images"
 
     for (image <- images) {
-      image fits imageGauge
+      image fits partialImageGauge
     }
   }
 }

@@ -141,7 +141,13 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
     def classSelector = {
       val classAttribute = node.attribute("class")
       classAttribute match {
-        case Some(classes) => classes.head.toString().split(" ").filter(_.nonEmpty).fold("")(_ + "." + _)
+        case Some(classes) =>
+          classes.headOption
+          .map(_.toString())
+          .map(_.split(" "))
+          .filter(_.nonEmpty)
+          .map(_.fold("")(_ + "." + _))
+          .getOrElse("")
         case None => ""
       }
     }

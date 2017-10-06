@@ -143,8 +143,8 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
       classAttribute match {
         case Some(classes) =>
           classes.headOption
-          .map(_.toString())
-          .map(_.split(" "))
+          .map(_.toString)
+          .map(_.split(" ").filter(_.nonEmpty))
           .filter(_.nonEmpty)
           .map(_.fold("")(_ + "." + _))
           .getOrElse("")

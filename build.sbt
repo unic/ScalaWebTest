@@ -9,6 +9,11 @@ val htmlUnitVersion = "2.25"
 
 val versions = Map("scalaWebTest" -> projectVersion, "scalaTest" -> scalaTestVersion, "selenium" -> seleniumVersion, "htmlUnit" -> htmlUnitVersion)
 
+val scalaWebTestSeries = "1.1.0"
+def mimaSettings(projectName: String) = Seq(
+   mimaPreviousArtifacts := Set("org.scalawebtest" %% projectName % scalaWebTestSeries)
+)
+
 lazy val root = (project in file("."))
   .settings(commonSettings: _*)
   .settings(publishArtifact := false)
@@ -41,16 +46,19 @@ lazy val core = Project(id = "scalawebtest-core", base = file("scalawebtest-core
       "org.slf4j" % "slf4j-api" % "1.7.24"
     )
   )
+  .settings(mimaSettings("scalawebtest-core"))
 
 lazy val aem = Project(id = "scalawebtest-aem", base = file("scalawebtest-aem"))
   .settings(commonSettings: _*)
   .settings(libraryDependencies ++= scalaVersion(playJsonDependency(scope = None)).value)
+  .settings(mimaSettings("scalawebtest-aem"))
   .dependsOn(core)
 
 lazy val json = Project(id = "scalawebtest-json", base = file("scalawebtest-json"))
-    .settings(commonSettings: _*)
-    .settings(libraryDependencies ++= scalaVersion(playJsonDependency(scope = None)).value)
-    .dependsOn(core)
+  .settings(commonSettings: _*)
+  .settings(libraryDependencies ++= scalaVersion(playJsonDependency(scope = None)).value)
+  .settings(mimaSettings("scalawebtest-json"))
+  .dependsOn(core)
 
 lazy val bom = Project(id = "scalawebtest-bom", base = file("scalawebtest-bom"))
   .settings(description := "ScalaWebTest (Bill of Materials)")

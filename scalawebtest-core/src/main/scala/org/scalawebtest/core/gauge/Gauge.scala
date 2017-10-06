@@ -85,7 +85,7 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
     definition.theSeq.foreach(gaugeElement => {
       val fit = nodeFits(Option(domNode.getParentNode).getOrElse(domNode), gaugeElement, None, MISFIT_RELEVANCE_START_VALUE)
       if (fit.isDefined) {
-        fail(s"Current document matches the provided gauge, although expected not to!\n Gauge spec: $gaugeElement\n Fitting node: ${fit.get.domNode.prettyString()} found")
+        fail(s"Current element matches the provided gauge, although expected not to!\n Gauge spec: $gaugeElement\n Fitting node: ${fit.get.domNode.prettyString()} found")
       }
       //when proceeding to the next definition, old misfits do not matter anymore
       misfitHolder.wipe()

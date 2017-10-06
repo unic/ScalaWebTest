@@ -66,7 +66,7 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
     })
   }
 
-  def fits(domNode: DomNode): Unit = {
+  def elementFits(domNode: DomNode): Unit = {
     var fittingNodes = List[Fit]()
     definition.theSeq.foreach(gaugeElement => {
       val fittingNode = nodeFits(Option(domNode.getParentNode).getOrElse(domNode), gaugeElement, None, MISFIT_RELEVANCE_START_VALUE)
@@ -81,7 +81,7 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
     })
   }
 
-  def doesNotFit(domNode: DomNode): Unit = {
+  def elementDoesNotFit(domNode: DomNode): Unit = {
     definition.theSeq.foreach(gaugeElement => {
       val fit = nodeFits(Option(domNode.getParentNode).getOrElse(domNode), gaugeElement, None, MISFIT_RELEVANCE_START_VALUE)
       if (fit.isDefined) {
@@ -423,7 +423,7 @@ trait HtmlGauge {
   }
 
   /**
-    * Synonym for [[Gauge.fits]]. Use whatever reads better in your current context.
+    * Synonym for [[Gauge.elementFits]]. Use whatever reads better in your current context.
     */
   def fit(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver): Unit = fits(definition)
 
@@ -438,7 +438,7 @@ trait HtmlGauge {
     /**
       * Assert that the current document `doesnt fit` the html snippet provided as definition for the `Gauge`
       *
-      * To get detailed information about available options in `Gauge` definitions, read the ScalaDoc of [[Gauge.fits]]
+      * To get detailed information about available options in `Gauge` definitions, read the ScalaDoc of [[Gauge.elementFits]]
       */
     def fit(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver): Unit = {
       new Gauge(definition).doesNotFit()

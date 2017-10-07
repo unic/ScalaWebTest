@@ -4,16 +4,17 @@ import sbt._
 import scala.xml.{Elem, NodeSeq}
 
 object ScalaWebTestBuild {
-  def playJsonDependency(scope: Option[String])(scalaVersion: String): Seq[ModuleID] = scalaVersion match {
-    case "2.11.11" => scope match {
-      case None => Seq("com.typesafe.play" % "play-json_2.11" % "2.5.9")
-      case Some(s) => Seq("com.typesafe.play" % "play-json_2.11" % "2.5.9" % s)
+  def playJsonDependency(scope: Option[String])(scalaVersion: String): Seq[ModuleID] = {
+    val playJsonVersion = "2.6.6"
+    def playJsonDependency = scope match {
+        case None => Seq("com.typesafe.play" %% "play-json" % playJsonVersion)
+        case Some(s) => Seq("com.typesafe.play" %% "play-json" % playJsonVersion % s)
+      }
+    scalaVersion match {
+      case "2.11.11" => playJsonDependency
+      case "2.12.3" => playJsonDependency
+      case _ => Seq()
     }
-    case "2.12.3" => scope match {
-      case None => Seq("com.typesafe.play" % "play-json_2.12" % "2.6.0-M4")
-      case Some(s) => Seq("com.typesafe.play" % "play-json_2.12" % "2.6.0-M4" % s)
-    }
-    case _ => Seq()
   }
 
   def crossVersionSharedSources(configurations: Seq[Configuration]): Seq[Setting[_]] =

@@ -3,7 +3,7 @@ import ScalaWebTestBuild._
 crossScalaVersions := Seq("2.12.3", "2.11.11", "2.10.6")
 
 val projectVersion = "1.1.2-SNAPSHOT"
-val scalaTestVersion = "3.0.1"
+val scalaTestVersion = "3.0.4"
 val seleniumVersion = "3.3.0"
 val htmlUnitVersion = "2.25"
 

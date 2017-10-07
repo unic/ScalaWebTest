@@ -4,8 +4,8 @@ crossScalaVersions := Seq("2.12.3", "2.11.11", "2.10.6")
 
 val projectVersion = "1.1.2-SNAPSHOT"
 val scalaTestVersion = "3.0.4"
-val seleniumVersion = "3.3.0"
-val htmlUnitVersion = "2.25"
+val seleniumVersion = "3.6.0"
+val htmlUnitVersion = "2.27"
 
 val versions = Map("scalaWebTest" -> projectVersion, "scalaTest" -> scalaTestVersion, "selenium" -> seleniumVersion, "htmlUnit" -> htmlUnitVersion)
 

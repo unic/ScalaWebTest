@@ -1,6 +1,6 @@
 import ScalaWebTestBuild._
 
-crossScalaVersions := Seq("2.12.1", "2.11.8", "2.10.6")
+crossScalaVersions := Seq("2.12.3", "2.11.11", "2.10.6")
 
 val projectVersion = "1.1.2-SNAPSHOT"
 val scalaTestVersion = "3.0.1"

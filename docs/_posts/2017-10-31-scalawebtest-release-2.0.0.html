@@ -1,0 +1,55 @@
+---
+title: ScalaWebTest 2.0.0
+layout: post
+twitterAuthor: danireych
+description: ScalaWebTest 2.0.0 Release notes
+abstract: ScalaWebTest 2.0.0 introduces semantic versioning
+---
+
+<section>
+    <header><h2>Highlights of this release</h2></header>
+
+    <section>
+        <header><h3>Update from ScalaWebTest <= 1.1.1</h3></header>
+        <p>
+            The version bump to 2.0.0 isn't because of big changes, but because we start to use semantic versioning. More on this topic in the release highlights.
+        </p>
+        <p>
+            We updated most of our dependencies and suggest you update them in your project as well, in case you manage any of our transitive dependencies explicitly in your project.
+            If you build your project with maven, we suggest you use our bill-of-materials, which automatically takes care of version updates of our dependencies. See <a href="/download.html#maven">Add ScalaWebTest to your maven project</a>
+            If you build your project with sbt, we suggest you copy our most important transitive dependencies from the <a href="/download.html#sbt">Add ScalaWebTest to your sbt project</a> section.
+        </p>
+    </section>
+
+    <section>
+        <header><h3>Introduction of semantic versioning</h3></header>
+        <p>As of release 2.0.0 ScalaWebTest is committed to use semantic versioning as described in <a href="http://semver.org/spec/v2.0.0.html">http://semver.org/spec/v2.0.0.html</a>
+        </p>
+        <blockquote>
+            Given a version number MAJOR.MINOR.PATCH, increment the:
+            <br>
+            <ol>
+                <li>MAJOR version when you make incompatible API changes,</li>
+                <li>MINOR version when you add functionality in a backwards-compatible manner, and</li>
+                <li>PATCH version when you make backwards-compatible bug fixes.</li>
+            </ol>
+            <br>
+            Additional labels for pre-release and build metadata are available as extensions to the MAJOR.MINOR.PATCH format.
+        </blockquote>
+        <p>
+            A version bump to 2.0.0 was required to introduce semantic versioning, because version 1.0.4 introduced some incompatible API changes.
+            ScalaWebTest now uses <a href="https://github.com/lightbend/migration-manager">MigrationManager</a> to make sure no incompatible changes slip the versioning scheme.
+        </p>
+    </section>
+    <section>
+        <header><h3>Using github milestones</h3></header>
+        <p>We use github milestones now to bundle all issues, which where solved with a specific version of ScalaWebTest. Release 2.0.0 is our first <a href="https://github.com/unic/ScalaWebTest/milestone/1?closed=1">milestone</a>.</p>
+    </section>
+    <section>
+        <header><h3>Consistent behavior for in documents and part of the DOM</h3></header>
+        <p>
+            Thanks to <a href="https://github.com/unic/ScalaWebTest/issues/47">Issue 47</a> the behavior of fits and doesntFit, when used to verify parts of the DOM,
+            is now consistent with the behavior when verifying complete documents.
+        </p>
+    </section>
+</section>

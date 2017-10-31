@@ -3,9 +3,10 @@ import ScalaWebTestBuild._
 crossScalaVersions := Seq("2.12.3", "2.11.11", "2.10.6")
 
 val projectVersion = "1.1.2-SNAPSHOT"
-val scalaTestVersion = "3.0.1"
-val seleniumVersion = "3.3.0"
-val htmlUnitVersion = "2.25"
+val scalaTestVersion = "3.0.4"
+val seleniumVersion = "3.6.0"
+val htmlUnitVersion = "2.27"
+val slf4jApiVersion = "1.7.25"
 
 val versions = Map("scalaWebTest" -> projectVersion, "scalaTest" -> scalaTestVersion, "selenium" -> seleniumVersion, "htmlUnit" -> htmlUnitVersion)
 
@@ -43,7 +44,7 @@ lazy val core = Project(id = "scalawebtest-core", base = file("scalawebtest-core
       "org.scalatest" %% "scalatest" % scalaTestVersion,
       "org.seleniumhq.selenium" % "selenium-java" % seleniumVersion,
       "org.seleniumhq.selenium" % "htmlunit-driver" % htmlUnitVersion,
-      "org.slf4j" % "slf4j-api" % "1.7.24"
+      "org.slf4j" % "slf4j-api" % slf4jApiVersion
     )
   )
   .settings(mimaSettings("scalawebtest-core"))
@@ -103,7 +104,7 @@ lazy val integration_test = Project(id = "scalawebtest-integration", base = file
       "org.scalatest" %% "scalatest" % scalaTestVersion % "it",
       "org.seleniumhq.selenium" % "selenium-java" % seleniumVersion % "it",
       "org.seleniumhq.selenium" % "htmlunit-driver" % htmlUnitVersion % "it",
-      "org.slf4j" % "slf4j-api" % "1.7.24" % "it"
+      "org.slf4j" % "slf4j-api" % slf4jApiVersion % "it"
     )
   )
   .settings(libraryDependencies ++= scalaVersion(playJsonDependency(Some("it"))).value)

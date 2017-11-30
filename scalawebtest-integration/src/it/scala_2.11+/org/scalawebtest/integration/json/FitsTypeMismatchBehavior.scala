@@ -36,6 +36,11 @@ trait FitsTypeMismatchBehavior {
         dijkstra fits gaugeType of """{"name": []}"""
       }
     }
+    it should "fail when null is expected, but a String provided" in {
+      assertThrows[TestFailedException] {
+        dijkstra fits gaugeType of """{"name": null}"""
+      }
+    }
     it should "fail when a property is missing" in {
       assertThrows[TestFailedException] {
         dijkstra fits gaugeType of """{"thesis": "Communication with an Automatic Computer"}"""

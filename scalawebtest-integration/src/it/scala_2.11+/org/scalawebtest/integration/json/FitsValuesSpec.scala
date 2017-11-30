@@ -17,7 +17,8 @@ class FitsValuesSpec extends ScalaWebTestJsonBaseSpec with FitsTypeMismatchBehav
         | "theories": [
         |   "shortest path",
         |   "graph theory"
-        | ]
+        | ],
+        | "falseTheories": null
         |}
       """.stripMargin
   }

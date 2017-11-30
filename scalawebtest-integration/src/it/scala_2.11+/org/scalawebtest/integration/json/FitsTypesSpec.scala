@@ -14,7 +14,8 @@ class FitsTypesSpec extends ScalaWebTestJsonBaseSpec with FitsTypeMismatchBehavi
         | "yearOfBirth": 0,
         | "isTuringAwardWinner": true,
         | "theories": [],
-        | "universities": [{"name": "", "begin": 0, "end": 0}]
+        | "universities": [{"name": "", "begin": 0, "end": 0}],
+        | "falseTheories": null
         |}
       """.stripMargin
   }

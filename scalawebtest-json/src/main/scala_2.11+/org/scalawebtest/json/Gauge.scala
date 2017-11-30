@@ -40,7 +40,7 @@ case class Gauge(testee: JsValue, fitValues: Boolean, fitArraySizes: Boolean) ex
   }
 
   private def fitsArray(json: JsValue, breadcrumb: List[String], defA: JsArray): Unit = {
-    def assertArrayElementsMatch(a: JsArray) = {
+    def assertArrayElementsMatch(a: JsArray): Unit = {
       if (fitArraySizes && defA.value.nonEmpty) {
         a.value should have length defA.value.length withClue s"in ${breadcrumb.prettyPrint()}"
       }
@@ -53,7 +53,7 @@ case class Gauge(testee: JsValue, fitValues: Boolean, fitArraySizes: Boolean) ex
     }
   }
 
-  private def fitsObject(json: JsValue, breadcrumb: List[String], defO: JsObject) = {
+  private def fitsObject(json: JsValue, breadcrumb: List[String], defO: JsObject): Unit = {
     def assertObjectContains(o: JsObject, breadcrumb: List[String], value: JsValue) {
       (o \ breadcrumb.head).toOption match {
         case None => fail(s"Expected to contain the key ${breadcrumb.head}, but didn't in $json. Complete selector was ${breadcrumb.prettyPrint()}")
@@ -94,6 +94,13 @@ case class Gauge(testee: JsValue, fitValues: Boolean, fitArraySizes: Boolean) ex
     }
   }
 
+  private def fitsNull(json: JsValue, breadcrumb: List[String]): Unit = {
+    json match {
+      case JsNull => //null is null, verifying for value or type are identical
+      case _ => fail(s"Expected ${breadcrumb.prettyPrint()} to contain NULL, but it contained $json instead")
+    }
+  }
+
   def fits(json: JsValue, breadcrumb: List[String], gauge: JsValue): Unit = {
     gauge match {
       case o: JsObject => fitsObject(json, breadcrumb, o)
@@ -101,7 +108,8 @@ case class Gauge(testee: JsValue, fitValues: Boolean, fitArraySizes: Boolean) ex
       case n: JsNumber => fitsNumber(json, breadcrumb, n)
       case s: JsString => fitsString(json, breadcrumb, s)
       case b: JsBoolean => fitsBoolean(json, breadcrumb, b)
-      case _ => fail("Invalid null element in gauge definition")
+      case JsNull => fitsNull(json, breadcrumb)
+      case _ => fail("Invalid element in gauge definition")
     }
   }
 

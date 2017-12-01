@@ -84,6 +84,7 @@ The release process of ScalaWebTest is currently done manually. The process is d
 		1. `sbt` - enters the sbt interactive mode
 		r. `+ clean` - deletes all generated files (target)
 		1. `+ compile` - compiles the main sources
+		1. `mimaReportBinaryIssues` - execute the Migration Manager to verify binary compatibility
 		1. `+ inttest` - compiles and run the integration tests
 		1. `+ publishSigned` - creates all of the below plus the poms
 		1. Enter the Sonatype PGP Key Password as stored in our company password store

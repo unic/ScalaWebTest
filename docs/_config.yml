@@ -8,7 +8,7 @@ defaults:
     scope:
       path: ""
     values:
-      scalaWebTestVersion: 2.0.0
+      scalaWebTestVersion: 2.0.1
 collections:
   - mainNavItems
 contextpath:

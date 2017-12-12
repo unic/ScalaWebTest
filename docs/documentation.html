@@ -116,9 +116,9 @@ twitterAuthor: danireych
 
 
                     <h3 id="firsttest">Write your first test</h3>
-                    To write your first test, you have to create a scala file in src/it/scala or src/test/scala, depending on your test setup.
+                    <p>To write your first test, you have to create a scala file in src/it/scala or src/test/scala, depending on your test setup.
                     Lets assume we want to verify our homepage. Create a class named HomepageSpec, and let it extend
-                    IntegrationFlatSpec. This uses <a href="http://www.scalatest.org/user_guide/selecting_a_style">FlatSpec style</a> from ScalaTest, other <a href="#teststyles">styles</a> are available.
+                        IntegrationFlatSpec. This uses <a href="http://www.scalatest.org/user_guide/selecting_a_style">FlatSpec style</a> from ScalaTest, other <a href="#teststyles">styles</a> are available.</p>
 
                     {% highlight scala %}
                     import org.scalawebtest.core.IntegrationFlatSpec
@@ -134,13 +134,13 @@ twitterAuthor: danireych
                     {% endhighlight%}
                     <a href="https://scastie.scala-lang.org/DaniRey/HuZB9METSSqu32QZmT7pcw">Try it in Scastie</a>
 
-                    That's all you need. The IntegrationSpec, inherited from IntegrationFlatSpec will automatically call http://localhost:8080/index.html before
+                    <p>That's all you need. The IntegrationSpec, inherited from IntegrationFlatSpec will automatically call http://localhost:8080/index.html before
                     executing a test. When using FlatSpec style the block following the <i>in</i> keyword is the body of the test.
                     Within the body of a test you can access the webDriver, to test the content of the current page. The webDriver is backed by the HtmlUnit driver from selenium.
-                    It emulates a browser and supports among other things JavaScript execution, clicking elements and submitting forms.
+                        It emulates a browser and supports among other things JavaScript execution, clicking elements and submitting forms.</p>
 
                     <h3 id="firstGauge">Write your first gauge</h3>
-                    This test can be rewritten making use of the HtmlGauge. <a href="#writingGauges">Writing gauges</a> provides a detailed introduction to this feature.
+                    <p>This test can be rewritten making use of the HtmlGauge. <a href="#writingGauges">Writing gauges</a> provides a detailed introduction to this feature.</p>
 
                     {% highlight scala %}
                     import org.scalawebtest.core.IntegrationFlatSpec

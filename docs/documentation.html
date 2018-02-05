@@ -56,8 +56,7 @@ twitterAuthor: danireych
                     <p>You can add ScalaWebTest to your integration testing dependencies in the build.sbt/scala
                         of your sbt project as follows.</p>
                     {% highlight scala %}
-                    libraryDependencies += "org.scalawebtest" %% "scalawebtest-core" % "{{page.scalaWebTestVersion}}" %
-                    "it"
+libraryDependencies += "org.scalawebtest" %% "scalawebtest-core" % "{{page.scalaWebTestVersion}}" % "it"
                     {% endhighlight %}
 
                     <p>If you want to manage the most important transitive dependencies of ScalaWebTest, you might
@@ -65,23 +64,23 @@ twitterAuthor: danireych
                         it as follows. Especially selenium-java and htmlunit-driver should align.</p>
 
                     {% highlight scala %}
-                    libraryDependencies ++= Seq(
-                        "org.scalawebtest" %% "scalawebtest-core" % "{{page.scalaWebTestVersion}}" % "it"
-                        "org.scalatest" %% "scalatest" % "3.0.4" % "it",
-                        "org.seleniumhq.selenium" % "selenium-java" % "3.6.0" % "it",
-                        "org.seleniumhq.selenium" % "htmlunit-driver" % "2.27" % "it"
-                    )
+libraryDependencies ++= Seq(
+    "org.scalawebtest" %% "scalawebtest-core" % "{{page.scalaWebTestVersion}}" % "it"
+    "org.scalatest" %% "scalatest" % "3.0.4" % "it",
+    "org.seleniumhq.selenium" % "selenium-java" % "3.6.0" % "it",
+    "org.seleniumhq.selenium" % "htmlunit-driver" % "2.27" % "it"
+)
                     {% endhighlight %}
                     <h4 id="swt_maven">Add ScalaWebTest to your maven project</h4>
                     <p>You have to add the following dependency to your maven project to use ScalaWebTest.</p>
 
                     {% highlight xml %}
-                    <dependency>
-                        <groupId>org.scalawebtest</groupId>
-                        <artifactId>scalawebtest-core_2.12</artifactId>
-                        <version>{{page.scalaWebTestVersion}}</version>
-                        <scope>test</scope>
-                    </dependency>
+<dependency>
+    <groupId>org.scalawebtest</groupId>
+    <artifactId>scalawebtest-core_2.12</artifactId>
+    <version>{{page.scalaWebTestVersion}}</version>
+    <scope>test</scope>
+</dependency>
                     {% endhighlight%}
 
                     <p>ScalaWebTest is also available for Scala 2.10 and 2.11, change the version after the underscore,
@@ -89,29 +88,29 @@ twitterAuthor: danireych
                         use.</p>
 
                     {% highlight xml %}
-                    <dependency>
-                        <groupId>org.scalawebtest</groupId>
-                        <artifactId>scalawebtest-core_2.11</artifactId>
-                        <version>{{page.scalaWebTestVersion}}</version>
-                        <scope>test</scope>
-                    </dependency>
+<dependency>
+    <groupId>org.scalawebtest</groupId>
+    <artifactId>scalawebtest-core_2.11</artifactId>
+    <version>{{page.scalaWebTestVersion}}</version>
+    <scope>test</scope>
+</dependency>
                     {% endhighlight%}
 
                     <p id="bom">In case you want to manage the most important transitive dependencies of ScalaWebTest,
                         you can add our bill-of-materials to your project. Just add the following to your dependencyManagement.</p>
 
                     {% highlight xml %}
-                    <dependencyManagement>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.scalawebtest</groupId>
-                                <artifactId>bom_2.12</artifactId>
-                                <version>{{page.scalaWebTestVersion}}</version>
-                                <type>pom</type>
-                                <scope>import</scope>
-                            </dependency>
-                        </dependencies>
-                    </dependencyManagement>
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.scalawebtest</groupId>
+            <artifactId>bom_2.12</artifactId>
+            <version>{{page.scalaWebTestVersion}}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
                     {% endhighlight%}
 
 
@@ -121,16 +120,18 @@ twitterAuthor: danireych
                         IntegrationFlatSpec. This uses <a href="http://www.scalatest.org/user_guide/selecting_a_style">FlatSpec style</a> from ScalaTest, other <a href="#teststyles">styles</a> are available.</p>
 
                     {% highlight scala %}
-                    import org.scalawebtest.core.IntegrationFlatSpec
+package org.scalawebtest.documentation
 
-                    class HomepageSpec extends IntegrationFlatSpec {
-                        override val host = "http://www.scalawebtest.org"
-                        path = "/index.html"
+import org.scalawebtest.core.IntegrationFlatSpec
 
-                        "Our homepage" should "contain a succinct claim" in {
-                            webDriver.findElementByTagName("h2").getText shouldEqual "Reduce the effort needed to write integration tests"
-                        }
-                    }
+class HomepageSpec extends IntegrationFlatSpec {
+    override val host = "http://www.scalawebtest.org"
+    path = "/index.html"
+
+    "Our homepage" should "contain a succinct claim" in {
+        webDriver.findElementByTagName("h2").getText shouldEqual "Reduce the effort needed to write integration tests"
+    }
+}
                     {% endhighlight%}
                     <a href="https://scastie.scala-lang.org/DaniRey/HuZB9METSSqu32QZmT7pcw">Try it in Scastie</a>
 
@@ -143,17 +144,19 @@ twitterAuthor: danireych
                     <p>This test can be rewritten making use of the HtmlGauge. <a href="#writingGauges">Writing gauges</a> provides a detailed introduction to this feature.</p>
 
                     {% highlight scala %}
-                    import org.scalawebtest.core.IntegrationFlatSpec
-                    import org.scalawebtest.core.gauge.HtmlGauge
+package org.scalawebtest.documentation
 
-                    class HomepageSpec extends IntegrationFlatSpec with HtmlGauge {
-                        override val host = "http://www.scalawebtest.org"
-                        path = "/index.html"
+import org.scalawebtest.core.IntegrationFlatSpec
+import org.scalawebtest.core.gauge.HtmlGauge
 
-                        "Our homepage" should "contain a succinct claim" in {
-                        fits(<h2>Reduce the effort needed to write integration tests</h2>)
-                        }
-                    }
+class HomepageSpec extends IntegrationFlatSpec with HtmlGauge {
+    override val host = "http://www.scalawebtest.org"
+    path = "/index.html"
+
+    "Our homepage" should "contain a succinct claim" in {
+    fits(<h2>Reduce the effort needed to write integration tests</h2>)
+    }
+}
                     {% endhighlight%}
                     <a href="https://scastie.scala-lang.org/DaniRey/aOD6RFqwSgynejH7CNl6qQ">Try it in Scastie</a>
                 </section>
@@ -167,24 +170,24 @@ twitterAuthor: danireych
                     ScalaWebTest uses this concept for it's own integration tests as well.
 
                     {% highlight scala %}
-                    package org.scalawebtest.integration
+package org.scalawebtest.documentation
 
-                    import org.scalatest.AppendedClues
-                    import org.scalatest.concurrent.PatienceConfiguration.Timeout
-                    import org.scalatest.time.SpanSugar._
-                    import org.scalawebtest.core.gauge.HtmlGauge
-                    import org.scalawebtest.core.{FormBasedLogin, IntegrationFlatSpec}
+import org.scalatest.AppendedClues
+import org.scalatest.concurrent.PatienceConfiguration.Timeout
+import org.scalatest.time.SpanSugar._
+import org.scalawebtest.core.gauge.HtmlGauge
+import org.scalawebtest.core.{FormBasedLogin, IntegrationFlatSpec}
 
-                    import scala.language.postfixOps
+import scala.language.postfixOps
 
-                    trait ScalaWebTestBaseSpec extends IntegrationFlatSpec with FormBasedLogin with AppendedClues with HtmlGauge{
-                        override val host = "http://localhost:9090"
-                        override val loginPath = "/fakeLogin.jsp"
+trait MyProjectBaseSpec extends IntegrationFlatSpec with FormBasedLogin with AppendedClues with HtmlGauge {
+    override val host = "http://localhost:9090"
+    override val loginPath = "/login.php"
 
-                        override val projectRoot = ""
+    override val projectRoot = ""
 
-                        override def loginTimeout = Timeout(5 seconds)
-                    }
+    override def loginTimeout = Timeout(5 seconds)
+}
                     {% endhighlight %}
 
                     This base trait uses FlatSpec style, FormBasedLogin and HtmlGauge. It configures host, loginPath and projectRoot and sets a suitable loginTimeout.
@@ -213,21 +216,23 @@ twitterAuthor: danireych
                         JavaScript execution is enabled or disable.
                         During test execution JavaScript is enabled and JavaScript errors let the test fail.</p>
                     {% highlight scala %}
-                    import org.scalawebtest.core.IntegrationFlatSpec
+package org.scalawebtest.documentation
 
-                    class HomepageSpec extends IntegrationFlatSpec {
-                        override val host = "http://www.scalawebtest.org"
-                        path = "/index.html"
+import org.scalawebtest.core.IntegrationFlatSpec
 
-                        loginConfig.swallowJavaScriptErrors
-                        config.enableJavaScript(throwOnError = true)
+class HomepageSpec extends IntegrationFlatSpec {
+    override val host = "http://www.scalawebtest.org"
+    path = "/index.html"
 
-                        "Our homepage" should "contain a succinct claim" in {
-                            webDriver.findElementByTagName("h2").getText shouldEqual "Reduce the effort needed to write integration tests"
-                        }
-                    }
-                    <a href="https://scastie.scala-lang.org/DaniRey/jeQ90Gt6TeSnP8Cp0aUSRg">Try it in Scastie</a>
+    loginConfig.swallowJavaScriptErrors()
+    config.enableJavaScript(throwOnError = true)
+
+    "Our homepage" should "contain a succinct claim" in {
+        webDriver.findElementByTagName("h2").getText shouldEqual "Reduce the effort needed to write integration tests"
+    }
+}
                     {% endhighlight%}
+                    <a href="https://scastie.scala-lang.org/DaniRey/jeQ90Gt6TeSnP8Cp0aUSRg">Try it in Scastie</a>
 
                     <p>By default JavaScript is not executed and JavaScript errors don't throw. Also CSS is not
                         interpreted. This applies to both loginConfig and config.</p>
@@ -253,61 +258,61 @@ twitterAuthor: danireych
                         Let's have a look at a simple example to get an idea how those gauges work.</p>
 
                     {% highlight scala %}
-                    package org.scalawebtest.integration.gauge
+package org.scalawebtest.documentation
 
-                    import org.scalawebtest.integration.ScalaWebTestBaseSpec
+import org.scalawebtest.core.IntegrationFlatSpec
+import org.scalawebtest.core.gauge.HtmlGauge
 
-                    class SimpleGaugeSpec extends ScalaWebTestBaseSpec {
+class SimpleGaugeSpec extends IntegrationFlatSpec with HtmlGauge {
 
-                        path = "/navigation.jsp"
+    path = "/navigation.jsp"
 
-                        "The navigation" should "contain our navigation links in correct structure, order and with the
-                        expected text" in {
-                            fit(
-                                <nav id="mainNav">
-                                    <ul class="blue_theme">
-                                         <li>
-                                              <a href="/path/to/first/element">first navigation element</a>
-                                         </li>
-                                         <li class="active">
-                                              <a href="/path/to/second/element">second navigation element</a>
-                                         </li>
-                                         <li>
-                                              <a href="/path/to/third/element">third navigation element</a>
-                                         </li>
-                                    </ul>
-                                 </nav>
-                    )
-                    }
-                    }
+    "The navigation" should "contain our navigation links in correct structure, order and with the expected text" in {
+        fit(
+            <nav id="mainNav">
+                <ul class="blue_theme">
+                     <li>
+                          <a href="/path/to/first/element">first navigation element</a>
+                     </li>
+                     <li class="active">
+                          <a href="/path/to/second/element">second navigation element</a>
+                     </li>
+                     <li>
+                          <a href="/path/to/third/element">third navigation element</a>
+                     </li>
+                </ul>
+             </nav>
+        )
+    }
+}
                     {% endhighlight %}
 
                     <p>This test would be successful, when run against, when <i>navigation.jsp</i> contains the
                         following HTML</p>
 
                     {% highlight html %}
-                    <!DOCTYPE html>
-                    <html>
+<!DOCTYPE html>
+<html>
 
-                    <head>
-                    </head>
+<head>
+</head>
 
-                    <body>
-                    <nav id="mainNav">
-                        <ul class="blue_theme">
-                            <li>
-                                <a href="/path/to/first/element">first navigation element</a>
-                            </li>
-                            <li class="active">
-                                <a href="/path/to/second/element">second navigation element</a>
-                            </li>
-                            <li>
-                                <a href="/path/to/third/element">third navigation element</a>
-                            </li>
-                        </ul>
-                    </nav>
-                    </body>
-                    </html>
+<body>
+<nav id="mainNav">
+    <ul class="blue_theme">
+        <li>
+            <a href="/path/to/first/element">first navigation element</a>
+        </li>
+        <li class="active">
+            <a href="/path/to/second/element">second navigation element</a>
+        </li>
+        <li>
+            <a href="/path/to/third/element">third navigation element</a>
+        </li>
+    </ul>
+</nav>
+</body>
+</html>
                     {% endhighlight %}
 
                     <p>We can already, see that <i>fits()</i> ignored <i>html</i>, <i>head</i> and <i>body</i>, elements
@@ -317,35 +322,35 @@ twitterAuthor: danireych
                         Let's assume we only want to make sure our navigation contains the correct links. We don't care
                         about classes added for design or text contained in the links. Therefore we reduce our test to.</p>
                     {% highlight scala %}
-                    "The navigation" should "contain our navigation links in correct structure and order" in {
-                    fit(
-                    <nav id="mainNav">
-                        <ul>
-                            <li>
-                                <a href="/path/to/first/element"></a>
-                            </li>
-                            <li>
-                                <a href="/path/to/second/element"></a>
-                            </li>
-                            <li>
-                                <a href="/path/to/third/element"></a>
-                            </li>
-                        </ul>
-                    </nav>
-                    )
-                    }
+"The navigation" should "contain our navigation links in correct structure and order" in {
+    fit(
+        <nav id="mainNav">
+            <ul>
+                <li>
+                    <a href="/path/to/first/element"></a>
+                </li>
+                <li>
+                    <a href="/path/to/second/element"></a>
+                </li>
+                <li>
+                    <a href="/path/to/third/element"></a>
+                </li>
+            </ul>
+        </nav>
+    )
+}
                     {% endhighlight %}
                     <p>If we don't care about the unnumbered list, we can reduce our test even further.</p>
                     {% highlight scala %}
-                    "The navigation" should "contain our navigation links in correct order" in {
-                    fit(
-                    <nav id="mainNav">
-                        <a href="/path/to/first/element"></a>
-                        <a href="/path/to/second/element"></a>
-                        <a href="/path/to/third/element"></a>
-                    </nav>
-                    )
-                    }
+"The navigation" should "contain our navigation links in correct order" in {
+    fit(
+        <nav id="mainNav">
+            <a href="/path/to/first/element"></a>
+            <a href="/path/to/second/element"></a>
+            <a href="/path/to/third/element"></a>
+        </nav>
+    )
+}
                     {% endhighlight %}
                     <p>The document then fits our gauge as follows. Matching parts are green, parts in grey have no
                         influence whether the
@@ -379,15 +384,15 @@ twitterAuthor: danireych
 
                     <p>If the gauge doesn't fit, we get an error. Lets change the test to the following.</p>
                     {% highlight scala %}
-                    "The navigation" should "contain our navigation links in correct order" in {
-                    fit(
-                    <nav id="mainNav">
-                        <a href="/path/to/first/element">second navigation element</a>
-                        <a href="/path/to/second/element"></a>
-                        <a href="/path/to/third/element"></a>
-                    </nav>
-                    )
-                    }
+"The navigation" should "contain our navigation links in correct order" in {
+    fit(
+        <nav id="mainNav">
+            <a href="/path/to/first/element">second navigation element</a>
+            <a href="/path/to/second/element"></a>
+            <a href="/path/to/third/element"></a>
+        </nav>
+    )
+}
                     {% endhighlight %}
                     <p>This will of course not match, because the text within the first link is wrong and belongs to the
                         second link.
@@ -421,26 +426,26 @@ twitterAuthor: danireych
 
                     <p>This results in the following error message from ScalaWebTest</p>
                     {% highlight text %}
-                    23:06:37.482 [ScalaTest-run-running-SimpleGaugeSpec] INFO IntegrationSpec - Going to
-                    http://localhost:8080/navigation.jsp
+23:06:37.482 [ScalaTest-run-running-SimpleGaugeSpec] INFO IntegrationSpec - Going to
+http://localhost:8080/navigation.jsp
 
-                    Misfitting Text: The text [first navigation element] within [HtmlAnchor[<h4
-                        href="/path/to/first/element"></h4>]] didn't equal [second navigation element]
-                    Current document does not match provided gauge:
-                    <nav id="mainNav">
-                        <ul>
-                            <li>
-                                <a href="/path/to/first/element">second navigation element</a>
-                            </li>
-                            <li>
-                                <a href="/path/to/second/element"></a>
-                            </li>
-                            <li>
-                                <a href="/path/to/third/element"></a>
-                            </li>
-                        </ul>
-                    </nav>
-                    ScalaTestFailure
+Misfitting Text: The text [first navigation element] within [HtmlAnchor[<h4
+    href="/path/to/first/element"></h4>]] didn't equal [second navigation element]
+Current document does not match provided gauge:
+<nav id="mainNav">
+    <ul>
+        <li>
+            <a href="/path/to/first/element">second navigation element</a>
+        </li>
+        <li>
+            <a href="/path/to/second/element"></a>
+        </li>
+        <li>
+            <a href="/path/to/third/element"></a>
+        </li>
+    </ul>
+</nav>
+ScalaTestFailure
                     {% endhighlight %}
 
                     <h3 id="classes">Test for classes on elements</h3>
@@ -453,18 +458,18 @@ twitterAuthor: danireych
                         document.
                         The following gauge therefore matches all the elements shown below.</p>
                     {% highlight scala %}
-                    fit(
-                        <div class="container red"></div>
-                    )
+fit(
+    <div class="container red"></div>
+)
                     {% endhighlight %}
                     {% highlight html %}
-                    <div class="container red"></div>
+<div class="container red"></div>
                     {% endhighlight %}
                     {% highlight html %}
-                    <div class="red container"></div>
+<div class="red container"></div>
                     {% endhighlight %}
                     {% highlight html %}
-                    <div class="red important container main"></div>
+<div class="red important container main"></div>
                     {% endhighlight %}
                     <h3 id="singleElements">Test single elements</h3>
                     <p>Often trying to fit the complete document into the defined <i>gauge</i> isn't the most natural
@@ -473,36 +478,39 @@ twitterAuthor: danireych
                         gallery images or items of a product list, <i>finding all</i>
                         those elements first, and then trying to fit each element with the <i>gauge</i>, is better.</p>
                     {% highlight scala %}
-                    import org.scalatest.exceptions.TestFailedException
-                    import org.scalawebtest.integration.ScalaWebTestBaseSpec
-                    import org.scalawebtest.core.gauge.HtmlElementGauge
+package org.scalawebtest.documentation
 
-                    class ElementGaugeSpec extends ScalaWebTestBaseSpec with HtmlElementGauge {
-                        path = "/galleryOverview.jsp"
+import org.scalatest.AppendedClues
+import org.scalawebtest.core.IntegrationFlatSpec
+import org.scalawebtest.core.gauge.HtmlElementGauge
 
-                    def images = findAll(CssSelectorQuery("ul div.image_columns"))
+class ElementGaugeSpec extends IntegrationFlatSpec with HtmlElementGauge with AppendedClues {
+    path = "/galleryOverview.jsp"
 
-                    val imageGauge =
-                    <div class="columns image_columns">
-                        <a>
-                            <figure class="obj_aspect_ratio">
-                                <noscript>
-                                    <img class="obj_full"></img>
-                                </noscript>
-                                <img class="obj_full lazyload"
-                                     srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-                                     data-sizes="auto"></img>
-                            </figure>
-                        </a>
-                    </div>
+    def images = findAll(CssSelectorQuery("ul div.image_columns"))
 
-                    "The gallery" should "contain the expected HTML for every image" in {
-                        images.size should be > 5 withClue " - gallery didn't contain the expected amount of images"
+    val imageGauge =
+    <div class="columns image_columns">
+        <a>
+            <figure class="obj_aspect_ratio">
+                <noscript>
+                    <img class="obj_full"></img>
+                </noscript>
+                <img class="obj_full lazyload"
+                     srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                     data-sizes="auto"></img>
+            </figure>
+        </a>
+    </div>
 
-                    for (image <- images) {
-                        image fits imageGauge
-                    }
-                    }
+    "The gallery" should "contain the expected HTML for every image" in {
+        images.size should be > 5 withClue " - gallery didn't contain the expected amount of images"
+
+        for (image <- images) {
+            image fits imageGauge
+        }
+    }
+}
                     {% endhighlight %}
                     <p>When using <a href="http://www.scalatest.org/user_guide/using_selenium">findAll</a> with a
                         <a href="http://docs.scala-lang.org/tutorials/tour/sequence-comprehensions.html">for-comprehension</a>,
@@ -524,17 +532,17 @@ twitterAuthor: danireych
                         You may use <i>@contains</i> to trigger the ContainsMatcher instead of the DefaultMatcher.
                         Thanks to this matcher, this gauge matches the following HTML element</p>
                     {% highlight scala %}
-                    fit(<a href="@contains ScalaWebTest"></a>)
+fit(<a href="@contains ScalaWebTest"></a>)
                     {% endhighlight %}
                     {% highlight html %}
-                    <a href="https://github.com/unic/ScalaWebTest"></a>
+<a href="https://github.com/unic/ScalaWebTest"></a>
                     {% endhighlight %}
                     <p>The containsMatcher is also available, when matching text.</p>
                     {% highlight scala %}
-                    fit(<a>@contains available</a>)
+fit(<a>@contains available</a>)
                     {% endhighlight %}
                     {% highlight html %}
-                    <a>ScalaWebTest is available on github</a>
+<a>ScalaWebTest is available on github</a>
                     {% endhighlight %}
                     <p>Hint: always add a space after the matcher annotation. We enforce this space to improve
                         readability of tests.</p>
@@ -544,16 +552,16 @@ twitterAuthor: danireych
                         It is triggered using <i>@regex</i></p>
 
                     {% highlight scala %}
-                    fit(<a href="@regex http:\\/\\/[a-zA-Z]+\.scalawebtest.org.*,"></a>)
+fit(<a href="@regex http:\\/\\/[a-zA-Z]+\.scalawebtest.org.*,"></a>)
                     {% endhighlight %}
 
                     <p>This gauge will fit</p>
                     {% highlight html %}
-                    <a href="http://www.scalawebtest.org/documentation.html"></a>
+<a href="http://www.scalawebtest.org/documentation.html"></a>
                     {% endhighlight %}
                     <p>but it won't fit</p>
                     {% highlight html %}
-                    <a href="http://scalawebtest.org/documentation.html"></a>
+<a href="http://scalawebtest.org/documentation.html"></a>
                     {% endhighlight %}
 
                     <h3 id="negation">Negating your tests</h3>
@@ -563,46 +571,46 @@ twitterAuthor: danireych
                         whatever reads better in your current context.</p>
 
                     {% highlight scala %}
-                    package org.scalawebtest.integration.gauge
+package org.scalawebtest.documentation
 
-                    import org.scalawebtest.integration.ScalaWebTestBaseSpec
+import org.scalawebtest.core.IntegrationFlatSpec
+import org.scalawebtest.core.gauge.HtmlGauge
 
-                    class LoggedInSpec extends ScalaWebTestBaseSpec{
-                        path = "/protectedContent.jsp?username=admin&password=secret"
+class LoggedInSpec extends IntegrationFlatSpec with HtmlGauge {
+    path = "/protectedContent.jsp?username=admin&password=secret"
 
-                    "When logged in the protectedContent page" should "not show the login form" in {
-                        not fit
-                    <form name="login_form"></form>
-                    }
-                    }
+    "When logged in the protectedContent page" should "not show the login form" in {
+        not fit <form name="login_form"></form>
+    }
+}
                     {% endhighlight %}
 
                     <p>In case the login form is mistakenly rendered, the following error will appear.</p>
 
                     {% highlight text %}
-                    Current document matches the provided gauge, although expected not to!
-                    Fitting node
-                    <html>
-                    <head>
-                        <title>Mock of a protected content page
-                        </title>
-                    </head>
-                    <body>
-                    <form name="login_form" action="protectedContent.jsp" method="get">
-                        <label for="username">username
-                        </label>
-                        <input type="text" name="username" id="username">
-                        </input>
-                        <label for="password">password
-                        </label>
-                        <input type="password" name="password" id="password">
-                        </input>
-                        <button type="submit">login
-                        </button>
-                    </form>
-                    </body>
-                    </html>
-                    found
+Current document matches the provided gauge, although expected not to!
+Fitting node
+<html>
+<head>
+    <title>Mock of a protected content page
+    </title>
+</head>
+<body>
+<form name="login_form" action="protectedContent.jsp" method="get">
+    <label for="username">username
+    </label>
+    <input type="text" name="username" id="username">
+    </input>
+    <label for="password">password
+    </label>
+    <input type="password" name="password" id="password">
+    </input>
+    <button type="submit">login
+    </button>
+</form>
+</body>
+</html>
+found
                     {% endhighlight %}
 
                     <h3 id="process">Testing a complete process</h3>
@@ -616,35 +624,37 @@ twitterAuthor: danireych
                     <p>Lets try this out using a page with protected content. On first load a form will be shown, after
                         logging in the form disappears, instead the text <i>sensitive information</i> appears.</p>
                     {% highlight scala%}
-                    package org.scalawebtest.integration.gauge
+package org.scalawebtest.documentation
 
-                    import org.scalawebtest.integration.ScalaWebTestBaseSpec
+import org.scalawebtest.core.IntegrationFlatSpec
 
-                    class LoginSpec extends ScalaWebTestBaseSpec {
-                        path = "/protectedContent.jsp"
+import org.scalawebtest.core.gauge.HtmlGauge
 
-                    "When accessing protectedContent it" should "show the login form" in {
-                        fits(
-                            <form name="login_form">
-                                <input name="username"></input>
-                                <input name="password"></input>
-                            </form>
-                    )
-                    }
+class LoginSpec extends IntegrationFlatSpec with HtmlGauge {
+    path = "/protectedContent.jsp"
 
-                    it should "hide the protected content, when not logged in" in {
-                        not fit <p>sensitive information</p>
-                    }
+    "When accessing protectedContent it" should "show the login form" in {
+        fits(
+            <form name="login_form">
+                <input name="username"></input>
+                <input name="password"></input>
+            </form>
+        )
+    }
 
-                    it should "show the protected content, after logging in" in {
-                        textField("username").value = "admin"
-                        pwdField("password").value = "secret"
+    it should "hide the protected content, when not logged in" in {
+        not fit <p>sensitive information</p>
+    }
 
-                        submit()
+    it should "show the protected content, after logging in" in {
+        textField("username").value = "admin"
+        pwdField("password").value = "secret"
 
-                        fits(<p>sensitive information</p>)
-                    }
-                    }
+        submit()
+
+        fits(<p>sensitive information</p>)
+    }
+}
                     {% endhighlight %}
 
                     <p>This example test was split into three smaller tests. This is technically not necessary, but has
@@ -664,7 +674,7 @@ twitterAuthor: danireych
                     <p>Thanks to Selenium executing JavaScript is not an issue. Per default JavaScript is not executed
                         with ScalaWebTest, because tests run faster without. To execute JavaScript, you have to enable it.</p>
                     {% highlight scala %}
-                    config.enableJavaScript(throwOnError = true)
+config.enableJavaScript(throwOnError = true)
                     {% endhighlight %}
                     <p>In addition, you have to decide whether a JavaScript error should cause your test to fail or not.
                         Usually failing on JavaScript errors is good, but sometimes you have to write tests for a web application with
@@ -675,11 +685,11 @@ twitterAuthor: danireych
                         ScalaTest provides <i>eventually</i>, which does exactly what we need. It repeats a given test
                         until it succeeds or the given timeout has been surpassed.</p>
                     {% highlight scala %}
-                    eventually(timeout(3 seconds)) {
-                        fits(
-                            <div id="container">Text loaded with JavaScript</div>
-                    )
-                    }
+eventually(timeout(3 seconds)) {
+    fits(
+        <div id="container">Text loaded with JavaScript</div>
+    )
+}
                     {% endhighlight %}
                 </section>
 
@@ -770,54 +780,56 @@ twitterAuthor: danireych
                         <i>Json.parse</i> to parse the response and then use <i>\</i> and <i>\\</i> to navigate the json
                         structure.</p>
                     {% highlight scala %}
-                    import org.scalawebtest.integration.ScalaWebTestBaseSpec
-                    import play.api.libs.json.Json
+package org.scalawebtest.documentation
 
-                    class ReducedJsonSpec extends ScalaWebTestBaseSpec {
-                        path = "/dijkstra.json"
-                        def json = Json.parse(webDriver.getPageSource)
+import org.scalawebtest.core.IntegrationFlatSpec
+import play.api.libs.json.Json
 
-                        "Dijkstra" should "have the correct firstname" in {
-                            def firstName = (json \ "firstName").as[String]
-                            firstName should equal("Edsger")
-                    }
-                    }
+class ReducedJsonSpec extends IntegrationFlatSpec {
+    path = "/dijkstra.json"
+    def json = Json.parse(webDriver.getPageSource)
+
+    "Dijkstra" should "have the correct firstname" in {
+        def firstName = (json \ "firstName").as[String]
+        firstName should equal("Edsger")
+    }
+}
                     {% endhighlight %}
                     <p>All JSON tests in the following examples use the following JSON response</p>
                     <div id="modules/json/testResponse">
                         {% highlight json %}
-                        {
-                            "name": "Dijkstra",
-                            "firstName": "Edsger",
-                            "yearOfBirth": 1930,
-                            "theories": [
-                            "shortest path",
-                            "graph theory"
-                        ],
-                            "isTuringAwardWinner": true,
-                            "universities": [
-                        {
-                            "name": "Universität Leiden",
-                            "begin": 1948,
-                            "end": 1956
-                        },
-                        {
-                            "name": "Mathematisch Centrum Amsterdam",
-                            "begin": 1951,
-                            "end": 1959
-                        },
-                        {
-                            "name": "Technische Universiteit Eindhoven",
-                            "begin": 1962,
-                            "end": 1984
-                        },
-                        {
-                            "name": "University of Texas at Austin",
-                            "begin": 1984,
-                            "end": 1999
-                        }
-                        ]
-                        }
+{
+    "name": "Dijkstra",
+    "firstName": "Edsger",
+    "yearOfBirth": 1930,
+    "theories": [
+    "shortest path",
+    "graph theory"
+],
+    "isTuringAwardWinner": true,
+    "universities": [
+{
+    "name": "Universität Leiden",
+    "begin": 1948,
+    "end": 1956
+},
+{
+    "name": "Mathematisch Centrum Amsterdam",
+    "begin": 1951,
+    "end": 1959
+},
+{
+    "name": "Technische Universiteit Eindhoven",
+    "begin": 1962,
+    "end": 1984
+},
+{
+    "name": "University of Texas at Austin",
+    "begin": 1984,
+    "end": 1999
+}
+]
+}
                         {% endhighlight %}
                     </div>
                     <p>Of course this way of verifying JSON responses reaches its limitations very soon. Therefore we
@@ -829,68 +841,71 @@ twitterAuthor: danireych
                         fit.
                     </p>
                     {% highlight scala %}
-                    import org.scalawebtest.integration.ScalaWebTestBaseSpec
-                    import org.scalawebtest.json.JsonGauge
+package org.scalawebtest.documentation
+import org.scalawebtest.core.IntegrationFlatSpec
+import org.scalawebtest.json.JsonGauge
+import org.scalawebtest.json.JsonGaugeFromResponse.fitsValues
 
-                    class DocumentFitsValuesSpec extends ScalaWebTestBaseSpec extends JsonGauge {
-                        path = "/jsonResponse.json.jsp"
+class DocumentFitsValuesSpec extends IntegrationFlatSpec with JsonGauge {
+    path = "/jsonResponse.json.jsp"
 
-                    "FitsValues" should "report success, when the json gauge contains the same values as the response it
-                    is tested against" in {
-                        fitsValues(
-                                    """{
-                                        "name": "Dijkstra",
-                                        "firstName": "Edsger",
-                                        "yearOfBirth": 1930,
-                                        "isTuringAwardWinner": true,
-                                        "theories": [
-                                        "shortest path",
-                                        "graph theory"
-                                        ]
-                                    }"""
-                                )
-                        }
-                    }
+    "FitsValues" should "report success, when the json gauge contains the same values as the response it is tested against" in {
+        fitsValues(
+            """{
+            "name": "Dijkstra",
+            "firstName": "Edsger",
+            "yearOfBirth": 1930,
+            "isTuringAwardWinner": true,
+            "theories": [
+                "shortest path",
+                "graph theory"
+            ]
+            }"""
+        )
+    }
+}
                     {% endhighlight %}
                     <p>Often verifying the complete response isn't ideal. We recommend to parse and traverse the
                         document using <a
                                 href="https://www.playframework.com/documentation/2.5.x/ScalaJson">play-json</a> and
                         then verify if the <i>JsLookup</i> or <i>JsValue</i> <i>fits</i> the defined gauge.</p>
                     {% highlight scala %}
-                    import org.scalatest.exceptions.TestFailedException
-                    import org.scalawebtest.integration.ScalaWebTestBaseSpec
-                    import org.scalawebtest.json.JsonGauge
-                    import play.api.libs.json.{JsValue, Json}
+package org.scalawebtest.documentation
 
-                    class DijkstraJsonGaugeSpec extends ScalaWebTestBaseSpec extends JsonGauge {
-                        path = "/dijkstra.json"
-                        def dijkstra = Json.parse(webDriver.getPageSource)
+import org.scalawebtest.core.IntegrationFlatSpec
+import org.scalawebtest.json.JsonGauge
+import play.api.libs.json.Json
 
-                        "The response for Dijkstra" should "contain the expected values" in {
-                            dijkstra fits values of
-                                """{
-                                    "firstName": "Edsger",
-                                    "name": "Dijkstra",
-                                    "yearOfBirth": 1930,
-                                    "theories": [
-                                        "shortest path",
-                                        "graph theory"
-                                        ]
-                                    }
-                                """
-                            }
-                    it should "contain the correct universities" in {
-                        val universities = dijkstra \ "universities"
-                        universities fit values of
-                    """
-                    [
-                        { "name": "Universität Leiden","begin": 1948, "end": 1956 },
-                        { "name": "Mathematisch Centrum Amsterdam", "begin": 1951, "end": 1959 },
-                        { "name": "Technische Universiteit Eindhoven", "begin": 1962, "end": 1984 },
-                        { "name": "University of Texas at Austin", "begin": 1984, "end": 1999 }
+class DijkstraJsonGaugeSpec extends IntegrationFlatSpec with JsonGauge {
+    path = "/dijkstra.json"
+    def dijkstra = Json.parse(webDriver.getPageSource)
+
+    "The response for Dijkstra" should "contain the expected values" in {
+        dijkstra fits values of
+            """{
+                "firstName": "Edsger",
+                "name": "Dijkstra",
+                "yearOfBirth": 1930,
+                "theories": [
+                    "shortest path",
+                    "graph theory"
                     ]
-                    """
-                    }
+                }
+            """
+        }
+    it should "contain the correct universities" in {
+        val universities = dijkstra \ "universities"
+        universities fit values of
+        """
+        [
+            { "name": "Universität Leiden","begin": 1948, "end": 1956 },
+            { "name": "Mathematisch Centrum Amsterdam", "begin": 1951, "end": 1959 },
+            { "name": "Technische Universiteit Eindhoven", "begin": 1962, "end": 1984 },
+            { "name": "University of Texas at Austin", "begin": 1984, "end": 1999 }
+        ]
+        """
+    }
+}
                     {% endhighlight %}
                     <p>As with the HTML gauge, controlled variance is allowed. The original <a
                             href="#modules/json/testResponse">response</a> contains additional key/value pairs (<i>isTuringAwardWinner</i>
@@ -907,25 +922,27 @@ twitterAuthor: danireych
                         <i>fits types of</i> in addition to <i>fits values of</i>.
                     </p>
                     {% highlight scala %}
-                    import org.scalatest.exceptions.TestFailedException
-                    import org.scalawebtest.integration.ScalaWebTestBaseSpec
-                    import org.scalawebtest.json.JsonGauge
-                    import play.api.libs.json.{JsValue, Json}
+package org.scalawebtest.documentation
 
-                    class DijkstraJsonGaugeFitsTypesSpec extends ScalaWebTestBaseSpec extends JsonGauge {
-                        path = "/dijkstra.json"
-                        def dijkstra = Json.parse(webDriver.getPageSource)
+import org.scalawebtest.core.IntegrationFlatSpec
+import org.scalawebtest.json.JsonGauge
+import play.api.libs.json.Json
 
-                    "The response for Dijkstra" should "contain the expected types" in {
-                        dijkstra fits types of
-                            """{
-                                "firstName": "",
-                                "name": "",
-                                "yearOfBirth": 0,
-                                "theories": [ "" ]
-                            }
-                        """
-                    }
+class DijkstraJsonGaugeFitsTypesSpec extends IntegrationFlatSpec with JsonGauge {
+    path = "/dijkstra.json"
+    def dijkstra = Json.parse(webDriver.getPageSource)
+
+    "The response for Dijkstra" should "contain the expected types" in {
+        dijkstra fits types of
+            """{
+                "firstName": "",
+                "name": "",
+                "yearOfBirth": 0,
+                "theories": [ "" ]
+            }
+        """
+    }
+}
                     {% endhighlight %}
                     <p>Now the values no longer matter. They are only used to determine the expected type. Therefore we
                         recommend to use values, which indicate that only the type matters. Use empty strings and 0.
@@ -941,22 +958,22 @@ twitterAuthor: danireych
                         All array elements then have to fulfill them. Lets have a look at an example. Lets assume the
                         test of the previous example would be replaced with the following</p>
                     {% highlight scala %}
-                    "The response for Dijkstra" should "contain the expected types" in {
-                        dijkstra fits types of
-                            """{
-                                "firstName": "",
-                                "name": "",
-                                "yearOfBirth": 0,
-                                "theories": [ "" ]
-                                "universities":
-                            [{
-                                "name": "",
-                                "begin": 0,
-                                "end": 0
-                            }]
-                        }
-                    """
-                    }
+"The response for Dijkstra" should "contain the expected types" in {
+    dijkstra fits types of
+        """{
+            "firstName": "",
+            "name": "",
+            "yearOfBirth": 0,
+            "theories": [ "" ]
+            "universities":
+            [{
+                "name": "",
+                "begin": 0,
+                "end": 0
+            }]
+        }
+        """
+}
                     {% endhighlight %}
                     <p>This would enforce all elements of the <i>universities</i> array to contain a key <i>name</i>
                         with a value of type <i>string</i> and the keys <i>begin</i> and <i>end</i> with a value of type
@@ -971,60 +988,62 @@ twitterAuthor: danireych
                         For example, we expect Martin to have studied and worked at three universities. For the first
                         two an <i>end</i> is known. This isn't the case for the last one.</p>
                     {% highlight scala %}
-                    "The response for Odersky" should "contain the expected types and array sizes" in {
-                    odersky fits typesAndArraySizes of
-                    """{
-                        "firstName": "",
-                        "name": "",
-                        "universities":
-                    [{
-                        "name": "",
-                        "begin": 0,
-                        "end": 0
-                    },
-                    {
-                        "name": "",
-                        "begin": 0,
-                        "end": 0
-                    },
-                    {
-                        "name": "",
-                        "begin": 0
-                    }]
-                    }
-                    """
-                    }
+"The response for Odersky" should "contain the expected types and array sizes" in {
+    odersky fits typesAndArraySizes of
+        """{
+            "firstName": "",
+            "name": "",
+            "universities":
+        [{
+            "name": "",
+            "begin": 0,
+            "end": 0
+        },
+        {
+            "name": "",
+            "begin": 0,
+            "end": 0
+        },
+        {
+            "name": "",
+            "begin": 0
+        }]
+        }
+        """
+}
                     {% endhighlight %}
                     <p>One more common situation exists with arrays. Often the array elements are not sorted. Although
                         we expect the array to contain a specific element, we don't know it's position.
                         For this situation <i>containsElementFitting values/types/typesAndArraySizes of</i> exists.</p>
                     {% highlight scala %}
-                    import org.scalawebtest.integration.ScalaWebTestBaseSpec
-                    import org.scalawebtest.json.JsonGauge
-                    import play.api.libs.json.{JsLookupResult, JsValue, Json}
+package org.scalawebtest.documentation
 
-                    class ContainsElementFittingSpec extends ScalaWebTestBaseSpec extends JsonGauge {
-                        path = "/jsonResponse.json.jsp"
-                        def dijkstra: JsValue = Json.parse(webDriver.getPageSource)
-                        def universities: JsLookupResult = { dijkstra \ "universities" }
+import org.scalawebtest.core.IntegrationFlatSpec
+import org.scalawebtest.json.JsonGauge
+import play.api.libs.json.{JsLookupResult, JsValue, Json}
 
-                        "The universities array" should "contain an element with the expected types" in {
-                            universities containsElementFitting types of
-                                """{
-                                    | "name": "",
-                                    | "begin": 0,
-                                    | "end": 0
-                                    | } """.stripMargin
-                    }
-                        it should "contain an element with the expected values" in {
-                            universities containsElementFitting values of
-                                """{
-                                    | "name": "Technische Universiteit Eindhoven",
-                                    | "begin": 1962,
-                                    | "end": 1984
-                                    | }""".stripMargin
-                                }
-                    }
+class ContainsElementFittingSpec extends IntegrationFlatSpec with JsonGauge {
+    path = "/jsonResponse.json.jsp"
+    def dijkstra: JsValue = Json.parse(webDriver.getPageSource)
+    def universities: JsLookupResult = { dijkstra \ "universities" }
+
+    "The universities array" should "contain an element with the expected types" in {
+        universities containsElementFitting types of
+            """{
+                | "name": "",
+                | "begin": 0,
+                | "end": 0
+                | } """.stripMargin
+    }
+    it should "contain an element with the expected values" in {
+        universities containsElementFitting values of
+            """{
+                | "name": "Technische Universiteit Eindhoven",
+                | "begin": 1962,
+                | "end": 1984
+                | }""".stripMargin
+    }
+}
                     {% endhighlight %}
                     <h4 id="modules/json/alternatives"></h4>
                     <p>

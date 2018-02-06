@@ -1,6 +1,6 @@
 github: [Repository metadata]
 markdown: kramdown
-url: http://www.scalawebtest.org
+url: https://www.scalawebtest.org
 #for local server instances
 #url: http://localhost:4000
 defaults:

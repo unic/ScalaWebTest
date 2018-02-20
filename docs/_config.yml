@@ -12,3 +12,4 @@ defaults:
 collections:
   - mainNavItems
 contextpath:
+include: [_headers]

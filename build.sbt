@@ -1,11 +1,11 @@
 import ScalaWebTestBuild._
 
-crossScalaVersions := Seq("2.12.3", "2.11.11", "2.10.6")
+crossScalaVersions := Seq("2.12.7", "2.11.12", "2.10.7")
 
-val projectVersion = "2.0.2-SNAPSHOT"
-val scalaTestVersion = "3.0.4"
-val seleniumVersion = "3.6.0"
-val htmlUnitVersion = "2.27"
+val projectVersion = "3.0.0-SNAPSHOT"
+val scalaTestVersion = "3.0.5"
+val seleniumVersion = "3.14.0"
+val htmlUnitVersion = "2.32.1"
 val slf4jApiVersion = "1.7.25"
 
 val versions = Map("scalaWebTest" -> projectVersion, "scalaTest" -> scalaTestVersion, "selenium" -> seleniumVersion, "htmlUnit" -> htmlUnitVersion)
@@ -23,7 +23,7 @@ lazy val root = (project in file("."))
 lazy val commonSettings = Seq(
   organization := "org.scalawebtest",
   version := projectVersion,
-  scalaVersion := "2.12.3",
+  scalaVersion := "2.12.7",
   scalacOptions := Seq("-unchecked", "-deprecation"),
   publishMavenStyle := true,
   publishTo := {
@@ -100,7 +100,7 @@ lazy val integration_test = Project(id = "scalawebtest-integration", base = file
   .settings(crossVersionSharedSources(Seq(IntegrationTest)): _*)
   .settings(
     libraryDependencies ++= Seq(
-      "javax.servlet" % "javax.servlet-api" % "3.0.1" % "provided",
+      "javax.servlet" % "javax.servlet-api" % "4.0.1" % "provided",
       "org.scalatest" %% "scalatest" % scalaTestVersion % "it",
       "org.seleniumhq.selenium" % "selenium-java" % seleniumVersion % "it",
       "org.seleniumhq.selenium" % "htmlunit-driver" % htmlUnitVersion % "it",

@@ -10,7 +10,7 @@ val slf4jApiVersion = "1.7.25"
 
 val versions = Map("scalaWebTest" -> projectVersion, "scalaTest" -> scalaTestVersion, "selenium" -> seleniumVersion, "htmlUnit" -> htmlUnitVersion)
 
-val scalaWebTestSeries = "1.1.0"
+val scalaWebTestSeries = "3.0.0"
 def mimaSettings(projectName: String) = Seq(
    mimaPreviousArtifacts := Set("org.scalawebtest" %% projectName % scalaWebTestSeries)
 )

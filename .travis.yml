@@ -1,9 +1,9 @@
 sudo: false # container-based infrastructure
 language: scala
 scala:
- - 2.12.3
- - 2.11.11
- - 2.10.6
+ - 2.12.7
+ - 2.11.12
+ - 2.10.7
 jdk: oraclejdk8
 script:
  - sbt ++$TRAVIS_SCALA_VERSION test

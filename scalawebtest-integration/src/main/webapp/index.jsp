@@ -2,9 +2,9 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Unic AEM Testing - Mock Server</title>
+    <title>ScalaWebTest - Mock Server</title>
   </head>
   <body>
-  <h1>Unic AEM Testing - Mock Server</h1>
+  <h1>ScalaWebTest - Mock Server</h1>
   </body>
 </html>

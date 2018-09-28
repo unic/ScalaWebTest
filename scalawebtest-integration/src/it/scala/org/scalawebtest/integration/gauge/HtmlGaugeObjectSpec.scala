@@ -23,15 +23,15 @@ class HtmlGaugeObjectSpec extends IntegrationFlatSpec {
   path = "/index.jsp"
 
   "CheckingGauge" should "work with fits" in {
-    fits(<h1>Unic AEM Testing - Mock Server</h1>)
+    fits(<h1>ScalaWebTest - Mock Server</h1>)
   }
   it should "work with fit (synonym of fits)" in {
-    fit(<h1>Unic AEM Testing - Mock Server</h1>)
+    fit(<h1>ScalaWebTest - Mock Server</h1>)
   }
   it should "work with doesnt fit" in {
-    doesnt fit <h2>Unic AEM Testing - False Text and Tag</h2>
+    doesnt fit <h2>ScalaWebTest - False Text and Tag</h2>
   }
   it should "work with not fit (synonym of doesnt fit)" in {
-    not fit <h2>Unic AEM Testing - False Text and Tag</h2>
+    not fit <h2>ScalaWebTest - False Text and Tag</h2>
   }
 }

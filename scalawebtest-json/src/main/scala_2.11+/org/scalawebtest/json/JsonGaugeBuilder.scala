@@ -74,17 +74,26 @@ trait JsonGauge {
         Gauge(
           testee = json,
           fitValues = false,
-          fitArraySizes = false)
+          fitArraySizes = false,
+          ignoreArrayOrder = true)
       case `typesAndArraySizes` =>
         Gauge(
           testee = json,
           fitValues = false,
-          fitArraySizes = true)
+          fitArraySizes = true,
+          ignoreArrayOrder = true)
       case `values` =>
         Gauge(
           testee = json,
           fitValues = true,
-          fitArraySizes = true)
+          fitArraySizes = true,
+          ignoreArrayOrder = false)
+      case `valuesIgnoringArrayOrder` =>
+        Gauge(
+          testee = json,
+          fitValues = true,
+          fitArraySizes = true,
+          ignoreArrayOrder = true)
     }
   }
 
@@ -103,6 +112,12 @@ trait JsonGauge {
     * marker object to build a gauge, which verifies values
     */
   object values extends GaugeType
+
+  /**
+    * marker object to build a gauge, which verifies values,
+    * but ignores their order within arrays
+    */
+  object valuesIgnoringArrayOrder extends GaugeType
 
   /**
     * base trait for the marker objects, which are used to select the behavior of the [[org.scalawebtest.json.Gauge]]
@@ -133,7 +148,7 @@ case class JsonGaugeArrayContains(gauge: Gauge) extends Assertions with Appended
         //the next line is only reached, if all array elements fit the definition
         true
       } catch {
-        //silent catch, it is expected that some elements to not fit the provided gauge
+        //silent catch, it is expected that some elements do not fit the provided gauge
         case e: TestFailedException => false
       }
     })

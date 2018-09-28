@@ -29,7 +29,7 @@ trait JsonGaugeFromResponse {
     */
   def fitsTypes(definition: String)(implicit webDriver: WebDriver): Unit = {
     def document = Json.parse(webDriver.getPageSource)
-    Gauge(document, fitValues = false, fitArraySizes = false).fits(Json.parse(definition))
+    Gauge(document, fitValues = false, fitArraySizes = false, ignoreArrayOrder = true).fits(Json.parse(definition))
   }
 
   /**
@@ -37,7 +37,7 @@ trait JsonGaugeFromResponse {
     */
   def fitsTypesAndArraySizes(definition: String)(implicit webDriver: WebDriver): Unit = {
     def document = Json.parse(webDriver.getPageSource)
-    Gauge(document, fitValues = false, fitArraySizes = true).fits(Json.parse(definition))
+    Gauge(document, fitValues = false, fitArraySizes = true, ignoreArrayOrder = true).fits(Json.parse(definition))
   }
 
   /**
@@ -45,7 +45,16 @@ trait JsonGaugeFromResponse {
     */
   def fitsValues(definition: String)(implicit webDriver: WebDriver): Unit = {
     def document = Json.parse(webDriver.getPageSource)
-    Gauge(document, fitValues = true, fitArraySizes = true).fits(Json.parse(definition))
+    Gauge(document, fitValues = true, fitArraySizes = true, ignoreArrayOrder = false).fits(Json.parse(definition))
+  }
+
+  /**
+    * Test if all values of the response fit the provided [[org.scalawebtest.json.Gauge]] definition,
+    * but ignoring the order of elements with arrays
+    */
+  def fitsValuesIgnoringArrayOrders(definition: String)(implicit webDriver: WebDriver): Unit = {
+    def document = Json.parse(webDriver.getPageSource)
+    Gauge(document, fitValues = true, fitArraySizes = true, ignoreArrayOrder = true).fits(Json.parse(definition))
   }
 }
 

@@ -14,6 +14,7 @@
  */
 package org.scalawebtest.json
 
+import org.scalatest.exceptions.TestFailedException
 import org.scalatest.{AppendedClues, Assertions, Matchers}
 import play.api.libs.json._
 
@@ -23,13 +24,13 @@ import scala.language.implicitConversions
   * One should not have to create an instance of [[Gauge]] manually. Use one of the provided Builder.
   * Either [[JsonGauge]] or [[JsonGaugeFromResponse]]
   *
-  * @param testee JsValue to be tested with the gauge
-  * @param fitValues whether the [[testee]] is expected to fit the gauge values
+  * @param testee        JsValue to be tested with the gauge
+  * @param fitValues     whether the [[testee]] is expected to fit the gauge values
   * @param fitArraySizes whether the [[testee]] is expected to fit the sizes of contained arrays
   */
-case class Gauge(testee: JsValue, fitValues: Boolean, fitArraySizes: Boolean) extends Assertions with AppendedClues with Matchers {
+case class Gauge(testee: JsValue, fitValues: Boolean, fitArraySizes: Boolean, ignoreArrayOrder: Boolean) extends Assertions with AppendedClues with Matchers {
 
-  def withTestee(testee: JsValue) = Gauge(testee, this.fitValues, this.fitArraySizes)
+  def withTestee(testee: JsValue) = Gauge(testee, this.fitValues, this.fitArraySizes, this.ignoreArrayOrder)
 
   def fits(definition: JsValue) {
     definition match {
@@ -44,7 +45,24 @@ case class Gauge(testee: JsValue, fitValues: Boolean, fitArraySizes: Boolean) ex
       if (fitArraySizes && defA.value.nonEmpty) {
         a.value should have length defA.value.length withClue s"in ${breadcrumb.prettyPrint()}"
       }
-      a.value.zip(defA.value).foreach { case (j, g) => fits(j, breadcrumb, g) }
+      if (ignoreArrayOrder) {
+        defA.value.foreach(g => {
+          val matchingElementFound = a.value.exists(j => {
+            try {
+              fits(j, breadcrumb, g)
+              //the next line is only reached, if all array elements fit the definition
+              true
+            } catch {
+              //silent catch, it is expected that some elements do not fit the provided gauge
+              case e: TestFailedException => false
+            }
+          })
+          if (!matchingElementFound)
+            fail(s"${a.toString()} did not contain an element, which matched the gauge definition $g")
+        })
+      } else {
+        a.value.zip(defA.value).foreach { case (j, g) => fits(j, breadcrumb, g) }
+      }
     }
 
     json match {

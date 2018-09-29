@@ -57,7 +57,7 @@ trait WebDriverConfigFixtures {
     */
   def withJavascript[X](f: X => Unit): X => Unit = withJavascript(f, enabled = true)
 
-  private def withFollowingRedirectsInternal[X](f: (X) => Unit, enableRedirects: Boolean): (X) => Unit = {
+  private def withFollowingRedirectsInternal[X](f: X => Unit, enableRedirects: Boolean): X => Unit = {
     x: X => {
       val redirectionEnabled = webDriver.getOptions.isRedirectEnabled
       webDriver.getOptions.setRedirectEnabled(enableRedirects)
@@ -69,7 +69,7 @@ trait WebDriverConfigFixtures {
     }
   }
 
-  private def withCssInternal[X](f: (X) => Unit, enableCss: Boolean): (X) => Unit = {
+  private def withCssInternal[X](f: X => Unit, enableCss: Boolean): X => Unit = {
     x: X => {
       val wasEnabled = webDriver.getOptions.isCssEnabled
       webDriver.getOptions.setCssEnabled(enableCss)
@@ -81,7 +81,7 @@ trait WebDriverConfigFixtures {
     }
   }
 
-  private def withJavascript[X](f: (X) => Unit, enabled: Boolean): (X) => Unit = {
+  private def withJavascript[X](f: X => Unit, enabled: Boolean): X => Unit = {
     x: X => {
       val jsEnabled = webDriver.getOptions.isJavaScriptEnabled
       webDriver.getOptions.setJavaScriptEnabled(enabled)

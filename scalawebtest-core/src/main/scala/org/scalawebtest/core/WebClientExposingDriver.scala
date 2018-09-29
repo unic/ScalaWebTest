@@ -15,9 +15,12 @@
 package org.scalawebtest.core
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage
+import com.gargoylesoftware.htmlunit.util.NameValuePair
 import com.gargoylesoftware.htmlunit.xml.XmlPage
 import com.gargoylesoftware.htmlunit.{BrowserVersion, TextPage, WebClient, WebClientOptions}
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
+
+import scala.collection.JavaConverters._
 
 /**
   * Extension of the default HtmlUnitDriver that provides access to some of the web client's options and methods which are hidden in the
@@ -25,14 +28,58 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver
   */
 class WebClientExposingDriver(version: BrowserVersion) extends HtmlUnitDriver(version) {
 
+  /**
+    * @return the options object of the WebClient
+    */
   def getOptions: WebClientOptions = {
     getWebClient.getOptions
   }
 
+  /**
+    *
+    * @return the WebClient of this WebDriver instance
+    */
   def getClient: WebClient = {
     getWebClient
   }
 
+  /**
+    * @return the response code of the web response of the current page
+    */
+  def getResponseCode: Int = {
+    lastPage.getWebResponse.getStatusCode
+  }
+
+  /**
+    * If a header field-name occurs multiple times, their field-values are merged into a comma-separated list.
+    * This is a lot more convenient then returning a List[String] and it is according to RFC 2616 section 4
+    * see https://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2
+    *
+    * Multiple message-header fields with the same field-name MAY be present in a message if and only if
+    * the entire field-value for that header field is defined as a comma-separated list [i.e., #(values)].
+    * It MUST be possible to combine the multiple header fields into one "field-name: field-value" pair,
+    * without changing the semantics of the message, by appending each subsequent field-value to the first,
+    * each separated by a comma. The order in which header fields with the same field-name are received is therefore
+    * significant to the interpretation of the combined field value, and thus a proxy MUST NOT change the order
+    * of these field values when a message is forwarded.
+    *
+    * @return response headers as Map header field-name to header field-value. If a header field-name occurs multiple times, their field-values are merged into a comma-separated list.
+    */
+  def getResponseHeaders: Map[String, String] = {
+    def toMapWithMergedDuplicates(m: Map[String, String], p: NameValuePair): Map[String, String] = {
+      m.get(p.getName) match {
+        case Some(v) => m + (p.getName -> s"$v, ${p.getValue}")
+        case None => m + (p.getName -> p.getValue)
+      }
+    }
+
+    lastPage.getWebResponse.getResponseHeaders
+      .asScala.foldLeft(Map[String, String]())(toMapWithMergedDuplicates)
+  }
+
+  /**
+    * @return Some(HtmlPage) if the currentPage is a HtmlPage otherwise None
+    */
   def getCurrentHtmlPage: Option[HtmlPage] = {
     lastPage match {
       case page: HtmlPage => Some(page)
@@ -40,6 +87,9 @@ class WebClientExposingDriver(version: BrowserVersion) extends HtmlUnitDriver(ve
     }
   }
 
+  /**
+    * @return Some(TextPage) if the currentPage is a TextPage otherwise None
+    */
   def getCurrentTextPage: Option[TextPage] = {
     lastPage match {
       case page: TextPage => Some(page)
@@ -47,6 +97,9 @@ class WebClientExposingDriver(version: BrowserVersion) extends HtmlUnitDriver(ve
     }
   }
 
+  /**
+    * @return Some(XmlPage) if the currentPage is an XmlPage otherwise None
+    */
   def getCurrentXmlPage: Option[XmlPage] = {
     lastPage match {
       case page: XmlPage => Some(page)
@@ -54,6 +107,11 @@ class WebClientExposingDriver(version: BrowserVersion) extends HtmlUnitDriver(ve
     }
   }
 
+  /**
+    * @param timeoutMillis the maximum amount of time to wait (in milliseconds)
+    * @return the number of background JavaScript jobs still executing or waiting to be executed when this
+    *         method returns; will be <tt>0</tt> if there are no jobs left to execute
+    */
   def waitForBackgroundJavaScript(timeoutMillis: Long): Int = {
     getWebClient.waitForBackgroundJavaScript(timeoutMillis)
   }

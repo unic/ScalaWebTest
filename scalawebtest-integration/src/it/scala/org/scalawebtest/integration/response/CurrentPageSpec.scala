@@ -8,7 +8,7 @@ class CurrentPageSpec extends ScalaWebTestBaseSpec with ResponseAccessors {
   path = "/index.jsp"
 
   "When opening a HTML page, it" should "be accessible via currentHtmlPage" in {
-    currentHtmlPage shouldBe a[Some[HtmlPage]]
+    currentHtmlPage.get shouldBe a[HtmlPage]
   }
   it should "return None when trying to get the currentXmlPage" in {
     currentXmlPage shouldBe None

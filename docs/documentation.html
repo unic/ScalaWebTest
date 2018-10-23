@@ -56,14 +56,12 @@ twitterAuthor: danireych
                     <p>You can add ScalaWebTest to your testing dependencies in the build.sbt/scala
                         of your sbt project as follows.</p>
                     {% highlight scala %}
-libraryDependencies += "org.scalawebtest" %% "scalawebtest-core" % "{{page.scalaWebTestVersion}}" % "test"
-                    {% endhighlight %}
+libraryDependencies += "org.scalawebtest" %% "scalawebtest-core" % "{{page.scalaWebTestVersion}}" % "test"{% endhighlight %}
                     <p>We recommend to bind the ScalaWebTest dependencies to the IntegrationTest configuration, which can be referenced with "it".
                     The IntegrationTest configuration is not active by default. Follow the guide for <a href="https://www.scala-sbt.org/1.x/docs/Testing.html#Integration+Tests">SBT 1.0</a> or
                         <a href="https://www.scala-sbt.org/0.13/docs/Testing.html#Integration+Tests">SBT 0.13</a> to make it part of your build. Then you can add ScalaWebTest to your project as follows.</p>
                     {% highlight scala %}
-                    libraryDependencies += "org.scalawebtest" %% "scalawebtest-core" % "{{page.scalaWebTestVersion}}" % "it"
-                    {% endhighlight %}
+libraryDependencies += "org.scalawebtest" %% "scalawebtest-core" % "{{page.scalaWebTestVersion}}" % "it"{% endhighlight %}
 
                     <p>If you want to manage the most important transitive dependencies of ScalaWebTest, you might
                         configure it as follows (replace "it" with "test", if you do not make use of the IntegrationTest configuration.
@@ -75,8 +73,7 @@ libraryDependencies ++= Seq(
     "org.scalatest" %% "scalatest" % "3.0.4" % "it",
     "org.seleniumhq.selenium" % "selenium-java" % "3.6.0" % "it",
     "org.seleniumhq.selenium" % "htmlunit-driver" % "2.27" % "it"
-)
-                    {% endhighlight %}
+){% endhighlight %}
                     <h4 id="swt_maven">Add ScalaWebTest to your maven project</h4>
                     <p>You have to add the following dependency to your maven project to use ScalaWebTest.</p>
 
@@ -86,8 +83,7 @@ libraryDependencies ++= Seq(
     <artifactId>scalawebtest-core_2.12</artifactId>
     <version>{{page.scalaWebTestVersion}}</version>
     <scope>test</scope>
-</dependency>
-                    {% endhighlight%}
+</dependency>{% endhighlight%}
 
                     <p>ScalaWebTest is also available for Scala 2.10 and 2.11, change the version after the underscore,
                         to get a ScalaWebTest version which is binary compatible with the Scala version which you
@@ -99,8 +95,7 @@ libraryDependencies ++= Seq(
     <artifactId>scalawebtest-core_2.11</artifactId>
     <version>{{page.scalaWebTestVersion}}</version>
     <scope>test</scope>
-</dependency>
-                    {% endhighlight%}
+</dependency>{% endhighlight%}
 
                     <p id="bom">In case you want to manage the most important transitive dependencies of ScalaWebTest,
                         you can add our bill-of-materials to your project. Just add the following to your dependencyManagement.</p>
@@ -116,8 +111,7 @@ libraryDependencies ++= Seq(
             <scope>import</scope>
         </dependency>
     </dependencies>
-</dependencyManagement>
-                    {% endhighlight%}
+</dependencyManagement>{% endhighlight%}
 
 
                     <h3 id="firsttest">Write your first test</h3>
@@ -137,8 +131,7 @@ class HomepageSpec extends IntegrationFlatSpec {
     "Our homepage" should "contain a succinct claim" in {
         webDriver.findElementByTagName("h2").getText shouldEqual "Reduce the effort needed to write integration tests"
     }
-}
-                    {% endhighlight%}
+}{% endhighlight%}
                     <a href="https://scastie.scala-lang.org/DaniRey/HuZB9METSSqu32QZmT7pcw">Try it in Scastie</a>
 
                     <p>That's all you need. The IntegrationSpec, inherited from IntegrationFlatSpec will automatically call http://localhost:8080/index.html before
@@ -162,8 +155,7 @@ class HomepageSpec extends IntegrationFlatSpec with HtmlGauge {
     "Our homepage" should "contain a succinct claim" in {
     fits(<h2>Reduce the effort needed to write integration tests</h2>)
     }
-}
-                    {% endhighlight%}
+}{% endhighlight%}
                     <a href="https://scastie.scala-lang.org/DaniRey/aOD6RFqwSgynejH7CNl6qQ">Try it in Scastie</a>
                 </section>
                 <section>
@@ -193,8 +185,7 @@ trait MyProjectBaseSpec extends IntegrationFlatSpec with FormBasedLogin with App
     override val projectRoot = ""
 
     override def loginTimeout = Timeout(5 seconds)
-}
-                    {% endhighlight %}
+}{% endhighlight %}
 
                     This base trait uses FlatSpec style, FormBasedLogin and HtmlGauge. It configures host, loginPath and projectRoot and sets a suitable loginTimeout.
                     Our <a href="https://github.com/unic/ScalaWebTest/tree/master/scalawebtest-integration/src/it">integration tests</a> have two purposes. Not only do we use them to test our framework, but we also use it as documentation. They are a good
@@ -236,8 +227,7 @@ class HomepageSpec extends IntegrationFlatSpec {
     "Our homepage" should "contain a succinct claim" in {
         webDriver.findElementByTagName("h2").getText shouldEqual "Reduce the effort needed to write integration tests"
     }
-}
-                    {% endhighlight%}
+}{% endhighlight%}
                     <a href="https://scastie.scala-lang.org/DaniRey/jeQ90Gt6TeSnP8Cp0aUSRg">Try it in Scastie</a>
 
                     <p>By default JavaScript is not executed and JavaScript errors don't throw. Also CSS is not
@@ -290,8 +280,7 @@ class SimpleGaugeSpec extends IntegrationFlatSpec with HtmlGauge {
              </nav>
         )
     }
-}
-                    {% endhighlight %}
+}{% endhighlight %}
 
                     <p>This test would be successful, when run against, when <i>navigation.jsp</i> contains the
                         following HTML</p>
@@ -318,8 +307,7 @@ class SimpleGaugeSpec extends IntegrationFlatSpec with HtmlGauge {
     </ul>
 </nav>
 </body>
-</html>
-                    {% endhighlight %}
+</html>{% endhighlight %}
 
                     <p>We can already, see that <i>fits()</i> ignored <i>html</i>, <i>head</i> and <i>body</i>, elements
                         before the navigation.
@@ -344,8 +332,7 @@ class SimpleGaugeSpec extends IntegrationFlatSpec with HtmlGauge {
             </ul>
         </nav>
     )
-}
-                    {% endhighlight %}
+}{% endhighlight %}
                     <p>If we don't care about the unnumbered list, we can reduce our test even further.</p>
                     {% highlight scala %}
 "The navigation" should "contain our navigation links in correct order" in {
@@ -356,8 +343,7 @@ class SimpleGaugeSpec extends IntegrationFlatSpec with HtmlGauge {
             <a href="/path/to/third/element"></a>
         </nav>
     )
-}
-                    {% endhighlight %}
+}{% endhighlight %}
                     <p>The document then fits our gauge as follows. Matching parts are green, parts in grey have no
                         influence whether the
                         document fits or not.</p>
@@ -398,8 +384,7 @@ class SimpleGaugeSpec extends IntegrationFlatSpec with HtmlGauge {
             <a href="/path/to/third/element"></a>
         </nav>
     )
-}
-                    {% endhighlight %}
+}{% endhighlight %}
                     <p>This will of course not match, because the text within the first link is wrong and belongs to the
                         second link.
                         See the difference highlighted in the following html block.</p>
@@ -451,8 +436,7 @@ Current document does not match provided gauge:
         </li>
     </ul>
 </nav>
-ScalaTestFailure
-                    {% endhighlight %}
+ScalaTestFailure{% endhighlight %}
 
                     <h3 id="classes">Test for classes on elements</h3>
                     <p>The class attribute is special, because it is basically an unsorted set of class attributes.
@@ -466,17 +450,13 @@ ScalaTestFailure
                     {% highlight scala %}
 fit(
     <div class="container red"></div>
-)
-                    {% endhighlight %}
+){% endhighlight %}
                     {% highlight html %}
-<div class="container red"></div>
-                    {% endhighlight %}
+<div class="container red"></div>{% endhighlight %}
                     {% highlight html %}
-<div class="red container"></div>
-                    {% endhighlight %}
+<div class="red container"></div>{% endhighlight %}
                     {% highlight html %}
-<div class="red important container main"></div>
-                    {% endhighlight %}
+<div class="red important container main"></div>{% endhighlight %}
                     <h3 id="singleElements">Test single elements</h3>
                     <p>Often trying to fit the complete document into the defined <i>gauge</i> isn't the most natural
                         and efficient thing to do.
@@ -516,8 +496,7 @@ class ElementGaugeSpec extends IntegrationFlatSpec with HtmlElementGauge with Ap
             image fits imageGauge
         }
     }
-}
-                    {% endhighlight %}
+}{% endhighlight %}
                     <p>When using <a href="http://www.scalatest.org/user_guide/using_selenium">findAll</a> with a
                         <a href="http://docs.scala-lang.org/tutorials/tour/sequence-comprehensions.html">for-comprehension</a>,
                         one should always verify, that the expected amount of elements was found.</p>
@@ -538,18 +517,14 @@ class ElementGaugeSpec extends IntegrationFlatSpec with HtmlElementGauge with Ap
                         You may use <i>@contains</i> to trigger the ContainsMatcher instead of the DefaultMatcher.
                         Thanks to this matcher, this gauge matches the following HTML element</p>
                     {% highlight scala %}
-fit(<a href="@contains ScalaWebTest"></a>)
-                    {% endhighlight %}
+fit(<a href="@contains ScalaWebTest"></a>){% endhighlight %}
                     {% highlight html %}
-<a href="https://github.com/unic/ScalaWebTest"></a>
-                    {% endhighlight %}
+<a href="https://github.com/unic/ScalaWebTest"></a>{% endhighlight %}
                     <p>The containsMatcher is also available, when matching text.</p>
                     {% highlight scala %}
-fit(<a>@contains available</a>)
-                    {% endhighlight %}
+fit(<a>@contains available</a>){% endhighlight %}
                     {% highlight html %}
-<a>ScalaWebTest is available on github</a>
-                    {% endhighlight %}
+<a>ScalaWebTest is available on github</a>{% endhighlight %}
                     <p>Hint: always add a space after the matcher annotation. We enforce this space to improve
                         readability of tests.</p>
                     <h3 id="regex">Test for regex matches</h3>
@@ -558,17 +533,14 @@ fit(<a>@contains available</a>)
                         It is triggered using <i>@regex</i></p>
 
                     {% highlight scala %}
-fit(<a href="@regex http:\\/\\/[a-zA-Z]+\.scalawebtest.org.*,"></a>)
-                    {% endhighlight %}
+fit(<a href="@regex http:\\/\\/[a-zA-Z]+\.scalawebtest.org.*,"></a>){% endhighlight %}
 
                     <p>This gauge will fit</p>
                     {% highlight html %}
-<a href="http://www.scalawebtest.org/documentation.html"></a>
-                    {% endhighlight %}
+<a href="http://www.scalawebtest.org/documentation.html"></a>{% endhighlight %}
                     <p>but it won't fit</p>
                     {% highlight html %}
-<a href="http://scalawebtest.org/documentation.html"></a>
-                    {% endhighlight %}
+<a href="http://scalawebtest.org/documentation.html"></a>{% endhighlight %}
 
                     <h3 id="negation">Negating your tests</h3>
                     <p>Sometimes you want to make sure that a certain content is not shown. For example you want to make
@@ -588,8 +560,7 @@ class LoggedInSpec extends IntegrationFlatSpec with HtmlGauge {
     "When logged in the protectedContent page" should "not show the login form" in {
         not fit <form name="login_form"></form>
     }
-}
-                    {% endhighlight %}
+}{% endhighlight %}
 
                     <p>In case the login form is mistakenly rendered, the following error will appear.</p>
 
@@ -616,8 +587,7 @@ Fitting node
 </form>
 </body>
 </html>
-found
-                    {% endhighlight %}
+found{% endhighlight %}
 
                     <h3 id="process">Testing a complete process</h3>
                     <p>Today's web applications are of course not that static. Usually it is more interesting to test a
@@ -660,8 +630,7 @@ class LoginSpec extends IntegrationFlatSpec with HtmlGauge {
 
         fits(<p>sensitive information</p>)
     }
-}
-                    {% endhighlight %}
+}{% endhighlight %}
 
                     <p>This example test was split into three smaller tests. This is technically not necessary, but has
                         the following advantage. When only part of the tests fails, you have a better idea what went wrong. For
@@ -680,8 +649,7 @@ class LoginSpec extends IntegrationFlatSpec with HtmlGauge {
                     <p>Thanks to Selenium executing JavaScript is not an issue. Per default JavaScript is not executed
                         with ScalaWebTest, because tests run faster without. To execute JavaScript, you have to enable it.</p>
                     {% highlight scala %}
-config.enableJavaScript(throwOnError = true)
-                    {% endhighlight %}
+config.enableJavaScript(throwOnError = true){% endhighlight %}
                     <p>In addition, you have to decide whether a JavaScript error should cause your test to fail or not.
                         Usually failing on JavaScript errors is good, but sometimes you have to write tests for a web application with
                         major issues in it's JavaScript. This is one of the rare moments, where you have to disable <i>throwOnError</i> to be
@@ -695,8 +663,7 @@ eventually(timeout(3 seconds)) {
     fits(
         <div id="container">Text loaded with JavaScript</div>
     )
-}
-                    {% endhighlight %}
+}{% endhighlight %}
                 </section>
 
                 <section>
@@ -799,8 +766,7 @@ class ReducedJsonSpec extends IntegrationFlatSpec {
         def firstName = (json \ "firstName").as[String]
         firstName should equal("Edsger")
     }
-}
-                    {% endhighlight %}
+}{% endhighlight %}
                     <p>All JSON tests in the following examples use the following JSON response</p>
                     <div id="modules/json/testResponse">
                         {% highlight json %}
@@ -835,8 +801,7 @@ class ReducedJsonSpec extends IntegrationFlatSpec {
     "end": 1999
 }
 ]
-}
-                        {% endhighlight %}
+}{% endhighlight %}
                     </div>
                     <p>Of course this way of verifying JSON responses reaches its limitations very soon. Therefore we
                         created <i>JsonGauge</i></p>
@@ -869,8 +834,7 @@ class DocumentFitsValuesSpec extends IntegrationFlatSpec with JsonGauge {
             }"""
         )
     }
-}
-                    {% endhighlight %}
+}{% endhighlight %}
                     <p>Often verifying the complete response isn't ideal. We recommend to parse and traverse the
                         document using <a
                                 href="https://www.playframework.com/documentation/2.5.x/ScalaJson">play-json</a> and
@@ -911,8 +875,7 @@ class DijkstraJsonGaugeSpec extends IntegrationFlatSpec with JsonGauge {
         ]
         """
     }
-}
-                    {% endhighlight %}
+}{% endhighlight %}
                     <p>As with the HTML gauge, controlled variance is allowed. The original <a
                             href="#modules/json/testResponse">response</a> contains additional key/value pairs (<i>isTuringAwardWinner</i>
                         and <i>universities</i>).
@@ -948,8 +911,7 @@ class DijkstraJsonGaugeFitsTypesSpec extends IntegrationFlatSpec with JsonGauge 
             }
         """
     }
-}
-                    {% endhighlight %}
+}{% endhighlight %}
                     <p>Now the values no longer matter. They are only used to determine the expected type. Therefore we
                         recommend to use values, which indicate that only the type matters. Use empty strings and 0.
                         This test would succeed. It would fail, when the response would:</p>
@@ -979,8 +941,7 @@ class DijkstraJsonGaugeFitsTypesSpec extends IntegrationFlatSpec with JsonGauge 
             }]
         }
         """
-}
-                    {% endhighlight %}
+}{% endhighlight %}
                     <p>This would enforce all elements of the <i>universities</i> array to contain a key <i>name</i>
                         with a value of type <i>string</i> and the keys <i>begin</i> and <i>end</i> with a value of type
                         <i>number</i>.
@@ -1016,8 +977,7 @@ class DijkstraJsonGaugeFitsTypesSpec extends IntegrationFlatSpec with JsonGauge 
         }]
         }
         """
-}
-                    {% endhighlight %}
+}{% endhighlight %}
                     <p>One more common situation exists with arrays. Often the array elements are not sorted. Although
                         we expect the array to contain a specific element, we don't know it's position.
                         For this situation <i>containsElementFitting values/types/typesAndArraySizes of</i> exists.</p>
@@ -1049,8 +1009,7 @@ class ContainsElementFittingSpec extends IntegrationFlatSpec with JsonGauge {
                 | "end": 1984
                 | }""".stripMargin
     }
-}
-                    {% endhighlight %}
+}{% endhighlight %}
                     <h4 id="modules/json/alternatives"></h4>
                     <p>
                         Because of its simplicity we prefer <a

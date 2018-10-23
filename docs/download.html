@@ -41,20 +41,18 @@ description: Add ScalaWebTest to your build tool dependencies or download it
                 <p>You can add ScalaWebTest to your integration testing dependencies in the build.sbt/scala
                     of your sbt project as follows.</p>
                 {% highlight scala %}
-libraryDependencies += "org.scalawebtest" %% "scalawebtest-core" % "{{page.scalaWebTestVersion}}" % "it"
-                {% endhighlight %}
+libraryDependencies += "org.scalawebtest" %% "scalawebtest-core" % "{{page.scalaWebTestVersion}}" % "it"{% endhighlight %}
 
                 <p>If you want to manage the most important transitive dependencies of ScalaWebTest, you might configure
                     it as follows. Especially selenium-java and htmlunit-driver should align.</p>
 
                 {% highlight scala %}
 libraryDependencies ++= Seq(
-    "org.scalawebtest" %% "scalawebtest-core" % "{{page.scalaWebTestVersion}}" % "it"
+    "org.scalawebtest" %% "scalawebtest-core" % "{{page.scalaWebTestVersion}}" % "it",
     "org.scalatest" %% "scalatest" % "3.0.4" % "it",
     "org.seleniumhq.selenium" % "selenium-java" % "3.6.0" % "it",
     "org.seleniumhq.selenium" % "htmlunit-driver" % "2.27" % "it"
-)
-                {% endhighlight %}
+){% endhighlight %}
 
             </section>
 
@@ -68,8 +66,7 @@ libraryDependencies ++= Seq(
     <artifactId>scalawebtest-core_2.12</artifactId>
     <version>{{page.scalaWebTestVersion}}</version>
     <scope>test</scope>
-</dependency>
-                {% endhighlight%}
+</dependency>{% endhighlight%}
 
                 <p id="bom">In case you want to manage the most important transitive dependencies of ScalaWebTest,
                     you can add our bill-of-materials to your project. You may do so by adding the following dependency</p>
@@ -85,8 +82,7 @@ libraryDependencies ++= Seq(
             <scope>import</scope>
         </dependency>
     </dependencies>
-</dependencyManagement>
-                {% endhighlight%}
+</dependencyManagement>{% endhighlight%}
             </section>
 
         </div>

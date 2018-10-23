@@ -53,19 +53,25 @@ twitterAuthor: danireych
                         All you have to do is adding the core module to your test or integration test dependencies.</p>
 
                     <h4 id="swt_sbt">Add ScalaWebTest to your SBT project</h4>
-                    <p>You can add ScalaWebTest to your integration testing dependencies in the build.sbt/scala
+                    <p>You can add ScalaWebTest to your testing dependencies in the build.sbt/scala
                         of your sbt project as follows.</p>
                     {% highlight scala %}
-libraryDependencies += "org.scalawebtest" %% "scalawebtest-core" % "{{page.scalaWebTestVersion}}" % "it"
+libraryDependencies += "org.scalawebtest" %% "scalawebtest-core" % "{{page.scalaWebTestVersion}}" % "test"
+                    {% endhighlight %}
+                    <p>We recommend to bind the ScalaWebTest dependencies to the IntegrationTest configuration, which can be referenced with "it".
+                    The IntegrationTest configuration is not active by default. Follow the guide for <a href="https://www.scala-sbt.org/1.x/docs/Testing.html#Integration+Tests">SBT 1.0</a> or
+                        <a href="https://www.scala-sbt.org/0.13/docs/Testing.html#Integration+Tests">SBT 0.13</a> to make it part of your build. Then you can add ScalaWebTest to your project as follows.</p>
+                    {% highlight scala %}
+                    libraryDependencies += "org.scalawebtest" %% "scalawebtest-core" % "{{page.scalaWebTestVersion}}" % "it"
                     {% endhighlight %}
 
                     <p>If you want to manage the most important transitive dependencies of ScalaWebTest, you might
-                        configure
-                        it as follows. Especially selenium-java and htmlunit-driver should align.</p>
+                        configure it as follows (replace "it" with "test", if you do not make use of the IntegrationTest configuration.
+                        Especially selenium-java and htmlunit-driver have to align with each other.</p>
 
                     {% highlight scala %}
 libraryDependencies ++= Seq(
-    "org.scalawebtest" %% "scalawebtest-core" % "{{page.scalaWebTestVersion}}" % "it"
+    "org.scalawebtest" %% "scalawebtest-core" % "{{page.scalaWebTestVersion}}" % "it",
     "org.scalatest" %% "scalatest" % "3.0.4" % "it",
     "org.seleniumhq.selenium" % "selenium-java" % "3.6.0" % "it",
     "org.seleniumhq.selenium" % "htmlunit-driver" % "2.27" % "it"

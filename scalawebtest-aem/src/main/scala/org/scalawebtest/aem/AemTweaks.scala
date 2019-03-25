@@ -43,7 +43,7 @@ trait AemTweaks {
   /**
     * Fixture to set the wccmode for the given function call
     */
-  def withWcmMode[X](mode: WcmMode): ((X) => Unit) => (X) => Unit = withWcmModeInternal(mode, _: X => Unit)
+  def withWcmMode[X](mode: WcmMode): (X => Unit) => X => Unit = withWcmModeInternal(mode, _: X => Unit)
 
   private def withWcmModeInternal[X](mode: WcmMode, f: X => Unit): X => Unit = {
     x: X => {

@@ -14,7 +14,17 @@
  */
 package org.scalawebtest.core
 
+import java.net.URI
+
 class BaseConfiguration() {
+  private var internalBaseURI = new URI("http://localhost:8080")
+
+  def useBaseURI(uri: String) {
+    internalBaseURI = new URI(uri)
+  }
+
+  def baseURI: URI = internalBaseURI
+
   var configurations: Map[String, WebClientExposingDriver => Unit] = Map()
 
   //initialize with sensible default configuration
@@ -68,6 +78,7 @@ class BaseConfiguration() {
 }
 
 class LoginConfiguration extends BaseConfiguration
+
 class Configuration extends BaseConfiguration {
   //initialize with sensible default configuration
   var navigateToBeforeEachEnabled = true

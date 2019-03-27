@@ -17,11 +17,16 @@ package org.scalawebtest.integration.js
 import org.scalatest.time.SpanSugar._
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
+import scala.language.postfixOps
+
 class AjaxSpec extends ScalaWebTestBaseSpec {
   path = "/simpleAjax.jsp"
   config.enableJavaScript(throwOnError = true)
+  config.enforceReloadOnNavigateTo()
 
   "A simple webpage loading content with JS" should "be correctly interpreted by HtmlUnit" in {
+    def container: Element = find(cssSelector("div#container")).get
+
     eventually(timeout(3 seconds)) {
       container.text should include("Text loaded with JavaScript")
     }
@@ -32,7 +37,4 @@ class AjaxSpec extends ScalaWebTestBaseSpec {
     }
   }
 
-  def container: Element = {
-    find(cssSelector("div#container")).get
-  }
 }

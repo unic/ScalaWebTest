@@ -14,14 +14,20 @@
  */
 package org.scalawebtest.integration.extensions.aem
 
+import org.openqa.selenium.WebDriver
+import org.openqa.selenium.chrome.ChromeOptions
+import org.openqa.selenium.remote.{DesiredCapabilities, RemoteWebDriver}
 import org.scalatest.concurrent.PatienceConfiguration.Timeout
 import org.scalatest.time.SpanSugar._
 import org.scalawebtest.aem.{AemTweaks, AuthorLogin}
 import org.scalawebtest.core.{FormBasedLogin, IntegrationFlatSpec}
+import org.scalawebtest.integration.BeforeAndAfterTestSuite
 
 import scala.language.postfixOps
 
 trait AemModuleScalaWebTestBaseSpec extends IntegrationFlatSpec with FormBasedLogin with AemTweaks with AuthorLogin {
+  override implicit val webDriver: WebDriver = new RemoteWebDriver(BeforeAndAfterTestSuite.service.getUrl, new ChromeOptions())
+
   override val host = "http://localhost:9090"
   override val loginPath = "/fakeLogin.jsp"
 

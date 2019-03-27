@@ -44,6 +44,7 @@ lazy val core = Project(id = "scalawebtest-core", base = file("scalawebtest-core
       "org.scalatest" %% "scalatest" % scalaTestVersion,
       "org.seleniumhq.selenium" % "selenium-java" % seleniumVersion,
       "org.seleniumhq.selenium" % "htmlunit-driver" % htmlUnitVersion,
+      "org.jsoup" % "jsoup" % "1.11.3",
       "org.slf4j" % "slf4j-api" % slf4jApiVersion
     )
   )

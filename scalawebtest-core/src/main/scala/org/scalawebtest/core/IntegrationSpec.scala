@@ -16,7 +16,11 @@ package org.scalawebtest.core
 
 import java.util.logging.Level
 
-import org.openqa.selenium.Cookie
+import com.gargoylesoftware.htmlunit.BrowserVersion
+import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.firefox.FirefoxDriver
+import org.openqa.selenium.htmlunit.HtmlUnitDriver
+import org.openqa.selenium.{Cookie, WebDriver}
 import org.scalatest._
 import org.scalatest.concurrent.Eventually
 import org.scalatest.selenium.WebBrowser
@@ -24,6 +28,7 @@ import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.mutable.ListBuffer
 import scala.language.postfixOps
+import scala.util.Try
 
 
 
@@ -35,7 +40,9 @@ import scala.language.postfixOps
   * adapted the default configuration available in loginConfig and config,
   * and extend one of the Login traits if applicable.
   */
-trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with BeforeAndAfterAll with WebClientExposingHtmlUnit with IntegrationSettings with Eventually {
+trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with BeforeAndAfterAll with IntegrationSettings with Eventually {
+  implicit val webDriver: WebDriver = new HtmlUnitDriver(BrowserVersion.CHROME)
+
   val logger: Logger = LoggerFactory.getLogger("IntegrationSpec")
   val cookiesToBeDiscarded = new ListBuffer[Cookie]()
   /**
@@ -103,6 +110,10 @@ trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with
   override def afterEach(): Unit = {
     cookiesToBeDiscarded.foreach(cookie => delete cookie cookie.getName)
     cookiesToBeDiscarded.clear()
+  }
+
+  override def afterAll(): Unit = {
+    webDriver.quit()
   }
 
   /**

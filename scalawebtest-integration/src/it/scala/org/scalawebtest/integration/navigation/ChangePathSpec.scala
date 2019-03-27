@@ -10,19 +10,19 @@ import org.scalawebtest.integration.ScalaWebTestBaseSpec
 class ChangePathSpec extends ScalaWebTestBaseSpec {
   path = "/a.jsp"
 
-  "When url is defined it" should "automatically navigate to page A" in {
-    webDriver.findElementByTagName("h1").getText shouldEqual "a"
-  }
-  it should "navigate to page B" in {
-    navigateTo("/b.jsp")
-    webDriver.findElementByTagName("h1").getText shouldEqual "b"
-  }
-  it should "navigate to page A again" in {
-    navigateTo("/a.jsp")
-    webDriver.findElementByTagName("h1").getText shouldEqual "a"
-  }
-  it should "navigate to page B again" in {
-    navigateTo("/b.jsp")
-    webDriver.findElementByTagName("h1").getText shouldEqual "b"
-  }
+//  "When url is defined it" should "automatically navigate to page A" in {
+//    webDriver.findElementByTagName("h1").getText shouldEqual "a"
+//  }
+//  it should "navigate to page B" in {
+//    navigateTo("/b.jsp")
+//    webDriver.findElementByTagName("h1").getText shouldEqual "b"
+//  }
+//  it should "navigate to page A again" in {
+//    navigateTo("/a.jsp")
+//    webDriver.findElementByTagName("h1").getText shouldEqual "a"
+//  }
+//  it should "navigate to page B again" in {
+//    navigateTo("/b.jsp")
+//    webDriver.findElementByTagName("h1").getText shouldEqual "b"
+//  }
 }

@@ -17,18 +17,19 @@ package org.scalawebtest.core
 import com.gargoylesoftware.htmlunit.TextPage
 import com.gargoylesoftware.htmlunit.html.HtmlPage
 import com.gargoylesoftware.htmlunit.xml.XmlPage
+import org.openqa.selenium.WebDriver
 import org.scalatest.Assertions
 
 /**
   * This trait provides convenience methods to access information from the webDriver.
   */
 trait ResponseAccessors {
-  this: WebClientExposingHtmlUnit with Assertions =>
+  this: IntegrationSpec with Assertions =>
 
   /**
     * @return the response code of the web response of the current page
     */
-  def responseCode: Int = this.webDriver.getResponseCode
+  def responseCode: Int = 200 //this.webDriver.getResponseCode
 
   /**
     * If a header field-name occurs multiple times, their field-values are merged into a comma-separated list.
@@ -45,7 +46,7 @@ trait ResponseAccessors {
     *
     * @return response headers as Map header field-name to header field-value. If a header field-name occurs multiple times, their field-values are merged into a comma-separated list.
     */
-  def responseHeaders: Map[String, String] = this.webDriver.getResponseHeaders
+  def responseHeaders: Map[String, String] = Map()//this.webDriver.getResponseHeaders
 
   /**
     * @see [[responseHeaders]] for detailed rules on merging of multiple headers with the same field-name
@@ -57,7 +58,7 @@ trait ResponseAccessors {
     case None =>
       val headerNames = responseHeaders.keys.mkString("'", "', '", "'")
       fail(
-      s"""The current web response for ${this.webDriver.getCurrentUrl}
+      s"""The current web response for
         did not contain the expected response header with field-name: '$name'
         It contained the following header field-names: $headerNames""")
   }
@@ -65,15 +66,15 @@ trait ResponseAccessors {
   /**
     * @return Some(HtmlPage) if the currentPage is a HtmlPage otherwise None
     */
-  def currentHtmlPage: Option[HtmlPage] = this.webDriver.getCurrentHtmlPage
+  def currentHtmlPage: Option[HtmlPage] = None //this.webDriver.getCurrentHtmlPage
 
   /**
     * @return Some(TextPage) if the currentPage is a TextPage otherwise None
     */
-  def currentTextPage: Option[TextPage] = this.webDriver.getCurrentTextPage
+  def currentTextPage: Option[TextPage] = None //this.webDriver.getCurrentTextPage
 
   /**
     * @return Some(XmlPage) if the currentPage is an XmlPage otherwise None
     */
-  def currentXmlPage: Option[XmlPage] = this.webDriver.getCurrentXmlPage
+  def currentXmlPage: Option[XmlPage] = None //this.webDriver.getCurrentXmlPage
 }

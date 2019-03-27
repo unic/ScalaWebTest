@@ -14,8 +14,11 @@
  */
 package org.scalawebtest.core
 
+import org.openqa.selenium.WebDriver
+import org.scalatest.selenium.WebBrowser
+
 class BaseConfiguration() {
-  var configurations: Map[String, WebClientExposingDriver => Unit] = Map()
+  var configurations: Map[String, WebDriver => Unit] = Map()
 
   //initialize with sensible default configuration
   disableJavaScript()
@@ -28,42 +31,42 @@ class BaseConfiguration() {
     */
   def enableJavaScript(throwOnError: Boolean): Unit = {
     configurations += "enableJavaScript" ->
-      ((webDriver: WebClientExposingDriver) => webDriver.getOptions.setJavaScriptEnabled(true))
+      ((webDriver: WebDriver) => null)//webDriver.getOptions.setJavaScriptEnabled(true))
     configurations += "throwOnJSError" ->
-      ((webDriver: WebClientExposingDriver) => webDriver.getOptions.setThrowExceptionOnScriptError(throwOnError))
+      ((webDriver: WebDriver) => null)//webDriver.getOptions.setThrowExceptionOnScriptError(throwOnError))
   }
 
   /**
     * Disable JavaScript evaluation as well as throwing on JavaScript error in the webDriver
     */
   def disableJavaScript(): Unit = {
-    configurations += "enableJavaScript" -> ((webDriver: WebClientExposingDriver) => webDriver.getOptions.setJavaScriptEnabled(false))
-    configurations += "throwOnJSError" -> ((webDriver: WebClientExposingDriver) => webDriver.getOptions.setThrowExceptionOnScriptError(false))
+    configurations += "enableJavaScript" -> ((webDriver: WebDriver) => null)//webDriver.getOptions.setJavaScriptEnabled(false))
+    configurations += "throwOnJSError" -> ((webDriver: WebDriver) => null)//webDriver.getOptions.setThrowExceptionOnScriptError(false))
   }
 
   /**
     * Throw on JavaScript Error. Preferably use [[BaseConfiguration.disableJavaScript()]], as the two configurations only make sense when combined.
     */
   def throwOnJavaScriptError(): Unit = configurations += "throwOnJSError" ->
-    ((webDriver: WebClientExposingDriver) => webDriver.getOptions.setThrowExceptionOnScriptError(true))
+    ((webDriver: WebDriver) => null)//webDriver.getOptions.setThrowExceptionOnScriptError(true))
 
   /**
     * Silently swallow JavaScript errors. Preferably use [[BaseConfiguration.disableJavaScript()]], as the two configurations only make sense when combined.
     */
   def swallowJavaScriptErrors(): Unit = configurations += "throwOnJSError" ->
-    ((webDriver: WebClientExposingDriver) => webDriver.getOptions.setThrowExceptionOnScriptError(false))
+    ((webDriver: WebDriver) => null)//webDriver.getOptions.setThrowExceptionOnScriptError(false))
 
   /**
     * Enable CSS evaluation in the webDriver.
     */
   def enableCss(): Unit = configurations += "enableCss" ->
-    ((webDriver: WebClientExposingDriver) => webDriver.getOptions.setCssEnabled(true))
+    ((webDriver: WebDriver) => null)//webDriver.getOptions.setCssEnabled(true))
 
   /**
     * Disable CSS evaluation in the webDriver.
     */
   def disableCss(): Unit = configurations += "enableCss" ->
-    ((webDriver: WebClientExposingDriver) => webDriver.getOptions.setCssEnabled(false))
+    ((webDriver: WebDriver) => null)//webDriver.getOptions.setCssEnabled(false))
 
 }
 

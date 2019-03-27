@@ -76,5 +76,5 @@ trait BasicAuthLogin extends Login {
   self: IntegrationSpec =>
   def base64Encode(value: String): String = DatatypeConverter.printBase64Binary(value.getBytes())
 
-  webDriver.getClient.addRequestHeader("Authorization", "Basic " + base64Encode(username + ":" + password))
+//  webDriver.getClient.addRequestHeader("Authorization", "Basic " + base64Encode(username + ":" + password))
 }

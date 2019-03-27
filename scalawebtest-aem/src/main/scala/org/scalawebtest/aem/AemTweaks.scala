@@ -14,6 +14,7 @@
  */
 package org.scalawebtest.aem
 
+import org.openqa.selenium.WebDriver
 import org.scalawebtest.aem.WcmMode._
 import org.scalawebtest.core._
 
@@ -33,7 +34,7 @@ trait AemTweaks {
     setWcmMode(DISABLED)
 
     def setWcmMode(wcmMode: WcmMode): Unit = configurations += "wcmMode" ->
-      ((webDriver: WebClientExposingDriver) => setWcmModeCookie(wcmMode))
+      ((webDriver: WebDriver) => setWcmModeCookie(wcmMode))
   }
 
   private def setWcmModeCookie(mode: WcmMode) {

@@ -14,15 +14,13 @@
  */
 package org.scalawebtest.core.gauge
 
-import com.gargoylesoftware.htmlunit.html.DomNode
-import org.w3c.dom
+import org.jsoup.nodes.{Node => JNode, TextNode => JTextNode}
 
-case class CandidateAttribute(relevance: Int, containingElement: DomNode, attribute: dom.Node) {
-  def value(): String = attribute.getNodeValue
-
-  def name(): String = attribute.getNodeName
+case class CandidateAttribute(relevance: Int, containingElement: JNode, attributeName: String, attributeValue: String){
+  def name(): String = attributeName
+  def value(): String = attributeValue
 }
 
-case class CandidateElement(relevance: Int, element: DomNode) {
-  def text(): String = element.asText()
+case class CandidateElement(relevance: Int, element: JTextNode) {
+  def text(): String = element.text()
 }

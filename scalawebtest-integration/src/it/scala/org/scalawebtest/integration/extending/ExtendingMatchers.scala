@@ -1,6 +1,5 @@
 package org.scalawebtest.integration.extending
 
-import org.scalawebtest.core.gauge.HtmlGauge.{doesnt, fits}
 import org.scalawebtest.core.gauge._
 import org.scalawebtest.core.gauge.Matchers.{AttributeMatcher, TextMatcher}
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
@@ -14,7 +13,7 @@ class ExtendingMatchers extends ScalaWebTestBaseSpec {
     override def textMatches(expected: String, element: CandidateElement): Option[Misfit] = {
       val emailRegex = s"^$emailRegexCore$$"
 
-      if (element.text().matches(emailRegex)) {
+      if (element.text().trim().matches(emailRegex)) {
         None
       } else {
         Some(Misfit(element.relevance, "Misfitting Text: The [" + element.text() + "] from [" + element.element + "] is not an email address"))

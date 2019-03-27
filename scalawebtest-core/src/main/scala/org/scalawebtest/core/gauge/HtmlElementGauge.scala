@@ -15,9 +15,10 @@
 package org.scalawebtest.core.gauge
 
 import com.gargoylesoftware.htmlunit.html.DomNode
-import org.openqa.selenium.WebElement
+import org.jsoup.Jsoup
 import org.openqa.selenium.htmlunit.HtmlUnitWebElement
-import org.scalawebtest.core.WebClientExposingDriver
+import org.openqa.selenium.{WebDriver, WebElement}
+import org.openqa.selenium.JavascriptExecutor
 
 import scala.language.reflectiveCalls
 import scala.xml.NodeSeq
@@ -54,30 +55,25 @@ trait HtmlElementGauge {
       *
       * If you verify all elements of a list of elements found by findAll, remember to verify the search result is of expected length, or at least not empty.
       */
-    def fits(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver): Unit = {
-      val domNode: DomNode = extractDomNode(element: Element)
-      new Gauge(definition).elementFits(domNode)
+    def fits(definition: NodeSeq)(implicit webDriver: WebDriver): Unit = {
+      new Gauge(definition).elementFits(Jsoup.parseBodyFragment(extractSource(element)).body().child(0))
     }
 
-    def doesNotFit(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver): Unit = {
-      val domNode: DomNode = extractDomNode(element: Element)
-      new Gauge(definition).elementDoesNotFit(domNode)
+    def doesNotFit(definition: NodeSeq)(implicit webDriver: WebDriver): Unit = {
+      new Gauge(definition).elementDoesNotFit(Jsoup.parseBodyFragment(extractSource(element)).body().child(0))
     }
 
-    def fit(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver): Unit = {
+    def fit(definition: NodeSeq)(implicit webDriver: WebDriver): Unit = {
       fits(definition)
     }
 
-    def doesntFit(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver): Unit = {
+    def doesntFit(definition: NodeSeq)(implicit webDriver: WebDriver): Unit = {
       doesNotFit(definition)
     }
   }
 
-  private def extractDomNode(element: Element) = {
-    val htmlUnitElement = element.underlying.asInstanceOf[HtmlUnitWebElement]
-    val elementField = htmlUnitElement.getClass.getDeclaredField("element")
-    elementField.setAccessible(true)
-    val domNode = elementField.get(htmlUnitElement).asInstanceOf[DomNode]
-    domNode
+  def extractSource(element: Element)(implicit webdriver: WebDriver): String =  {
+    val outerHtml = webdriver.asInstanceOf[JavascriptExecutor].executeScript("return arguments[0].outerHTML;", element.underlying).asInstanceOf[String]
+    outerHtml
   }
 }

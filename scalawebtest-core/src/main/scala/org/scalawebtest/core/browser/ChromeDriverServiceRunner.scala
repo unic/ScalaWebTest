@@ -1,13 +1,14 @@
-package org.scalawebtest.integration
+package org.scalawebtest.core.browser
+
 import java.io.File
 
 import org.openqa.selenium.chrome.ChromeDriverService
 
-object BeforeAndAfterTestSuite {
+object ChromeDriverServiceRunner {
   //before test suite
   System.setProperty("webdriver.chrome.driver", "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chromedriver.exe")
 
-  val service = new ChromeDriverService.Builder()
+  val service: ChromeDriverService = new ChromeDriverService.Builder()
     .usingDriverExecutable(new File("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chromedriver.exe"))
     .usingAnyFreePort.build
 
@@ -22,3 +23,4 @@ object BeforeAndAfterTestSuite {
   }
 
 }
+

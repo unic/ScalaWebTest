@@ -17,8 +17,6 @@ package org.scalawebtest.core
 import java.util.logging.Level
 
 import com.gargoylesoftware.htmlunit.BrowserVersion
-import org.openqa.selenium.chrome.ChromeDriver
-import org.openqa.selenium.firefox.FirefoxDriver
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import org.openqa.selenium.{Cookie, WebDriver}
 import org.scalatest._
@@ -28,7 +26,6 @@ import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.mutable.ListBuffer
 import scala.language.postfixOps
-import scala.util.Try
 
 
 

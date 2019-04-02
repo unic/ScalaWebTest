@@ -10,7 +10,7 @@ object ChromeDriverServiceRunner {
   System.setProperty("webdriver.chrome.driver", "/usr/lib/chromium-browser/chromedriver")
 
   val service: ChromeDriverService = new ChromeDriverService.Builder()
-    .usingDriverExecutable(new File("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chromedriver.exe"))
+    .usingDriverExecutable(new File(System.getProperty("webdriver.chrome.driver")))
     .usingAnyFreePort.build
 
   service.start()

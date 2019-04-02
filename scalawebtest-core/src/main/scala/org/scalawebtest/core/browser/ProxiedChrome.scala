@@ -10,7 +10,7 @@ trait ProxiedChrome { self: IntegrationSpec =>
   //this import the object, and therefore allows it to execute commands before and after the test suite was run
   private val driverServiceRunner =  ChromeDriverServiceRunner
 
-  override implicit val webDriver: WebDriver = new RemoteWebDriver(driverServiceRunner.service.getUrl, new ChromeOptions())
+  override implicit val webDriver: WebDriver = new RemoteWebDriver(driverServiceRunner.service.getUrl, new ChromeOptions().addArguments("--no-sandbox", "--headless"))
 }
 
 

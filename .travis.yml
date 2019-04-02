@@ -8,3 +8,11 @@ jdk: oraclejdk8
 script:
  - sbt ++$TRAVIS_SCALA_VERSION test
  - sbt ++$TRAVIS_SCALA_VERSION inttest
+addons:
+ chrome: stable
+ apt:
+  packages:
+    - chromium-chromedriver
+before_script:
+ # start Chrome and listen on localhost
+ - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &

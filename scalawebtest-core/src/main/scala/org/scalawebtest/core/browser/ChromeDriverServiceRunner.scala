@@ -6,7 +6,8 @@ import org.openqa.selenium.chrome.ChromeDriverService
 
 object ChromeDriverServiceRunner {
   //before test suite
-  System.setProperty("webdriver.chrome.driver", "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chromedriver.exe")
+//  System.setProperty("webdriver.chrome.driver", "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chromedriver.exe")
+  System.setProperty("webdriver.chrome.driver", "/usr/lib/chromium-browser/chromedriver")
 
   val service: ChromeDriverService = new ChromeDriverService.Builder()
     .usingDriverExecutable(new File("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chromedriver.exe"))

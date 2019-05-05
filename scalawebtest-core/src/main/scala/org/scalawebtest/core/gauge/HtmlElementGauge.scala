@@ -72,8 +72,16 @@ trait HtmlElementGauge {
     }
   }
 
-  def extractSource(element: Element)(implicit webdriver: WebDriver): String =  {
-    val outerHtml = webdriver.asInstanceOf[JavascriptExecutor].executeScript("return arguments[0].outerHTML;", element.underlying).asInstanceOf[String]
-    outerHtml
+  def extractSource(element: Element)(implicit webdriver: WebDriver): String = {
+    element.underlying match {
+      case htmlUnitElement: HtmlUnitWebElement =>
+        val elementField = htmlUnitElement.getClass.getDeclaredField("element")
+        elementField.setAccessible(true)
+        val domNode = elementField.get(htmlUnitElement).asInstanceOf[DomNode]
+        domNode.asXml()
+      case _ =>
+        val outerHtml = webdriver.asInstanceOf[JavascriptExecutor].executeScript("return arguments[0].outerHTML;", element.underlying).asInstanceOf[String]
+        outerHtml
+    }
   }
 }

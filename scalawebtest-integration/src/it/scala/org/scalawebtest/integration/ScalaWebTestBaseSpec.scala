@@ -17,13 +17,13 @@ package org.scalawebtest.integration
 import org.scalatest.AppendedClues
 import org.scalatest.concurrent.PatienceConfiguration.Timeout
 import org.scalatest.time.SpanSugar._
-import org.scalawebtest.core.browser.ProxiedChrome
+import org.scalawebtest.core.browser.SeleniumChrome
 import org.scalawebtest.core.gauge.HtmlGauge
 import org.scalawebtest.core.{FormBasedLogin, IntegrationFlatSpec}
 
 import scala.language.postfixOps
 
-trait ScalaWebTestBaseSpec extends IntegrationFlatSpec with FormBasedLogin with AppendedClues with HtmlGauge with ProxiedChrome {
+abstract class ScalaWebTestBaseSpec extends IntegrationFlatSpec with FormBasedLogin with AppendedClues with HtmlGauge with SeleniumChrome {
 
   override val host = "http://localhost:9090"
   override val loginPath = "/fakeLogin.jsp"

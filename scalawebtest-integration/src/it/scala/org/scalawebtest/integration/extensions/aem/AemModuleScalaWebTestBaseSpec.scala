@@ -22,7 +22,7 @@ import org.scalawebtest.core.{FormBasedLogin, IntegrationFlatSpec}
 
 import scala.language.postfixOps
 
-trait AemModuleScalaWebTestBaseSpec extends IntegrationFlatSpec with FormBasedLogin with AemTweaks with AuthorLogin with SeleniumChrome{
+abstract class AemModuleScalaWebTestBaseSpec extends IntegrationFlatSpec with FormBasedLogin with AemTweaks with AuthorLogin {
   override val host = "http://localhost:9090"
   override val loginPath = "/fakeLogin.jsp"
 

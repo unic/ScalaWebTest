@@ -3,6 +3,8 @@ package org.scalawebtest.integration.navigation
 import org.scalatest.time.SpanSugar._
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
+import scala.language.postfixOps
+
 class EnforceNavigateTo extends ScalaWebTestBaseSpec{
   path = "/simpleAjax.jsp"
   config.enableJavaScript(throwOnError = true)

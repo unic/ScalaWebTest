@@ -22,6 +22,7 @@ import org.openqa.selenium.{Cookie, WebDriver}
 import org.scalatest._
 import org.scalatest.concurrent.Eventually
 import org.scalatest.selenium.WebBrowser
+import org.scalawebtest.core.configuration.{BaseConfiguration, Configuration, HtmlUnitConfiguration, LoginConfiguration}
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.mutable.ListBuffer
@@ -38,21 +39,21 @@ import scala.language.postfixOps
   * and extend one of the Login traits if applicable.
   */
 trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with BeforeAndAfterAll with IntegrationSettings with Eventually {
-  implicit val webDriver: WebDriver = new HtmlUnitDriver(BrowserVersion.CHROME)
+  implicit val webDriver: WebDriver = new WebClientExposingDriver(BrowserVersion.CHROME)
 
-  val logger: Logger = LoggerFactory.getLogger("IntegrationSpec")
+  val logger: Logger = LoggerFactory.getLogger(classOf[IntegrationSpec].getName)
   val cookiesToBeDiscarded = new ListBuffer[Cookie]()
   /**
     * Configuration applied before login.
     * Cookies cannot be set in this configuration. The webDriver
     * has to open a connection, before it can set cookies
     */
-  val loginConfig = new LoginConfiguration
+  val loginConfig: LoginConfiguration = new LoginConfiguration with HtmlUnitConfiguration
   /**
     * Configuration applied after login.
     * Cookies may be added here.
     */
-  val config = new Configuration
+  val config: Configuration = new Configuration with HtmlUnitConfiguration
 
   /**
     * Stores the path with prefixed [[IntegrationSettings.host]] and [[IntegrationSpec.projectRoot]] as url.

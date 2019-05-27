@@ -29,7 +29,7 @@ trait ResponseAccessors {
   /**
     * @return the response code of the web response of the current page
     */
-  def responseCode: Int = 200 //this.webDriver.getResponseCode
+  def responseCode: Int = asWebClientExposingDriverOrError(webDriver).getResponseCode
 
   /**
     * If a header field-name occurs multiple times, their field-values are merged into a comma-separated list.
@@ -46,7 +46,7 @@ trait ResponseAccessors {
     *
     * @return response headers as Map header field-name to header field-value. If a header field-name occurs multiple times, their field-values are merged into a comma-separated list.
     */
-  def responseHeaders: Map[String, String] = Map()//this.webDriver.getResponseHeaders
+  def responseHeaders: Map[String, String] = asWebClientExposingDriverOrError(webDriver).getResponseHeaders
 
   /**
     * @see [[responseHeaders]] for detailed rules on merging of multiple headers with the same field-name
@@ -66,15 +66,20 @@ trait ResponseAccessors {
   /**
     * @return Some(HtmlPage) if the currentPage is a HtmlPage otherwise None
     */
-  def currentHtmlPage: Option[HtmlPage] = None //this.webDriver.getCurrentHtmlPage
+  def currentHtmlPage: Option[HtmlPage] = asWebClientExposingDriverOrError(webDriver).getCurrentHtmlPage
 
   /**
     * @return Some(TextPage) if the currentPage is a TextPage otherwise None
     */
-  def currentTextPage: Option[TextPage] = None //this.webDriver.getCurrentTextPage
+  def currentTextPage: Option[TextPage] = asWebClientExposingDriverOrError(webDriver).getCurrentTextPage
 
   /**
     * @return Some(XmlPage) if the currentPage is an XmlPage otherwise None
     */
-  def currentXmlPage: Option[XmlPage] = None //this.webDriver.getCurrentXmlPage
+  def currentXmlPage: Option[XmlPage] = asWebClientExposingDriverOrError(webDriver).getCurrentXmlPage
+
+  private def asWebClientExposingDriverOrError(webDriver: WebDriver): WebClientExposingDriver = webDriver match {
+    case w: WebClientExposingDriver => w
+    case _ => throw new RuntimeException(s"ResponseAccessors can only be used with a webDriver of type ${classOf[WebClientExposingDriver].getCanonicalName}")
+  }
 }

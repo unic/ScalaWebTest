@@ -34,7 +34,7 @@ trait SeleniumChrome {
   private val driverServiceRunner = ChromeDriverServiceRunner
 
   override implicit val webDriver: WebDriver = new ChromeRemoteWebDriver(
-    driverServiceRunner.service.getUrl,
+    driverServiceRunner.url,
     new ChromeOptions().addArguments("--no-sandbox", "--headless")
   )
 

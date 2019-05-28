@@ -15,26 +15,48 @@
 package org.scalawebtest.core.browser
 
 import java.io.File
+import java.net.URL
 
 import org.openqa.selenium.chrome.ChromeDriverService
 import org.scalawebtest.core.Configurable
 
 object ChromeDriverServiceRunner extends Configurable {
   //before test suite
-  private val chromeDriverPath = requiredConfigFor("webdriver.chrome.driver")
+  private val driverServiceUrlProperty = "webdriver.chrome.driver.service.url"
+  private val driverProperty = "webdriver.chrome.driver"
 
-  val service: ChromeDriverService = new ChromeDriverService.Builder()
-    .usingDriverExecutable(new File(chromeDriverPath))
-    .usingAnyFreePort.build
+  private val runningChromeDriverServicePort = configFor[URL](driverServiceUrlProperty)
 
-  service.start()
+  var serviceOrPort: Either[ChromeDriverService, URL] = runningChromeDriverServicePort match {
+    case Some(url) =>
+      println(s"Not taking any action regarding ChromeDriverService, because it is managed outside of ScalaWebTest and access was provided via $driverServiceUrlProperty property.")
+      Right(url)
+    case None =>
+      val chromeDriverPath = requiredConfigFor[String](driverProperty)
 
-  println(s"Started ChromeDriverService from path $chromeDriverPath")
+      val service = new ChromeDriverService.Builder()
+        .usingDriverExecutable(new File(chromeDriverPath))
+        .usingAnyFreePort.build
+
+      service.start()
+      println(s"Started ChromeDriverService from path $chromeDriverPath")
+      Left(service)
+  }
+
+  def url: URL = serviceOrPort match {
+    case Left(s) => s.getUrl
+    case Right(u) => u
+  }
 
   //after test suite
   sys addShutdownHook {
-    service.stop()
-    println("Stopped ChromeDriverService")
+    serviceOrPort match {
+      case Left(s) =>
+        s.stop()
+        println("Stopped ChromeDriverService")
+      case Right(p) =>
+        println(s"Not taking any action regarding ChromeDriverService, because it is managed outside of ScalaWebTest and access was provided via $driverServiceUrlProperty property.")
+    }
   }
 }
 

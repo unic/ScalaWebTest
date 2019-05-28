@@ -5,6 +5,8 @@ scala:
  - 2.11.12
  - 2.10.7
 jdk: oraclejdk8
+env:
+ - webdriver.chrome.driver.service.url=9222
 script:
  - sbt ++$TRAVIS_SCALA_VERSION test
  - sbt ++$TRAVIS_SCALA_VERSION inttest

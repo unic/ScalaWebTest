@@ -5,7 +5,6 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import play.api.libs.json.{JsValue, Json}
 
 class FitsTypesSpec extends ScalaWebTestJsonBaseSpec with FitsTypeMismatchBehavior {
-  override implicit val webDriver: WebDriver = new HtmlUnitDriver()
   path = "/jsonResponse.json.jsp"
   def dijkstra: JsValue = Json.parse(webDriver.getPageSource)
 

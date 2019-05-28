@@ -23,7 +23,7 @@ trait WebDriverName {
 trait SeleniumBrowserConfiguration {
   self: BaseConfiguration with WebDriverName =>
 
-  private val logger: Logger = LoggerFactory.getLogger(classOf[SeleniumBrowserConfiguration].getName)
+  private val logger: Logger = LoggerFactory.getLogger(getClass.getName)
 
   override def enableJavaScript(throwOnError: Boolean): Unit = logger.warn(s"JavaScript is always active with $webDriverName. This configuration is superfluous.")
 

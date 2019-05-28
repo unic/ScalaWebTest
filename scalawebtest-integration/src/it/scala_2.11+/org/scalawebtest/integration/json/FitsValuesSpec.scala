@@ -6,7 +6,6 @@ import org.scalatest.exceptions.TestFailedException
 import play.api.libs.json.{JsValue, Json}
 
 class FitsValuesSpec extends ScalaWebTestJsonBaseSpec with FitsTypeMismatchBehavior {
-  override implicit val webDriver: WebDriver = new HtmlUnitDriver()
   path = "/jsonResponse.json.jsp"
   def dijkstra: JsValue = Json.parse(webDriver.getPageSource)
 

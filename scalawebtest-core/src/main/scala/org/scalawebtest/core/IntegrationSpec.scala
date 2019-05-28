@@ -17,7 +17,6 @@ package org.scalawebtest.core
 import java.util.logging.Level
 
 import com.gargoylesoftware.htmlunit.BrowserVersion
-import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import org.openqa.selenium.{Cookie, WebDriver}
 import org.scalatest._
 import org.scalatest.concurrent.Eventually
@@ -27,8 +26,6 @@ import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.mutable.ListBuffer
 import scala.language.postfixOps
-
-
 
 /**
   * This is the base trait for integration specs. The recommended way is to create your own project specific trait, which extends
@@ -41,7 +38,7 @@ import scala.language.postfixOps
 trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with BeforeAndAfterAll with IntegrationSettings with Eventually {
   implicit val webDriver: WebDriver = new WebClientExposingDriver(BrowserVersion.CHROME)
 
-  val logger: Logger = LoggerFactory.getLogger(classOf[IntegrationSpec].getName)
+  val logger: Logger = LoggerFactory.getLogger(getClass.getName)
   val cookiesToBeDiscarded = new ListBuffer[Cookie]()
   /**
     * Configuration applied before login.

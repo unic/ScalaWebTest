@@ -5,7 +5,6 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import org.scalawebtest.json.JsonGaugeFromResponse.fitsValues
 
 class DocumentFitsValuesSpec extends ScalaWebTestJsonBaseSpec {
-  override implicit val webDriver: WebDriver = new HtmlUnitDriver()
   path = "/jsonResponse.json.jsp"
 
   "FitsValues" should "report success, when the json gauge contains the same values as the response it is tested against" in {

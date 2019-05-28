@@ -5,7 +5,6 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import play.api.libs.json.{JsLookupResult, JsValue, Json}
 
 class ContainsElementFittingSpec extends ScalaWebTestJsonBaseSpec {
-  override implicit val webDriver: WebDriver = new HtmlUnitDriver()
   path = "/jsonResponse.json.jsp"
   def dijkstra: JsValue = Json.parse(webDriver.getPageSource)
   def universities: JsLookupResult = { dijkstra \ "universities" }

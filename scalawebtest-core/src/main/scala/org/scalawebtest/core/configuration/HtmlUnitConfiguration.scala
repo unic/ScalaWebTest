@@ -24,10 +24,6 @@ trait HtmlUnitConfiguration {
   swallowJavaScriptErrors()
   disableCss()
 
-  /**
-    * Enable JavaScript evaluation in the webDriver
-    * and choose whether to throw on JavaScript error
-    */
   override def enableJavaScript(throwOnError: Boolean): Unit = {
     configurations += "enableJavaScript" ->
       ((webDriver: WebDriver) => asWebClientExposingDriverOrError(webDriver).getOptions.setJavaScriptEnabled(true))
@@ -35,35 +31,20 @@ trait HtmlUnitConfiguration {
       ((webDriver: WebDriver) => asWebClientExposingDriverOrError(webDriver).getOptions.setThrowExceptionOnScriptError(throwOnError))
   }
 
-  /**
-    * Disable JavaScript evaluation as well as throwing on JavaScript error in the webDriver
-    */
   override def disableJavaScript(): Unit = {
     configurations += "enableJavaScript" -> ((webDriver: WebDriver) => asWebClientExposingDriverOrError(webDriver).getOptions.setJavaScriptEnabled(false))
     configurations += "throwOnJSError" -> ((webDriver: WebDriver) => asWebClientExposingDriverOrError(webDriver).getOptions.setThrowExceptionOnScriptError(false))
   }
 
-  /**
-    * Throw on JavaScript Error. Preferably use [[HtmlUnitConfiguration.disableJavaScript()]], as the two configurations only make sense when combined.
-    */
   override def throwOnJavaScriptError(): Unit = configurations += "throwOnJSError" ->
     ((webDriver: WebDriver) => asWebClientExposingDriverOrError(webDriver).getOptions.setThrowExceptionOnScriptError(true))
 
-  /**
-    * Silently swallow JavaScript errors. Preferably use [[HtmlUnitConfiguration.disableJavaScript()]], as the two configurations only make sense when combined.
-    */
   override def swallowJavaScriptErrors(): Unit = configurations += "throwOnJSError" ->
     ((webDriver: WebDriver) => asWebClientExposingDriverOrError(webDriver).getOptions.setThrowExceptionOnScriptError(false))
 
-  /**
-    * Enable CSS evaluation in the webDriver.
-    */
   override def enableCss(): Unit = configurations += "enableCss" ->
     ((webDriver: WebDriver) => asWebClientExposingDriverOrError(webDriver).getOptions.setCssEnabled(true))
 
-  /**
-    * Disable CSS evaluation in the webDriver.
-    */
   override def disableCss(): Unit = configurations += "enableCss" ->
     ((webDriver: WebDriver) => asWebClientExposingDriverOrError(webDriver).getOptions.setCssEnabled(false))
 

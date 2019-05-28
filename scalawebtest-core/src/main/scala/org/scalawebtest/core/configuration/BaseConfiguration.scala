@@ -20,19 +20,38 @@ import org.scalawebtest.core.IntegrationSpec
 abstract class BaseConfiguration() {
   var configurations: Map[String, WebDriver => Unit] = Map()
 
+  /**
+    * Enable JavaScript evaluation in the webDriver
+    * and choose whether to throw on JavaScript error
+    */
   def enableJavaScript(throwOnError: Boolean): Unit
 
+  /**
+    * Disable JavaScript evaluation as well as throwing on JavaScript error in the webDriver
+    */
   def disableJavaScript(): Unit
 
+  /**
+    * Throw on JavaScript Error. Preferably use [[HtmlUnitConfiguration.disableJavaScript()]], as the two configurations only make sense when combined.
+    */
   def throwOnJavaScriptError(): Unit
 
+  /**
+    * Silently swallow JavaScript errors. Preferably use [[HtmlUnitConfiguration.disableJavaScript()]], as the two configurations only make sense when combined.
+    */
   def swallowJavaScriptErrors(): Unit
 
+  /**
+    * Enable CSS evaluation in the webDriver.
+    */
   def enableCss(): Unit
 
+  /**
+    * Disable CSS evaluation in the webDriver.
+    */
   def disableCss(): Unit
 
-  def unimplementedConfiguration(webDriverName: String): Unit = throw new RuntimeException(s"This is not configurable when working with $webDriverName. Please choose a different browser/webDriver.")
+  protected def unimplementedConfiguration(webDriverName: String): Unit = throw new RuntimeException(s"This is not configurable when working with $webDriverName. Please choose a different browser/webDriver.")
 }
 
 abstract class LoginConfiguration extends BaseConfiguration

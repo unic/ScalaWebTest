@@ -41,7 +41,7 @@ trait SeleniumChrome {
   class ChromeRemoteWebDriver(remoteAddress: URL , capabilities: Capabilities ) extends RemoteWebDriver(remoteAddress, capabilities) {
     override def getPageSource: String = {
       super.getPageSource
-        .replaceFirst("""<html xmlns="http://www.w3.org/1999/xhtml"><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">""", "")
+        .replaceFirst("""<html.*><head.*></head><body.*><pre style="word-wrap: break-word; white-space: pre-wrap;">""", "")
         .replaceFirst("""</pre></body></html>""", "")
     }
   }

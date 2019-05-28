@@ -69,7 +69,19 @@ trait Configurable {
       }
       else {
         logger.info(s"No environment variable $name found")
-        None
+        if (name.contains(".") || name.contains("-")) {
+          val envVarName = name.toUpperCase.replaceAll("[.-]", "_")
+          logger.info(s"Searching for environment variable $envVarName instead of $name, because Linux does not support environment variables with a dot or hyphen in the name")
+          val envVar = System.getenv(envVarName)
+          if (envVar != null) {
+            logger.info(s"Environment variable $envVarName found with value $envVar")
+            implicitly[Transformer[T]].transform(envVar, Context("environment variable", envVarName))
+          } else {
+            None
+          }
+        } else {
+          None
+        }
       }
     }
   }

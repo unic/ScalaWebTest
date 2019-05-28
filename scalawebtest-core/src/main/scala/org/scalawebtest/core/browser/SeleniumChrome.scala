@@ -35,7 +35,7 @@ trait SeleniumChrome {
 
   override implicit val webDriver: WebDriver = new ChromeRemoteWebDriver(
     driverServiceRunner.url,
-    new ChromeOptions()//.addArguments("--no-sandbox", "--headless")
+    new ChromeOptions().addArguments("--no-sandbox", "--headless")
   )
 
   class ChromeRemoteWebDriver(remoteAddress: URL , capabilities: Capabilities ) extends RemoteWebDriver(remoteAddress, capabilities) {

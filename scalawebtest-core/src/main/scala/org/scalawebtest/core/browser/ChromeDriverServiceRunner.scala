@@ -22,7 +22,7 @@ import org.scalawebtest.core.Configurable
 
 object ChromeDriverServiceRunner extends Configurable {
   //before test suite
-  private val driverServiceUrlProperty = "WEBDRIVER_CHROME_DRIVER_SERVICE_URL"
+  private val driverServiceUrlProperty = "webdriver.chrome.driver.service.url"
   private val driverProperty = "webdriver.chrome.driver"
 
   private val runningChromeDriverServicePort = configFor[URL](driverServiceUrlProperty)

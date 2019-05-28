@@ -6,7 +6,8 @@ scala:
  - 2.10.7
 jdk: oraclejdk8
 env:
- - WEBDRIVER_CHROME_DRIVER_SERVICE_URL="http://localhost:9222"
+ #- WEBDRIVER_CHROME_DRIVER_SERVICE_URL="http://localhost:9222"
+ - WEBDRIVER_CHROME_DRIVER="/usr/lib/chromium-browser/chromedriver"
 script:
  - sbt ++$TRAVIS_SCALA_VERSION test
  - sbt ++$TRAVIS_SCALA_VERSION inttest

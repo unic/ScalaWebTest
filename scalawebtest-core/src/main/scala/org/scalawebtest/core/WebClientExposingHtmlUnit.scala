@@ -22,5 +22,5 @@ import org.scalatest.selenium.{Driver, WebBrowser}
  * Also uses a more current browser version than the default HtmlUnit trait.
  */
 trait WebClientExposingHtmlUnit extends WebBrowser with Driver {
-  override implicit val webDriver = new WebClientExposingDriver(BrowserVersion.CHROME)
+  override val webDriver: WebClientExposingDriver = new WebClientExposingDriver(BrowserVersion.CHROME)
 }

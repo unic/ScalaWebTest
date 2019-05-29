@@ -75,9 +75,4 @@ class HtmlElementGaugeSpec extends ScalaWebTestBaseSpec with HtmlElementGauge {
       images.next() fits <div class="columns_image"></div> <div class="columns_image"></div>
     }
   }
-  it should "fail if the top level element in the gauge is not the same as the one tested" in {
-    assertThrows[TestFailedException] {
-      images.next() fits <a></a>
-    }
-  }
 }

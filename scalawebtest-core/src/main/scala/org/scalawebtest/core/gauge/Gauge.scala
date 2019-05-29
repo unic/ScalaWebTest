@@ -67,48 +67,29 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
   }
 
   def elementFits(domNode: DomNode): Unit = {
-    if (definition.theSeq.length != 1) {
-      fail("Exactly one top level node expected, in the gauge definition.")
-    }
-
-    definition.theSeq.head match {
-      case elem: Elem =>
-        if (domNode.getLocalName != elem.label) {
-          misfitHolder.addMisfit(Misfit(MISFIT_RELEVANCE_START_VALUE, s"Expected <${elem.label}>, but was <${domNode.getLocalName}> in ${domNode.prettyString()}"))
-          failAndReportMisfit()
-        }
-        if (!verifyClassesOnCandidate(domNode, elem, MISFIT_RELEVANCE_START_VALUE)) {
-          failAndReportMisfit()
-        }
-        val fittingNode = verifyCandidate(domNode, elem, None, MISFIT_RELEVANCE_START_VALUE)
-        if (fittingNode.isEmpty) {
-          failAndReportMisfit()
-        }
-      //only element allowed as top level gauge definition, when using elementFits
-      case invalid => fail("Gauge definition contained invalid top level element " + invalid)
-    }
+    var fittingNodes = List[Fit]()
+    definition.theSeq.foreach(gaugeElement => {
+      val fittingNode = nodeFits(Option(domNode.getParentNode).getOrElse(domNode), gaugeElement, None, MISFIT_RELEVANCE_START_VALUE)
+      if (fittingNode.isEmpty) {
+        failAndReportMisfit()
+      }
+      else {
+        fittingNodes = fittingNode.get :: fittingNodes
+        //when proceeding to the next definition, old misfits do not matter anymore
+        misfitHolder.wipe()
+      }
+    })
   }
 
   def elementDoesNotFit(domNode: DomNode): Unit = {
-    if (definition.theSeq.length != 1) {
-      fail("Exactly one top level node expected, in the gauge definition.")
-    }
-
-    definition.theSeq.head match {
-      case elem: Elem =>
-        if (domNode.getLocalName != elem.label) {
-          misfitHolder.addMisfit(Misfit(MISFIT_RELEVANCE_START_VALUE, s"Expected <${elem.label}>, but was <${domNode.getLocalName}> in ${domNode.prettyString()}"))
-          failAndReportMisfit()
-        }
-        if (verifyClassesOnCandidate(domNode, elem, MISFIT_RELEVANCE_START_VALUE)) {
-          val fittingNode = verifyCandidate(domNode, elem, None, MISFIT_RELEVANCE_START_VALUE)
-          if (fittingNode.isDefined) {
-            fail(s"Current element matches the provided gauge, although expected not to!\n Gauge spec: $elem\n Fitting node: ${fittingNode.get.domNode.prettyString()} found")
-          }
-        }
-      //only element allowed as top level gauge definition, when using elementFits
-      case invalid => fail("Gauge definition contained invalid top level element " + invalid)
-    }
+    definition.theSeq.foreach(gaugeElement => {
+      val fit = nodeFits(Option(domNode.getParentNode).getOrElse(domNode), gaugeElement, None, MISFIT_RELEVANCE_START_VALUE)
+      if (fit.isDefined) {
+        fail(s"Current element matches the provided gauge, although expected not to!\n Gauge spec: $gaugeElement\n Fitting node: ${fit.get.domNode.prettyString()} found")
+      }
+      //when proceeding to the next definition, old misfits do not matter anymore
+      misfitHolder.wipe()
+    })
   }
 
   private def verifyClassesOnCandidate(domNode: DomNode, elem: Elem, misfitRelevance: MisfitRelevance): Boolean = {
@@ -154,7 +135,6 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver) ex
 
     node.label + classSelector
   }
-
 
   private def nodeFits(node: DomNode, gaugeDefinition: Seq[Node], previousSibling: Option[DomNode], misfitRelevance: MisfitRelevance): Option[Fit] = {
     val definitionIt = gaugeDefinition.iterator
@@ -449,7 +429,7 @@ trait HtmlGauge {
   }
 
   /**
-    * Synonym for [[Gauge.fits]]. Use whatever reads better in your current context.
+    * Synonym for [[Gauge.elementFits]]. Use whatever reads better in your current context.
     */
   def fit(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver): Unit = fits(definition)
 
@@ -464,7 +444,7 @@ trait HtmlGauge {
     /**
       * Assert that the current document `doesnt fit` the html snippet provided as definition for the `Gauge`
       *
-      * To get detailed information about available options in `Gauge` definitions, read the ScalaDoc of [[Gauge.fits]]
+      * To get detailed information about available options in `Gauge` definitions, read the ScalaDoc of [[Gauge.elementFits]]
       */
     def fit(definition: NodeSeq)(implicit webDriver: WebClientExposingDriver): Unit = {
       new Gauge(definition).doesNotFit()

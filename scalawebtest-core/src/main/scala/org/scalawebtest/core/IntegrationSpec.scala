@@ -38,7 +38,7 @@ import scala.language.postfixOps
 trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with BeforeAndAfterAllConfigMap with IntegrationSettings with Eventually {
   implicit var webDriver: WebDriver = new WebClientExposingDriver(BrowserVersion.CHROME)
 
-  val logger: Logger = LoggerFactory.getLogger(getClass.getName)
+  private val logger: Logger = LoggerFactory.getLogger(getClass.getName)
   val cookiesToBeDiscarded = new ListBuffer[Cookie]()
   /**
     * Configuration applied before login.

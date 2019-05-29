@@ -16,7 +16,7 @@ package org.scalawebtest.core.gauge
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Element => JElement, Node => JNode, TextNode => JTextNode}
-import org.openqa.selenium.{By, WebDriver}
+import org.openqa.selenium.WebDriver
 import org.scalatest.Assertions
 import org.scalatest.words.NotWord
 
@@ -28,7 +28,7 @@ import scala.xml._
 /**
   * Gauge provides functions to write integration tests with very low effort. For a detailed description of it's usage,
   * see [[org.scalawebtest.core.gauge.Gauge.fits]] and [[org.scalawebtest.core.gauge.Gauge.doesnt.fit]]
-  * as well as [[org.scalawebtest.core.gauge.HtmlElementGauge$.GaugeFromElement.fits]] and [[org.scalawebtest.core.gauge.HtmlElementGauge$.GaugeFromElement.fits]]
+  * as well as [[org.scalawebtest.core.gauge.HtmlElementGauge.GaugeFromElement.fits]] and [[org.scalawebtest.core.gauge.HtmlElementGauge.GaugeFromElement.fits]]
   */
 class Gauge(definition: NodeSeq)(implicit webDriver: WebDriver) extends Assertions {
   type MisfitRelevance = Int
@@ -39,7 +39,6 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebDriver) extends Assertio
 
   def fits(): Unit = {
     var fittingNodes = List[Fit]()
-//    if (webDriver.getCurrentHtmlPage.isEmpty) fail("Current page is not of type HtmlPage. At the moment only Html documents are supported")
 
     val currentPage = Jsoup.parse(webDriver.getPageSource)
     definition.theSeq.foreach(gaugeElement => {
@@ -56,12 +55,11 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebDriver) extends Assertio
   }
 
   def doesNotFit(): Unit = {
-//    if (webDriver.getCurrentHtmlPage.isEmpty) fail("Current page is not of type HtmlPage. At the moment only Html documents are supported")
     val currentPage = Jsoup.parse(webDriver.getPageSource)
     definition.theSeq.foreach(gaugeElement => {
       val fit = nodeFits(currentPage, gaugeElement, None, MISFIT_RELEVANCE_START_VALUE)
       if (fit.isDefined) {
-        fail(s"Current document matches the provided gauge, although expected not to!\n Gauge spec: $gaugeElement\n Fitting node: ${fit.get.domNode.prettyString()} found")
+        fail(s"Current document matches the provided gauge, although expected not to!\n Gauge spec: $gaugeElement\n Fitting node: ${fit.get.domNode.prettyString} found")
       }
       //when proceeding to the next definition, old misfits do not matter anymore
       misfitHolder.wipe()
@@ -76,7 +74,7 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebDriver) extends Assertio
     definition.theSeq.head match {
       case elem: Elem =>
         if (domNode.nodeName() != elem.label) {
-          misfitHolder.addMisfit(Misfit(MISFIT_RELEVANCE_START_VALUE, s"Expected <${elem.label}>, but was <${domNode.nodeName}> in ${domNode.prettyString()}"))
+          misfitHolder.addMisfit(Misfit(MISFIT_RELEVANCE_START_VALUE, s"Expected <${elem.label}>, but was <${domNode.nodeName}> in ${domNode.prettyString}"))
           failAndReportMisfit()
         }
         if (!verifyClassesOnCandidate(domNode, elem, MISFIT_RELEVANCE_START_VALUE)) {
@@ -98,14 +96,14 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebDriver) extends Assertio
 
     definition.theSeq.head match {
       case elem: Elem =>
-        if (domNode.nodeName() != elem.label) {
-          misfitHolder.addMisfit(Misfit(MISFIT_RELEVANCE_START_VALUE, s"Expected <${elem.label}>, but was <${domNode.nodeName()}> in ${domNode.prettyString()}"))
+        if (domNode.nodeName != elem.label) {
+          misfitHolder.addMisfit(Misfit(MISFIT_RELEVANCE_START_VALUE, s"Expected <${elem.label}>, but was <${domNode.nodeName}> in ${domNode.prettyString}"))
           failAndReportMisfit()
         }
         if (verifyClassesOnCandidate(domNode, elem, MISFIT_RELEVANCE_START_VALUE)) {
           val fittingNode = verifyCandidate(domNode, elem, None, MISFIT_RELEVANCE_START_VALUE)
           if (fittingNode.isDefined) {
-            fail(s"Current element matches the provided gauge, although expected not to!\n Gauge spec: $elem\n Fitting node: ${fittingNode.get.domNode.prettyString()} found")
+            fail(s"Current element matches the provided gauge, although expected not to!\n Gauge spec: $elem\n Fitting node: ${fittingNode.get.domNode.prettyString} found")
           }
         }
       //only element allowed as top level gauge definition, when using elementFits
@@ -117,14 +115,14 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebDriver) extends Assertio
     val definitionAttributes = elem.attributes.asAttrMap
 
     def assertContainsClass(domNode: JNode, clazz: String): Boolean = {
-      val domNodeClass = domNode.attributes().get("class")
+      val domNodeClass = domNode.attributes.get("class")
       if (domNodeClass == null) {
-        misfitHolder.addMisfit(Misfit(misfitRelevance, s"Expected element to contain the class $clazz, but didn't contain any class attribute in ${domNode.prettyString()}"))
+        misfitHolder.addMisfit(Misfit(misfitRelevance, s"Expected element to contain the class $clazz, but didn't contain any class attribute in ${domNode.prettyString}"))
         false
       } else {
         val containsClass = domNodeClass.split(" ").map(_.trim).filter(_.nonEmpty).contains(clazz)
         if (!containsClass) {
-          misfitHolder.addMisfit(Misfit(misfitRelevance, s"Expected element to contain the class $clazz, but only contained ${domNodeClass} in ${domNode.prettyString()}"))
+          misfitHolder.addMisfit(Misfit(misfitRelevance, s"Expected element to contain the class $clazz, but only contained $domNodeClass in ${domNode.prettyString}"))
         }
         containsClass
       }
@@ -189,7 +187,7 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebDriver) extends Assertio
       }
     }
     if (nodeFits) {
-      if (node.nodeName() == "body" && firstFittingSubNode.isDefined) {
+      if (node.nodeName == "body" && firstFittingSubNode.isDefined) {
         firstFittingSubNode
       }
       else {
@@ -205,7 +203,7 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebDriver) extends Assertio
     else {
       def elementFits: Boolean = {
         def textElement = {
-          val children = nodeExpectedToContainText.childNodes().asScala.toList
+          val children = nodeExpectedToContainText.childNodes.asScala.toList
           val considerableNodes = previousSibling match {
             case Some(p) => children.filter(p.isBefore(_))
             case None => children
@@ -220,8 +218,8 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebDriver) extends Assertio
           }
           case None =>
             previousSibling match {
-              case Some(p) => misfitHolder.addMisfit(Misfit(misfitRelevance, "Misfitting Element: element [" + nodeExpectedToContainText.prettyString() + "] did not contain a text element after [" + p.prettyString() + "]"))
-              case None => misfitHolder.addMisfit(Misfit(misfitRelevance, "Misfitting Element: element [" + nodeExpectedToContainText.prettyString() + "] did not contain a text"))
+              case Some(p) => misfitHolder.addMisfit(Misfit(misfitRelevance, s"Misfitting Element: element [${nodeExpectedToContainText.prettyString}] did not contain a text element after [${p.prettyString}]"))
+              case None => misfitHolder.addMisfit(Misfit(misfitRelevance, s"Misfitting Element: element [${nodeExpectedToContainText.prettyString}] did not contain a text"))
             }
             false
         }
@@ -239,7 +237,7 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebDriver) extends Assertio
     var fit: Option[Fit] = None
 
     if (!candidatesIt.hasNext) {
-      misfitHolder.addMisfit(misfitRelevance, "Misfitting Element: No element matching cssSelector [" + cssSelector + "] found below " + currentNode.prettyString)
+      misfitHolder.addMisfit(misfitRelevance, s"Misfitting Element: No element matching cssSelector [$cssSelector] found below ${currentNode.prettyString}")
     }
     //test all candidate elements, whether they match given attribute expectations
     while (fit.isEmpty && candidatesIt.hasNext) {
@@ -265,15 +263,15 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebDriver) extends Assertio
       if (expectedKey != "class" && expectedValue.nonEmpty) {
         attributeMisfitRelevance += 1
 
-        def matchesAttribute(): Boolean = {
-          val attributes = candidate.attributes()
+        def matchesAttribute: Boolean = {
+          val attributes = candidate.attributes
           if (attributes == null) {
-            misfitHolder.addMisfit(attributeMisfitRelevance, "Misfitting Element: element [" + candidate.prettyString() + "] does not have any attributes, but attribute [" + defAttr + "] expected")
+            misfitHolder.addMisfit(attributeMisfitRelevance, s"Misfitting Element: element [${candidate.prettyString}] does not have any attributes, but attribute [$defAttr] expected")
             return false
           }
           val attr = attributes.get(expectedKey)
           if (attr == null) {
-            misfitHolder.addMisfit(attributeMisfitRelevance, "Misfitting Element: element [" + candidate.prettyString() + "] does not have the expected attribute [" + defAttr + "]")
+            misfitHolder.addMisfit(attributeMisfitRelevance, s"Misfitting Element: element [${candidate.prettyString}] does not have the expected attribute [$defAttr]")
             return false
           }
           Matchers.attributeMatches(expectedValue, CandidateAttribute(attributeMisfitRelevance, candidate, expectedKey, attr)) match {
@@ -282,7 +280,7 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebDriver) extends Assertio
           }
         }
 
-        matchesAllAttributes &= matchesAttribute()
+        matchesAllAttributes &= matchesAttribute
       }
     }
     //if the current element matches all attributes and is in correct order, we will test child elements
@@ -295,14 +293,14 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebDriver) extends Assertio
   }
 
   private def failAndReportMisfit() = {
-    val relevantMisfitsReason = misfitHolder.relevantMisfits().reverse.map(_.reason).mkString("\n")
-    fail(relevantMisfitsReason + "\nCurrent document does not match provided gauge:\n" + definition.toString)
+    val relevantMisfitsReason = misfitHolder.relevantMisfits.reverse.map(_.reason).mkString("\n")
+    fail(s"$relevantMisfitsReason\nCurrent document does not match provided gauge:\n${definition.toString}")
   }
 
   private def elementOrderCorrect(current: JNode, previousSibling: Option[JNode], gaugeElement: Elem, misfitRelevance: MisfitRelevance): Boolean =
     previousSibling match {
       case Some(prev) if current.isBefore(prev) =>
-        misfitHolder.addMisfit(misfitRelevance, "Misfitting Element Order: Found [" + current.prettyString() + "\n] when looking for an element matching [\n" + gaugeElement + "\n]. It didn't fit, because it was found before [" + previousSibling.get.prettyString() + "\n] but was expected after it.")
+        misfitHolder.addMisfit(misfitRelevance, s"Misfitting Element Order: Found [${current.prettyString}\n] when looking for an element matching [\n$gaugeElement\n]. It didn't fit, because it was found before [${previousSibling.get.prettyString}\n] but was expected after it.")
         false
       case _ =>
         true
@@ -314,7 +312,7 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebDriver) extends Assertio
         @tailrec
         def parentsInner(node: JNode, parents: List[JNode]): List[JNode] = {
           if (node.hasParent)
-            parentsInner(node.parent(), node :: parents)
+            parentsInner(node.parent, node :: parents)
           else
             parents
         }
@@ -324,15 +322,11 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebDriver) extends Assertio
 
       def nodeWithParentsBefore(self: List[JNode], others: List[JNode]): Boolean = {
         if (self.tail.headOption == others.tail.headOption) {
-          self.head.siblingIndex() < others.head.siblingIndex()
+          self.head.siblingIndex < others.head.siblingIndex
         } else {
           nodeWithParentsBefore(self.tail, others.tail)
         }
       }
-
-      //      val following = org.w3c.dom.Node.DOCUMENT_POSITION_FOLLOWING
-      //      val order = domNode.compareDocumentPosition(other)
-      //      (order & following) == following
 
       val domNodeAndParents = parents(domNode)
       val otherAndParents = parents(other)
@@ -344,30 +338,23 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebDriver) extends Assertio
       nodeWithParentsBefore(comparableSlice(domNodeAndParents), comparableSlice(otherAndParents))
     }
 
-//    def contains(other: JNode): Boolean = {
-//      val containedBy = org.w3c.dom.Node.DOCUMENT_POSITION_CONTAINED_BY
-//      val order = domNode.compareDocumentPosition(other)
-//      (order & containedBy) == containedBy
-//    }
   }
 
   implicit class PrettyPrintJNode(domNode: JNode) {
-    def prettyString(): String = prettyString(0)
+    def prettyString: String = prettyString(0)
 
     private def prettyString(depth: Int): String = {
       def indention: String = {
-        "\n" + (0 to depth).map(_ => " ").fold("")(_ + _)
+        "\n" + (0 to depth).map(_ => "  ").mkString
       }
-
-      //      domNode match {
-      //        case t: DomText => t.asText()
-      //        case e: DomElement =>
-      //          indention + s"<${e.getNodeName + e.getAttributesMap.values().asScala.map(e => e.getNodeName + "=\"" + e.getNodeValue + "\"").fold("")(_ + " " + _)}>" +
-      //            e.getChildren.asScala.map(_.prettyString(depth + 1)).fold("")(_ + _) +
-      //            indention + s"</${e.getNodeName}>"
-      //        case _ => ""
-      //      }
-      ""
+      domNode match {
+        case t: JTextNode => t.text.trim
+        case e: JElement =>
+          indention + s"<${e.nodeName}${e.attributes}>" +
+            e.childNodes.asScala.map(_.prettyString(depth + 1)).mkString +
+            (if(e.children.size > 0) indention else "") + s"</${e.nodeName}>"
+        case o => o.toString
+      }
     }
   }
 

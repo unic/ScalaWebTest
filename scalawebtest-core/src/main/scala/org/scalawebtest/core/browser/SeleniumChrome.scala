@@ -16,14 +16,17 @@ package org.scalawebtest.core.browser
 
 import java.net.URL
 
+import org.openqa.selenium.Capabilities
 import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.remote.RemoteWebDriver
-import org.openqa.selenium.{Capabilities, WebDriver}
-import org.scalawebtest.core.IntegrationSpec
+import org.scalatest.ConfigMap
 import org.scalawebtest.core.configuration._
+import org.scalawebtest.core.{Configurable, IntegrationSpec}
+
+import scala.collection.JavaConverters._
 
 
-trait SeleniumChrome {
+trait SeleniumChrome extends Configurable {
   self: IntegrationSpec =>
 
   override val loginConfig = new LoginConfiguration with SeleniumChromeConfiguration
@@ -33,12 +36,20 @@ trait SeleniumChrome {
   //this imports the ChromeDriverServiceRunner object, and therefore allows it to execute commands before and after the test suite was run
   private val driverServiceRunner = ChromeDriverServiceRunner
 
-  override implicit val webDriver: WebDriver = new ChromeRemoteWebDriver(
-    driverServiceRunner.url,
-    new ChromeOptions().addArguments("--no-sandbox", "--headless")
-  )
+  override def prepareWebDriver(configMap: ConfigMap): Unit = {
+    val driverServiceUrl = driverServiceRunner.assertInitialized(configMap)
+    val chromeArguments =
+      configFor[String](configMap)("webdriver.chrome.arguments").map(_.split(',').toList)
+        .getOrElse(List("--no-sandbox", "--headless"))
+        .asJava
 
-  class ChromeRemoteWebDriver(remoteAddress: URL , capabilities: Capabilities ) extends RemoteWebDriver(remoteAddress, capabilities) {
+    webDriver = new ChromeRemoteWebDriver(
+      driverServiceUrl,
+      new ChromeOptions().addArguments(chromeArguments)
+    )
+  }
+
+  class ChromeRemoteWebDriver(remoteAddress: URL, capabilities: Capabilities) extends RemoteWebDriver(remoteAddress, capabilities) {
     override def getPageSource: String = {
       super.getPageSource
         .replaceFirst("""<html.*><head.*></head><body.*><pre style="word-wrap: break-word; white-space: pre-wrap;">""", "")
@@ -49,6 +60,7 @@ trait SeleniumChrome {
   trait SeleniumChromeConfiguration extends BaseConfiguration with WebDriverName with SeleniumBrowserConfiguration {
     override val webDriverName: String = classOf[SeleniumChrome].getCanonicalName
   }
+
 }
 
 

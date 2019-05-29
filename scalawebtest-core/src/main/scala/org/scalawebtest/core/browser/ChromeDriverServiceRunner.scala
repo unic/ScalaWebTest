@@ -18,6 +18,7 @@ import java.io.File
 import java.net.URL
 
 import org.openqa.selenium.chrome.ChromeDriverService
+import org.scalatest.ConfigMap
 import org.scalawebtest.core.Configurable
 
 object ChromeDriverServiceRunner extends Configurable {
@@ -25,32 +26,42 @@ object ChromeDriverServiceRunner extends Configurable {
   private val driverServiceUrlProperty = "webdriver.chrome.driver.service.url"
   private val driverProperty = "webdriver.chrome.driver"
 
-  private val runningChromeDriverServicePort = configFor[URL](driverServiceUrlProperty)
+  var internalServiceOrPort: Either[ChromeDriverService, URL] = _
 
-  var serviceOrPort: Either[ChromeDriverService, URL] = runningChromeDriverServicePort match {
-    case Some(url) =>
-      println(s"Not taking any action regarding ChromeDriverService, because it is managed outside of ScalaWebTest and access was provided via $driverServiceUrlProperty property.")
-      Right(url)
-    case None =>
-      val chromeDriverPath = requiredConfigFor[String](driverProperty)
-
-      val service = new ChromeDriverService.Builder()
-        .usingDriverExecutable(new File(chromeDriverPath))
-        .usingAnyFreePort.build
-
-      service.start()
-      println(s"Started ChromeDriverService from path $chromeDriverPath")
-      Left(service)
+  def assertInitialized(configMap: ConfigMap): URL = {
+    serviceOrPort(configMap) match {
+      case Left(s) => s.getUrl
+      case Right(u) => u
+    }
   }
 
-  def url: URL = serviceOrPort match {
-    case Left(s) => s.getUrl
-    case Right(u) => u
+  private def serviceOrPort(configMap: ConfigMap): Either[ChromeDriverService, URL] = {
+    val runningChromeDriverServicePort = configFor[URL](configMap)(driverServiceUrlProperty)
+    if (internalServiceOrPort == null) {
+      internalServiceOrPort = runningChromeDriverServicePort match {
+        case Some(url) =>
+          println(s"Not taking any action regarding ChromeDriverService, because it is managed outside of ScalaWebTest and access was provided via $driverServiceUrlProperty property.")
+          Right(url)
+        case None =>
+          val chromeDriverPath = requiredConfigFor[String](configMap)(driverProperty)
+
+          val service = new ChromeDriverService.Builder()
+            .usingDriverExecutable(new File(chromeDriverPath))
+            .usingAnyFreePort.build
+
+          service.start()
+          println(s"Started ChromeDriverService from path $chromeDriverPath")
+          Left(service)
+      }
+    }
+    internalServiceOrPort
   }
 
   //after test suite
   sys addShutdownHook {
-    serviceOrPort match {
+    //an empty ConfigMap is used, because we can not access the real ConfigMap in the shutdownHook,
+    //but also because we do need information from the ConfigMap during shutdown.
+    serviceOrPort(ConfigMap.empty) match {
       case Left(s) =>
         s.stop()
         println("Stopped ChromeDriverService")

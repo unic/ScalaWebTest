@@ -16,6 +16,7 @@ package org.scalawebtest.core
 
 import java.net.URL
 
+import org.scalatest.ConfigMap
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.util.{Failure, Success, Try}
@@ -52,42 +53,58 @@ trait Configurable {
     }
   }
 
-  def configFor[T: Transformer](name: String): Option[T] = {
-    def context(kind: String) = Context(kind, name)
+  def configFor[T: Transformer](configMap: ConfigMap)(name: String): Option[T] = {
+    def systemProperty(name: String): Option[T] = {
+      val sysProp = System.getProperty(name)
+      if (sysProp != null) {
+        logger.info(s"System property $name found with value $sysProp")
+        implicitly[Transformer[T]].transform(sysProp, Context("system property", name))
+      }
+      else {
+        logger.info(s"No system property $name found")
+        None
+      }
+    }
 
-    val sysProp = System.getProperty(name)
-    if (sysProp != null) {
-      logger.info(s"System property $name found with value $sysProp")
-      implicitly[Transformer[T]].transform(sysProp, context("system property"))
-    } else {
-      logger.info(s"No system property $name found, deferring to environment variables")
-
+    def envVar(name: String): Option[T] = {
       val envVar = System.getenv(name)
       if (envVar != null) {
         logger.info(s"Environment variable $name found with value $envVar")
-        implicitly[Transformer[T]].transform(envVar, context("environment variable"))
-      }
-      else {
+        implicitly[Transformer[T]].transform(envVar, Context("environment variable", name))
+      } else {
         logger.info(s"No environment variable $name found")
-        if (name.contains(".") || name.contains("-")) {
-          val envVarName = name.toUpperCase.replaceAll("[.-]", "_")
-          logger.info(s"Searching for environment variable $envVarName instead of $name, because Linux does not support environment variables with a dot or hyphen in the name")
-          val envVar = System.getenv(envVarName)
-          if (envVar != null) {
-            logger.info(s"Environment variable $envVarName found with value $envVar")
-            implicitly[Transformer[T]].transform(envVar, Context("environment variable", envVarName))
-          } else {
-            None
-          }
-        } else {
-          None
-        }
+        None
       }
     }
+
+    def envVarNameFallback(name: String): Option[T] = {
+      if (name.contains(".") || name.contains("-")) {
+        val envVarName = name.toUpperCase.replaceAll("[.-]", "_")
+        envVar(envVarName)
+      } else {
+        None
+      }
+    }
+
+    def fromConfigMap(name: String): Option[T] = {
+      configMap.getOptional[String](name) match {
+        case Some(s) =>
+          logger.info(s"ConfigMap entry (runner argument) $name found with value $s")
+          implicitly[Transformer[T]].transform(s, Context("ConfigMap entry (runner argument)", name))
+        case None =>
+          logger.info(s"No ConfigMap entry (runner argument) $name found")
+          None
+      }
+    }
+
+    fromConfigMap(name)
+      .orElse(envVar(name))
+      .orElse(envVarNameFallback(name))
+      .orElse(systemProperty(name))
   }
 
-  def requiredConfigFor[T: Transformer](name: String): T = {
-    configFor[T](name) match {
+  def requiredConfigFor[T: Transformer](configMap: ConfigMap)(name: String): T = {
+    configFor[T](configMap)(name) match {
       case Some(s) => s
       case None =>
         val ex = new RuntimeException(s"Required configuration for $name missing. Provide a value via system property or environment variable.")

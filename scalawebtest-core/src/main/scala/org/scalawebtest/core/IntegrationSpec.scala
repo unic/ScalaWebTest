@@ -35,8 +35,8 @@ import scala.language.postfixOps
   * adapted the default configuration available in loginConfig and config,
   * and extend one of the Login traits if applicable.
   */
-trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with BeforeAndAfterAll with IntegrationSettings with Eventually {
-  implicit val webDriver: WebDriver = new WebClientExposingDriver(BrowserVersion.CHROME)
+trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with BeforeAndAfterAllConfigMap with IntegrationSettings with Eventually {
+  implicit var webDriver: WebDriver = new WebClientExposingDriver(BrowserVersion.CHROME)
 
   val logger: Logger = LoggerFactory.getLogger(getClass.getName)
   val cookiesToBeDiscarded = new ListBuffer[Cookie]()
@@ -86,6 +86,11 @@ trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with
     */
   def afterLogin(): Unit = {}
 
+  /**
+    * Executed as first step during beforeAll(), can be used to modify the webdriver, based on information from the ConfigMap
+    */
+  def prepareWebDriver(configMap: ConfigMap): Unit = {}
+
   def applyConfiguration(config: BaseConfiguration): Unit = {
     config.configurations.values.foreach(configFunction =>
       try {
@@ -96,27 +101,21 @@ trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with
       })
   }
 
-  def avoidLogSpam(): Unit = {
-    java.util.logging.Logger.getLogger("com.gargoylesoftware").setLevel(Level.OFF)
-    java.util.logging.Logger.getLogger("org.apache.commons.httpclient").setLevel(Level.OFF)
-    java.util.logging.Logger.getLogger("net.lightbody").setLevel(Level.OFF)
-  }
-
   override def afterEach(): Unit = {
     cookiesToBeDiscarded.foreach(cookie => delete cookie cookie.getName)
     cookiesToBeDiscarded.clear()
   }
 
-  override def afterAll(): Unit = {
+  override def afterAll(configMap: ConfigMap): Unit = {
     webDriver.quit()
   }
 
   /**
     * Overwrite beforeLogin() and afterLogin() for test-specific tasks
     */
-  override def beforeAll(): Unit = {
+  override def beforeAll(configMap: ConfigMap): Unit = {
+    prepareWebDriver(configMap)
     beforeLogin()
-    avoidLogSpam()
     applyConfiguration(loginConfig)
     login()
     applyConfiguration(config)

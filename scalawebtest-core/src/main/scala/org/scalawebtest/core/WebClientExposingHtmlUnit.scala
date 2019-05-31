@@ -15,7 +15,7 @@
 package org.scalawebtest.core
 
 import com.gargoylesoftware.htmlunit.BrowserVersion
-import org.scalatest.selenium.{Driver, WebBrowser}
+import org.scalatestplus.selenium.{Driver, WebBrowser}
 
 /**
  * Uses a custom web driver implementation that exposes its web client's options. 

@@ -30,9 +30,9 @@ import scala.language.implicitConversions
   */
 case class Gauge(testee: JsValue, fitValues: Boolean, fitArraySizes: Boolean, ignoreArrayOrder: Boolean) extends Assertions with AppendedClues with Matchers {
 
-  def withTestee(testee: JsValue) = Gauge(testee, this.fitValues, this.fitArraySizes, this.ignoreArrayOrder)
+  def withTestee(testee: JsValue): Gauge = Gauge(testee, this.fitValues, this.fitArraySizes, this.ignoreArrayOrder)
 
-  def fits(definition: JsValue) {
+  def fits(definition: JsValue): Unit = {
     definition match {
       case o: JsObject => fitsObject(testee, Nil, o)
       case a: JsArray => fitsArray(testee, Nil, a)
@@ -72,7 +72,7 @@ case class Gauge(testee: JsValue, fitValues: Boolean, fitArraySizes: Boolean, ig
   }
 
   private def fitsObject(json: JsValue, breadcrumb: List[String], defO: JsObject): Unit = {
-    def assertObjectContains(o: JsObject, breadcrumb: List[String], value: JsValue) {
+    def assertObjectContains(o: JsObject, breadcrumb: List[String], value: JsValue): Unit = {
       (o \ breadcrumb.head).toOption match {
         case None => fail(s"Expected to contain the key ${breadcrumb.head}, but didn't in $json. Complete selector was ${breadcrumb.prettyPrint()}")
         case Some(v) => fits(v, breadcrumb, value)

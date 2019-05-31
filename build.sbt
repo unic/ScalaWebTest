@@ -1,12 +1,14 @@
 import ScalaWebTestBuild._
 
-crossScalaVersions := Seq("2.12.7", "2.11.12", "2.10.7")
+import scala.xml.transform.RewriteRule
+
+crossScalaVersions := Seq("2.13.0-RC3", "2.12.8", "2.11.12")
 
 val projectVersion = "3.0.0-SNAPSHOT"
-val scalaTestVersion = "3.0.5"
-val seleniumVersion = "3.14.0"
-val htmlUnitVersion = "2.32.1"
-val slf4jVersion = "1.7.25"
+val scalaTestVersion = "3.0.8-RC5"
+val seleniumVersion = "3.141.59"
+val htmlUnitVersion = "2.35.1"
+val slf4jVersion = "1.7.26"
 
 val versions = Map("scalaWebTest" -> projectVersion, "scalaTest" -> scalaTestVersion, "selenium" -> seleniumVersion, "htmlUnit" -> htmlUnitVersion)
 
@@ -23,7 +25,7 @@ lazy val root = (project in file("."))
 lazy val commonSettings = Seq(
   organization := "org.scalawebtest",
   version := projectVersion,
-  scalaVersion := "2.12.7",
+  scalaVersion := "2.12.8",
   scalacOptions := Seq("-unchecked", "-deprecation"),
   publishMavenStyle := true,
   publishTo := {
@@ -72,8 +74,8 @@ lazy val bom = Project(id = "scalawebtest-bom", base = file("scalawebtest-bom"))
   .settings(
     pomExtra := pomExtra.value ++ scalaVersion(bomDependencies(versions)).value
   )
-  .settings(pomPostProcess := { (node: scala.xml.Node) =>
-    val rewriteRule =
+  .settings(pomPostProcess := { node: scala.xml.Node =>
+    val rewriteRule: RewriteRule =
       new scala.xml.transform.RewriteRule {
         override def transform(n: scala.xml.Node): scala.xml.NodeSeq = {
           val name = n.nameToString(new StringBuilder).toString

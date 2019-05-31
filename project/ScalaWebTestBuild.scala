@@ -5,14 +5,20 @@ import scala.xml.{Elem, NodeSeq}
 
 object ScalaWebTestBuild {
   def playJsonDependency(scope: Option[String])(scalaVersion: String): Seq[ModuleID] = {
-    val playJsonVersion = "2.6.10"
-    def playJsonDependency = scope match {
-        case None => Seq("com.typesafe.play" %% "play-json" % playJsonVersion)
-        case Some(s) => Seq("com.typesafe.play" %% "play-json" % playJsonVersion % s)
-      }
+    def playJsonDependency(playJsonVersion: String) = scope match {
+      case None => Seq("com.typesafe.play" %% "play-json" % playJsonVersion)
+      case Some(s) => Seq("com.typesafe.play" %% "play-json" % playJsonVersion % s)
+    }
+
+    def playJsonDependency213(playJsonVersion: String) = scope match {
+      case None => Seq("com.typesafe.play" % "play-json_2.13.0-RC2" % playJsonVersion)
+      case Some(s) => Seq("com.typesafe.play" % "play-json_2.13.0-RC2" % playJsonVersion % s)
+    }
+
     scalaVersion match {
-      case "2.11.12" => playJsonDependency
-      case "2.12.7" => playJsonDependency
+      case "2.11.12" => playJsonDependency("2.7.0")
+      case "2.12.8" => playJsonDependency("2.8.0-M1")
+      case "2.13.0-RC3" => playJsonDependency213("2.8.0-M1")
       case _ => Seq()
     }
   }

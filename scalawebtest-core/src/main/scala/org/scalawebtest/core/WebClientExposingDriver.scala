@@ -18,7 +18,6 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage
 import com.gargoylesoftware.htmlunit.util.NameValuePair
 import com.gargoylesoftware.htmlunit.xml.XmlPage
 import com.gargoylesoftware.htmlunit.{BrowserVersion, TextPage, WebClient, WebClientOptions}
-import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
 
 import scala.collection.JavaConverters._

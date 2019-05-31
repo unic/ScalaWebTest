@@ -124,12 +124,11 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebDriver) extends Assertio
       classAttribute match {
         case Some(classes) =>
           classes.headOption
-            .map(_.toString)
-            .map(_.split(" ").filter(_.nonEmpty))
+            .map(_.toString.split(" +"))
             .filter(_.nonEmpty)
-            .map(_.fold("")(_ + "." + _))
+            .map(_.mkString(".", ".", ""))
             .getOrElse("")
-        case None => ""
+        case _ => ""
       }
     }
 

@@ -20,7 +20,7 @@ import com.gargoylesoftware.htmlunit.BrowserVersion
 import org.openqa.selenium.{Cookie, WebDriver}
 import org.scalatest._
 import org.scalatest.concurrent.Eventually
-import org.scalatest.selenium.WebBrowser
+import org.scalatestplus.selenium.WebBrowser
 import org.scalawebtest.core.configuration.{BaseConfiguration, Configuration, HtmlUnitConfiguration, LoginConfiguration}
 import org.slf4j.{Logger, LoggerFactory}
 
@@ -74,7 +74,7 @@ trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with
     *  - fill login form with your credentials (use FormBasedLogin trait)
     *  - use basic authentication (use BasicAuthLogin trait)
     */
-  def login() {}
+  def login(): Unit = {}
 
   /**
     * Executed during beforeAll(), before performing any tasks
@@ -132,7 +132,7 @@ trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with
     * Sets a cookie for the current test. Any cookie set through this method
     * is discarded after a test.
     */
-  def setCookieForSingleTest(name: String, value: String) {
+  def setCookieForSingleTest(name: String, value: String): Unit = {
     val cookie: Cookie = new Cookie(name, value)
     webDriver.manage().addCookie(cookie)
     add cookie(name, value)

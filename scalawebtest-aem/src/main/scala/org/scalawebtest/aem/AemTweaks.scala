@@ -35,7 +35,7 @@ trait AemTweaks {
       ((_: WebDriver) => setWcmModeCookie(wcmMode))
   }
 
-  private def setWcmModeCookie(mode: WcmMode) {
+  private def setWcmModeCookie(mode: WcmMode): Unit = {
     add cookie("wcmmode", mode.toString)
   }
 

@@ -16,16 +16,16 @@ package org.scalawebtest.core
 
 import java.util.logging.Level
 
-import org.openqa.selenium.Cookie
+import com.gargoylesoftware.htmlunit.BrowserVersion
+import org.openqa.selenium.{Cookie, WebDriver}
 import org.scalatest._
 import org.scalatest.concurrent.Eventually
 import org.scalatest.selenium.WebBrowser
+import org.scalawebtest.core.configuration.{BaseConfiguration, Configuration, HtmlUnitConfiguration, LoginConfiguration}
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.mutable.ListBuffer
 import scala.language.postfixOps
-
-
 
 /**
   * This is the base trait for integration specs. The recommended way is to create your own project specific trait, which extends
@@ -35,20 +35,22 @@ import scala.language.postfixOps
   * adapted the default configuration available in loginConfig and config,
   * and extend one of the Login traits if applicable.
   */
-trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with BeforeAndAfterAll with WebClientExposingHtmlUnit with IntegrationSettings with Eventually {
-  val logger: Logger = LoggerFactory.getLogger("IntegrationSpec")
+trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with BeforeAndAfterAllConfigMap with IntegrationSettings with Eventually {
+  implicit var webDriver: WebDriver = new WebClientExposingDriver(BrowserVersion.CHROME)
+
+  private val logger: Logger = LoggerFactory.getLogger(getClass.getName)
   val cookiesToBeDiscarded = new ListBuffer[Cookie]()
   /**
     * Configuration applied before login.
     * Cookies cannot be set in this configuration. The webDriver
     * has to open a connection, before it can set cookies
     */
-  val loginConfig = new LoginConfiguration
+  val loginConfig: LoginConfiguration = new LoginConfiguration with HtmlUnitConfiguration
   /**
     * Configuration applied after login.
     * Cookies may be added here.
     */
-  val config = new Configuration
+  val config: Configuration = new Configuration with HtmlUnitConfiguration
 
   /**
     * Stores the path with prefixed [[IntegrationSettings.host]] and [[IntegrationSpec.projectRoot]] as url.
@@ -84,6 +86,11 @@ trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with
     */
   def afterLogin(): Unit = {}
 
+  /**
+    * Executed as first step during beforeAll(), can be used to modify the webdriver, based on information from the ConfigMap
+    */
+  def prepareWebDriver(configMap: ConfigMap): Unit = {}
+
   def applyConfiguration(config: BaseConfiguration): Unit = {
     config.configurations.values.foreach(configFunction =>
       try {
@@ -94,23 +101,21 @@ trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with
       })
   }
 
-  def avoidLogSpam(): Unit = {
-    java.util.logging.Logger.getLogger("com.gargoylesoftware").setLevel(Level.OFF)
-    java.util.logging.Logger.getLogger("org.apache.commons.httpclient").setLevel(Level.OFF)
-    java.util.logging.Logger.getLogger("net.lightbody").setLevel(Level.OFF)
-  }
-
   override def afterEach(): Unit = {
     cookiesToBeDiscarded.foreach(cookie => delete cookie cookie.getName)
     cookiesToBeDiscarded.clear()
   }
 
+  override def afterAll(configMap: ConfigMap): Unit = {
+    webDriver.quit()
+  }
+
   /**
     * Overwrite beforeLogin() and afterLogin() for test-specific tasks
     */
-  override def beforeAll(): Unit = {
+  override def beforeAll(configMap: ConfigMap): Unit = {
+    prepareWebDriver(configMap)
     beforeLogin()
-    avoidLogSpam()
     applyConfiguration(loginConfig)
     login()
     applyConfiguration(config)

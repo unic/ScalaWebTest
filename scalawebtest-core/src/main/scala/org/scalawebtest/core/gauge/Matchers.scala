@@ -74,7 +74,7 @@ object Matchers {
       if (element.text().trim().equals(expected)) {
         None
       } else {
-        Some(Misfit(element.relevance, "Misfitting Text: The text [" + element.text() + "] within [" + element.element.getParentNode + "] didn't equal [" + expected + "]"))
+        Some(Misfit(element.relevance, "Misfitting Text: The text [" + element.text() + "] within [" + element.element.parent() + "] didn't equal [" + expected + "]"))
       }
     }
   }
@@ -91,7 +91,7 @@ object Matchers {
     }
 
     override def textMatches(expected: String, element: CandidateElement): Option[Misfit] = {
-      if (element.text().matches(expected)) {
+      if (element.text().trim().matches(expected)) {
         None
       } else {
         Some(Misfit(element.relevance, "Misfitting Text: The [" + element.text() + "] from [" + element.element + "] didn't match regex pattern [" + expected + "]"))

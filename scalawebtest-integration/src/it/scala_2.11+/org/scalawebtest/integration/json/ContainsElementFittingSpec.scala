@@ -1,5 +1,7 @@
 package org.scalawebtest.integration.json
 
+import org.openqa.selenium.WebDriver
+import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import play.api.libs.json.{JsLookupResult, JsValue, Json}
 
 class ContainsElementFittingSpec extends ScalaWebTestJsonBaseSpec {

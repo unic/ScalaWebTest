@@ -5,7 +5,7 @@ import org.scalawebtest.integration.{AdditionalAssertions, ScalaWebTestBaseSpec}
 
 class MisfitRelevanceSpec extends ScalaWebTestBaseSpec with AdditionalAssertions{
   path = "/nested.jsp"
-  "Misfit relevance" should "afa" in {
+  "Misfit relevance" should "return the correct error message" in {
     assertThrowsAndTestMessage[TestFailedException](
         fits(<div>
           <select title="friendship book questions">
@@ -18,7 +18,7 @@ class MisfitRelevanceSpec extends ScalaWebTestBaseSpec with AdditionalAssertions
           </select>
           <textarea title="hobby"></textarea>
         </div>)
-    )(message => message should startWith("Misfitting Attribute: [title] in [HtmlTextArea[<textarea title=\"hobbies\">]] with value[hobbies] didn't equal [hobby]"))
+    )(message => message should startWith("Misfitting Attribute: [title] in [<textarea title=\"hobbies\"></textarea>] with value[hobbies] didn't equal [hobby]"))
   }
 
 }

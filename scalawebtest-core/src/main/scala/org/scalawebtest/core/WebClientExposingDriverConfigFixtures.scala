@@ -14,11 +14,13 @@
  */
 package org.scalawebtest.core
 
+import org.openqa.selenium.WebDriver
+
 /**
   * Provide fixtures to set a specific webdriver configuration for a given function call
   * and restore previous configuration after the function call.
   */
-trait WebDriverConfigFixtures {
+trait WebClientExposingDriverConfigFixtures {
   self: IntegrationSpec =>
 
   /**
@@ -59,37 +61,45 @@ trait WebDriverConfigFixtures {
 
   private def withFollowingRedirectsInternal[X](f: X => Unit, enableRedirects: Boolean): X => Unit = {
     x: X => {
-      val redirectionEnabled = webDriver.getOptions.isRedirectEnabled
-      webDriver.getOptions.setRedirectEnabled(enableRedirects)
+      val webClientExposingDriver = asWebClientExposingDriverOrError(webDriver)
+      val redirectionEnabled = webClientExposingDriver.getOptions.isRedirectEnabled
+      webClientExposingDriver.getOptions.setRedirectEnabled(enableRedirects)
       try {
         f(x)
       } finally {
-        webDriver.getOptions.setRedirectEnabled(redirectionEnabled)
+        webClientExposingDriver.getOptions.setRedirectEnabled(redirectionEnabled)
       }
     }
   }
 
   private def withCssInternal[X](f: X => Unit, enableCss: Boolean): X => Unit = {
     x: X => {
-      val wasEnabled = webDriver.getOptions.isCssEnabled
-      webDriver.getOptions.setCssEnabled(enableCss)
+      val webClientExposingDriver = asWebClientExposingDriverOrError(webDriver)
+      val wasEnabled = webClientExposingDriver.getOptions.isCssEnabled
+      webClientExposingDriver.getOptions.setCssEnabled(enableCss)
       try {
         f(x)
       } finally {
-        webDriver.getOptions.setCssEnabled(wasEnabled)
+        webClientExposingDriver.getOptions.setCssEnabled(wasEnabled)
       }
     }
   }
 
   private def withJavascript[X](f: X => Unit, enabled: Boolean): X => Unit = {
     x: X => {
-      val jsEnabled = webDriver.getOptions.isJavaScriptEnabled
-      webDriver.getOptions.setJavaScriptEnabled(enabled)
+      val webClientExposingDriver = asWebClientExposingDriverOrError(webDriver)
+      val jsEnabled = webClientExposingDriver.getOptions.isJavaScriptEnabled
+      webClientExposingDriver.getOptions.setJavaScriptEnabled(enabled)
       try {
         f(x)
       } finally {
-        webDriver.getOptions.setJavaScriptEnabled(jsEnabled)
+        webClientExposingDriver.getOptions.setJavaScriptEnabled(jsEnabled)
       }
     }
+  }
+
+  private def asWebClientExposingDriverOrError(webDriver: WebDriver): WebClientExposingDriver = webDriver match {
+    case w: WebClientExposingDriver => w
+    case _ => throw new RuntimeException(s"This configuration can only be applied to a webDriver of type ${classOf[WebClientExposingDriver].getCanonicalName}")
   }
 }

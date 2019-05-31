@@ -14,8 +14,10 @@
  */
 package org.scalawebtest.aem
 
+import org.openqa.selenium.WebDriver
 import org.scalawebtest.aem.WcmMode._
 import org.scalawebtest.core._
+import org.scalawebtest.core.configuration.BaseConfiguration
 
 /**
   * Extend this trait to inherit useful default configuration for AEM projects.
@@ -25,15 +27,12 @@ import org.scalawebtest.core._
 trait AemTweaks {
   self: IntegrationSpec =>
 
-  override val config = new Configuration() with AemConfig
+  //add default configuration
+  config.setWcmMode(DISABLED)
 
-  trait AemConfig {
-    self: BaseConfiguration =>
-    //add default configuration
-    setWcmMode(DISABLED)
-
-    def setWcmMode(wcmMode: WcmMode): Unit = configurations += "wcmMode" ->
-      ((webDriver: WebClientExposingDriver) => setWcmModeCookie(wcmMode))
+  implicit class AemConfig(baseConfig: BaseConfiguration){
+    def setWcmMode(wcmMode: WcmMode): Unit = baseConfig.configurations += "wcmMode" ->
+      ((_: WebDriver) => setWcmModeCookie(wcmMode))
   }
 
   private def setWcmModeCookie(mode: WcmMode) {
@@ -43,7 +42,7 @@ trait AemTweaks {
   /**
     * Fixture to set the wccmode for the given function call
     */
-  def withWcmMode[X](mode: WcmMode): ((X) => Unit) => (X) => Unit = withWcmModeInternal(mode, _: X => Unit)
+  def withWcmMode[X](mode: WcmMode): (X => Unit) => X => Unit = withWcmModeInternal(mode, _: X => Unit)
 
   private def withWcmModeInternal[X](mode: WcmMode, f: X => Unit): X => Unit = {
     x: X => {

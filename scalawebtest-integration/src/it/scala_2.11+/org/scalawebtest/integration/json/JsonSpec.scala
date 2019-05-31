@@ -47,7 +47,6 @@ class JsonSpec extends ScalaWebTestBaseSpec {
     def theories = (json \ "theories").as[List[String]]
     def universityNames = (json \ "universities" \\ "name").map(_.as[String])
   }
-
 }
 
 

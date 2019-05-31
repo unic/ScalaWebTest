@@ -1,5 +1,7 @@
 package org.scalawebtest.integration.json
 
+import org.openqa.selenium.WebDriver
+import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import org.scalatest.exceptions.TestFailedException
 import play.api.libs.json.{JsValue, Json}
 

@@ -1,4 +1,3 @@
-import sbt.Keys.{scalaVersion, unmanagedSourceDirectories}
 import sbt._
 
 import scala.xml.{Elem, NodeSeq}
@@ -22,18 +21,6 @@ object ScalaWebTestBuild {
       case _ => Seq()
     }
   }
-
-  def crossVersionSharedSources(configurations: Seq[Configuration]): Seq[Setting[_]] =
-    configurations.map { sc =>
-      (unmanagedSourceDirectories in sc) ++= {
-        (unmanagedSourceDirectories in sc).value.map { dir: File =>
-          CrossVersion.partialVersion(scalaVersion.value) match {
-            case Some((2, y)) if y == 10 => new File(dir.getPath + "_2.10")
-            case Some((2, y)) if y >= 11 => new File(dir.getPath + "_2.11+")
-          }
-        }
-      }
-    }
 
   def bomDependencies(versions: Map[String, String])(scalaVersion: String): Elem = {
     val scalaMajorVersion = scalaVersion.substring(0, "2.XX".length)

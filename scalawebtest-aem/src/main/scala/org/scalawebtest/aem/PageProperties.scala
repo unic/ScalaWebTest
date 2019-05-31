@@ -1,7 +1,7 @@
 package org.scalawebtest.aem
 
 import org.scalawebtest.core.IntegrationSpec
-import play.api.libs.json._
+import play.api.libs.json.{JsObject, JsValue, Json}
 
 import scala.util.Try
 
@@ -45,7 +45,7 @@ trait PageProperties {
       *
       * @return all values which are of the given sling:resourceType
       */
-    def findByResourceType: (String) => Iterable[JsValue] = findByProperty("sling:resourceType")(_)
+    def findByResourceType: String => Iterable[JsValue] = findByProperty("sling:resourceType")(_)
 
     /**
       * Tries to transform a JsValue to a JsObject. If possible, it searches through

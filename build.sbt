@@ -37,7 +37,7 @@ lazy val commonSettings = Seq(
   },
   pomIncludeRepository := { _ => false },
   pomExtra := scalaWebTestPomExtra
-) ++ crossVersionSharedSources(Seq(Test, Compile))
+)
 
 lazy val core = Project(id = "scalawebtest-core", base = file("scalawebtest-core"))
   .settings(commonSettings: _*)
@@ -74,7 +74,7 @@ lazy val bom = Project(id = "scalawebtest-bom", base = file("scalawebtest-bom"))
   .settings(
     pomExtra := pomExtra.value ++ scalaVersion(bomDependencies(versions)).value
   )
-  .settings(pomPostProcess := { node: scala.xml.Node =>
+  .settings(pomPostProcess := { (node: scala.xml.Node) =>
     val rewriteRule: RewriteRule =
       new scala.xml.transform.RewriteRule {
         override def transform(n: scala.xml.Node): scala.xml.NodeSeq = {
@@ -100,7 +100,6 @@ lazy val integration_test = Project(id = "scalawebtest-integration", base = file
   .configs(IntegrationTest)
   .settings(Defaults.itSettings: _*)
   .settings(commonSettings: _*)
-  .settings(crossVersionSharedSources(Seq(IntegrationTest)): _*)
   .settings(
     libraryDependencies ++= Seq(
       "javax.servlet" % "javax.servlet-api" % "4.0.1" % "provided",

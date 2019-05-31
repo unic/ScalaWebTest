@@ -1,10 +1,9 @@
-sudo: false # container-based infrastructure
 language: scala
 scala:
  - 2.12.7
  - 2.11.12
  - 2.10.7
-jdk: oraclejdk8
+jdk: openjdk8
 env:
  - WEBDRIVER_CHROME_DRIVER="/usr/lib/chromium-browser/chromedriver"
 script:

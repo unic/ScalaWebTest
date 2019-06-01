@@ -78,8 +78,4 @@ trait ResponseAccessors {
     */
   def currentXmlPage: Option[XmlPage] = asWebClientExposingDriverOrError(webDriver).getCurrentXmlPage
 
-  private def asWebClientExposingDriverOrError(webDriver: WebDriver): WebClientExposingDriver = webDriver match {
-    case w: WebClientExposingDriver => w
-    case _ => throw new RuntimeException(s"ResponseAccessors can only be used with a webDriver of type ${classOf[WebClientExposingDriver].getCanonicalName}")
-  }
 }

@@ -53,15 +53,15 @@ trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with
   val config: Configuration = new Configuration with HtmlUnitConfiguration
 
   /**
-    * Stores the path with prefixed [[IntegrationSettings.host]] and [[IntegrationSpec.projectRoot]] as url.
+    * Stores the path with prefixed [[BaseConfiguration.baseURI]] as url.
     * Before each test [[WebBrowser.goTo()]] with the currently stored url will be executed, but only
     * if [[WebClientExposingDriver.getCurrentUrl]] doesn't equal url.
     */
   def path_=(path: String): Unit = {
-    url = s"$host$projectRoot$path"
+    url = s"${config.baseURI.toString}$path"
   }
 
-  def path: String = url.replaceFirst(host, "").replaceFirst(projectRoot, "")
+  def path: String = url.replaceFirst(config.baseURI.toString, "")
 
   protected var url: String = ""
 
@@ -156,7 +156,7 @@ trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with
     */
   def navigateTo(newPath: String): Unit = {
     path = newPath
-    navigateToUrl(s"$host$projectRoot$path")
+    navigateToUrl(s"${config.baseURI.toString}$path")
   }
 
   protected def navigateToUrl(targetUrl: String): Unit = {

@@ -18,7 +18,7 @@ import org.scalawebtest.core.IntegrationFlatSpec
 import org.scalawebtest.core.gauge.HtmlGauge._
 
 class HtmlGaugeObjectSpec extends IntegrationFlatSpec {
-  override val host = "http://localhost:9090"
+  config.useBaseURI("http://localhost:9090")
 
   path = "/index.jsp"
 

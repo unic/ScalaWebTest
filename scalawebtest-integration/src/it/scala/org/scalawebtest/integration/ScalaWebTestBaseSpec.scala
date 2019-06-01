@@ -23,11 +23,8 @@ import org.scalawebtest.core.{FormBasedLogin, IntegrationFlatSpec}
 import scala.language.postfixOps
 
 abstract class ScalaWebTestBaseSpec extends IntegrationFlatSpec with FormBasedLogin with AppendedClues with HtmlGauge {
-
-  override val host = "http://localhost:9090"
-  override val loginPath = "/fakeLogin.jsp"
-
-  override val projectRoot = ""
+  config.useBaseURI("http://localhost:9090")
+  loginConfig.useBaseURI("http://localhost:9090/fakeLogin.jsp")
 
   override def loginTimeout = Timeout(5 seconds)
 }

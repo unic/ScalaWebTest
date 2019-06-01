@@ -15,9 +15,23 @@
 package org.scalawebtest.core
 
 /**
- * Default settings
- */
+  * Default settings
+  */
 trait IntegrationSettings {
-  val host = "http://localhost:8080"
-  val projectRoot = ""
+  @deprecated(message =
+    """
+      |The 'host' property was moved/merged into the 'baseURI' in the BaseConfiguration.
+      |The BaseConfiguration is inherited by Configuration and LoginConfiguration and holds the configurations for test execution and login respectively.
+      |If you used 'host = "http://localhost:8181"' and 'projectRoot = "/web-app"' before, then use 'config.useBaseURI("http://locahost:8181/web-app")' instead.
+      |If you used 'host = "http://localhost:8181"' and 'loginPath = "/login"' before, then use 'loginConfig.useBaseURI("http://locahost:8181/login")' instead.
+    """.stripMargin, since = "ScalaWebTest 3.0.0")
+   val host: String = "The IntegrationSettings.host property was deprecated with ScalaWebTest 3.0.0 - use config.useBaseURI and loginConfig.useBaseURI instead"
+
+  @deprecated(message =
+    """
+      |The 'projectRoot' property was moved/merged into the 'baseURI' in the BaseConfiguration.
+      |The BaseConfiguration is inherited by Configuration and LoginConfiguration and holds the configurations for test execution and login respectively.
+      |If you used 'host = "http://localhost:8181"' and 'projectRoot = "/web-app"' before, then use 'config.useBaseURI("http://locahost:8181/web-app")' instead.
+    """.stripMargin, since = "ScalaWebTest 3.0.0")
+  final val projectRoot: String = "The IntegrationSettings.projectRoot property was deprecated with ScalaWebTest 3.0.0 - use config.useBaseURI instead"
 }

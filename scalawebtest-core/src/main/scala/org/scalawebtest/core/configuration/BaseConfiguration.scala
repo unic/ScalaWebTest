@@ -14,10 +14,20 @@
  */
 package org.scalawebtest.core.configuration
 
+import java.net.URI
+
 import org.openqa.selenium.WebDriver
 import org.scalawebtest.core.IntegrationSpec
 
 abstract class BaseConfiguration() {
+  private var internalBaseURI = new URI("http://localhost:8080")
+
+  def useBaseURI(uri: String) {
+    internalBaseURI = new URI(uri)
+  }
+
+  def baseURI: URI = internalBaseURI
+
   var configurations: Map[String, WebDriver => Unit] = Map()
 
   /**

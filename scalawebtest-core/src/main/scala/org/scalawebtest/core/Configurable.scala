@@ -14,7 +14,7 @@
  */
 package org.scalawebtest.core
 
-import java.net.URL
+import java.net.{URI, URL}
 
 import org.scalatest.ConfigMap
 import org.slf4j.{Logger, LoggerFactory}
@@ -44,11 +44,15 @@ trait Configurable {
     }
   }
 
-  implicit object UrlTransformer extends Transformer[URL] {
-    override def transform(s: String, c: Context): Option[URL] = Try(new URL(s)) match {
+  implicit object URLTransformer extends Transformer[URL] {
+    override def transform(s: String, c: Context): Option[URL] = UriTransformer.transform(s, c).map(_.toURL)
+  }
+
+  implicit object UriTransformer extends Transformer[URI] {
+    override def transform(s: String, c: Context): Option[URI] = Try(new URI(s)) match {
       case Success(i) => Some(i)
       case Failure(e) =>
-        logger.error(s"Could not transform ${c.kind} ${c.name} with value $s to ${classOf[URL].getName}", e)
+        logger.error(s"Could not transform ${c.kind} ${c.name} with value $s to ${classOf[URI].getName}", e)
         None
     }
   }

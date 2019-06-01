@@ -15,15 +15,16 @@
 package org.scalawebtest.core
 
 import javax.xml.bind.DatatypeConverter
-
+import org.scalatest.ConfigMap
 import org.scalatest.concurrent.PatienceConfiguration.Timeout
 import org.scalatest.time.SpanSugar._
+import org.slf4j.LoggerFactory
 
 import scala.language.postfixOps
 
 /**
-  * Extend this trait when implementing you own login implementation,
-  * to assert identical username, password configuration across all implementations
+  * Extend this trait when implementing your own login implementation,
+  * to assert identical username, password field names across all implementations.
   */
 trait Login {
   val username = "admin"
@@ -44,21 +45,25 @@ trait Login {
   */
 trait FormBasedLogin extends Login {
   self: IntegrationSpec =>
+  private val logger = LoggerFactory.getLogger(getClass.getName)
+
   val username_fieldname = "j_username"
   val password_fieldname = "j_password"
 
   @deprecated(message =
-  """The 'loginPath' property was moved/merged into the 'baseURI' in the BaseConfiguration.
-    |The BaseConfiguration is inherited by Configuration and LoginConfiguration and holds the configurations for test execution and login respectively.
-    |If you used 'host = "http://localhost:8181"' and 'loginPath = "/login"' before, then use 'loginConfig.useBaseURI("http://locahost:8181/login")' instead.""".stripMargin,
+    """The 'loginPath' property was moved/merged into the 'uri' in the LoginConfiguration.
+      |The LoginConfiguration holds the configurations for the login.
+      |If you used 'host = "http://localhost:8181"' and 'loginPath = "/login"' before, then use 'loginConfig.useLoginUri("http://locahost:8181/login")' instead.""".stripMargin,
     since = "ScalaWebTest 3.0.0")
-  final val loginPath = "The FormBasedLogin.loginPath property was deprecated with ScalaWebTest 3.0.0 - use loginConfig.useBaseURI instead"
+  final val loginPath = "The FormBasedLogin.loginPath property was deprecated with ScalaWebTest 3.0.0 - use loginConfig.useLoginUri instead"
 
   def loginTimeout = Timeout(5 seconds)
 
-  override def login(): Unit = {
+  override def login(configMap: ConfigMap): Unit = {
     eventually(loginTimeout)({
-      go to loginConfig.baseURI.toString
+      logger.info(s"Going to ${loginConfig.loginUri}")
+      go to loginConfig.loginUri.toString
+      logger.info(s"Filling login form at ${loginConfig.loginUri}")
       click on username_fieldname
       emailField(username_fieldname).value = username
       click on password_fieldname
@@ -81,5 +86,7 @@ trait BasicAuthLogin extends Login {
   self: IntegrationSpec =>
   def base64Encode(value: String): String = DatatypeConverter.printBase64Binary(value.getBytes())
 
-//  webDriver.getClient.addRequestHeader("Authorization", "Basic " + base64Encode(username + ":" + password))
+  asWebClientExposingDriverOrError(webDriver)
+    .getClient
+    .addRequestHeader("Authorization", "Basic " + base64Encode(username + ":" + password))
 }

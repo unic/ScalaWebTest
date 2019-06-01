@@ -1,5 +1,7 @@
 package org.scalawebtest.aem
 
+import java.net.URI
+
 import org.scalawebtest.core.IntegrationSpec
 import play.api.libs.json.{JsObject, JsValue, Json}
 
@@ -84,7 +86,7 @@ trait PageProperties {
     * The enable.json property of the org.apache.sling.servlets.get.DefaultGetServlet of your CQ/AEM instance has to be set to true.
     */
   abstract override def beforeEach(): Unit = {
-    val decomposedLink = new DecomposedLink(url)
+    val decomposedLink = new DecomposedLink(uri)
 
     def pagePropertiesUrl = s"${decomposedLink.protocolHostPort}${decomposedLink.pagePath}.$pagePropertiesDepth.json"
 
@@ -104,35 +106,33 @@ trait PageProperties {
 
     if (config.navigateToBeforeEachEnabled) {
       pageProperties = Try {
-        navigateToUrl(pagePropertiesUrl)
+        navigateToUri(pagePropertiesUrl)
         Json.parse(webDriver.getPageSource)
       }.toOption.orNull
 
       componentProperties = componentPropertiesUrl.flatMap(u =>
         Try {
-          navigateToUrl(u)
+          navigateToUri(u)
           Json.parse(webDriver.getPageSource)
         }.toOption
       ).orNull
 
       suffixProperties = suffixPropertiesUrl.flatMap(u =>
         Try {
-          navigateToUrl(u)
+          navigateToUri(u)
           Json.parse(webDriver.getPageSource)
         }.toOption
       ).orNull
 
-      navigateToUrl(url)
+      navigateToUri(url)
     }
   }
 
-  private class DecomposedLink(link: String) {
+  private class DecomposedLink(uri: URI) {
     //AEM url structure protocol://host[:port]/path[/jcr:content/parsys/component][.selectors].extension[/suffix][#anchor][?requestParameters]
     //we are not interested in anchor and request parameters
-    private val decomposable = substringBefore(substringBefore(link, "?"), "#")
-    private val beginOfPath = decomposable.indexOf("/", "https://".length)
-    val protocolHostPort: String = decomposable.substring(0, beginOfPath)
-    private val pathSelectorsExtensionSuffix = decomposable.substring(beginOfPath)
+    val protocolHostPort: String = s"${uri.getScheme}://${uri.getAuthority}"
+    private val pathSelectorsExtensionSuffix = uri.getPath
     private val selectorsExtensionSuffix = substringAfter(pathSelectorsExtensionSuffix, ".")
     val suffix: String = selectorsExtensionSuffix.indexOf("/") match {
       case -1 => ""

@@ -22,8 +22,8 @@ import org.scalawebtest.core.{FormBasedLogin, IntegrationFlatSpec}
 import scala.language.postfixOps
 
 abstract class AemModuleScalaWebTestBaseSpec extends IntegrationFlatSpec with FormBasedLogin with AemTweaks with AuthorLogin {
-  config.useBaseURI("http://localhost:9090")
-  loginConfig.useBaseURI("http://localhost:9090/fakeLogin.jsp")
+  config.useBaseUri("http://localhost:9090")
+  loginConfig.useLoginUri("http://localhost:9090/fakeLogin.jsp")
 
   override def loginTimeout = Timeout(5 seconds)
 }

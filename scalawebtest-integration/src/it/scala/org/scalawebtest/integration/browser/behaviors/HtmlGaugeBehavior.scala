@@ -1,9 +1,10 @@
 package org.scalawebtest.integration.browser.behaviors
 
-import org.scalawebtest.integration.ScalaWebTestBaseSpec
+import org.scalawebtest.core.IntegrationFlatSpec
+import org.scalawebtest.core.gauge.HtmlGauge
 
 trait HtmlGaugeBehavior {
-  self: ScalaWebTestBaseSpec =>
+  self: IntegrationFlatSpec with HtmlGauge =>
 
   def anHtmlGauge(): Unit = {
     it should "be capable to fit a simple HTML Gauge" in {

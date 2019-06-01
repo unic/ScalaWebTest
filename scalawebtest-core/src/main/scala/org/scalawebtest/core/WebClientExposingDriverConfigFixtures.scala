@@ -97,9 +97,4 @@ trait WebClientExposingDriverConfigFixtures {
       }
     }
   }
-
-  private def asWebClientExposingDriverOrError(webDriver: WebDriver): WebClientExposingDriver = webDriver match {
-    case w: WebClientExposingDriver => w
-    case _ => throw new RuntimeException(s"This configuration can only be applied to a webDriver of type ${classOf[WebClientExposingDriver].getCanonicalName}")
-  }
 }

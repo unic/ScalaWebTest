@@ -1,10 +1,10 @@
 package org.scalawebtest.integration.browser.behaviors
 
 import org.scalatest.OptionValues
-import org.scalawebtest.integration.ScalaWebTestBaseSpec
+import org.scalawebtest.core.IntegrationFlatSpec
 
 trait WebBrowserBehavior extends OptionValues {
-  self: ScalaWebTestBaseSpec =>
+  self: IntegrationFlatSpec =>
   def aWebBrowserWithElementLookup(): Unit = {
     it should "be capable to find a single element in an HTML document" in {
       navigateTo("/")

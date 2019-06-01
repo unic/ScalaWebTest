@@ -21,7 +21,7 @@ import org.scalawebtest.core.{FormBasedLogin, IntegrationSpec}
   */
 trait AuthorLogin extends FormBasedLogin {
   self: IntegrationSpec =>
-  loginConfig.useBaseURI("http://localhost:4502/libs/granite/core/content/login.html")
+  loginConfig.useLoginUri("http://localhost:4502/libs/granite/core/content/login.html")
   override val username: String = "admin"
   override val password: String = "admin"
 }

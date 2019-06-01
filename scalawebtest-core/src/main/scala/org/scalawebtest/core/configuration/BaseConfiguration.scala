@@ -17,17 +17,10 @@ package org.scalawebtest.core.configuration
 import java.net.URI
 
 import org.openqa.selenium.WebDriver
-import org.scalawebtest.core.IntegrationSpec
+import org.scalatest.ConfigMap
+import org.scalawebtest.core.{Configurable, IntegrationSpec}
 
-abstract class BaseConfiguration() {
-  private var internalBaseURI = new URI("http://localhost:8080")
-
-  def useBaseURI(uri: String) {
-    internalBaseURI = new URI(uri)
-  }
-
-  def baseURI: URI = internalBaseURI
-
+abstract class BaseConfiguration() extends Configurable {
   var configurations: Map[String, WebDriver => Unit] = Map()
 
   /**
@@ -61,15 +54,38 @@ abstract class BaseConfiguration() {
     */
   def disableCss(): Unit
 
+  def updateWithConfigMapAndSystemEnvVars(configMap: ConfigMap): Unit
+
   protected def unimplementedConfiguration(webDriverName: String): Unit = throw new RuntimeException(s"This is not configurable when working with $webDriverName. Please choose a different browser/webDriver.")
 }
 
-abstract class LoginConfiguration extends BaseConfiguration
+abstract class LoginConfiguration extends BaseConfiguration {
+  private var internalUri = new URI("http://localhost:8080")
+
+  def useLoginUri(uri: String): Unit = internalUri = new URI(uri)
+
+  def loginUri: URI = internalUri
+
+  override def updateWithConfigMapAndSystemEnvVars(configMap: ConfigMap): Unit = {
+    configFor[URI](configMap)("scalawebtest.login.uri").foreach(u => internalUri = u)
+  }
+}
 
 abstract class Configuration extends BaseConfiguration {
   //initialize with sensible default configuration
+  private var internalBaseUri = new URI("http://localhost:8080")
   var navigateToBeforeEachEnabled = true
   var reloadOnNavigateToEnforced = false
+
+  def useBaseUri(uri: String): Unit = {
+    internalBaseUri = new URI(uri)
+  }
+
+  override def updateWithConfigMapAndSystemEnvVars(configMap: ConfigMap): Unit = {
+    configFor[URI](configMap)("scalawebtest.base.uri").foreach(u => internalBaseUri = u)
+  }
+
+  def baseUri: URI = internalBaseUri
 
   /**
     * Enabling navigateTo is the default. [[org.scalatest.BeforeAndAfterEach.beforeEach]] Test navigateTo is called with the current value of [[IntegrationSpec.path]]

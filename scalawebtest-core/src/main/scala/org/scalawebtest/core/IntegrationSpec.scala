@@ -14,7 +14,7 @@
  */
 package org.scalawebtest.core
 
-import java.util.logging.Level
+import java.net.URI
 
 import com.gargoylesoftware.htmlunit.BrowserVersion
 import org.openqa.selenium.{Cookie, WebDriver}
@@ -53,17 +53,14 @@ trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with
   val config: Configuration = new Configuration with HtmlUnitConfiguration
 
   /**
-    * Stores the path with prefixed [[BaseConfiguration.baseURI]] as url.
-    * Before each test [[WebBrowser.goTo()]] with the currently stored url will be executed, but only
-    * if [[WebClientExposingDriver.getCurrentUrl]] doesn't equal url.
+    * [[Configuration.baseUri]] with [[path]] appended is used as [[uri]].
+    * Per default, the webdriver navigates to [[uri]], before the test is executed.
     */
-  def path_=(path: String): Unit = {
-    url = s"${config.baseURI.toString}$path"
-  }
+  var path: String = ""
 
-  def path: String = url.replaceFirst(config.baseURI.toString, "")
+  def url: String = uri.toString
 
-  protected var url: String = ""
+  def uri: URI = config.baseUri.resolve(config.baseUri.getPath + path)
 
   /**
     * Override to encode your project specific login mechanism.
@@ -74,24 +71,26 @@ trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with
     *  - fill login form with your credentials (use FormBasedLogin trait)
     *  - use basic authentication (use BasicAuthLogin trait)
     */
-  def login(): Unit = {}
+  def login(configMap: ConfigMap): Unit = {}
 
   /**
     * Executed during beforeAll(), before performing any tasks
     */
-  def beforeLogin(): Unit = {}
+  def beforeLogin(configMap: ConfigMap): Unit = {}
 
   /**
     * Executed during beforeAll(), after logging in.
     */
-  def afterLogin(): Unit = {}
+  def afterLogin(configMap: ConfigMap): Unit = {}
 
   /**
     * Executed as first step during beforeAll(), can be used to modify the webdriver, based on information from the ConfigMap
     */
   def prepareWebDriver(configMap: ConfigMap): Unit = {}
 
-  def applyConfiguration(config: BaseConfiguration): Unit = {
+  def applyConfiguration(config: BaseConfiguration, configMap: ConfigMap): Unit = {
+    config.updateWithConfigMapAndSystemEnvVars(configMap)
+
     config.configurations.values.foreach(configFunction =>
       try {
         configFunction(webDriver)
@@ -115,16 +114,16 @@ trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with
     */
   override def beforeAll(configMap: ConfigMap): Unit = {
     prepareWebDriver(configMap)
-    beforeLogin()
-    applyConfiguration(loginConfig)
-    login()
-    applyConfiguration(config)
-    afterLogin()
+    beforeLogin(configMap)
+    applyConfiguration(loginConfig, configMap)
+    login(configMap)
+    applyConfiguration(config, configMap)
+    afterLogin(configMap)
   }
 
   override def beforeEach(): Unit = {
     if (config.navigateToBeforeEachEnabled) {
-      navigateToUrl(url)
+      navigateToUri(uri.toString)
     }
   }
 
@@ -140,12 +139,14 @@ trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with
   }
 
   /**
-    * Resets all cookies, sets the WCM mode to disabled and logs in again
+    * Resets all cookies and logs in again
     */
   def resetCookies(): Unit = {
     webDriver.manage().deleteAllCookies()
-    login()
-    afterLogin()
+    applyConfiguration(loginConfig, ConfigMap.empty)
+    login(ConfigMap.empty)
+    applyConfiguration(config, ConfigMap.empty)
+    afterLogin(ConfigMap.empty)
   }
 
   /**
@@ -156,19 +157,23 @@ trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with
     */
   def navigateTo(newPath: String): Unit = {
     path = newPath
-    navigateToUrl(s"${config.baseURI.toString}$path")
+    navigateToUri(s"${config.baseUri.toString}$path")
   }
 
-  protected def navigateToUrl(targetUrl: String): Unit = {
-    if (targetUrl.isEmpty) {
+  protected def navigateToUri(targetUri: String): Unit = {
+    if (targetUri.isEmpty) {
       throw new RuntimeException("NavigateTo was called without path being defined. Either set config.disableNavigateTo or define path")
     }
-    if (pageSource == null || !(targetUrl equals webDriver.getCurrentUrl) || config.reloadOnNavigateToEnforced) {
-      logger.info("Going to " + targetUrl)
-      go to targetUrl
+    if (pageSource == null || !(targetUri equals webDriver.getCurrentUrl) || config.reloadOnNavigateToEnforced) {
+      logger.info("Going to " + targetUri)
+      go to targetUri
     } else {
-      logger.info("Remaining at " + targetUrl + " without refreshing page")
+      logger.info("Remaining at " + targetUri + " without refreshing page")
     }
   }
 
+  protected def asWebClientExposingDriverOrError(webDriver: WebDriver): WebClientExposingDriver = webDriver match {
+    case w: WebClientExposingDriver => w
+    case _ => throw new RuntimeException(s"This feature requires a webDriver of type ${classOf[WebClientExposingDriver].getCanonicalName}, but received ${webDriver.getClass.getCanonicalName}")
+  }
 }

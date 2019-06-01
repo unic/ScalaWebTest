@@ -1,10 +1,9 @@
 package org.scalawebtest.integration.browser.behaviors
 
-import org.scalawebtest.integration.ScalaWebTestBaseSpec
+import org.scalawebtest.core.IntegrationFlatSpec
 
 trait JsonGaugeBehavior {
-
-  self: ScalaWebTestBaseSpec =>
+  self: IntegrationFlatSpec =>
 
   //TODO: replace String comparison with JsonGauge, after Scala 2.10 support was removed from ScalaWebTest
   def aJsonGauge(): Unit = {

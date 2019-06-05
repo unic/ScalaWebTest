@@ -136,7 +136,42 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebDriver) extends Assertio
   }
 
   private def nodeFits(node: JElement, gaugeDefinition: Seq[Node], previousSibling: Option[JNode], misfitRelevance: MisfitRelevance): Option[Fit] = {
-    val definitionIt = gaugeDefinition.iterator
+
+    /**
+      * When using variables in gauge definitions, the variables are represented using Atom.
+      * Therefore
+      * {{{<p>I have {bananas.size} Bananas <b> yeah</b></p>}}}
+      * is an Element with the following children:
+      * {{{Text(I have), Atom(3), Text(Bananas ), Elem(b)}}}
+      * This code will merge them to:
+      * {{{Text(I have 3 Bananas ), Elem(b)}}}
+      */
+    def mergeTextAndAtom(l: List[Node]): List[Node] = {
+      @tailrec
+      def recMerge(l: List[Node], acc: List[Node]): List[Node] = {
+        l match {
+          case Nil => acc
+          case e :: n =>
+            e match {
+              case a: Atom[_] => acc.headOption match {
+                case Some(Text(at)) => recMerge(n, Text(at + a.text) :: acc.tail)
+                case _ => recMerge(n, Text(a.text) :: acc)
+              }
+              case Text(t) =>
+                acc.headOption match {
+                  case Some(Text(at)) => recMerge(n, Text(at + t) :: acc.tail)
+                  case _ => recMerge(n, Text(t) :: acc)
+                }
+              case _ =>
+                recMerge(n, e :: acc)
+            }
+        }
+      }
+
+      recMerge(l, Nil).reverse
+    }
+
+    val definitionIt = mergeTextAndAtom(gaugeDefinition.toList).iterator
     var nodeFits = true
     var firstFittingSubNode: Option[Fit] = None
     var previousNode = previousSibling
@@ -160,8 +195,6 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebDriver) extends Assertio
           }
         case textDef: Text =>
           textFits(node, textDef.text.trim, previousNode, nodeMisfitRelevance)
-        case atom: Atom[_] =>
-          textFits(node, atom.text.trim, previousNode, nodeMisfitRelevance)
         case _ => true //everything except text and elements is ignored
       }
     }
@@ -326,12 +359,13 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebDriver) extends Assertio
       def indention: String = {
         "\n" + (0 to depth).map(_ => "  ").mkString
       }
+
       domNode match {
         case t: JTextNode => t.text.trim
         case e: JElement =>
           indention + s"<${e.nodeName}${e.attributes}>" +
             e.childNodes.asScala.map(_.prettyString(depth + 1)).mkString +
-            (if(e.children.size > 0) indention else "") + s"</${e.nodeName}>"
+            (if (e.children.size > 0) indention else "") + s"</${e.nodeName}>"
         case o => o.toString
       }
     }

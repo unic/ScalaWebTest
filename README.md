@@ -55,14 +55,14 @@ you can do the following:
 ## How to Release
 
 ### Prerequisites
-Create the following file ~/.sbt/0.13/plugins/gpg.sbt
+Create the following file ~/.sbt/1.0/plugins/gpg.sbt
 
 Add the following line to gpg.sbt
-`addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.0.0")`
+`addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.1.1")`
 
 Copy the private key (Sonatype PGP Private and Public Key from our company password store), to ~/.sbt/gpg/secring.ast
 
-Create the file  ~/.sbt/0.13/sonatype.sbt
+Create the file  ~/.sbt/1.0/sonatype.sbt
 
 Add the following content and replace username, password
 ```

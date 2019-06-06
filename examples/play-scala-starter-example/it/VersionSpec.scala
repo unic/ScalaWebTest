@@ -6,7 +6,7 @@ class VersionSpec extends BaseSpec {
     fits(
       <div id="content">
         <blockquote>
-          <p>You’re using Play {playVersion} abc</p>
+          <p>You’re using Play {playVersion}</p>
         </blockquote>
       </div>
       )

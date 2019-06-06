@@ -2,7 +2,7 @@ import ScalaWebTestBuild._
 
 import scala.xml.transform.RewriteRule
 
-crossScalaVersions := Seq("2.13.0-RC3", "2.12.8", "2.11.12")
+lazy val supportedScalaVersions = Seq("2.13.0-RC3", "2.12.8", "2.11.12")
 
 val projectVersion = "3.0.0-SNAPSHOT"
 val scalaTestVersion = "3.0.8-RC5"
@@ -20,6 +20,7 @@ def mimaSettings(projectName: String) = Seq(
 lazy val root = (project in file("."))
   .settings(commonSettings: _*)
   .settings(publishArtifact := false)
+  .settings(crossScalaVersions := Nil)
   .aggregate(core, aem, json, bom, integration_test)
 
 lazy val commonSettings = Seq(
@@ -41,6 +42,7 @@ lazy val commonSettings = Seq(
 
 lazy val core = Project(id = "scalawebtest-core", base = file("scalawebtest-core"))
   .settings(commonSettings: _*)
+  .settings(crossScalaVersions := supportedScalaVersions)
   .settings(
     libraryDependencies ++= Seq(
       "org.scalatest" %% "scalatest" % scalaTestVersion,
@@ -54,12 +56,14 @@ lazy val core = Project(id = "scalawebtest-core", base = file("scalawebtest-core
 
 lazy val aem = Project(id = "scalawebtest-aem", base = file("scalawebtest-aem"))
   .settings(commonSettings: _*)
+  .settings(crossScalaVersions := supportedScalaVersions)
   .settings(libraryDependencies ++= scalaVersion(playJsonDependency(scope = None)).value)
   .settings(mimaSettings("scalawebtest-aem"))
   .dependsOn(core)
 
 lazy val json = Project(id = "scalawebtest-json", base = file("scalawebtest-json"))
   .settings(commonSettings: _*)
+  .settings(crossScalaVersions := supportedScalaVersions)
   .settings(libraryDependencies ++= scalaVersion(playJsonDependency(scope = None)).value)
   .settings(mimaSettings("scalawebtest-json"))
   .dependsOn(core)
@@ -67,6 +71,7 @@ lazy val json = Project(id = "scalawebtest-json", base = file("scalawebtest-json
 lazy val bom = Project(id = "scalawebtest-bom", base = file("scalawebtest-bom"))
   .settings(description := "ScalaWebTest (Bill of Materials)")
   .settings(commonSettings: _*)
+  .settings(crossScalaVersions := supportedScalaVersions)
   .settings(
     publishArtifact in(Compile, packageBin) := false,
     publishArtifact in(Compile, packageDoc) := false,
@@ -100,6 +105,7 @@ lazy val integration_test = Project(id = "scalawebtest-integration", base = file
   .configs(IntegrationTest)
   .settings(Defaults.itSettings: _*)
   .settings(commonSettings: _*)
+  .settings(crossScalaVersions := supportedScalaVersions)
   .settings(
     libraryDependencies ++= Seq(
       "javax.servlet" % "javax.servlet-api" % "4.0.1" % "provided",

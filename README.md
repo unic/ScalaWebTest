@@ -10,12 +10,12 @@ Read the full documentation on our website https://www.scalawebtest.org
 
 ### Prerequisites
 
-* Java 8
-* Sbt 0.13.x
+* Java >= 8
+* SBT 1.x
 
 Get familiar with the sbt build tool because this is used to manage the project.
 
-See Getting Started Guide here: http://www.scala-sbt.org/0.13/docs/Getting-Started.html
+See [Getting Started Guide](https://www.scala-sbt.org/1.x/docs/Getting-Started.html)
 
 ### Compile, test, package
 
@@ -76,9 +76,6 @@ credentials += Credentials("Sonatype Nexus Repository Manager",
 The release process of ScalaWebTest is currently done manually. The process is done as follows:
 
 1. Switch the version in `build.sbt` to that which is to be released (e.g. from `0.0.1-SNAPSHOT` to `1.0.0`)
-1. Commit your changes with the commit message "Release x.x.x" (e.g. `Release 1.0.0`)
-1. Tag this commit with the release version
-1. Push you changes and the tag
 1. In your command line type in the following:
 	1. the long way:
 		1. `sbt` - enters the sbt interactive mode
@@ -90,5 +87,8 @@ The release process of ScalaWebTest is currently done manually. The process is d
 		1. Enter the Sonatype PGP Key Password as stored in our company password store
 		1. Go to https://oss.sonatype.org/#stagingRepositories verify and close the staging repository
 		1. `exit` - exits the sbt interactive mode
+1. Commit your changes with the commit message "Release x.x.x" (e.g. `Release 1.0.0`)
+1. Tag this commit with the release version
 1. Switch the version in `build.sbt` to the snapshot version (e.g. from `1.0.0` to `1.0.0-SNAPSHOT`) and update the documentation if needed
 1. Finally commit those changes with the commit message "Release x.x.x complete" (e.g. `Release 1.0.0 complete`)
+1. Push you changes and the tag

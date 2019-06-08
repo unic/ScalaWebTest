@@ -5,13 +5,7 @@ functionality. Nevertheless, some features and use cases can not be part of our 
 add additional dependencies and complexity.
 
 ## Integration with play framework
-The sub-folder *play-scala-starter-example* contains a modified version of the `build.sbt` from 
-https://github.com/playframework/play-samples/tree/2.8.x/play-scala-starter-example.
-Additional there is a folder `it`, with a few simple tests. 
-To test it, clone the `play-samples` repository and copy `build.sbt` and `it` into the `play-scala-starter-example` folder.
-
-Last but not least, the `ci-build.sh` script illustrates, which tasks you have to execute on your build server, 
-to run integration tests against your play application.
+The sub-folder *play-scala-starter-example* contains an example, which illustrates how to test a play framework application with ScalaWebTest. 
 
 ## Dockerize building and running the tests
 The sub-folder *docker* contains examples to build and run your tests with a docker image provided by ScalaWebTest. 

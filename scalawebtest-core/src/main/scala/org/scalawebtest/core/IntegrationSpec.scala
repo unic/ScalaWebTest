@@ -15,6 +15,7 @@
 package org.scalawebtest.core
 
 import java.net.URI
+import java.util.logging.Level
 
 import com.gargoylesoftware.htmlunit.BrowserVersion
 import org.openqa.selenium.{Cookie, WebDriver}
@@ -61,6 +62,18 @@ trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with
   def url: String = uri.toString
 
   def uri: URI = config.baseUri.resolve(config.baseUri.getPath + path)
+
+  /**
+    * HtmlUnit reports a lot of unimportant warnings, such as:
+    *  'WARNING: Obsolete content type encountered: 'text/javascript'
+    *  'WARNING: Link type 'shortcut icon' not supported.'
+    * Therefore ScalaWebTest disables HtmlUnit's Logger per default.
+    *
+    * To see this warnings, overwrite the avoidLogSpam method.
+    */
+  def avoidLogSpam(): Unit = {
+    java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(Level.OFF)
+  }
 
   /**
     * Override to encode your project specific login mechanism.
@@ -113,6 +126,7 @@ trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with
     * Overwrite beforeLogin() and afterLogin() for test-specific tasks
     */
   override def beforeAll(configMap: ConfigMap): Unit = {
+    avoidLogSpam()
     prepareWebDriver(configMap)
     beforeLogin(configMap)
     applyConfiguration(loginConfig, configMap)

@@ -7,7 +7,6 @@ jdk: openjdk8
 env:
  global:
   - WEBDRIVER_CHROME_DRIVER="/usr/lib/chromium-browser/chromedriver"
-  - WEBDRIVER_GECKO_DRIVER="$pwd/geckodriver/geckodriver"
 script:
  - sbt ++$TRAVIS_SCALA_VERSION test
  - sbt ++$TRAVIS_SCALA_VERSION inttest
@@ -21,3 +20,4 @@ before_install:
  - wget https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz
  - mkdir geckodriver
  - tar -xzf geckodriver-v0.24.0-linux64.tar.gz -C geckodriver
+ - export WEBDRIVER_GECKO_DRIVER="$pwd/geckodriver/geckodriver"

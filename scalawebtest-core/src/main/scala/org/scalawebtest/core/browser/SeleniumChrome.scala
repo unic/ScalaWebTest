@@ -43,13 +43,13 @@ trait SeleniumChrome extends Configurable {
         .getOrElse(List("--no-sandbox", "--headless"))
         .asJava
 
-    webDriver = new ChromeRemoteWebDriver(
+    webDriver = new CleanedPageSourceRemoteWebDriver(
       driverServiceUrl,
       new ChromeOptions().addArguments(chromeArguments)
     )
   }
 
-  class ChromeRemoteWebDriver(remoteAddress: URL, capabilities: Capabilities) extends RemoteWebDriver(remoteAddress, capabilities) {
+  class CleanedPageSourceRemoteWebDriver(remoteAddress: URL, capabilities: Capabilities) extends RemoteWebDriver(remoteAddress, capabilities) {
     override def getPageSource: String = {
       super.getPageSource
         .replaceFirst("""<html.*><head.*></head><body.*><pre style="word-wrap: break-word; white-space: pre-wrap;">""", "")

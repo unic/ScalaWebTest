@@ -5,8 +5,9 @@ scala:
  - 2.11.12
 jdk: openjdk8
 env:
- - WEBDRIVER_CHROME_DRIVER="/usr/lib/chromium-browser/chromedriver"
- - WEBDRIVER_GECKO_DRIVER="/usr/lib/geckodriver/geckodriver"
+ global:
+  - WEBDRIVER_CHROME_DRIVER="/usr/lib/chromium-browser/chromedriver"
+  - WEBDRIVER_GECKO_DRIVER="$pwd/geckodriver/geckodriver"
 script:
  - sbt ++$TRAVIS_SCALA_VERSION test
  - sbt ++$TRAVIS_SCALA_VERSION inttest
@@ -18,5 +19,5 @@ addons:
     - chromium-chromedriver
 before_install:
  - wget https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz
- - mkdir /usr/lib/geckodriver
- - tar -xzf geckodriver-v0.24.0-linux64.tar.gz -C /usr/lib/geckodriver
+ - mkdir geckodriver
+ - tar -xzf geckodriver-v0.24.0-linux64.tar.gz -C geckodriver

@@ -305,8 +305,16 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebDriver) extends Assertio
   }
 
   private def failAndReportMisfit() = {
-    val relevantMisfitsReason = misfitHolder.relevantMisfits.reverse.map(_.reason).mkString("\n")
-    fail(s"$relevantMisfitsReason\nCurrent document does not match provided gauge:\n${definition.toString}")
+    def misfitReasons(misfits: List[Misfit]) = misfits.reverse.map(_.reason).mkString("\n")
+
+    if (misfitHolder.relevantMisfits.size > 10) {
+      fail(s"Too many Misfits, only showing the first 5 of ${misfitHolder.relevantMisfits.size} Misfits!\n" +
+        misfitReasons(misfitHolder.relevantMisfits.take(5)) +
+        s"\n\n... ${misfitHolder.relevantMisfits.size - 5} Misfits truncated!" +
+        s"\nCurrent document does not match provided gauge:\n${definition.toString}")
+    } else {
+      fail(s"${misfitReasons(misfitHolder.relevantMisfits)}\n\nCurrent document does not match provided gauge:\n${definition.toString}")
+    }
   }
 
   private def elementOrderCorrect(current: JNode, previousSibling: Option[JNode], gaugeElement: Elem, misfitRelevance: MisfitRelevance): Boolean =

@@ -10,6 +10,9 @@ env:
 script:
  - sbt ++$TRAVIS_SCALA_VERSION test
  - sbt ++$TRAVIS_SCALA_VERSION inttest
+dist: xenial
+services:
+  - xvfb 
 addons:
  chrome: stable
  firefox: latest

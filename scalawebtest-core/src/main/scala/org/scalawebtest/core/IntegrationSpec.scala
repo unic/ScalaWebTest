@@ -23,10 +23,12 @@ import org.scalatest._
 import org.scalatest.concurrent.Eventually
 import org.scalatestplus.selenium.WebBrowser
 import org.scalawebtest.core.configuration.{BaseConfiguration, Configuration, HtmlUnitConfiguration, LoginConfiguration}
+import org.scalawebtest.core.gauge.Gauge
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.mutable.ListBuffer
 import scala.language.postfixOps
+import scala.xml.NodeSeq
 
 /**
   * This is the base trait for integration specs. The recommended way is to create your own project specific trait, which extends
@@ -59,9 +61,53 @@ trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with
     */
   var path: String = ""
 
+  /**
+    * @return [[uri]] as String
+    */
   def url: String = uri.toString
 
+  /**
+    * @return [[config.baseUri]] + [[path]] as [[java.net.URI]]
+    */
   def uri: URI = config.baseUri.resolve(config.baseUri.getPath + path)
+
+  /**
+    * @return [[webDriver.getPageSource]] wrapped in a [[CurrentPage]]
+    */
+  def currentPage: CurrentPage = CurrentPage(webDriver.getPageSource)
+
+  /**
+    * The [[CurrentPage]] provides convenient access to the source of the current page and to HtmlGauge functions.
+    */
+  case class CurrentPage(source: String) {
+    /**
+      * The same as [[org.scalawebtest.core.gauge.HtmlGauge#fits]], but explicitly using the source of the currentPage.
+      *
+      * @see [[org.scalawebtest.core.gauge.HtmlGauge#fits]]
+      */
+    def fits(definition: NodeSeq): Unit =  new Gauge(definition).fitsCurrentPageSource(source)
+
+    /**
+      * The same as [[org.scalawebtest.core.gauge.HtmlGauge#fits]], but explicitly using the source of the currentPage.
+      *
+      * @see [[org.scalawebtest.core.gauge.HtmlGauge#fits]]
+      */
+    def fit(definition: NodeSeq): Unit =  new Gauge(definition).fitsCurrentPageSource(source)
+
+    /**
+      * The same as [[org.scalawebtest.core.gauge.HtmlGauge.doesnt#fit]], but explicitly using the source of the currentPage.
+      *
+      * @see [[org.scalawebtest.core.gauge.HtmlGauge.doesnt#fit]]
+      */
+    def doesNotFit(definition: NodeSeq): Unit =  new Gauge(definition).doesNotFitCurrentPageSource(source)
+
+    /**
+      * The same as [[org.scalawebtest.core.gauge.HtmlGauge.doesnt#fit]], but explicitly using the source of the currentPage.
+      *
+      * @see [[org.scalawebtest.core.gauge.HtmlGauge.doesnt#fit]]
+      */
+    def doesntFit(definition: NodeSeq): Unit =  new Gauge(definition).doesNotFitCurrentPageSource(source)
+  }
 
   /**
     * HtmlUnit reports a lot of unimportant warnings, such as:

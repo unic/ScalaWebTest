@@ -38,9 +38,13 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebDriver) extends Assertio
   case class Fit(domNode: JNode, misfitRelevance: MisfitRelevance)
 
   def fits(): Unit = {
-    var fittingNodes = List[Fit]()
+    fitsCurrentPageSource(webDriver.getPageSource)
+  }
 
-    val currentPage = Jsoup.parse(webDriver.getPageSource)
+  def fitsCurrentPageSource(currentPageSource: String): Unit = {
+     var fittingNodes = List[Fit]()
+
+    val currentPage = Jsoup.parse(currentPageSource)
     definition.theSeq.foreach(gaugeElement => {
       val fittingNode = nodeFits(currentPage, gaugeElement, None, MISFIT_RELEVANCE_START_VALUE)
       if (fittingNode.isEmpty) {
@@ -55,7 +59,11 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebDriver) extends Assertio
   }
 
   def doesNotFit(): Unit = {
-    val currentPage = Jsoup.parse(webDriver.getPageSource)
+    doesNotFitCurrentPageSource(webDriver.getPageSource)
+  }
+
+  def doesNotFitCurrentPageSource(currentPageSource: String): Unit = {
+    val currentPage = Jsoup.parse(currentPageSource)
     definition.theSeq.foreach(gaugeElement => {
       val fit = nodeFits(currentPage, gaugeElement, None, MISFIT_RELEVANCE_START_VALUE)
       if (fit.isDefined) {
@@ -491,13 +499,13 @@ trait HtmlGauge {
   }
 
   /**
-    * Synonym for [[Gauge.fits]]. Use whatever reads better in your current context.
+    * Synonym for [[org.scalawebtest.core.gauge.HtmlGauge#fits]]. Use whatever reads better in your current context.
     */
   def fit(definition: NodeSeq)(implicit webDriver: WebDriver): Unit = fits(definition)
 
   implicit class NotFit(notWord: NotWord) {
     /**
-      * Synonym for [[doesnt.fit]]. Use whatever reads better in your current context.
+      * Synonym for [[org.scalawebtest.core.gauge.HtmlGauge.doesnt#fit]]. Use whatever reads better in your current context.
       */
     def fit(definition: NodeSeq)(implicit webDriver: WebDriver): Unit = doesnt.fit(definition)
   }
@@ -506,7 +514,7 @@ trait HtmlGauge {
     /**
       * Assert that the current document `doesnt fit` the html snippet provided as definition for the `Gauge`
       *
-      * To get detailed information about available options in `Gauge` definitions, read the ScalaDoc of [[Gauge.fits]]
+      * To get detailed information about available options in `Gauge` definitions, read the ScalaDoc of [[org.scalawebtest.core.gauge.HtmlGauge#fits]]
       */
     def fit(definition: NodeSeq)(implicit webDriver: WebDriver): Unit = {
       new Gauge(definition).doesNotFit()

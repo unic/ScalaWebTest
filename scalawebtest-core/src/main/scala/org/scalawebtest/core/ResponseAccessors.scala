@@ -14,10 +14,6 @@
  */
 package org.scalawebtest.core
 
-import com.gargoylesoftware.htmlunit.TextPage
-import com.gargoylesoftware.htmlunit.html.HtmlPage
-import com.gargoylesoftware.htmlunit.xml.XmlPage
-import org.openqa.selenium.WebDriver
 import org.scalatest.Assertions
 
 /**
@@ -62,20 +58,4 @@ trait ResponseAccessors {
         did not contain the expected response header with field-name: '$name'
         It contained the following header field-names: $headerNames""")
   }
-
-  /**
-    * @return Some(HtmlPage) if the currentPage is a HtmlPage otherwise None
-    */
-  def currentHtmlPage: Option[HtmlPage] = asWebClientExposingDriverOrError(webDriver).getCurrentHtmlPage
-
-  /**
-    * @return Some(TextPage) if the currentPage is a TextPage otherwise None
-    */
-  def currentTextPage: Option[TextPage] = asWebClientExposingDriverOrError(webDriver).getCurrentTextPage
-
-  /**
-    * @return Some(XmlPage) if the currentPage is an XmlPage otherwise None
-    */
-  def currentXmlPage: Option[XmlPage] = asWebClientExposingDriverOrError(webDriver).getCurrentXmlPage
-
 }

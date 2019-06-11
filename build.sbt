@@ -4,7 +4,7 @@ import scala.xml.transform.RewriteRule
 
 lazy val supportedScalaVersions = Seq("2.13.0", "2.12.8", "2.11.12")
 
-val projectVersion = "3.0.0-RC2"
+val projectVersion = "3.0.0-SNAPSHOT"
 val scalaTestVersion = "3.0.8"
 val seleniumVersion = "3.141.59"
 val htmlUnitVersion = "2.35.1"

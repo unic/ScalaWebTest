@@ -17,7 +17,7 @@ object ScalaWebTestBuild {
     scalaVersion match {
       case "2.11.12" => playJsonDependency("2.7.0")
       case "2.12.8" => playJsonDependency("2.8.0-M1")
-      case "2.13.0-RC3" => playJsonDependency213("2.8.0-M1")
+      case "2.13.0" => playJsonDependency213("2.8.0-M1")
       case _ => Seq()
     }
   }

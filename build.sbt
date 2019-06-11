@@ -2,10 +2,10 @@ import ScalaWebTestBuild._
 
 import scala.xml.transform.RewriteRule
 
-lazy val supportedScalaVersions = Seq("2.13.0-RC3", "2.12.8", "2.11.12")
+lazy val supportedScalaVersions = Seq("2.13.0", "2.12.8", "2.11.12")
 
 val projectVersion = "3.0.0-SNAPSHOT"
-val scalaTestVersion = "3.0.8-RC5"
+val scalaTestVersion = "3.0.8"
 val seleniumVersion = "3.141.59"
 val htmlUnitVersion = "2.35.1"
 val slf4jVersion = "1.7.26"
@@ -26,7 +26,7 @@ lazy val root = (project in file("."))
 lazy val commonSettings = Seq(
   organization := "org.scalawebtest",
   version := projectVersion,
-  scalaVersion := "2.12.8",
+  scalaVersion := "2.13.0",
   scalacOptions := Seq("-unchecked", "-deprecation"),
   publishMavenStyle := true,
   publishTo := {

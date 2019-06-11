@@ -10,3 +10,7 @@ The sub-folder *play-scala-starter-example* contains an example, which illustrat
 ## Dockerize building and running the tests
 The sub-folder *docker* contains examples to build and run your tests with a docker image provided by ScalaWebTest. 
 It also shows how to build a small docker container, with pre-compiled tests in it.
+
+## Educational examples for documentation
+The sub-folder *documentation*, contains examples as used by the documentation. They have a more educational focus then
+the integration tests of the scalawebtest-integration module.

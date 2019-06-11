@@ -21,8 +21,8 @@ scalaVersion := "2.12.8"
 libraryDependencies += guice
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "4.0.2" % Test
 libraryDependencies += "com.h2database" % "h2" % "1.4.199"
-libraryDependencies += "org.scalawebtest" %% "scalawebtest-core" % "3.0.0-RC1" % "it"
-libraryDependencies += "org.scalawebtest" %% "scalawebtest-json" % "3.0.0-RC1" % "it"
+libraryDependencies += "org.scalawebtest" %% "scalawebtest-core" % "3.0.0-RC2" % "it"
+libraryDependencies += "org.scalawebtest" %% "scalawebtest-json" % "3.0.0-RC2" % "it"
 
 scalacOptions ++= Seq(
   "-feature",

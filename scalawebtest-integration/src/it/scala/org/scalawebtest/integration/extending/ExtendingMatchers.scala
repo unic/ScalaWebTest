@@ -1,7 +1,7 @@
 package org.scalawebtest.integration.extending
 
-import org.scalawebtest.core.gauge._
 import org.scalawebtest.core.gauge.Matchers.{AttributeMatcher, TextMatcher}
+import org.scalawebtest.core.gauge._
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
 class ExtendingMatchers extends ScalaWebTestBaseSpec {

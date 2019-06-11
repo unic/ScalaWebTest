@@ -15,7 +15,6 @@
 package org.scalawebtest.integration.gauge
 
 import org.scalawebtest.core.IntegrationFlatSpec
-import org.scalawebtest.core.gauge.HtmlGauge._
 
 class HtmlGaugeFromCurrentPageSpec extends IntegrationFlatSpec {
   config.useBaseUri("http://localhost:9090")

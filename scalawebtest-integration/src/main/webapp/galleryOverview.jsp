@@ -16,7 +16,7 @@
         <ul>
             <div class="columns image_columns">
                 <a href="/gallery/image/1">
-                    <figure class="obj_aspect_ratio" style="padding-top: 79.75%">
+                    <figure class="obj_aspect_ratio">
                         <noscript>
                             <img class="obj_full"
                                  src="/image/1.jpg?w=600"
@@ -25,7 +25,7 @@
                         <img
                                 class="obj_full lazyload"
                                 src="/image/1.jpg?w=600"
-                                srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                                srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAMAAABlApw1AAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAA2UExURUxpcQAAAAAAAGZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZgAAAAAAAMMpPhwBA7EjNlcGETVhaCQAAAANdFJOUwD18WUFTTcMFSN7LeaHjN0xAAABYElEQVR42u3XUVKDMBSG0baUkBi0uv/NGoIg+sxM507Pt4L/cHmAy0U6o3vA/u+fQvVHsK7PgZryatgBy/wSqoaYNkDbn/N8C9bcCKugP/9yew/WrWw3WA5QajxALfkASPEAaQcsB4gI6CfYAOM1GuA6HgEpIiABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJwGeJzQUwGfJ/T1TMDHCQEAAAAAAAC8LCD8t1D4r1E/NAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK8KqBEB9QhI8zVYc9oB6zs0DsNbmIZhXN+gHVC7IExj218PgC5ohDilvn8F9BPkUmpNTRGh2iol/xxgu0EjRCrvz78DmqARAtX2tv0boBPu06II0v13/jemI5vt8kv1XgAAAFd6VFh0UmF3IHByb2ZpbGUgdHlwZSBpcHRjAAB4nOPyDAhxVigoyk/LzEnlUgADIwsuYwsTIxNLkxQDEyBEgDTDZAMjs1Qgy9jUyMTMxBzEB8uASKBKLgDqFxF08kI1lQAAAABJRU5ErkJggg=="
                                 data-srcset="
         /image/1.jpg?w=252 252w,
         /image/1.jpg?w=600 600w,
@@ -39,7 +39,7 @@
                 <a href="/gallery/image/2">
 
 
-                    <figure class="obj_aspect_ratio" style="padding-top: 56.25%">
+                    <figure class="obj_aspect_ratio">
                         <noscript>
                             <img class="obj_full"
                                  src="/image/2.jpg?w=600"
@@ -49,7 +49,7 @@
                         <img
                                 class="obj_full lazyload"
                                 src="/image/2.jpg?w=600"
-                                srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                                srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAMAAABlApw1AAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAA2UExURUxpcQAAAAAAAGZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZgAAAAAAAMMpPhwBA7EjNlcGETVhaCQAAAANdFJOUwD18WUFTTcMFSN7LeaHjN0xAAABYElEQVR42u3XUVKDMBSG0baUkBi0uv/NGoIg+sxM507Pt4L/cHmAy0U6o3vA/u+fQvVHsK7PgZryatgBy/wSqoaYNkDbn/N8C9bcCKugP/9yew/WrWw3WA5QajxALfkASPEAaQcsB4gI6CfYAOM1GuA6HgEpIiABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJwGeJzQUwGfJ/T1TMDHCQEAAAAAAAC8LCD8t1D4r1E/NAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK8KqBEB9QhI8zVYc9oB6zs0DsNbmIZhXN+gHVC7IExj218PgC5ohDilvn8F9BPkUmpNTRGh2iol/xxgu0EjRCrvz78DmqARAtX2tv0boBPu06II0v13/jemI5vt8kv1XgAAAFd6VFh0UmF3IHByb2ZpbGUgdHlwZSBpcHRjAAB4nOPyDAhxVigoyk/LzEnlUgADIwsuYwsTIxNLkxQDEyBEgDTDZAMjs1Qgy9jUyMTMxBzEB8uASKBKLgDqFxF08kI1lQAAAABJRU5ErkJggg=="
                                 data-srcset="
         /image/2.jpg?w=252 252w,
         /image/2.jpg=600 600w,
@@ -62,7 +62,7 @@
                 <a href="/gallery/image/3">
 
 
-                    <figure class="obj_aspect_ratio" style="padding-top: 56.25%">
+                    <figure class="obj_aspect_ratio">
                         <noscript>
                             <img class="obj_full"
                                  src="/image/3.jpg?w=600"
@@ -72,7 +72,7 @@
                         <img
                                 class="obj_full lazyload"
                                 src="/image/3.jpg?w=600"
-                                srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                                srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAMAAABlApw1AAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAA2UExURUxpcQAAAAAAAGZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZgAAAAAAAMMpPhwBA7EjNlcGETVhaCQAAAANdFJOUwD18WUFTTcMFSN7LeaHjN0xAAABYElEQVR42u3XUVKDMBSG0baUkBi0uv/NGoIg+sxM507Pt4L/cHmAy0U6o3vA/u+fQvVHsK7PgZryatgBy/wSqoaYNkDbn/N8C9bcCKugP/9yew/WrWw3WA5QajxALfkASPEAaQcsB4gI6CfYAOM1GuA6HgEpIiABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJwGeJzQUwGfJ/T1TMDHCQEAAAAAAAC8LCD8t1D4r1E/NAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK8KqBEB9QhI8zVYc9oB6zs0DsNbmIZhXN+gHVC7IExj218PgC5ohDilvn8F9BPkUmpNTRGh2iol/xxgu0EjRCrvz78DmqARAtX2tv0boBPu06II0v13/jemI5vt8kv1XgAAAFd6VFh0UmF3IHByb2ZpbGUgdHlwZSBpcHRjAAB4nOPyDAhxVigoyk/LzEnlUgADIwsuYwsTIxNLkxQDEyBEgDTDZAMjs1Qgy9jUyMTMxBzEB8uASKBKLgDqFxF08kI1lQAAAABJRU5ErkJggg=="
                                 data-srcset="
         /image/3.jpg?w=252 252w,
         /image/3.jpg=600 600w,
@@ -85,7 +85,7 @@
                 <a href="/gallery/image/4">
 
 
-                    <figure class="obj_aspect_ratio" style="padding-top: 56.25%">
+                    <figure class="obj_aspect_ratio">
                         <noscript>
                             <img class="obj_full"
                                  src="/image/4.jpg?w=600"
@@ -95,7 +95,7 @@
                         <img
                                 class="obj_full lazyload"
                                 src="/image/4.jpg?w=600"
-                                srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                                srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAMAAABlApw1AAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAA2UExURUxpcQAAAAAAAGZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZgAAAAAAAMMpPhwBA7EjNlcGETVhaCQAAAANdFJOUwD18WUFTTcMFSN7LeaHjN0xAAABYElEQVR42u3XUVKDMBSG0baUkBi0uv/NGoIg+sxM507Pt4L/cHmAy0U6o3vA/u+fQvVHsK7PgZryatgBy/wSqoaYNkDbn/N8C9bcCKugP/9yew/WrWw3WA5QajxALfkASPEAaQcsB4gI6CfYAOM1GuA6HgEpIiABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJwGeJzQUwGfJ/T1TMDHCQEAAAAAAAC8LCD8t1D4r1E/NAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK8KqBEB9QhI8zVYc9oB6zs0DsNbmIZhXN+gHVC7IExj218PgC5ohDilvn8F9BPkUmpNTRGh2iol/xxgu0EjRCrvz78DmqARAtX2tv0boBPu06II0v13/jemI5vt8kv1XgAAAFd6VFh0UmF3IHByb2ZpbGUgdHlwZSBpcHRjAAB4nOPyDAhxVigoyk/LzEnlUgADIwsuYwsTIxNLkxQDEyBEgDTDZAMjs1Qgy9jUyMTMxBzEB8uASKBKLgDqFxF08kI1lQAAAABJRU5ErkJggg=="
                                 data-srcset="
         /image/4.jpg?w=252 252w,
         /image/4.jpg=600 600w,
@@ -108,7 +108,7 @@
                 <a href="/gallery/image/5">
 
 
-                    <figure class="obj_aspect_ratio" style="padding-top: 56.25%">
+                    <figure class="obj_aspect_ratio">
                         <noscript>
                             <img class="obj_full"
                                  src="/image/5.jpg?w=600"
@@ -118,7 +118,7 @@
                         <img
                                 class="obj_full lazyload"
                                 src="/image/5.jpg?w=600"
-                                srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                                srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAMAAABlApw1AAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAA2UExURUxpcQAAAAAAAGZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZgAAAAAAAMMpPhwBA7EjNlcGETVhaCQAAAANdFJOUwD18WUFTTcMFSN7LeaHjN0xAAABYElEQVR42u3XUVKDMBSG0baUkBi0uv/NGoIg+sxM507Pt4L/cHmAy0U6o3vA/u+fQvVHsK7PgZryatgBy/wSqoaYNkDbn/N8C9bcCKugP/9yew/WrWw3WA5QajxALfkASPEAaQcsB4gI6CfYAOM1GuA6HgEpIiABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJwGeJzQUwGfJ/T1TMDHCQEAAAAAAAC8LCD8t1D4r1E/NAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK8KqBEB9QhI8zVYc9oB6zs0DsNbmIZhXN+gHVC7IExj218PgC5ohDilvn8F9BPkUmpNTRGh2iol/xxgu0EjRCrvz78DmqARAtX2tv0boBPu06II0v13/jemI5vt8kv1XgAAAFd6VFh0UmF3IHByb2ZpbGUgdHlwZSBpcHRjAAB4nOPyDAhxVigoyk/LzEnlUgADIwsuYwsTIxNLkxQDEyBEgDTDZAMjs1Qgy9jUyMTMxBzEB8uASKBKLgDqFxF08kI1lQAAAABJRU5ErkJggg=="
                                 data-srcset="
         /image/5.jpg?w=252 252w,
         /image/5.jpg=600 600w,
@@ -131,7 +131,7 @@
                 <a href="/gallery/image/6">
 
 
-                    <figure class="obj_aspect_ratio" style="padding-top: 56.25%">
+                    <figure class="obj_aspect_ratio">
                         <noscript>
                             <img class="obj_full"
                                  src="/image/6.jpg?w=600"
@@ -141,7 +141,7 @@
                         <img
                                 class="obj_full lazyload"
                                 src="/image/6.jpg?w=600"
-                                srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                                srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAMAAABlApw1AAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAA2UExURUxpcQAAAAAAAGZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZgAAAAAAAMMpPhwBA7EjNlcGETVhaCQAAAANdFJOUwD18WUFTTcMFSN7LeaHjN0xAAABYElEQVR42u3XUVKDMBSG0baUkBi0uv/NGoIg+sxM507Pt4L/cHmAy0U6o3vA/u+fQvVHsK7PgZryatgBy/wSqoaYNkDbn/N8C9bcCKugP/9yew/WrWw3WA5QajxALfkASPEAaQcsB4gI6CfYAOM1GuA6HgEpIiABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJwGeJzQUwGfJ/T1TMDHCQEAAAAAAAC8LCD8t1D4r1E/NAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK8KqBEB9QhI8zVYc9oB6zs0DsNbmIZhXN+gHVC7IExj218PgC5ohDilvn8F9BPkUmpNTRGh2iol/xxgu0EjRCrvz78DmqARAtX2tv0boBPu06II0v13/jemI5vt8kv1XgAAAFd6VFh0UmF3IHByb2ZpbGUgdHlwZSBpcHRjAAB4nOPyDAhxVigoyk/LzEnlUgADIwsuYwsTIxNLkxQDEyBEgDTDZAMjs1Qgy9jUyMTMxBzEB8uASKBKLgDqFxF08kI1lQAAAABJRU5ErkJggg=="
                                 data-srcset="
         /image/6.jpg?w=252 252w,
         /image/6.jpg=600 600w,

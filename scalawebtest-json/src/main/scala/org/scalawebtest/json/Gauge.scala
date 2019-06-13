@@ -19,6 +19,7 @@ import org.scalatest.{AppendedClues, Assertions, Matchers}
 import play.api.libs.json._
 
 import scala.language.implicitConversions
+import scala.reflect.ClassTag
 
 /**
   * One should not have to create an instance of [[Gauge]] manually. Use one of the provided Builder.
@@ -43,7 +44,7 @@ case class Gauge(testee: JsValue, fitValues: Boolean, fitArraySizes: Boolean, ig
   private def fitsArray(json: JsValue, breadcrumb: List[String], defA: JsArray): Unit = {
     def assertArrayElementsMatch(a: JsArray): Unit = {
       if (fitArraySizes && defA.value.nonEmpty) {
-        a.value should have length defA.value.length withClue s"in ${breadcrumb.prettyPrint()}"
+        a.value should have length defA.value.length withClue s"in ${breadcrumb.prettyPrint}"
       }
       if (ignoreArrayOrder) {
         defA.value.foreach(g => {
@@ -67,56 +68,57 @@ case class Gauge(testee: JsValue, fitValues: Boolean, fitArraySizes: Boolean, ig
 
     json match {
       case ar: JsArray => assertArrayElementsMatch(ar)
-      case _ => fail(s"${json.toString()} expected to be an array, but wasn't.")
+      case v => failForTypeMismatch[JsArray](v, breadcrumb)
     }
   }
 
   private def fitsObject(json: JsValue, breadcrumb: List[String], defO: JsObject): Unit = {
     def assertObjectContains(o: JsObject, breadcrumb: List[String], value: JsValue): Unit = {
       (o \ breadcrumb.head).toOption match {
-        case None => fail(s"Expected to contain the key ${breadcrumb.head}, but didn't in $json. Complete selector was ${breadcrumb.prettyPrint()}")
+        case None => fail(s"Expected to contain the key ${breadcrumb.head}, but didn't in $json. Complete selector was ${breadcrumb.prettyPrint}")
         case Some(v) => fits(v, breadcrumb, value)
       }
     }
 
     json match {
       case o: JsObject => defO.fields.foreach { case (k, v) => assertObjectContains(o, k :: breadcrumb, v) }
-      case _ => fail(s"${json.toString()} expected to be an object, but wasn't.")
+      case v => failForTypeMismatch[JsObject](v, breadcrumb)
     }
   }
 
   private def fitsNumber(json: JsValue, breadcrumb: List[String], defN: JsNumber): Unit = {
     json match {
       case n: JsNumber => if (fitValues) {
-        n.value shouldEqual defN.value withClue s"in ${breadcrumb.prettyPrint()}"
+        n.value shouldEqual defN.value withClue s"in ${breadcrumb.prettyPrint}"
       }
-      case _ => fail(s"Expected ${breadcrumb.prettyPrint()} to contain a Number, but it contained $json instead")
+      case v => failForTypeMismatch[JsNumber](v, breadcrumb)
     }
   }
 
   private def fitsString(json: JsValue, breadcrumb: List[String], defS: JsString): Unit = {
     json match {
       case s: JsString => if (fitValues) {
-        s.value shouldEqual defS.value withClue s"in ${breadcrumb.prettyPrint()}"
+        s.value shouldEqual defS.value withClue s"in ${breadcrumb.prettyPrint}"
       }
-      case _ => fail(s"Expected ${breadcrumb.prettyPrint()} to contain a String, but it contained $json instead")
+      case v => failForTypeMismatch[JsString](v, breadcrumb)
     }
   }
 
   private def fitsBoolean(json: JsValue, breadcrumb: List[String], defB: JsBoolean): Unit = {
     json match {
       case b: JsBoolean => if (fitValues) {
-        b.value shouldEqual defB.value withClue s"in ${breadcrumb.prettyPrint()}"
+        b.value shouldEqual defB.value withClue s"in ${breadcrumb.prettyPrint}"
       }
-      case _ => fail(s"Expected ${breadcrumb.prettyPrint()} to contain a BOOLEAN, but it contained $json instead")
+      case v => failForTypeMismatch[JsBoolean](v, breadcrumb)
     }
   }
 
   private def fitsNull(json: JsValue, breadcrumb: List[String]): Unit = {
-    json match {
-      case JsNull => //null is null, verifying for value or type are identical
-      case _ => fail(s"Expected ${breadcrumb.prettyPrint()} to contain NULL, but it contained $json instead")
-    }
+    json shouldBe JsNull withClue s", in the field ${breadcrumb.prettyPrint}"
+  }
+
+  def failForTypeMismatch[T: ClassTag](v: JsValue, breadcrumb: List[String]): Unit = {
+    v shouldBe a[T] withClue s", as value for the field ${breadcrumb.prettyPrint}"
   }
 
   def fits(json: JsValue, breadcrumb: List[String], gauge: JsValue): Unit = {

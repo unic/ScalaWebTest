@@ -137,7 +137,7 @@ case class JsonGaugeArrayContains(gauge: Gauge) extends Assertions with Appended
         if (!hasMatchingElement(array, definition)) {
           fail(s"${gauge.testee.toString()} did not contain an element, which matched the gauge definition $definition")
         }
-      case _ => fail(s"${gauge.testee.toString()} expected to be an array, but wasn't.")
+      case v => v shouldBe a[JsArray]
     }
   }
 
@@ -156,5 +156,5 @@ case class JsonGaugeArrayContains(gauge: Gauge) extends Assertions with Appended
 }
 
 class PrettyPrintBreadcrumb(breadcrumb: List[String]) {
-  def prettyPrint(): String = breadcrumb.reverse.mkString("\\")
+  def prettyPrint: String = breadcrumb.reverse.mkString("'", ".", "'")
 }

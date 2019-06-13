@@ -9,6 +9,7 @@ val scalaTestVersion = "3.0.8"
 val seleniumVersion = "3.141.59"
 val htmlUnitVersion = "2.35.1"
 val slf4jVersion = "1.7.26"
+val playJsonVersion = "2.7.4"
 
 val versions = Map("scalaWebTest" -> projectVersion, "scalaTest" -> scalaTestVersion, "selenium" -> seleniumVersion, "htmlUnit" -> htmlUnitVersion)
 
@@ -57,14 +58,14 @@ lazy val core = Project(id = "scalawebtest-core", base = file("scalawebtest-core
 lazy val aem = Project(id = "scalawebtest-aem", base = file("scalawebtest-aem"))
   .settings(commonSettings: _*)
   .settings(crossScalaVersions := supportedScalaVersions)
-  .settings(libraryDependencies ++= scalaVersion(playJsonDependency(scope = None)).value)
+  .settings(libraryDependencies += "com.typesafe.play" %% "play-json" % playJsonVersion)
   .settings(mimaSettings("scalawebtest-aem"))
   .dependsOn(core)
 
 lazy val json = Project(id = "scalawebtest-json", base = file("scalawebtest-json"))
   .settings(commonSettings: _*)
   .settings(crossScalaVersions := supportedScalaVersions)
-  .settings(libraryDependencies ++= scalaVersion(playJsonDependency(scope = None)).value)
+  .settings(libraryDependencies += "com.typesafe.play" %% "play-json" % playJsonVersion)
   .settings(mimaSettings("scalawebtest-json"))
   .dependsOn(core)
 
@@ -113,10 +114,10 @@ lazy val integration_test = Project(id = "scalawebtest-integration", base = file
       "org.seleniumhq.selenium" % "selenium-java" % seleniumVersion % "it",
       "org.seleniumhq.selenium" % "htmlunit-driver" % htmlUnitVersion % "it",
       "org.slf4j" % "slf4j-api" % slf4jVersion % "it",
-      "org.slf4j" % "slf4j-simple" % slf4jVersion % "it"
+      "org.slf4j" % "slf4j-simple" % slf4jVersion % "it",
+      "com.typesafe.play" %% "play-json" % playJsonVersion % "it"
     )
   )
-  .settings(libraryDependencies ++= scalaVersion(playJsonDependency(Some("it"))).value)
   .enablePlugins(JettyPlugin)
   .settings(containerPort in Jetty := 9090)
   .dependsOn(core)

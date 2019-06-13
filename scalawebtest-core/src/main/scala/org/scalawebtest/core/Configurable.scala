@@ -50,7 +50,13 @@ trait Configurable {
 
   implicit object UriTransformer extends Transformer[URI] {
     override def transform(s: String, c: Context): Option[URI] = Try(new URI(s)) match {
-      case Success(i) => Some(i)
+      case Success(i) =>
+        Try(i.toURL) match {
+          case _: Success[_] => Some(i)
+          case Failure(e) =>
+            logger.error(s"Could not transform ${c.kind} ${c.name} with value $s from a ${classOf[URI].getName} to a ${classOf[URL].getName}. In the context of ScalaWebTest all URIs are also expect to be valid URLs.", e)
+            None
+        }
       case Failure(e) =>
         logger.error(s"Could not transform ${c.kind} ${c.name} with value $s to ${classOf[URI].getName}", e)
         None

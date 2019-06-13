@@ -20,6 +20,8 @@ import org.openqa.selenium.WebDriver
 import org.scalatest.ConfigMap
 import org.scalawebtest.core.{Configurable, IntegrationSpec}
 
+import scala.util.Try
+
 abstract class BaseConfiguration() extends Configurable {
   var configurations: Map[String, WebDriver => Unit] = Map()
 
@@ -62,7 +64,10 @@ abstract class BaseConfiguration() extends Configurable {
 abstract class LoginConfiguration extends BaseConfiguration {
   private var internalUri = new URI("http://localhost:8080")
 
-  def useLoginUri(uri: String): Unit = internalUri = new URI(uri)
+  def useLoginUri(uri: String): Unit = {
+    require(Try(new URI(uri).toURL).isSuccess, "'useLoginUri' was called with an illegal argument - uri is required to be a valid java.net.URI and java.net.URL")
+    internalUri = new URI(uri)
+  }
 
   def loginUri: URI = internalUri
 
@@ -78,6 +83,7 @@ abstract class Configuration extends BaseConfiguration {
   var reloadOnNavigateToEnforced = false
 
   def useBaseUri(uri: String): Unit = {
+    require(Try(new URI(uri).toURL).isSuccess, "'useBaseUri' was called with an illegal argument - uri is required to be a valid java.net.URI and java.net.URL")
     internalBaseUri = new URI(uri)
   }
 

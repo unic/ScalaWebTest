@@ -12,6 +12,7 @@ Read the full documentation on our website https://www.scalawebtest.org
 
 * Java >= 8
 * SBT 1.x
+* [ChromeDriver](http://chromedriver.chromium.org/)
 
 Get familiar with the sbt build tool because this is used to manage the project.
 
@@ -25,8 +26,16 @@ See [Getting Started Guide](https://www.scala-sbt.org/1.x/docs/Getting-Started.h
 
 ### Run whole integration test
 
+Before running the integration tests, you will need to configure `WEBDRIVER_CHROME_DRIVER` environment variable. To do so, run the following command:
+
+```bash
+$ export WEBDRIVER_CHROME_DRIVER="$(which chromedriver)"
 ```
-#> sbt inttest
+
+And then run the tests using the command below:
+
+```bash
+$ sbt inttest
 ```
 
 This will start a Jetty server, executes the integration tests and stops the server again.

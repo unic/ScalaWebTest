@@ -29,7 +29,7 @@ import scala.xml._
 
 /**
   * Gauge provides functions to write integration tests with very low effort. For a detailed description of it's usage,
-  * see [[org.scalawebtest.core.gauge.Gauge.fits]] and [[org.scalawebtest.core.gauge.Gauge.doesnt.fit]]
+  * see [[org.scalawebtest.core.gauge.HtmlGauge.fits]] and [[org.scalawebtest.core.gauge.HtmlGauge.doesnt.fit]]
   * as well as [[org.scalawebtest.core.gauge.HtmlElementGauge.GaugeFromElement.fits]] and [[org.scalawebtest.core.gauge.HtmlElementGauge.GaugeFromElement.fits]]
   */
 class Gauge(definition: NodeSeq)(implicit webDriver: WebDriver) extends Assertions {
@@ -371,9 +371,6 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebDriver) extends Assertio
     }
   }
 }
-
-@deprecated("Please switch to the HtmlGauge object or extend the HtmlGauge trait. The Gauge object will be removed in a future version, for clear disambiguation between HtmlGauge and JsonGauge", "ScalaWebTest 1.1.0")
-object Gauge extends HtmlGauge
 
 object HtmlGauge extends HtmlGauge
 

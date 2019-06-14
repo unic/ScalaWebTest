@@ -17,10 +17,10 @@ package org.scalawebtest.core.gauge
 import org.jsoup.nodes.{Node => JNode, TextNode => JTextNode}
 
 case class CandidateAttribute(relevance: Int, containingElement: JNode, attributeName: String, attributeValue: String){
-  def name(): String = attributeName
-  def value(): String = attributeValue
+  def name: String = attributeName
+  def value: String = attributeValue
 }
 
 case class CandidateElement(relevance: Int, element: JTextNode) {
-  def text(): String = element.text()
+  def text: String = element.text
 }

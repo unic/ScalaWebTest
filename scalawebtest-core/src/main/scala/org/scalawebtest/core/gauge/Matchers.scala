@@ -14,6 +14,8 @@
  */
 package org.scalawebtest.core.gauge
 
+import org.scalawebtest.core.gauge.JNodePrettifier.PrettyStringProvider
+
 /**
   * Verifies element text or attribute values with one of its PluggableMatchers.
   */
@@ -39,7 +41,7 @@ object Matchers {
   }
 
   private def noMatcherFoundMisfit(relevance: Int, expectedValue: String, matchers: List[PluggableMatcher]): Misfit = {
-    Misfit(relevance, "Matcher not found", "No matcher found for checkingGauge definition [" + expectedValue + "]. None of the registered matchers [" + matchers + "] contained a matching marked [" + matchers.map(_.marker) + "]")
+    Misfit(relevance, "Matcher not found", "No matcher found for checkingGauge definition [" + expectedValue + "]. None of the registered matchers [" + matchers + "] contained a matching marked [" + matchers.map(_.marker) + "]", None, None)
   }
 
   /**
@@ -63,18 +65,18 @@ object Matchers {
     override val marker = ""
 
     override def attributeMatches(expected: String, attribute: CandidateAttribute): Option[Misfit] = {
-      if (attribute.value().equals(expected)) {
+      if (attribute.value.equals(expected)) {
         None
       } else {
-        Some(Misfit(attribute.relevance, "Misfitting Attribute", "[" + attribute.name() + "] in [" + attribute.containingElement + "] with value[" + attribute.value() + "] didn't equal [" + expected + "]"))
+        Some(Misfit(attribute.relevance, "Misfitting Attribute", s"[${attribute.name}] in [${attribute.containingElement.prettyString}] with value [${attribute.value}] didn't equal [$expected]", Some(expected), Some(attribute.value)))
       }
     }
 
     override def textMatches(expected: String, element: CandidateElement): Option[Misfit] = {
-      if (element.text().trim().equals(expected)) {
+      if (element.text.trim.equals(expected)) {
         None
       } else {
-        Some(Misfit(element.relevance, "Misfitting Text", "The text [" + element.text + "] within [" + element.element.parent + "] didn't equal [" + expected + "]"))
+        Some(Misfit(element.relevance, "Misfitting Text", s"The text [${element.text}] within [${element.element.parent.prettyString}] didn't equal [$expected]", Some(expected), Some(element.text)))
       }
     }
   }
@@ -83,18 +85,18 @@ object Matchers {
     override val marker = "@regex "
 
     override def attributeMatches(expected: String, attribute: CandidateAttribute): Option[Misfit] = {
-      if (attribute.value().matches(expected)) {
+      if (attribute.value.matches(expected)) {
         None
       } else {
-        Some(Misfit(attribute.relevance, "Misfitting Attribute", "[" + attribute.name() + "] in [" + attribute.containingElement + "] with value[" + attribute.value() + "] didn't match regex pattern [" + expected + "]"))
+        Some(Misfit(attribute.relevance, "Misfitting Attribute", s"The attribute [${attribute.name}] in [${attribute.containingElement.prettyString}] with value [${attribute.value}] didn't match regex pattern [$expected]", None, None))
       }
     }
 
     override def textMatches(expected: String, element: CandidateElement): Option[Misfit] = {
-      if (element.text().trim().matches(expected)) {
+      if (element.text.trim().matches(expected)) {
         None
       } else {
-        Some(Misfit(element.relevance, "Misfitting Text", "The [" + element.text() + "] from [" + element.element + "] didn't match regex pattern [" + expected + "]"))
+        Some(Misfit(element.relevance, "Misfitting Text", s"The text [${element.text}] from [${element.element.prettyString}] didn't match regex pattern [$expected]", None, None))
       }
     }
   }
@@ -103,19 +105,19 @@ object Matchers {
     override val marker = "@contains "
 
     override def attributeMatches(expected: String, attribute: CandidateAttribute): Option[Misfit] = {
-      if (attribute.value().contains(expected)) {
+      if (attribute.value.contains(expected)) {
         None
       }
       else {
-        Some(Misfit(attribute.relevance, "Misfitting Attribute", "[" + attribute.name() + "] in [" + attribute.containingElement + "] with value[" + attribute.value() + "] didn't contain [" + expected + "]"))
+        Some(Misfit(attribute.relevance, "Misfitting Attribute", s"The attribute [${attribute.name}] in [${attribute.containingElement.prettyString}] with value [${attribute.value}] didn't contain [$expected]", Some(s"...$expected..."), Some(attribute.value)))
       }
     }
 
     override def textMatches(expected: String, element: CandidateElement): Option[Misfit] = {
-      if (element.text().contains(expected)) {
+      if (element.text.contains(expected)) {
         None
       } else {
-        Some(Misfit(element.relevance, "Misfitting Text", "The [" + element.text + "] from [" + element.element + "] didn't contain [" + expected + "]"))
+        Some(Misfit(element.relevance, "Misfitting Text", s"The text [${element.text}] from [${element.element.prettyString}] didn't contain [$expected]", Some(s"...expected..."), Some(element.text)))
       }
     }
   }

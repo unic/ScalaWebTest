@@ -13,20 +13,20 @@ class ExtendingMatchers extends ScalaWebTestBaseSpec {
     override def textMatches(expected: String, element: CandidateElement): Option[Misfit] = {
       val emailRegex = s"^$emailRegexCore$$"
 
-      if (element.text().trim().matches(emailRegex)) {
+      if (element.text.trim.matches(emailRegex)) {
         None
       } else {
-        Some(Misfit(element.relevance, "Misfitting Text", "The [" + element.text() + "] from [" + element.element + "] is not an email address"))
+        Some(Misfit(element.relevance, "Misfitting Text", "The [" + element.text + "] from [" + element.element + "] is not an email address", None, None))
       }
     }
 
     override def attributeMatches(expected: String, attribute: CandidateAttribute): Option[Misfit] = {
       val emailOrMailToRegex = s"^(mailto:)?$emailRegexCore$$"
 
-      if (attribute.value().matches(emailOrMailToRegex)) {
+      if (attribute.value.matches(emailOrMailToRegex)) {
         None
       } else {
-        Some(Misfit(attribute.relevance, "Misfitting Attribute", "[" + attribute.name() + "] in [" + attribute.containingElement + "] with value[" + attribute.value() + "] is not an email address or mailto: link"))
+        Some(Misfit(attribute.relevance, "Misfitting Attribute", "[" + attribute.name + "] in [" + attribute.containingElement + "] with value[" + attribute.value + "] is not an email address or mailto: link", None, None))
       }
     }
 

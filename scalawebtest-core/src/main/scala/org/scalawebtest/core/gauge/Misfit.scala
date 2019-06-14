@@ -14,13 +14,38 @@
  */
 package org.scalawebtest.core.gauge
 
-case class Misfit(relevance: Int, topic: String, detail: String)
+import scala.io.AnsiColor._
+
+case class Misfit(relevance: Int, topic: String, detail: String, expected: Option[String], actual: Option[String]) {
+  def message: String = {
+    val expectActualMessage =
+      (
+        for {
+          e <- expected
+          a <- actual
+        }
+          yield
+            s"""
+               |$BLUE${UNDERLINED}Expected:$RESET\n
+               |$BLUE$e$RESET\n
+               |$RED${UNDERLINED}Actual:$RESET\n
+               |$RED$a$RESET
+               |""".stripMargin
+        ).getOrElse("")
+
+    s"""
+       |$RED$UNDERLINED$topic:$RESET\n
+       |$RED$detail$RESET
+       |$expectActualMessage
+       |""".stripMargin
+  }
+}
 
 class MisfitHolder {
   var misfits: List[Misfit] = Nil
 
-  def addMisfit(relevance: Int, topic: String, detail: String): Unit = {
-    misfits = Misfit(relevance, topic, detail) :: misfits
+  def addMisfitByValues(relevance: Int, topic: String, detail: String, expected: Option[String], actual: Option[String]): Unit = {
+    misfits = Misfit(relevance, topic, detail, expected, actual) :: misfits
   }
 
   def addMisfit(misfit: Misfit): Unit = {

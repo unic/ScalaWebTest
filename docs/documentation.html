@@ -70,9 +70,9 @@ libraryDependencies += "org.scalawebtest" %% "scalawebtest-core" % "{{page.scala
                     {% highlight scala %}
 libraryDependencies ++= Seq(
     "org.scalawebtest" %% "scalawebtest-core" % "{{page.scalaWebTestVersion}}" % "it",
-    "org.scalatest" %% "scalatest" % "3.0.4" % "it",
-    "org.seleniumhq.selenium" % "selenium-java" % "3.6.0" % "it",
-    "org.seleniumhq.selenium" % "htmlunit-driver" % "2.27" % "it"
+    "org.scalatest" %% "scalatest" % "3.0.8" % "it",
+    "org.seleniumhq.selenium" % "selenium-java" % "3.141.59" % "it",
+    "org.seleniumhq.selenium" % "htmlunit-driver" % "2.35.1" % "it"
 ){% endhighlight %}
                     <h4 id="swt_maven">Add ScalaWebTest to your maven project</h4>
                     <p>You have to add the following dependency to your maven project to use ScalaWebTest.</p>
@@ -80,19 +80,19 @@ libraryDependencies ++= Seq(
                     {% highlight xml %}
 <dependency>
     <groupId>org.scalawebtest</groupId>
-    <artifactId>scalawebtest-core_2.12</artifactId>
+    <artifactId>scalawebtest-core_2.13</artifactId>
     <version>{{page.scalaWebTestVersion}}</version>
     <scope>test</scope>
 </dependency>{% endhighlight%}
 
-                    <p>ScalaWebTest is also available for Scala 2.10 and 2.11, change the version after the underscore,
+                    <p>ScalaWebTest is also available for Scala 2.12 and 2.11, change the version after the underscore,
                         to get a ScalaWebTest version which is binary compatible with the Scala version which you
                         use.</p>
 
                     {% highlight xml %}
 <dependency>
     <groupId>org.scalawebtest</groupId>
-    <artifactId>scalawebtest-core_2.11</artifactId>
+    <artifactId>scalawebtest-core_2.12</artifactId>
     <version>{{page.scalaWebTestVersion}}</version>
     <scope>test</scope>
 </dependency>{% endhighlight%}
@@ -105,7 +105,7 @@ libraryDependencies ++= Seq(
     <dependencies>
         <dependency>
             <groupId>org.scalawebtest</groupId>
-            <artifactId>scalawebtest-bom_2.12</artifactId>
+            <artifactId>scalawebtest-bom_2.13</artifactId>
             <version>{{page.scalaWebTestVersion}}</version>
             <type>pom</type>
             <scope>import</scope>
@@ -125,8 +125,7 @@ package org.scalawebtest.documentation
 import org.scalawebtest.core.IntegrationFlatSpec
 
 class HomepageSpec extends IntegrationFlatSpec {
-    override val host = "http://www.scalawebtest.org"
-    path = "/index.html"
+    config.useBaseUri("http://www.scalawebtest.org/index.html")
 
     "Our homepage" should "contain a succinct claim" in {
         webDriver.findElementByTagName("h2").getText shouldEqual "Reduce the effort needed to write integration tests"
@@ -146,14 +145,12 @@ class HomepageSpec extends IntegrationFlatSpec {
 package org.scalawebtest.documentation
 
 import org.scalawebtest.core.IntegrationFlatSpec
-import org.scalawebtest.core.gauge.HtmlGauge
 
 class HomepageSpec extends IntegrationFlatSpec with HtmlGauge {
-    override val host = "http://www.scalawebtest.org"
-    path = "/index.html"
+    config.useBaseUri("http://www.scalawebtest.org/index.html")
 
     "Our homepage" should "contain a succinct claim" in {
-    fits(<h2>Reduce the effort needed to write integration tests</h2>)
+        currentPage fits <h2>Reduce the effort needed to write integration tests</h2>
     }
 }{% endhighlight%}
                     <a href="https://scastie.scala-lang.org/DaniRey/aOD6RFqwSgynejH7CNl6qQ">Try it in Scastie</a>
@@ -179,10 +176,8 @@ import org.scalawebtest.core.{FormBasedLogin, IntegrationFlatSpec}
 import scala.language.postfixOps
 
 trait MyProjectBaseSpec extends IntegrationFlatSpec with FormBasedLogin with AppendedClues with HtmlGauge {
-    override val host = "http://localhost:9090"
-    override val loginPath = "/login.php"
-
-    override val projectRoot = ""
+    config.useBaseUri("http://localhost:9090")
+    loginConfig.useLoginUri("http://localhost:9090/login.php")
 
     override def loginTimeout = Timeout(5 seconds)
 }{% endhighlight %}
@@ -218,8 +213,7 @@ package org.scalawebtest.documentation
 import org.scalawebtest.core.IntegrationFlatSpec
 
 class HomepageSpec extends IntegrationFlatSpec {
-    override val host = "http://www.scalawebtest.org"
-    path = "/index.html"
+    config.useBaseUri("http://www.scalawebtest.org/index.html")
 
     loginConfig.swallowJavaScriptErrors()
     config.enableJavaScript(throwOnError = true)

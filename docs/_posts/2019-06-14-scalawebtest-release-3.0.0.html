@@ -1,0 +1,112 @@
+---
+title: ScalaWebTest 3.0.0
+layout: post
+twitterAuthor: danireych
+description: ScalaWebTest 3.0.0 Release notes
+abstract: is compatible with a Selenium WebDrivers. It can be configured with environment variables, which makes it Docker friendly.
+---
+
+<section>
+    <header><h2>Highlights of this release</h2></header>
+
+    <section>
+        <header><h3>Update from ScalaWebTest <= 3.0.0</h3></header>
+        <p>
+            For <a href="https://github.com/unic/ScalaWebTest/issues/12">#12</a> we redesigned our configurations and replaced <i>IntegrationSettings.host</i> and <i>IntegrationSetting.projectRoot</i> with the method <i>Configuration.useBaseUri(uri: String)</i>, which can be accessed as <i>config.useBaseUri(uri)</i>.
+
+            In your tests replace the following or similar
+            {% highlight scala %}
+            override val host = my.server:8080
+            override val projectRoot = "/myapp"
+            {% endhighlight %}
+
+            with
+
+            {% highlight scala %}
+            config.useBaseUri("http://my.server:8080/myapp")
+            {% endhighlight %}
+
+            A similar redesign was done for the <i>Login</i>. Instead of <i>Login.loginPath</i> there is now a <i>LoginConfiguration.useLoginUri(uri: String)</i>  method.
+
+            In your tests replace the following or similar
+            {% highlight scala %}
+            override val loginPath = "/login"
+            {% endhighlight %}
+
+            with
+
+            {% highlight scala %}
+            loginConfig.useLoginUri("http://my.server:8080/login")
+            {% endhighlight %}
+        </p>
+        <p>
+            With <a href="https://github.com/unic/ScalaWebTest/issues/90">#90</a> we removed <i>org.scalawebtest.core.gauge.Gauge</i> (which was deprecated since 1.1.0). Simply replace your import with <i>org.scalawebtest.core.gauge.HtmlGauge</i>.
+        </p>
+    </section>
+
+    <section>
+        <header><h3>Configuration can be provided via Runner arguments or environment variables</h3></header>
+        <p>
+            With <a href="https://github.com/unic/ScalaWebTest/issues/12">#12</a> we added the ability to configure ScalaWebTest via Runner arguments or environment variables. The latter is especially useful when using docker.
+            <i>config.baseUri</i> can be overwritten by runner argument <i>scalawebtest.base.uri</i> or environment variable <i>SCALAWEBTEST_BASE_URI</i>.
+            The same is true for <i>loginConfig.loginUri</i> with <i>scalawebtest.base.uri</i> and <i>SCALAWEBTEST_BASE_URI</i>
+        </p>
+    </section>
+
+    <section>
+        <header><h3>Any Selenium WebDriver can be used</h3></header>
+        <p>
+            HtmlUnit remains the default WebDriver. It is the best way to start, because no additional setup on the host is required. For JavaScript heavy applications, HtmlUnit is not the best solution.
+            Chrome support is part of ScalaWebTest, for other WebDrivers one might take inspiration from our Chrome implementation.
+            To use Chrome, extend <i>org.scalawebtest.core.browser.SeleniumChrome</i> and provide the path to the ChromeDriver via run argument <i>webdriver.chrome.driver</i> or the environment variable <i>WEBDRIVER_CHROME_DRIVER</i>.
+            Alternatively you may start the Chrome Driver Service yourself and provide <i>webdriver.chrome.driver.service.url</i> respectively <i>WEBDRIVER_CHROME_DRIVER_SERVICE_URL</i>.
+            Additionally the Webdriver arguments can be changed with <i>webdriver.chrome.arguments</i> respectively <i>WEBDRIVER_CHROME_ARGUMENTS</i>
+        </p>
+    </section>
+
+    <section>
+        <header><h3>Support Scala 2.13, drop support for Scala 2.10</h3></header>
+        <p>
+            With <a href="https://github.com/unic/ScalaWebTest/issues/72">#72</a> we added support for Scala 2.13 and dropped support for Scala 2.10
+        </p>
+    </section>
+
+    <section>
+        <header><h3>Accessor methods for HTTP Response Code and Response Headers</h3></header>
+        <p>
+            With HtmlUnit we have access to Response Code and Response Headers. With <a href="https://github.com/unic/ScalaWebTest/issues/21">#21</a>  we addd convenience methods to access this information via <i>org.scalawebtest.core.ResponseAccessors</i>.
+            As this information is not available over the WebDriver API, this feature can only be used with HtmlUnit. It is no problem to use multiple browsers in one set of integration tests.
+        </p>
+    </section>
+
+    <section>
+        <header><h3>Improved readability with <i>currentPage</i></h3></header>
+        <p>
+            With <a href="https://github.com/unic/ScalaWebTest/issues/83">#83</a> we added the <i>currentPage</i> keyword. This allows to rewrite tests from.
+
+            {% highlight scala %}
+            import org.scalawebtest.core.gauge.HtmlGauge._
+
+            "Homepage" should "contain a title" in {
+                fits(<h1>title</h1>)
+            }
+            {% endhighlight %}
+
+            to
+
+            {% highlight scala %}
+            "Homepage" should "contain a title" in {
+               currentPage fits <h1>title</h1>
+            }
+            {% endhighlight %}
+
+            Please notice that not only the text flow is improved, but additionally we can get rid of the parentheses around our gauge definition.
+            Also the import of <i>HtmlGauge</i> is no longer needed.
+        </p>
+    </section>
+
+    <section>
+        <header><h3>All changes in detail</h3></header>
+        <p>Review the <a href="https://github.com/unic/ScalaWebTest/milestone/3?closed=1">closed issues</a> of Milestone 3.0.0 on <a href="https://github.com/unic/ScalaWebTest/milestone/3?closed=1">github</a>, for a detailed list with all changes.</p>
+    </section>
+</section>

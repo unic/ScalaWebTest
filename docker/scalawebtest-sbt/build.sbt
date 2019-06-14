@@ -5,9 +5,9 @@ lazy val tests = (project in file("."))
   .enablePlugins(DockerPlugin)
   .settings(
     name := "Tests",
-    libraryDependencies += "org.scalawebtest" %% "scalawebtest-core" % "3.0.0-RC2",
-    libraryDependencies += "org.scalawebtest" %% "scalawebtest-json" % "3.0.0-RC2",
-    libraryDependencies += "org.scalawebtest" %% "scalawebtest-aem" % "3.0.0-RC2",
+    libraryDependencies += "org.scalawebtest" %% "scalawebtest-core" % "3.0.0",
+    libraryDependencies += "org.scalawebtest" %% "scalawebtest-json" % "3.0.0",
+    libraryDependencies += "org.scalawebtest" %% "scalawebtest-aem" % "3.0.0",
     libraryDependencies += "org.slf4j" % "slf4j-simple" % "1.7.26",
   )
 

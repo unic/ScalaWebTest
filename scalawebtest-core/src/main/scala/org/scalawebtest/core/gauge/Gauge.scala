@@ -238,8 +238,8 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebDriver) extends Assertio
           }
           case None =>
             previousSibling match {
-              case Some(p) => misfitHolder.addMisfit(Misfit(misfitRelevance, s"Misfitting Element: element [${nodeExpectedToContainText.prettyString}] did not contain a text element after [${p.prettyString}]"))
-              case None => misfitHolder.addMisfit(Misfit(misfitRelevance, s"Misfitting Element: element [${nodeExpectedToContainText.prettyString}] did not contain a text"))
+              case Some(p) => misfitHolder.addMisfit(Misfit(misfitRelevance, "Misfitting Element", "element [" + nodeExpectedToContainText.prettyString() + "] did not contain a text element after [" + p.prettyString() + "]"))
+              case None => misfitHolder.addMisfit(Misfit(misfitRelevance, "Misfitting Element", "element [" + nodeExpectedToContainText.prettyString() + "] did not contain a text"))
             }
             false
         }
@@ -257,7 +257,7 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebDriver) extends Assertio
     var fit: Option[Fit] = None
 
     if (!candidatesIt.hasNext) {
-      misfitHolder.addMisfit(misfitRelevance, s"Misfitting Element: No element matching cssSelector [$cssSelector] found below ${currentNode.prettyString}")
+      misfitHolder.addMisfit(misfitRelevance, "Misfitting Element", "No element matching cssSelector [" + cssSelector + "] found below " + currentNode.prettyString)
     }
     //test all candidate elements, whether they match given attribute expectations
     while (fit.isEmpty && candidatesIt.hasNext) {
@@ -286,12 +286,12 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebDriver) extends Assertio
         def matchesAttribute: Boolean = {
           val attributes = candidate.attributes
           if (attributes == null) {
-            misfitHolder.addMisfit(attributeMisfitRelevance, s"Misfitting Element: element [${candidate.prettyString}] does not have any attributes, but attribute [$defAttr] expected")
+            misfitHolder.addMisfit(attributeMisfitRelevance, "Misfitting Element", "element [" + candidate.prettyString() + "] does not have any attributes, but attribute [" + defAttr + "] expected")
             return false
           }
           val attr = attributes.get(expectedKey)
           if (attr == null) {
-            misfitHolder.addMisfit(attributeMisfitRelevance, s"Misfitting Element: element [${candidate.prettyString}] does not have the expected attribute [$defAttr]")
+            misfitHolder.addMisfit(attributeMisfitRelevance, "Misfitting Element", "element [" + candidate.prettyString() + "] does not have the expected attribute [" + defAttr + "]")
             return false
           }
           Matchers.attributeMatches(expectedValue, CandidateAttribute(attributeMisfitRelevance, candidate, expectedKey, attr)) match {
@@ -313,7 +313,9 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebDriver) extends Assertio
   }
 
   private def failAndReportMisfit() = {
-    def misfitReasons(misfits: List[Misfit]) = misfits.reverse.map(_.reason).mkString("\n")
+    val misfitSeparator = "\n--------------------------------------------------------------------------------------------\n"
+    val gaugeSeparator = "\n\n############################################################################################\n"
+    def misfitReasons(misfits: List[Misfit]) = misfits.reverse.map(m => s"${m.topic}: ${m.detail}").mkString(misfitSeparator)
 
     if (misfitHolder.relevantMisfits.size > 10) {
       fail(s"Too many Misfits, only showing the first 5 of ${misfitHolder.relevantMisfits.size} Misfits!\n" +
@@ -328,7 +330,7 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebDriver) extends Assertio
   private def elementOrderCorrect(current: JNode, previousSibling: Option[JNode], gaugeElement: Elem, misfitRelevance: MisfitRelevance): Boolean =
     previousSibling match {
       case Some(prev) if current.isBefore(prev) =>
-        misfitHolder.addMisfit(misfitRelevance, s"Misfitting Element Order: Found [${current.prettyString}\n] when looking for an element matching [\n$gaugeElement\n]. It didn't fit, because it was found before [${previousSibling.get.prettyString}\n] but was expected after it.")
+        misfitHolder.addMisfit(misfitRelevance, s"Misfitting Element Order", "Found [${current.prettyString}\n] when looking for an element matching [\n$gaugeElement\n]. It didn't fit, because it was found before [${previousSibling.get.prettyString}\n] but was expected after it.")
         false
       case _ =>
         true

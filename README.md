@@ -1,10 +1,12 @@
 # [![ScalaWebTest](https://www.scalawebtest.org/images/swt-logo-light.png)](http://www.scalawebtest.org)
-###### [![Build Status](https://travis-ci.org/unic/ScalaWebTest.svg?branch=master)](https://travis-ci.org/unic/ScalaWebTest) [![Join the chat at https://gitter.im/ScalaWebTest/Lobby](https://badges.gitter.im/ScalaWebTest/Lobby.svg)](https://gitter.im/ScalaWebTest/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+## [![Build Status](https://travis-ci.org/unic/ScalaWebTest.svg?branch=master)](https://travis-ci.org/unic/ScalaWebTest) [![Join the chat at https://gitter.im/ScalaWebTest/Lobby](https://badges.gitter.im/ScalaWebTest/Lobby.svg)](https://gitter.im/ScalaWebTest/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 ScalaWebTest is a library for writing ScalaTest/Selenium based integration tests for websites. It helps you with your basic setup and provides a new and very efficient approach to testing.
 
 In manufacturing it is common to use gauges (also called checking gauges or testing gauges) to verify whether a workpiece meets predefined criteria and tolerances. ScalaWebTest transfers this concept to the world of web integration testing. You can define a gauge in HTML, and use it to verify your web application. This greatly improves the readability, simplicity of your integration tests.
 
-Read the full documentation on our website https://www.scalawebtest.org
+Read the full documentation on our website <https://www.scalawebtest.org>
 
 ## Getting Started with development
 
@@ -12,6 +14,7 @@ Read the full documentation on our website https://www.scalawebtest.org
 
 * Java >= 8
 * SBT 1.x
+* [ChromeDriver](http://chromedriver.chromium.org/)
 
 Get familiar with the sbt build tool because this is used to manage the project.
 
@@ -19,14 +22,22 @@ See [Getting Started Guide](https://www.scala-sbt.org/1.x/docs/Getting-Started.h
 
 ### Compile, test, package
 
-```
-#> sbt compile test package
+```bash
+$ sbt compile test package
 ```
 
 ### Run whole integration test
 
+Before running the integration tests, you will need to configure `WEBDRIVER_CHROME_DRIVER` environment variable. To do so, run the following command:
+
+```bash
+$ export WEBDRIVER_CHROME_DRIVER="$(which chromedriver)"
 ```
-#> sbt inttest
+
+And then run the tests using the command below:
+
+```bash
+$ sbt inttest
 ```
 
 This will start a Jetty server, executes the integration tests and stops the server again.
@@ -36,25 +47,25 @@ This will start a Jetty server, executes the integration tests and stops the ser
 If you would like to run the Jetty server and in parallel work on integration tests and some code changes,
 you can do the following:
 
-```
+```bash
 # Enter the sbt console first, enter 'sbt' in root folder
-#> sbt
+$ sbt
 
 # Start Jetty server
-#sbt> jetty:start
+sbt> jetty:start
 
 # Or if you would like that sbt automatically restarts Jetty after code changes then do:
-#sbt> ~jetty:start
+sbt> ~jetty:start
 
-# Open separate command window and enter the sbt console again 
+# Open separate command window and enter the sbt console agains
 # Run a single integration tests
-#sbt> it:testOnly org.scalawebtest.integration.gauge.ContainsSpec
-
+sbt> it:testOnly org.scalawebtest.integration.gauge.ContainsSpec
 ```
 
 ## How to Release
 
 ### Prerequisites
+
 Create the following file ~/.sbt/1.0/plugins/gpg.sbt
 
 Add the following line to gpg.sbt
@@ -65,7 +76,8 @@ Copy the private key (Sonatype PGP Private and Public Key from our company passw
 Create the file  ~/.sbt/1.0/sonatype.sbt
 
 Add the following content and replace username, password
-```
+
+```scalas
 credentials += Credentials("Sonatype Nexus Repository Manager",
                            "oss.sonatype.org",
                            "<your username>",
@@ -73,6 +85,7 @@ credentials += Credentials("Sonatype Nexus Repository Manager",
 ```
 
 ### Release
+
 The release process of ScalaWebTest is currently done manually. The process is done as follows:
 
 1. Switch the version in `build.sbt` to that which is to be released (e.g. from `0.0.1-SNAPSHOT` to `1.0.0`)
@@ -85,7 +98,7 @@ The release process of ScalaWebTest is currently done manually. The process is d
 		1. `+ inttest` - compiles and run the integration tests
 		1. `+ publishSigned` - creates all of the below plus the poms
 		1. Enter the Sonatype PGP Key Password as stored in our company password store
-		1. Go to https://oss.sonatype.org/#stagingRepositories verify and close the staging repository
+		1. Go to <https://oss.sonatype.org/#stagingRepositories> verify and close the staging repository
 		1. `exit` - exits the sbt interactive mode
 1. Commit your changes with the commit message "Release x.x.x" (e.g. `Release 1.0.0`)
 1. Tag this commit with the release version

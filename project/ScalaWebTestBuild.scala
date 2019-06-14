@@ -13,6 +13,16 @@ object ScalaWebTestBuild {
           <version>{versions("scalaWebTest")}</version>
         </dependency>
         <dependency>
+          <groupId>org.scalawebtest</groupId>
+          <artifactId>scalawebtest-json_{scalaMajorVersion}</artifactId>
+          <version>{versions("scalaWebTest")}</version>
+        </dependency>
+        <dependency>
+          <groupId>org.scalawebtest</groupId>
+          <artifactId>scalawebtest-aem_{scalaMajorVersion}</artifactId>
+          <version>{versions("scalaWebTest")}</version>
+        </dependency>
+        <dependency>
           <groupId>org.scalatest</groupId>
           <artifactId>scalatest_{scalaMajorVersion}</artifactId>
           <version>{versions("scalaTest")}</version>

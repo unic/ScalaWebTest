@@ -123,12 +123,13 @@ libraryDependencies ++= Seq(
 package org.scalawebtest.documentation
 
 import org.scalawebtest.core.IntegrationFlatSpec
-
+import org.openqa.selenium.By
+                    
 class HomepageSpec extends IntegrationFlatSpec {
     config.useBaseUri("http://www.scalawebtest.org/index.html")
 
     "Our homepage" should "contain a succinct claim" in {
-        webDriver.findElementByTagName("h2").getText shouldEqual "Reduce the effort needed to write integration tests"
+        webDriver.findElement(By.tagName("h2")).getText shouldEqual "Reduce the effort needed to write integration tests"
     }
 }{% endhighlight%}
                     <a href="https://scastie.scala-lang.org/DaniRey/HuZB9METSSqu32QZmT7pcw">Try it in Scastie</a>

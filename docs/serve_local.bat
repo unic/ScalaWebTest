@@ -1,0 +1,1 @@
+docker run -it -p4000:4000 -v%CD%:/srv/jekyll jekyll/jekyll:latest jekyll serve --watch

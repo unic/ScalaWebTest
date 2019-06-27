@@ -29,19 +29,20 @@ twitterAuthor: danireych
 
                         <h3 id="handlingWebRequests">Handling of web requests and state</h3>
                         <p>ScalaWebTest's <a href="#api_IntegrationSpec">IntegrationSpec</a> trait helps you to structure your tests and keep them boilerplate free. It extends the most important traits, to write integration tests for web applications, from ScalaTest.
-                        It provides an easy way to configure the HtmlUnit webdriver and it takes care of login, web requests and cookies.
-                        Before executing your tests, it takes care of login, if needed. Next it requests the resource, which your test wants to verify. To keep your tests boilerplate free, the URL to the tested resource is split in 3 segments.
-                        The host and projectRoot are part of the IntegrationSettings. The last part is the path itself.
+                        It provides an easy way to configure the Selenium webdriver and it takes care of login, web requests and cookies.
+                        Before executing your tests, it takes care of login, if needed. Next it requests the resource, which your test wants to verify. The URL to the tested resource is split in two segments.
+                        The <b>baseUri</b> is part of the Configuration, use <b>config.useBaseUri</b> to change it. The <b>path</b>, which is usually different for every test, is then appended to the <i>baseUri</i>.
                         In most cases a test should only work with a single resource, in this case the path doesn't change throughout the test.
                         Per default the IntegrationSpec will, before each test, take care that the current resource in the WebDriver is the one belonging to the defined path. This behavior can be changed.
                         Therefore your test does not have to interact with the WebDriver. Instead it can directly verify the content of the current resource via webdriver.</p>
 
                         <h3 id="gaugesForSimpleTests">Gauges for simple tests</h3>
-                        <p>The HtmlUnit webdriver and selenium are very powerful. But writing integration tests for web application is still very cumbersome and the resulting tests are often hard to read.
-                        We think the easiest way to define the expected result of a web request is using the returned data format itself. Therefore we use pseudo HTML (let's focus on HTML for the moment, but we also support JSON)
+                        <p>Selenium is a powerful tool, but testing the returned HTML from a web application is cumbersome and the resulting tests are often hard to read.
+                            We think the easiest way to define the expected result of a web request is using the returned data format itself.
+                            Therefore we use pseudo HTML (<a href="documentation.html#modules/json/gauge">alternatively JSON to verify JSON</a>)
                         to describe the expected result. Of course a simple string comparison would be to naive.
-                        Therefore we treat the HTML (technically we require XML, because it has native support in Scala), which is used to describe the result,
-                        as <a href="#gaugesForSimpleTests">gauge definition</a> (other would call it a template). If we can find all elements from the gauge definition in the verified HTML page, it is considered valid. </p>
+                        Therefore we treat the HTML (Scala XML literal, to be precise), which is used to describe the expected result,
+                        as <a href="#gaugesForSimpleTests">gauge definition</a> (other would call it a template). If all elements from the gauge definition are present in the verified HTML page, it does fit the <b>gauge</b> and is therefore valid.</p>
                 </section>
                 <section>
                     <header>
@@ -59,12 +60,17 @@ twitterAuthor: danireych
 libraryDependencies += "org.scalawebtest" %% "scalawebtest-core" % "{{page.scalaWebTestVersion}}" % "test"{% endhighlight %}
                     <p>We recommend to bind the ScalaWebTest dependencies to the IntegrationTest configuration, which can be referenced with "it".
                     The IntegrationTest configuration is not active by default. Follow the guide for <a href="https://www.scala-sbt.org/1.x/docs/Testing.html#Integration+Tests">SBT 1.0</a> or
-                        <a href="https://www.scala-sbt.org/0.13/docs/Testing.html#Integration+Tests">SBT 0.13</a> to make it part of your build. Then you can add ScalaWebTest to your project as follows.</p>
+                        <a href="https://www.scala-sbt.org/0.13/docs/Testing.html#Integration+Tests">SBT 0.13</a> to make it part of your build.
+                        Then you can add ScalaWebTest to your project as follows.</p>
                     {% highlight scala %}
 libraryDependencies += "org.scalawebtest" %% "scalawebtest-core" % "{{page.scalaWebTestVersion}}" % "it"{% endhighlight %}
 
+                    <p>ScalaWebTest uses the <b>slf4j-api</b> to write to the console or logfiles.
+                        If your project does not contain an implementation of the Slf4j Logger, add the following dependency.</p>
+                    {% highlight scala %}
+libraryDependencies += "org.slf4j" % "slf4j-simple" % "{{page.slf4jVersion}}"{% endhighlight %}
                     <p>If you want to manage the most important transitive dependencies of ScalaWebTest, you might
-                        configure it as follows (replace "it" with "test", if you do not make use of the IntegrationTest configuration.
+                        configure it as follows (replace "it" with "test", if you do not make use of the IntegrationTest configuration).
                         Especially selenium-java and htmlunit-driver have to align with each other.</p>
 
                     {% highlight scala %}
@@ -85,9 +91,17 @@ libraryDependencies ++= Seq(
     <scope>test</scope>
 </dependency>{% endhighlight%}
 
+                    <p>ScalaWebTest uses the <b>slf4j-api</b> to write to the console or logfiles.
+                        If your project does not contain an implementation of the Slf4j Logger, add the following dependency.</p>
+                                        {% highlight xml %}
+<dependency>
+    <groupId>org.slf4j</groupId>
+    <artifactId>slf4j-simple</artifactId>
+    <version>{{page.slf4jVersion}}</version>
+    <scope>test</scope>
+</dependency>{% endhighlight%}
                     <p>ScalaWebTest is also available for Scala 2.12 and 2.11, change the version after the underscore,
-                        to get a ScalaWebTest version which is binary compatible with the Scala version which you
-                        use.</p>
+                        to get a ScalaWebTest version which is binary compatible with the one you are using.</p>
 
                     {% highlight xml %}
 <dependency>
@@ -120,41 +134,49 @@ libraryDependencies ++= Seq(
                         IntegrationFlatSpec. This uses <a href="http://www.scalatest.org/user_guide/selecting_a_style">FlatSpec style</a> from ScalaTest, other <a href="#teststyles">styles</a> are available.</p>
 
                     {% highlight scala %}
-package org.scalawebtest.documentation
+package org.scalawebtest.integration.doc
 
 import org.scalawebtest.core.IntegrationFlatSpec
 import org.openqa.selenium.By
-                    
+
 class HomepageSpec extends IntegrationFlatSpec {
-    config.useBaseUri("http://www.scalawebtest.org/index.html")
+  config.useBaseUri("https://www.scalawebtest.org")
+  path = "/index.html"
 
-    "Our homepage" should "contain a succinct claim" in {
-        webDriver.findElement(By.tagName("h2")).getText shouldEqual "Reduce the effort needed to write integration tests"
-    }
+  "Our homepage" should "contain a succinct claim" in {
+    webDriver
+      .findElement(By.tagName("h2"))
+      .getText shouldEqual "Reduce the effort needed to write integration tests"
+  }
 }{% endhighlight%}
-                    <a href="https://scastie.scala-lang.org/DaniRey/HuZB9METSSqu32QZmT7pcw">Try it in Scastie</a>
+                    <a href="https://scastie.scala-lang.org/DaniRey/HuZB9METSSqu32QZmT7pcw/2" target="_blank">Try it in Scastie</a>
 
-                    <p>That's all you need. The IntegrationSpec, inherited from IntegrationFlatSpec will automatically call http://localhost:8080/index.html before
-                    executing a test. When using FlatSpec style the block following the <i>in</i> keyword is the body of the test.
-                    Within the body of a test you can access the webDriver, to test the content of the current page. The webDriver is backed by the HtmlUnit driver from selenium.
-                        It emulates a browser and supports among other things JavaScript execution, clicking elements and submitting forms.</p>
+                    <p>That's all you need. The IntegrationSpec, inherited from IntegrationFlatSpec will automatically call https://www.scalawebtest.org/index.html
+                        before executing a test. When using FlatSpec style the block following the <b>in</b> keyword is the body of the test.
+                        Within the body of a test you can access the webDriver, to test the content of the current page. The webDriver by default backed by HtmlUnit.
+                        It emulates a browser and supports among other things JavaScript execution, clicking elements and submitting forms.
+                        HtmlUnit has its limitations with JavaScript and it is always headless, for those that need more advanced features
+                        we recommend <a href="#browsers/seleniumChrome">SeleniumChrome</a>.</p>
 
                     <h3 id="firstGauge">Write your first gauge</h3>
                     <p>This test can be rewritten making use of the HtmlGauge. <a href="#writingGauges">Writing gauges</a> provides a detailed introduction to this feature.</p>
 
                     {% highlight scala %}
-package org.scalawebtest.documentation
+package org.scalawebtest.integration.doc
 
 import org.scalawebtest.core.IntegrationFlatSpec
+import org.scalawebtest.core.gauge.HtmlGauge
 
 class HomepageSpec extends IntegrationFlatSpec with HtmlGauge {
-    config.useBaseUri("http://www.scalawebtest.org/index.html")
+  config.useBaseUri( "http://www.scalawebtest.org")
+  path = "/index.html"
 
-    "Our homepage" should "contain a succinct claim" in {
-        currentPage fits <h2>Reduce the effort needed to write integration tests</h2>
-    }
+  "Our homepage" should "contain a succinct claim" in {
+    currentPage fits <h2>Reduce the effort needed to write integration tests</h2>
+  }
 }{% endhighlight%}
-                    <a href="https://scastie.scala-lang.org/DaniRey/aOD6RFqwSgynejH7CNl6qQ">Try it in Scastie</a>
+
+                    <a href="https://scastie.scala-lang.org/DaniRey/aOD6RFqwSgynejH7CNl6qQ/2" target="_blank">Try it in Scastie</a>
                 </section>
                 <section>
                     <header>

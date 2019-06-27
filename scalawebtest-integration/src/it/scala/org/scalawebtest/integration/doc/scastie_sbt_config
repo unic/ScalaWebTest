@@ -1,0 +1,9 @@
+scalacOptions ++= Seq(
+  "-deprecation",
+  "-encoding", "UTF-8",
+  "-feature",
+  "-unchecked"
+)
+
+libraryDependencies += "org.scalawebtest" %% "scalawebtest-core" % "3.0.0"
+libraryDependencies += "org.slf4j" % "slf4j-simple" % "1.7.26"

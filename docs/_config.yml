@@ -1,14 +1,12 @@
 github: [Repository metadata]
 markdown: kramdown
-url: https://www.scalawebtest.org
-#for local server instances
-#url: http://localhost:4000
 defaults:
   -
     scope:
       path: ""
     values:
       scalaWebTestVersion: 3.0.0
+      slf4jVersion: 1.7.26
 collections:
   - mainNavItems
 contextpath:

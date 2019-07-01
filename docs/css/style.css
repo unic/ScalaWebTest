@@ -2437,3 +2437,23 @@ section .info {
     margin-left: auto;
     margin-right: auto;
 }
+
+.column_two {
+    flex: 50%;
+    padding: 0 5px;
+}
+
+.column_two img {
+    width: 100%;
+}
+
+.column_three {
+    flex: 33.33%;
+    padding: 0 5px;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+}

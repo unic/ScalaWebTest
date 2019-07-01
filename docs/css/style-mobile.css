@@ -81,6 +81,8 @@ header .byline {
     line-height: 44px;
     font-weight: 300;
     text-decoration: none;
+    margin: 0 auto;
+    width: 100px;
 }
 
 #titleBar .tag {
@@ -263,8 +265,8 @@ header .byline {
 
 #contentNavButtonLeft {
     display: block;
-    position: fixed;
-    margin: 8px 0px 0px 20px;
+    float: left;
+    margin: 8px 0 0 20px;
     border: none;
 }
 
@@ -276,9 +278,8 @@ header .byline {
 
 #contentNavButtonRight {
     display: block;
-    position: fixed;
     float: right;
-    margin: 8px 0 0 355px;
+    margin: 8px 20px 0 0;
     border: none;
 }
 
@@ -317,4 +318,19 @@ header .byline {
 #leftPanel a:hover, #rightPanel a:hover {
     text-decoration: none;
     font-weight: bolder;
+}
+
+.column_two {
+    flex: 100%;
+    padding: 0 5px;
+}
+
+.column_three {
+    flex: 100%;
+    padding: 0 5px;
+}
+
+.row {
+    display: flex;
+    flex-direction: column;
 }

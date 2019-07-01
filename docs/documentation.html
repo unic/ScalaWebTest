@@ -134,8 +134,6 @@ libraryDependencies ++= Seq(
                         IntegrationFlatSpec. This uses <a href="http://www.scalatest.org/user_guide/selecting_a_style">FlatSpec style</a> from ScalaTest, other <a href="#teststyles">styles</a> are available.</p>
 
                     {% highlight scala %}
-package org.scalawebtest.integration.doc
-
 import org.scalawebtest.core.IntegrationFlatSpec
 import org.openqa.selenium.By
 
@@ -162,8 +160,6 @@ class HomepageSpec extends IntegrationFlatSpec {
                     <p>This test can be rewritten making use of the HtmlGauge. <a href="#writingGauges">Writing gauges</a> provides a detailed introduction to this feature.</p>
 
                     {% highlight scala %}
-package org.scalawebtest.integration.doc
-
 import org.scalawebtest.core.IntegrationFlatSpec
 import org.scalawebtest.core.gauge.HtmlGauge
 
@@ -182,14 +178,14 @@ class HomepageSpec extends IntegrationFlatSpec with HtmlGauge {
                     <header>
                         <h2 id="structuringYourProject">Structuring your project</h2>
                     </header>
-                    <h3 id="basetrait">Build your base trait</h3>
+                    <h3 id="basetrait">Build your base class</h3>
                     Configurations, style choice and possible custom extension should be shared across your project. To
-                    do so, we recommend to create a base trait, which is extended by all your tests.
+                    do so, we recommend to create an abstract base class, which is extended by all your tests.
                     ScalaWebTest uses this concept for it's own integration tests as well.
+                    Instead of an abstract class one could use a trait as well. This was our recommendation for earlier versions,
+                    but using an abstract class improves your compilation time, therefore we recommend it over traits.
 
                     {% highlight scala %}
-package org.scalawebtest.documentation
-
 import org.scalatest.AppendedClues
 import org.scalatest.concurrent.PatienceConfiguration.Timeout
 import org.scalatest.time.SpanSugar._
@@ -198,16 +194,17 @@ import org.scalawebtest.core.{FormBasedLogin, IntegrationFlatSpec}
 
 import scala.language.postfixOps
 
-trait MyProjectBaseSpec extends IntegrationFlatSpec with FormBasedLogin with AppendedClues with HtmlGauge {
+abstract class MyProjectBaseSpec extends IntegrationFlatSpec with FormBasedLogin with AppendedClues with HtmlGauge {
     config.useBaseUri("http://localhost:9090")
     loginConfig.useLoginUri("http://localhost:9090/login.php")
 
     override def loginTimeout = Timeout(5 seconds)
 }{% endhighlight %}
 
-                    This base trait uses FlatSpec style, FormBasedLogin and HtmlGauge. It configures host, loginPath and projectRoot and sets a suitable loginTimeout.
-                    Our <a href="https://github.com/unic/ScalaWebTest/tree/master/scalawebtest-integration/src/it">integration tests</a> have two purposes. Not only do we use them to test our framework, but we also use it as documentation. They are a good
-                    starting point when looking for best practice on how to make the most out of ScalaWebTest.
+                    This abstract base class uses FlatSpec style, FormBasedLogin, AppendedClues and HtmlGauge. It configures host, loginPath and projectRoot and sets a suitable loginTimeout.
+                    Our <a href="https://github.com/unic/ScalaWebTest/tree/master/scalawebtest-integration/src/it">integration tests</a> have two purposes.
+                    Not only do we use them to test our framework, but we also use it as documentation. They are a good starting point when looking for best practice,
+                    on how to make the most out of ScalaWebTest.
 
                     <h3 id="teststyles">Selecting a style</h3>
                     <p>ScalaTest provides a wide variety of testing <a href="http://www.scalatest.org/user_guide/selecting_a_style">styles</a>.
@@ -216,14 +213,14 @@ trait MyProjectBaseSpec extends IntegrationFlatSpec with FormBasedLogin with App
                         There is no technical reason behind it, it is simply a matter of taste.
                         We recommend that you extend one of the Integration*Spec/Suite classes from <a
                                 href="https://github.com/unic/ScalaWebTest/blob/master/scalawebtest-core/src/main/scala/org/scalawebtest/core/Styles.scala">Styles.scala</a>
-                        in your base trait.
+                        in your abstract base class.
                     </p>
 
                     <h3 id="config">Configure your tests</h3>
                     <p>A reasonable default configuration is provided, which can easily be adapted. If you want to
                         change a configuration for all your tests, we recommend to change it in your base trait, otherwise best
                         practice is to change it in the constructor of your TestSpec.
-                        Two config objects exist, one which is used during login (if login is needed)
+                        Two config objects exist, one which is used during login (if login is used)
                         and one which is used during test execution.
                     </p>
 
@@ -231,21 +228,22 @@ trait MyProjectBaseSpec extends IntegrationFlatSpec with FormBasedLogin with App
                         JavaScript execution is enabled or disable.
                         During test execution JavaScript is enabled and JavaScript errors let the test fail.</p>
                     {% highlight scala %}
-package org.scalawebtest.documentation
-
+import org.openqa.selenium.By
 import org.scalawebtest.core.IntegrationFlatSpec
 
 class HomepageSpec extends IntegrationFlatSpec {
-    config.useBaseUri("http://www.scalawebtest.org/index.html")
+  config.useBaseUri("http://www.scalawebtest.org/index.html")
 
-    loginConfig.swallowJavaScriptErrors()
-    config.enableJavaScript(throwOnError = true)
+  loginConfig.swallowJavaScriptErrors()
+  config.enableJavaScript(throwOnError = true)
 
-    "Our homepage" should "contain a succinct claim" in {
-        webDriver.findElementByTagName("h2").getText shouldEqual "Reduce the effort needed to write integration tests"
-    }
+  "Our homepage" should "contain a succinct claim" in {
+    webDriver
+      .findElement(By.tagName("h2"))
+      .getText shouldEqual "Reduce the effort needed to write integration tests"
+  }
 }{% endhighlight%}
-                    <a href="https://scastie.scala-lang.org/DaniRey/jeQ90Gt6TeSnP8Cp0aUSRg">Try it in Scastie</a>
+                    <a href="https://scastie.scala-lang.org/DaniRey/jeQ90Gt6TeSnP8Cp0aUSRg/2">Try it in Scastie</a>
 
                     <p>By default JavaScript is not executed and JavaScript errors don't throw. Also CSS is not
                         interpreted. This applies to both loginConfig and config.</p>
@@ -258,21 +256,40 @@ class HomepageSpec extends IntegrationFlatSpec {
 
                     <h3 id="usingGauges">Using gauges</h3>
 
-                    <p>Using <b>gauges</b> to write your integration tests, is the core idea of ScalaWebTest. We think
+                    <p>Using <b>gauges</b> to write your integration tests, is the core idea of ScalaWebTest. We believe
+                        Selenium has good primitives to navigate a website (triggering events, filling forms), but the tools to verify the
+                        resulting output are lacking. We are convinced that the HTML DOM is what should be verified. An alternative would be visual tests,
+                        but those tend to be brittle and it is difficult to test only a certain aspect of the page. But a few of them might be a valuable addition.
                         using org.scalatest.selenium.WebBrowser.Query, i.e CssSelectorQuery,
                         to select elements in a HTML document and then verifying it is cumbersome and resulting tests
                         are hard to read.
-                        Instead we copy a concept from the manufacturing industry.
+                        Instead we borrow a concept from the manufacturing industry.
                         They build gauges (or templates), which they then lay their workpiece into. If the workpiece fits in the gauge,
-                        it satisfies the requirements. Our gauges are defined in HTML
+                        it satisfies the requirements.</p>
+
+                    <div class="row">
+                        <div class="column_two">
+                            <figure>
+                                <img src="images/caliper_gauge.jpg" alt="caliper gauge">
+                                <figcaption class="highlight"><b>caliper gauge:</b> if the workpiece fits the red side it is too small, if it doesn't fit the other side it is too big</figcaption>
+                            </figure>
+                        </div>
+
+                        <div class="column_two">
+                            <figure class="column_two">
+                                <img src="images/limit_plug_gauge.jpg" alt="limit plug gauge">
+                                <figcaption class="highlight"><b>limit plug gauge:</b> if the red side fits the boring it is too big, if the other side doesn't fit it is too small</figcaption>
+                            </figure>
+                        </div>
+                    </div>
+
+                    <p>Our gauges are defined in HTML
                         (XML to be more precise, or <a
                                 href="http://www.scala-lang.org/files/archive/api/2.12.1/scala-xml/scala/xml/NodeSeq$.html">scala.xml.NodeSeq</a> to be exact)
                         instead of being forked from steel.
                         Let's have a look at a simple example to get an idea how those gauges work.</p>
 
                     {% highlight scala %}
-package org.scalawebtest.documentation
-
 import org.scalawebtest.core.IntegrationFlatSpec
 import org.scalawebtest.core.gauge.HtmlGauge
 

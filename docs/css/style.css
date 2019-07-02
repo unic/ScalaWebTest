@@ -28,12 +28,12 @@ body, input, textarea, select {
     font-size: 11pt;
     font-weight: 300;
     line-height: 1.75em;
-    color: #777;
+    color: #555;
 }
 
 h1, h2, h3, h4, h5, h6 {
     font-weight: 300;
-    color: #777;
+    color: #555;
 }
 
 h2 {
@@ -2438,6 +2438,14 @@ section .info {
     margin-right: auto;
 }
 
+:not(pre) > code {
+    font-family: Consolas, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
+    background: #f0f0f0;
+    padding: .1em;
+    border-radius: .3em;
+    color: black;
+}
+
 .column_two {
     flex: 50%;
     padding: 0 5px;
@@ -2445,6 +2453,7 @@ section .info {
 
 .column_two img {
     width: 100%;
+    max-width: max-content;
 }
 
 .column_three {
@@ -2452,8 +2461,20 @@ section .info {
     padding: 0 5px;
 }
 
+.column_three img {
+    width: 100%;
+    max-width: max-content;
+}
+
 .row {
     display: flex;
     flex-direction: row;
-    align-items: baseline;
+    align-items: self-end;
+    margin-bottom: 2em;
+}
+
+figcaption {
+    padding: 2px 0;
+    border-bottom: solid 1px;
+    border-color: #aaa;
 }

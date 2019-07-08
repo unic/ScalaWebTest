@@ -2446,27 +2446,37 @@ section .info {
     color: black;
 }
 
-.column_two {
-    flex: 50%;
-    padding: 0 5px;
+.flex_column_one {
+    flex: 100%;
+    padding: 0 20px 0 0;
 }
 
-.column_two img {
+.flex_column_one img {
     width: 100%;
     max-width: max-content;
 }
 
-.column_three {
+.flex_column_two {
+    flex: 50%;
+    padding: 0 20px 0 0;
+}
+
+.flex_column_two img {
+    width: 100%;
+    max-width: max-content;
+}
+
+.flex_column_three {
     flex: 33.33%;
     padding: 0 5px;
 }
 
-.column_three img {
+.flex_column_three img {
     width: 100%;
     max-width: max-content;
 }
 
-.row {
+.flex_row {
     display: flex;
     flex-direction: row;
     align-items: self-end;

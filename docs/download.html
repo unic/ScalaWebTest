@@ -40,19 +40,19 @@ description: Add ScalaWebTest to your build tool dependencies or download it
                 <header><h3 id="sbt">Add ScalaWebTest to your sbt project</h3></header>
                 <p>You can add ScalaWebTest to your integration testing dependencies in the build.sbt/scala
                     of your sbt project as follows.</p>
-                {% highlight scala %}
-libraryDependencies += "org.scalawebtest" %% "scalawebtest-core" % "{{page.scalaWebTestVersion}}" % "it"{% endhighlight %}
+                 {% code scala %}
+libraryDependencies += "org.scalawebtest" %% "scalawebtest-core" % "{{page.scalaWebTestVersion}}" % "it" {% endcode %}
 
                 <p>If you want to manage the most important transitive dependencies of ScalaWebTest, you might configure
                     it as follows. Especially selenium-java and htmlunit-driver should align.</p>
 
-                {% highlight scala %}
+                 {% code scala %}
 libraryDependencies ++= Seq(
     "org.scalawebtest" %% "scalawebtest-core" % "{{page.scalaWebTestVersion}}" % "it",
     "org.scalatest" %% "scalatest" % "3.0.8" % "it",
     "org.seleniumhq.selenium" % "selenium-java" % "3.141.59" % "it",
     "org.seleniumhq.selenium" % "htmlunit-driver" % "2.35.1" % "it"
-){% endhighlight %}
+) {% endcode %}
 
             </section>
 
@@ -60,18 +60,18 @@ libraryDependencies ++= Seq(
                 <header><h3 id="maven">Add ScalaWebTest to your maven project</h3></header>
                 <p>You have to add the following dependency to your maven project to use ScalaWebTest.</p>
 
-                {% highlight xml %}
+                 {% code xml %}
 <dependency>
     <groupId>org.scalawebtest</groupId>
     <artifactId>scalawebtest-core_2.13</artifactId>
     <version>{{page.scalaWebTestVersion}}</version>
     <scope>test</scope>
-</dependency>{% endhighlight%}
+</dependency> {% endcode%}
 
                 <p id="bom">In case you want to manage the most important transitive dependencies of ScalaWebTest,
                     you can add our bill-of-materials to your project. You may do so by adding the following dependency</p>
 
-                {% highlight xml %}
+                 {% code xml %}
 <dependencyManagement>
     <dependencies>
         <dependency>
@@ -82,7 +82,7 @@ libraryDependencies ++= Seq(
             <scope>import</scope>
         </dependency>
     </dependencies>
-</dependencyManagement>{% endhighlight%}
+</dependencyManagement> {% endcode%}
             </section>
 
         </div>

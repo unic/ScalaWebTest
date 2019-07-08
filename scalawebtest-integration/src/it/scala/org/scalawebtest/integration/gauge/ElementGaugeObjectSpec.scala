@@ -52,4 +52,11 @@ class ElementGaugeObjectSpec extends ScalaWebTestBaseSpec {
       image fits partialImageGauge
     }
   }
+  it should "successfully fit a gauge, which contains two child siblings" in {
+    val partialImageGaugeWitSiblings = <img class="obj_full"></img><img class="obj_full lazyload"></img>
+
+    for (image <- images) {
+      image fits partialImageGaugeWitSiblings
+    }
+  }
 }

@@ -8,7 +8,7 @@ module Czak
       # forms: name, name=value, or name="quoted text"
       #
       # quoted text is allowed to contain spaces
-      SYNTAX = %r!^([\w.+#-]+)((\s+\w+(=([\w\.\/-]+|"[\w\s]*\w+"))?)*)$!
+      SYNTAX = %r!^([\w.+#-]+)((\s+\w+="[^"]*"|\s+\w+=[\w\.\/-]+|\w+?)*)$!
 
       def initialize(tag_name, markup, tokens)
         super
@@ -70,7 +70,7 @@ eos
           # Split along 3 possible forms -- key="<quoted list>", key=value, or key
           input.scan(%r!(?:\w+="[^"]*"|\w+=[\w\.\/-]+|\w+)!) do |opt|
             key, value = opt.split("=")
-            # If a quoted list, convert to array
+            # If a quoted list, remove quotes
             if value && value.include?("\"")
               value.delete!('"')
             end
@@ -129,8 +129,9 @@ eos
         ].join(" ")
 
         res = "<figure>"
-        res += "<pre class=\"highlight\"><code #{code_attributes}>#{code.chomp}</code></pre></figure>"
+        res += "<pre class=\"highlight\"><code #{code_attributes}>#{code.chomp}</code></pre>"
         res += "<figcaption>#{@highlight_options[:caption]}</figcaption>" if @highlight_options[:caption]
+        res += "</figure>"
         res
       end
     end

@@ -15,37 +15,37 @@ abstract: supports Scala 2.12, 2.11 and 2.10, has new artifact ids and new featu
             We changed the artifact ids, for better autocompletion in your IDE. Therefore you have to change the artifact id in your dependencies.
             Just add the prefix <i>scalawebtest-</i> to all your dependencies. For example, change
 
-            {% highlight scala %}
+             {% code scala %}
             libraryDependencies += "org.scalawebtest" %% "core" % "1.0.3" % "it"
-            {% endhighlight %}
+             {% endcode %}
 
             to
 
-            {% highlight scala %}
+             {% code scala %}
             libraryDependencies += "org.scalawebtest" %% "scalawebtest-core" % "1.0.4" % "it"
-            {% endhighlight %}
+             {% endcode %}
 
             Or in a maven project from
 
-            {% highlight xml %}
+             {% code xml %}
             <dependency>
                 <groupId>org.scalawebtest</groupId>
                 <artifactId>core_2.11</artifactId>
                 <version>1.0.3</version>
                 <scope>test</scope>
             </dependency>
-            {% endhighlight%}
+             {% endcode%}
 
             to
 
-            {% highlight xml %}
+             {% code xml %}
             <dependency>
                 <groupId>org.scalawebtest</groupId>
                 <artifactId>scalawebtest-core_2.11</artifactId>
                 <version>1.0.4</version>
                 <scope>test</scope>
             </dependency>
-            {% endhighlight%}
+             {% endcode%}
 
             You might change from <i>core_2.11</i> to <i>scalawebtest-core_2.12</i>, in case you want to upgrade from Scala 2.11 to 2.12 aswell.
         </p>

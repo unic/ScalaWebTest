@@ -56,65 +56,65 @@ twitterAuthor: danireych
                     <h4 id="swt_sbt">Add ScalaWebTest to your SBT project</h4>
                     <p>You can add ScalaWebTest to your testing dependencies in the build.sbt/scala
                         of your sbt project as follows.</p>
-                    {% highlight scala %}
-libraryDependencies += "org.scalawebtest" %% "scalawebtest-core" % "{{page.scalaWebTestVersion}}" % "test"{% endhighlight %}
+                     {% code scala %}
+libraryDependencies += "org.scalawebtest" %% "scalawebtest-core" % "{{page.scalaWebTestVersion}}" % "test" {% endcode %}
                     <p>We recommend to bind the ScalaWebTest dependencies to the IntegrationTest configuration, which can be referenced with "it".
                     The IntegrationTest configuration is not active by default. Follow the guide for <a href="https://www.scala-sbt.org/1.x/docs/Testing.html#Integration+Tests">SBT 1.0</a> or
                         <a href="https://www.scala-sbt.org/0.13/docs/Testing.html#Integration+Tests">SBT 0.13</a> to make it part of your build.
                         Then you can add ScalaWebTest to your project as follows.</p>
-                    {% highlight scala %}
-libraryDependencies += "org.scalawebtest" %% "scalawebtest-core" % "{{page.scalaWebTestVersion}}" % "it"{% endhighlight %}
+                     {% code scala %}
+libraryDependencies += "org.scalawebtest" %% "scalawebtest-core" % "{{page.scalaWebTestVersion}}" % "it" {% endcode %}
 
                     <p>ScalaWebTest uses the <b>slf4j-api</b> to write to the console or logfiles.
                         If your project does not contain an implementation of the Slf4j Logger, add the following dependency.</p>
-                    {% highlight scala %}
-libraryDependencies += "org.slf4j" % "slf4j-simple" % "{{page.slf4jVersion}}"{% endhighlight %}
+                     {% code scala %}
+libraryDependencies += "org.slf4j" % "slf4j-simple" % "{{page.slf4jVersion}}" {% endcode %}
                     <p>If you want to manage the most important transitive dependencies of ScalaWebTest, you might
                         configure it as follows (replace "it" with "test", if you do not make use of the IntegrationTest configuration).
                         Especially selenium-java and htmlunit-driver have to align with each other.</p>
 
-                    {% highlight scala %}
+                     {% code scala %}
 libraryDependencies ++= Seq(
     "org.scalawebtest" %% "scalawebtest-core" % "{{page.scalaWebTestVersion}}" % "it",
     "org.scalatest" %% "scalatest" % "3.0.8" % "it",
     "org.seleniumhq.selenium" % "selenium-java" % "3.141.59" % "it",
     "org.seleniumhq.selenium" % "htmlunit-driver" % "2.35.1" % "it"
-){% endhighlight %}
+) {% endcode %}
                     <h4 id="swt_maven">Add ScalaWebTest to your maven project</h4>
                     <p>You have to add the following dependency to your maven project to use ScalaWebTest.</p>
 
-                    {% highlight xml %}
+                     {% code xml %}
 <dependency>
     <groupId>org.scalawebtest</groupId>
     <artifactId>scalawebtest-core_2.13</artifactId>
     <version>{{page.scalaWebTestVersion}}</version>
     <scope>test</scope>
-</dependency>{% endhighlight%}
+</dependency> {% endcode%}
 
                     <p>ScalaWebTest uses the <b>slf4j-api</b> to write to the console or logfiles.
                         If your project does not contain an implementation of the Slf4j Logger, add the following dependency.</p>
-                                        {% highlight xml %}
+                                         {% code xml %}
 <dependency>
     <groupId>org.slf4j</groupId>
     <artifactId>slf4j-simple</artifactId>
     <version>{{page.slf4jVersion}}</version>
     <scope>test</scope>
-</dependency>{% endhighlight%}
+</dependency> {% endcode%}
                     <p>ScalaWebTest is also available for Scala 2.12 and 2.11, change the version after the underscore,
                         to get a ScalaWebTest version which is binary compatible with the one you are using.</p>
 
-                    {% highlight xml %}
+                     {% code xml %}
 <dependency>
     <groupId>org.scalawebtest</groupId>
     <artifactId>scalawebtest-core_2.12</artifactId>
     <version>{{page.scalaWebTestVersion}}</version>
     <scope>test</scope>
-</dependency>{% endhighlight%}
+</dependency> {% endcode%}
 
                     <p id="bom">In case you want to manage the most important transitive dependencies of ScalaWebTest,
                         you can add our bill-of-materials to your project. Just add the following to your dependencyManagement.</p>
 
-                    {% highlight xml %}
+                     {% code xml %}
 <dependencyManagement>
     <dependencies>
         <dependency>
@@ -125,7 +125,7 @@ libraryDependencies ++= Seq(
             <scope>import</scope>
         </dependency>
     </dependencies>
-</dependencyManagement>{% endhighlight%}
+</dependencyManagement> {% endcode%}
 
 
                     <h3 id="firsttest">Write your first test</h3>
@@ -133,7 +133,7 @@ libraryDependencies ++= Seq(
                     Lets assume we want to verify our homepage. Create a class named HomepageSpec, and let it extend
                         IntegrationFlatSpec. This uses <a href="http://www.scalatest.org/user_guide/selecting_a_style">FlatSpec style</a> from ScalaTest, other <a href="#teststyles">styles</a> are available.</p>
 
-                    {% highlight scala %}
+                     {% code scala %}
 import org.scalawebtest.core.IntegrationFlatSpec
 import org.openqa.selenium.By
 
@@ -146,7 +146,7 @@ class HomepageSpec extends IntegrationFlatSpec {
       .findElement(By.tagName("h2"))
       .getText shouldEqual "Reduce the effort needed to write integration tests"
   }
-}{% endhighlight%}
+} {% endcode%}
                     <a href="https://scastie.scala-lang.org/DaniRey/HuZB9METSSqu32QZmT7pcw/2" target="_blank">Try it in Scastie</a>
 
                     <p>That's all you need. The IntegrationSpec, inherited from IntegrationFlatSpec will automatically call https://www.scalawebtest.org/index.html
@@ -159,7 +159,7 @@ class HomepageSpec extends IntegrationFlatSpec {
                     <h3 id="firstGauge">Write your first gauge</h3>
                     <p>This test can be rewritten making use of the HtmlGauge. <a href="#writingGauges">Writing gauges</a> provides a detailed introduction to this feature.</p>
 
-                    {% highlight scala %}
+                     {% code scala %}
 import org.scalawebtest.core.IntegrationFlatSpec
 import org.scalawebtest.core.gauge.HtmlGauge
 
@@ -170,7 +170,7 @@ class HomepageSpec extends IntegrationFlatSpec with HtmlGauge {
   "Our homepage" should "contain a succinct claim" in {
     currentPage fits <h2>Reduce the effort needed to write integration tests</h2>
   }
-}{% endhighlight%}
+} {% endcode%}
 
                     <a href="https://scastie.scala-lang.org/DaniRey/aOD6RFqwSgynejH7CNl6qQ/2" target="_blank">Try it in Scastie</a>
                 </section>
@@ -185,7 +185,7 @@ class HomepageSpec extends IntegrationFlatSpec with HtmlGauge {
                     Instead of an abstract class one could use a trait as well. This was our recommendation for earlier versions,
                     but using an abstract class improves your compilation time, therefore we recommend it over traits.
 
-                    {% highlight scala %}
+                     {% code scala %}
 import org.scalatest.AppendedClues
 import org.scalatest.concurrent.PatienceConfiguration.Timeout
 import org.scalatest.time.SpanSugar._
@@ -199,7 +199,7 @@ abstract class MyProjectBaseSpec extends IntegrationFlatSpec with FormBasedLogin
     loginConfig.useLoginUri("http://localhost:9090/login.php")
 
     override def loginTimeout = Timeout(5 seconds)
-}{% endhighlight %}
+} {% endcode %}
 
                     This abstract base class uses FlatSpec style, FormBasedLogin, AppendedClues and HtmlGauge. It configures host, loginPath and projectRoot and sets a suitable loginTimeout.
                     Our <a href="https://github.com/unic/ScalaWebTest/tree/master/scalawebtest-integration/src/it">integration tests</a> have two purposes.
@@ -227,7 +227,7 @@ abstract class MyProjectBaseSpec extends IntegrationFlatSpec with FormBasedLogin
                     <p>In the following TestSpec JavaScript errors are swallowed during Login phase, no matter if
                         JavaScript execution is enabled or disable.
                         During test execution JavaScript is enabled and JavaScript errors let the test fail.</p>
-                    {% highlight scala %}
+                     {% code scala %}
 import org.openqa.selenium.By
 import org.scalawebtest.core.IntegrationFlatSpec
 
@@ -242,7 +242,7 @@ class HomepageSpec extends IntegrationFlatSpec {
       .findElement(By.tagName("h2"))
       .getText shouldEqual "Reduce the effort needed to write integration tests"
   }
-}{% endhighlight%}
+} {% endcode%}
                     <a href="https://scastie.scala-lang.org/DaniRey/jeQ90Gt6TeSnP8Cp0aUSRg/2">Try it in Scastie</a>
 
                     <p>By default JavaScript is not executed and JavaScript errors don't throw. Also CSS is not
@@ -267,15 +267,15 @@ class HomepageSpec extends IntegrationFlatSpec {
                         They build gauges (or templates), which they then lay their workpiece into. If the workpiece fits in the gauge,
                         it satisfies the requirements.</p>
 
-                    <div class="row">
-                        <div class="column_two">
+                    <div class="flex_row">
+                        <div class="flex_column_two">
                             <figure>
                                 <img src="images/caliper_gauge.jpg" alt="caliper gauge">
                                 <figcaption><b>caliper gauge:</b> if the workpiece fits the red side it is too small, if it doesn't fit the other side it is too big</figcaption>
                             </figure>
                         </div>
 
-                        <div class="column_two">
+                        <div class="flex_column_two">
                             <figure class="column_two">
                                 <img src="images/limit_plug_gauge.jpg" alt="limit plug gauge">
                                 <figcaption><b>limit plug gauge:</b> if the red side fits the boring it is too big, if the other side doesn't fit it is too small</figcaption>
@@ -291,8 +291,8 @@ class HomepageSpec extends IntegrationFlatSpec {
                         This is also the abstraction, with which we work in ScalaWebTest. Let's first have a look at the document, which we would like to test with a gauge,
                         and its representation as DOM tree.</p>
 
-                    <div class="row">
-                        <div class="column_two">
+                    <div class="flex_row">
+                        <div class="flex_column_two">
                             {% code html caption=index.html %}
 <!DOCTYPE html>
 <html lang="en">
@@ -318,7 +318,7 @@ class HomepageSpec extends IntegrationFlatSpec {
 </html>
                             {% endcode %}
                         </div>
-                        <div class="column_two">
+                        <div class="flex_column_two">
                             <figure>
                                 <img src="images/illustrations/HtmlGauge/document.png" alt="DOM tree of index.html"/>
                                 <figcaption>DOM tree of index.html</figcaption>
@@ -331,8 +331,8 @@ class HomepageSpec extends IntegrationFlatSpec {
                         parsed into a DOM tree.
                     </p>
 
-                    <div class="row">
-                        <div class="column_two">
+                    <div class="flex_row">
+                        <div class="flex_column_two">
                         {% code scala caption="spec with gauge definition" %}
 import org.scalawebtest.core.IntegrationFlatSpec
 
@@ -353,7 +353,7 @@ class HtmlGauge extends IntegrationFlatSpec {
 }
                         {% endcode %}
                         </div>
-                        <div class="column_two">
+                        <div class="flex_column_two">
                             <figure>
                                 <img src="images/illustrations/HtmlGauge/gauge_definition.png" alt="DOM tree of gauge definition"/>
                                 <figcaption>DOM tree of gauge definition</figcaption>
@@ -368,7 +368,7 @@ class HtmlGauge extends IntegrationFlatSpec {
                         has to be found in the document.
                     </p>
 
-                    <div class="row">
+                    <div class="flex_row">
                         <figure>
                             <img src="images/illustrations/HtmlGauge/HtmlGauge.gif" alt="Trying to fit document into gauge">
                             <figcaption>Trying to fit document into gauge</figcaption>
@@ -381,8 +381,8 @@ class HtmlGauge extends IntegrationFlatSpec {
                         The idea is to make tests stable and vocal about their intend, by focusing on the elements and attributes, which matter for a specific test.
                     </p>
 
-                    <div class="row">
-                        <div class="column_two">
+                    <div class="flex_row">
+                        <div class="flex_column_two">
                             {% code html caption=index.html %}
 <!DOCTYPE html>
 <html lang="en">
@@ -408,7 +408,7 @@ class HtmlGauge extends IntegrationFlatSpec {
 </html>
                             {% endcode %}
                         </div>
-                        <div class="column_two">
+                        <div class="flex_column_two">
                             <figure>
                                 <img src="images/illustrations/GapGauge/document.png" alt="DOM tree of index.html"/>
                                 <figcaption>DOM tree of index.html</figcaption>
@@ -420,8 +420,8 @@ class HtmlGauge extends IntegrationFlatSpec {
                        The document remains the same as in the previous example. The gauge definition is missing the element <code>div</code> and <code>li</code>.
                     </p>
 
-                    <div class="row">
-                        <div class="column_two">
+                    <div class="flex_row">
+                        <div class="flex_column_two">
                         {% code scala caption="spec with gauge definition" %}
 import org.scalawebtest.core.IntegrationFlatSpec
 
@@ -438,7 +438,7 @@ class GapGauge extends IntegrationFlatSpec {
 }
                         {% endcode %}
                         </div>
-                        <div class="column_two">
+                        <div class="flex_column_two">
                             <figure>
                                 <img src="images/illustrations/GapGauge/gauge_definition.png" alt="DOM tree of gauge definition"/>
                                 <figcaption>DOM tree of gauge definition</figcaption>
@@ -446,7 +446,7 @@ class GapGauge extends IntegrationFlatSpec {
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="flex_row">
                         <figure>
                             <img src="images/illustrations/GapGauge/GapGauge.gif" alt="Trying to fit document into gauge">
                             <figcaption>Trying to fit document into gauge</figcaption>
@@ -456,8 +456,8 @@ class GapGauge extends IntegrationFlatSpec {
                     <p>While gaps are allowed in the gauge definition. The order of elements has to be identical for the gauge definition and the document.
                         The following example illustrates this, with a document, which does not fit the provided gauge.</p>
 
-                    <div class="row">
-                        <div class="column_two">
+                    <div class="flex_row">
+                        <div class="flex_column_two">
                             {% code html caption=index.html %}
 <!DOCTYPE html>
 <html lang="en">
@@ -473,7 +473,7 @@ class GapGauge extends IntegrationFlatSpec {
 </html>
                             {% endcode %}
                         </div>
-                        <div class="column_two">
+                        <div class="flex_column_two">
                             <figure>
                                 <img src="images/illustrations/ElementOrderGauge/document.png" alt="DOM tree of index.html"/>
                                 <figcaption>DOM tree of index.html</figcaption>
@@ -486,8 +486,8 @@ class GapGauge extends IntegrationFlatSpec {
                        This is not as intended and the following gauge definition expects them in natural order.
                     </p>
 
-                    <div class="row">
-                        <div class="column_two">
+                    <div class="flex_row">
+                        <div class="flex_column_two">
                         {% code scala caption="spec with gauge definition" %}
 import org.scalawebtest.core.IntegrationFlatSpec
 
@@ -507,7 +507,7 @@ class ElementOrderGauge extends IntegrationFlatSpec {
 }
                         {% endcode %}
                         </div>
-                        <div class="column_two">
+                        <div class="flex_column_two">
                             <figure>
                                 <img src="images/illustrations/ElementOrderGauge/gauge_definition.png" alt="DOM tree of gauge definition"/>
                                 <figcaption>DOM tree of gauge definition</figcaption>
@@ -515,7 +515,7 @@ class ElementOrderGauge extends IntegrationFlatSpec {
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="flex_row">
                         <figure>
                             <img src="images/illustrations/ElementOrderGauge/ElementOrderGauge.gif" alt="Trying to fit document into gauge">
                             <figcaption>Trying to fit document into gauge</figcaption>
@@ -535,14 +535,14 @@ class ElementOrderGauge extends IntegrationFlatSpec {
                         document.
                         The following gauge therefore matches all the elements shown below.</p>
 
-                    <div class="row">
-                        <div class="column_two">
+                    <div class="flex_row">
+                        <div class="flex_column_two">
                      {% code scala caption="Gauge definition containing two classes" %}
 currentPage fits
     <div class="container red"></div>
 {% endcode %}
                         </div>
-                        <div class="column_two">
+                        <div class="flex_column_two">
                     {% code html %}
 <div class="container red"></div>{% endcode %}
                     {% code html %}
@@ -556,110 +556,113 @@ currentPage fits
                     <p>Often trying to fit the complete document into the defined <code>gauge</code> isn't the most natural
                         and efficient thing to do.
                         Especially when a website contains multiple elements of the same kind, such as content cards,
-                        gallery images or items of a product list, <code>findAll</code>
-                        those elements first, and then trying to fit each element with the <code>gauge</code>, is better.</p>
-                    {% highlight scala %}
-package org.scalawebtest.documentation
-
+                        gallery images or items of a product list. It is more natural to first <code>findAll</code>
+                        those elements, and then trying to fit each element into the <code>gauge</code>.</p>
+                    <div class="flex_row">
+                        <div class="flex_column_one">
+                    {% code scala caption="ElementGaugeSpec.scala - findAll gallery images and test if they fit the gauge"%}
 import org.scalatest.AppendedClues
 import org.scalawebtest.core.IntegrationFlatSpec
 import org.scalawebtest.core.gauge.HtmlElementGauge
 
 class ElementGaugeSpec extends IntegrationFlatSpec with HtmlElementGauge with AppendedClues {
-    path = "/galleryOverview.jsp"
+  config.useBaseUri("http://localhost:9090")
+  path = "/galleryOverview.jsp"
 
-    def images = findAll(CssSelectorQuery("ul div.image_columns"))
-
-    val imageGauge =
+  val imageGauge =
     <div class="columns image_columns">
-        <a>
-            <figure class="obj_aspect_ratio">
-                <noscript>
-                    <img class="obj_full"></img>
-                </noscript>
-                <img class="obj_full lazyload"
-                     srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-                     data-sizes="auto"></img>
-            </figure>
-        </a>
+      <a>
+        <figure class="obj_aspect_ratio">
+          <noscript>
+            <img class="obj_full"></img>
+          </noscript>
+          <img class="obj_full lazyload"
+               data-sizes="auto"></img>
+        </figure>
+      </a>
     </div>
 
-    "The gallery" should "contain the expected HTML for every image" in {
-        images.size should be > 5 withClue " - gallery didn't contain the expected amount of images"
+  "The gallery" should "contain the expected HTML for every image" in {
+    def images = findAll(CssSelectorQuery("ul div.image_columns"))
 
-        for (image <- images) {
-            image fits imageGauge
-        }
+    images.size should be > 5 withClue " - gallery didn't contain the expected amount of images"
+
+    for (image <- images) {
+      image fits imageGauge
     }
-}{% endhighlight %}
+  }
+}{% endcode %}</div></div>
+
                     <p>When using <a href="http://www.scalatest.org/user_guide/using_selenium">findAll</a> with a
                         <a href="http://docs.scala-lang.org/tutorials/tour/sequence-comprehensions.html">for-comprehension</a>,
-                        one should always verify, that the expected amount of elements was found.</p>
+                        always verify, that the expected amount of elements was found. If zero element where found, no element is checked.
+                        Therefore an additional check is required to make sure the test fails, if <code>findAll</code> didn't return anything.</p>
                     <p>When using <code>fits</code> or <code>doesntFit</code>, the same features are available, no matter if the
-                        whole document, or a single
-                        element is checked. Therefore the following chapters apply to both usecases.
-                        There are two restrictions when using gauges for single elements (built using <a
-                                href="https://github.com/unic/ScalaWebTest/tree/master/scalawebtest-core/src/main/scala/org/scalawebtest/core/gauge/ElementGaugeBuilder.GaugeFromElement">ElementGaugeBuilder.GaugeFromElement</a>)
+                        whole document, or a single element is checked. Therefore the following chapters are applicable for both ways of using it.
                     </p>
-                    <ul>
-                        <li>the gauge may only contain one top level element</li>
-                        <li>the top level element of the gauge has to be the same, as the one which is checked (not one
-                            of its children)
-                        </li>
-                    </ul>
+
                     <h3 id="contains">Test for containment</h3>
                     <p>It is common that you don't want to verify the complete attribute value, or text of an element.
                         You may use <code>@contains</code> to trigger the ContainsMatcher instead of the DefaultMatcher.
                         Thanks to this matcher, this gauge matches the following HTML element</p>
-                    {% highlight scala %}
-fit(<a href="@contains ScalaWebTest"></a>){% endhighlight %}
-                    {% highlight html %}
-<a href="https://github.com/unic/ScalaWebTest"></a>{% endhighlight %}
+
+                    {% code scala %}
+fit(<a href="@contains ScalaWebTest"></a>){% endcode %}
+
+                    <p>This gauge will fit</p>
+
+                    {% code html %}
+<a href="https://github.com/unic/ScalaWebTest"></a>{% endcode %}
+
                     <p>The containsMatcher is also available, when matching text.</p>
-                    {% highlight scala %}
-fit(<a>@contains available</a>){% endhighlight %}
-                    {% highlight html %}
-<a>ScalaWebTest is available on github</a>{% endhighlight %}
+                    {% code scala %}
+fit(<a>@contains available</a>){% endcode %}
+
+                    <p>This gauge will fit</p>
+
+                    {% code html %}
+<a>ScalaWebTest is available on github</a>{% endcode %}
+
                     <p>Hint: always add a space after the matcher annotation. We enforce this space to improve
                         readability of tests.</p>
+
                     <h3 id="regex">Test for regex matches</h3>
                     <p>When we want to enforce textual rules on our content, we need a more powerful Matcher. The
                         RegexMatcher is our friend.
                         It is triggered using <code>@regex</code></p>
 
-                    {% highlight scala %}
-fit(<a href="@regex http:\\/\\/[a-zA-Z]+\.scalawebtest.org.*,"></a>){% endhighlight %}
+                    {% code scala %}
+fit(<a href="@regex http:\\/\\/[a-zA-Z]+\.scalawebtest.org.*,"></a>){% endcode %}
 
                     <p>This gauge will fit</p>
-                    {% highlight html %}
-<a href="http://www.scalawebtest.org/documentation.html"></a>{% endhighlight %}
+                    {% code html %}
+<a href="http://www.scalawebtest.org/documentation.html"></a>{% endcode %}
                     <p>but it won't fit</p>
-                    {% highlight html %}
-<a href="http://scalawebtest.org/documentation.html"></a>{% endhighlight %}
+                    {% code html %}
+<a href="http://scalawebtest.org/documentation.html"></a>{% endcode %}
 
                     <h3 id="negation">Negating your tests</h3>
                     <p>Sometimes you want to make sure that a certain content is not shown. For example you want to make
                         sure, that no login form is shown, when a user is logged in. Or you want to make sure that a post doesn't
-                        appear before it is made public. To do so you may use <code>doesnt fit()</code> or <code>not fit()</code>. They are synonyms. Choose
-                        whatever reads better in your current context.</p>
+                        appear before it is made public. To do so you may use <code>currentPage doesNotFit</code> or <code>currentPage doesntFit</code>. They are synonyms.
+                        If you prefer gauges, which do not start with <code>currentPage</code>, but directly with the gauge, you may use <code>doesnt fit()</code> or <code>not fit()</code>
+                        Choose whatever reads better in your current context.</p>
 
-                    {% highlight scala %}
-package org.scalawebtest.documentation
-
+                     {% code scala %}
 import org.scalawebtest.core.IntegrationFlatSpec
 import org.scalawebtest.core.gauge.HtmlGauge
 
 class LoggedInSpec extends IntegrationFlatSpec with HtmlGauge {
-    path = "/protectedContent.jsp?username=admin&password=secret"
+  path = "/protectedContent.jsp?username=admin&password=secret"
 
-    "When logged in the protectedContent page" should "not show the login form" in {
-        not fit <form name="login_form"></form>
-    }
-}{% endhighlight %}
+  "When logged in the protectedContent page" should "not show the login form" in {
+    currentPage doesNotFit <form name="login_form"></form>
+  }
+}{% endcode %}
 
                     <p>In case the login form is mistakenly rendered, the following error will appear.</p>
 
-                    {% highlight text %}
+                     {% code text %}
 Current document matches the provided gauge, although expected not to!
 Fitting node
 <html>
@@ -682,69 +685,66 @@ Fitting node
 </form>
 </body>
 </html>
-found{% endhighlight %}
+found {% endcode %}
 
                     <h3 id="process">Testing a complete process</h3>
                     <p>Today's web applications are of course not that static. Usually it is more interesting to test a
                         complete process.
-                        This is easily possible with Selenium. You can use it to press buttons, fill and submit forms and even execute
+                        Selenium has great support to do so. You can press buttons, fill and submit forms and execute
                         JavaScript.
-                        As the gauges are based on Selenium, they can be combined with actions as well. As soon as an
-                        action is executed, the currentPage is updated and our next call to <code>fit()</code> or <code>doesnt fit()</code> will be
-                        executed against the updated page.</p>
-                    <p>Lets try this out using a page with protected content. On first load a form will be shown, after
-                        logging in the form disappears, instead the text <i>sensitive information</i> appears.</p>
-                    {% highlight scala%}
-package org.scalawebtest.documentation
-
+                        As ScalaWebTest's gauges are evaluated against the same browser window, as the executed Selenium commands,
+                        gauges can be used to verify pre-conditions and results of actions. Remember <a href="http://www.scalatest.org">ScalaTest</a> executes the tests in order.
+                        As soon as an action is executed, the currentPage is updated and the next call to <code>fit()</code> or <code>doesnt fit()</code> will be
+                        executed against the updated page/DOM.</p>
+                    <p>Lets try this out using a page with protected content. Initially a login form is shown, after submitting it with correct credentials,
+                        the form disappears, and the text <i>sensitive information</i> appears.</p>
+                    <div class="flex_row">
+                        <div class="flex_column_one">
+                     {% code scala caption="Verify pre-conditions, change state, verify post-conditions" %}
 import org.scalawebtest.core.IntegrationFlatSpec
 
 import org.scalawebtest.core.gauge.HtmlGauge
 
 class LoginSpec extends IntegrationFlatSpec with HtmlGauge {
-    path = "/protectedContent.jsp"
+  path = "/protectedContent.jsp"
 
-    "When accessing protectedContent it" should "show the login form" in {
-        fits(
-            <form name="login_form">
-                <input name="username"></input>
-                <input name="password"></input>
-            </form>
-        )
-    }
+  "When accessing protectedContent it" should "show the login form" in {
+    currentPage fits
+      <form name="login_form">
+        <input name="username"></input>
+        <input name="password"></input>
+      </form>
+  }
 
-    it should "hide the protected content, when not logged in" in {
-        not fit <p>sensitive information</p>
-    }
+  it should "hide the protected content, when not logged in" in {
+    currentPage doesNotFit <p>sensitive information</p>
+  }
 
-    it should "show the protected content, after logging in" in {
-        textField("username").value = "admin"
-        pwdField("password").value = "secret"
+  it should "show the protected content, after logging in" in {
+    textField("username").value = "admin"
+    pwdField("password").value = "secret"
 
-        submit()
+    submit()
 
-        fits(<p>sensitive information</p>)
-    }
-}{% endhighlight %}
+    currentPage fits <p>sensitive information</p>
+  }
+}{% endcode %}
+                        </div>
+                    </div>
 
                     <p>This example test was split into three smaller tests. This is technically not necessary, but has
                         the following advantage. When only part of the tests fails, you have a better idea what went wrong. For
                         example, if the login fails, but the login form is correctly shown, the issue has to be your login process. But if the
                         login form isn't shown, the problem has a very different cause. In addition the verbose output from the
                         <code>gauge</code> should help you finding the root cause.</p>
-                </section>
-
-                <section>
-                    <header>
-                        <h2 id="usingAdvancedFeatures">Using advanced Features</h2>
-                    </header>
 
                     <h3 id="executingJavascript">Executing JavaScript</h3>
-
-                    <p>Thanks to Selenium executing JavaScript is not an issue. Per default JavaScript is not executed
-                        with ScalaWebTest, because tests run faster without. To execute JavaScript, you have to enable it.</p>
-                    {% highlight scala %}
-config.enableJavaScript(throwOnError = true){% endhighlight %}
+                    <p>With Html-Unit Driver it is possible to execute JavaScript, but some edge-cases are not covered perfectly.
+                        As JavaScript on the JVM is interpreted with <a href="https://github.com/mozilla/rhino">Rhino</a>. For JavaScript heavy web applications,
+                        we recommend to use a native browser, such as <a href="#chrome">Chrome</a>.
+                        Per default ScalaWebTest doesn't execute JavaScript, because tests run faster without. To execute JavaScript, you have to enable it.</p>
+                     {% code scala %}
+config.enableJavaScript(throwOnError = true){% endcode %}
                     <p>In addition, you have to decide whether a JavaScript error should cause your test to fail or not.
                         Usually failing on JavaScript errors is good, but sometimes you have to write tests for a web application with
                         major issues in it's JavaScript. This is one of the rare moments, where you have to disable <code>throwOnError</code> to be
@@ -753,12 +753,17 @@ config.enableJavaScript(throwOnError = true){% endhighlight %}
                         have to give it some time to execute JavaScript, before we can expect it to have transformed the HTML.
                         ScalaTest provides <code>eventually</code>, which does exactly what we need. It repeats a given test
                         until it succeeds or the given timeout has been surpassed.</p>
-                    {% highlight scala %}
+                     {% code scala %}
 eventually(timeout(3 seconds)) {
     fits(
         <div id="container">Text loaded with JavaScript</div>
     )
-}{% endhighlight %}
+} {% endcode %}
+<!--                    <h3 id="arguments">Runner arguments</h3>-->
+<!--                    <h3 id="envVars">Environment variables</h3>-->
+<!--                    <h3 id="chrome">Using Chrome</h3>-->
+<!--                    <h3 id="otherBrowsers">Other Browsers</h3>-->
+<!--                    <h3 id="docker">Running inside docker</h3>-->
                 </section>
 
                 <section>
@@ -847,7 +852,7 @@ eventually(timeout(3 seconds)) {
                     <p>To verify the value or type of a few values, we consider standard play-json sufficient. Just use
                         <code>Json.parse</code> to parse the response and then use <code>\</code> and <code>\\</code> to navigate the json
                         structure.</p>
-                    {% highlight scala %}
+                     {% code scala %}
 package org.scalawebtest.documentation
 
 import org.scalawebtest.core.IntegrationFlatSpec
@@ -861,10 +866,10 @@ class ReducedJsonSpec extends IntegrationFlatSpec {
         def firstName = (json \ "firstName").as[String]
         firstName should equal("Edsger")
     }
-}{% endhighlight %}
+} {% endcode %}
                     <p>All JSON tests in the following examples use the following JSON response</p>
                     <div id="modules/json/testResponse">
-                        {% highlight json %}
+                         {% code json %}
 {
     "name": "Dijkstra",
     "firstName": "Edsger",
@@ -896,7 +901,7 @@ class ReducedJsonSpec extends IntegrationFlatSpec {
     "end": 1999
 }
 ]
-}{% endhighlight %}
+} {% endcode %}
                     </div>
                     <p>Of course this way of verifying JSON responses reaches its limitations very soon. Therefore we
                         created <code>JsonGauge</code></p>
@@ -906,7 +911,7 @@ class ReducedJsonSpec extends IntegrationFlatSpec {
                         With the JSON gauge you can use JSON to specify the gauge, into which the JSON response has to
                         fit.
                     </p>
-                    {% highlight scala %}
+                     {% code scala %}
 package org.scalawebtest.documentation
 import org.scalawebtest.core.IntegrationFlatSpec
 import org.scalawebtest.json.JsonGauge
@@ -929,12 +934,12 @@ class DocumentFitsValuesSpec extends IntegrationFlatSpec with JsonGauge {
             }"""
         )
     }
-}{% endhighlight %}
+} {% endcode %}
                     <p>Often verifying the complete response isn't ideal. We recommend to parse and traverse the
                         document using <a
                                 href="https://www.playframework.com/documentation/2.5.x/ScalaJson">play-json</a> and
                         then verify if the <code>JsLookup</code> or <code>JsValue</code> <code>fits</code> the defined gauge.</p>
-                    {% highlight scala %}
+                     {% code scala %}
 package org.scalawebtest.documentation
 
 import org.scalawebtest.core.IntegrationFlatSpec
@@ -970,7 +975,7 @@ class DijkstraJsonGaugeSpec extends IntegrationFlatSpec with JsonGauge {
         ]
         """
     }
-}{% endhighlight %}
+} {% endcode %}
                     <p>As with the HTML gauge, controlled variance is allowed. The original <a
                             href="#modules/json/testResponse">response</a> contains additional key/value pairs (<code>isTuringAwardWinner</code>
                         and <code>universities</code>).
@@ -985,7 +990,7 @@ class DijkstraJsonGaugeSpec extends IntegrationFlatSpec with JsonGauge {
                         tests. When sharing test via behaviors, verifying values is often too specific. Therefore we provide
                         <code>fits types of</code> in addition to <code>fits values of</code>.
                     </p>
-                    {% highlight scala %}
+                     {% code scala %}
 package org.scalawebtest.documentation
 
 import org.scalawebtest.core.IntegrationFlatSpec
@@ -1006,7 +1011,7 @@ class DijkstraJsonGaugeFitsTypesSpec extends IntegrationFlatSpec with JsonGauge 
             }
         """
     }
-}{% endhighlight %}
+} {% endcode %}
                     <p>Now the values no longer matter. They are only used to determine the expected type. Therefore we
                         recommend to use values, which indicate that only the type matters. Use empty strings and 0.
                         This test would succeed. It would fail, when the response would:</p>
@@ -1020,7 +1025,7 @@ class DijkstraJsonGaugeFitsTypesSpec extends IntegrationFlatSpec with JsonGauge 
                         expectations. When using <code>fits types of</code>, you only have to define those expectations once.
                         All array elements then have to fulfill them. Lets have a look at an example. Lets assume the
                         test of the previous example would be replaced with the following</p>
-                    {% highlight scala %}
+                     {% code scala %}
 "The response for Dijkstra" should "contain the expected types" in {
     dijkstra fits types of
         """{
@@ -1036,7 +1041,7 @@ class DijkstraJsonGaugeFitsTypesSpec extends IntegrationFlatSpec with JsonGauge 
             }]
         }
         """
-}{% endhighlight %}
+} {% endcode %}
                     <p>This would enforce all elements of the <code>universities</code> array to contain a key <code>name</code>
                         with a value of type <code>string</code> and the keys <code>begin</code> and <code>end</code> with a value of type
                         <code>number</code>.
@@ -1049,7 +1054,7 @@ class DijkstraJsonGaugeFitsTypesSpec extends IntegrationFlatSpec with JsonGauge 
                         for every element, but those expectations are allowed to differ.
                         For example, we expect Martin to have studied and worked at three universities. For the first
                         two an <code>end</code> is known. This isn't the case for the last one.</p>
-                    {% highlight scala %}
+                     {% code scala %}
 "The response for Odersky" should "contain the expected types and array sizes" in {
     odersky fits typesAndArraySizes of
         """{
@@ -1072,11 +1077,11 @@ class DijkstraJsonGaugeFitsTypesSpec extends IntegrationFlatSpec with JsonGauge 
         }]
         }
         """
-}{% endhighlight %}
+} {% endcode %}
                     <p>One more common situation exists with arrays. Often the array elements are not sorted. Although
                         we expect the array to contain a specific element, we don't know it's position.
                         For this situation <code>containsElementFitting values/types/typesAndArraySizes of</code> exists.</p>
-                    {% highlight scala %}
+                     {% code scala %}
 package org.scalawebtest.documentation
 
 import org.scalawebtest.core.IntegrationFlatSpec
@@ -1104,7 +1109,7 @@ class ContainsElementFittingSpec extends IntegrationFlatSpec with JsonGauge {
                 | "end": 1984
                 | }""".stripMargin
     }
-}{% endhighlight %}
+} {% endcode %}
                     <h4 id="modules/json/alternatives"></h4>
                     <p>
                         Because of its simplicity we prefer <a

@@ -320,17 +320,22 @@ header .byline {
     font-weight: bolder;
 }
 
-.column_two {
+.flex_column_one {
     flex: 100%;
     padding: 0 5px;
 }
 
-.column_three {
+.flex_column_two {
     flex: 100%;
     padding: 0 5px;
 }
 
-.row {
+.flex_column_three {
+    flex: 100%;
+    padding: 0 5px;
+}
+
+.flex_row {
     display: flex;
     flex-direction: column;
 }

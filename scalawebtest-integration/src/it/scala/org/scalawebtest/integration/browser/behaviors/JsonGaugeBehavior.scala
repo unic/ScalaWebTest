@@ -1,20 +1,21 @@
 package org.scalawebtest.integration.browser.behaviors
 
 import org.scalawebtest.core.IntegrationFlatSpec
+import play.api.libs.json.{JsValue, Json}
+import org.scalawebtest.json.JsonGauge._
 
 trait JsonGaugeBehavior {
   self: IntegrationFlatSpec =>
 
-  //TODO: replace String comparison with JsonGauge, after Scala 2.10 support was removed from ScalaWebTest
   def aJsonGauge(): Unit = {
-    def removeWhitespaces(s: String): String = {
-      s.replaceAll("\\s", "")
+    def json: JsValue = {
+      Json.parse(webDriver.getPageSource)
     }
 
     it should "be capable to handle JSON responses (some browsers wrap this in HTML and need special treatment)" in {
       navigateTo("/jsonResponse.json.jsp")
-      removeWhitespaces(webDriver.getPageSource) shouldBe
-        removeWhitespaces("""
+      json fits values of
+        """
           |{
           |  "name": "Dijkstra",
           |  "firstName": "Edsger",
@@ -47,7 +48,7 @@ trait JsonGaugeBehavior {
           |    }
           |  ],
           |  "falseTheories": null
-          |}""".stripMargin)
+          |}""".stripMargin
     }
   }
 }

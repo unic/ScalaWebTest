@@ -1,6 +1,6 @@
 version: '3'
 services:
   scalawebtest:
-    image: "scalawebtest/sbt:3.0.0-RC2"
+    image: "scalawebtest/sbt:3.0.0"
     volumes:
       - ./src/test/scala:/home/sbtuser/src/test/scala

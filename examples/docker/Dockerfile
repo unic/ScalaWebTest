@@ -3,7 +3,7 @@
 #
 
 # Pull base image
-FROM scalawebtest/sbt:3.0.0-RC2 AS builder
+FROM scalawebtest/sbt:3.0.0 AS builder
 
 COPY --chown=sbtuser:sbtuser src /home/sbtuser/src
 

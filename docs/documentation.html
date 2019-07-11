@@ -1079,38 +1079,28 @@ class ResponseHeaderValueSpec extends IntegrationFlatSpec with ResponseAccessors
 
                     <p>Every web application framework has its own specialities, which are relevant for testing.
                         ScalaWebTest allows to share this framework specific logic via modules. We encourage others, to
-                        create
-                        additional modules for their most used framework.</p>
+                        create additional modules for their most used framework.</p>
                     <p>What should be shared via modules?</p>
                     <p>We think even simple things such as default login method, ports and urls might be worth sharing.
                         Functions to create content, update accounts, or requesting a page in debug mode, could be even
                         better candidates for a module.</p>
                     <h3 id="modules_aem">AEM module</h3>
                     <p>As the creators of ScalaWebTest work a lot with Adobe Experience Manager, they decided to create
-                        the first module for
-                        this CMS</p>
+                        the first module for this CMS</p>
                     <p>To use this module extend <code>AemTweaks</code> from the <i>aem</i> module in your BaseTrait.
-                        This
-                        will cause the
-                        following.</p>
+                        This will cause the following.</p>
                     <ul>
                         <li><code>FormBasedLogin</code> is activated</li>
                         <li><code>loginUri</code> is set to the default AEM 6 login path</li>
                         <li>pages are requested with <code>wcmmode</code> cookie set to <code>DISABLED</code></li>
                     </ul>
                     <h4 id="modules/aem/pageproperties">PageProperties</h4>
-                    <p>Disclaimer: This trait is currently only available in scalawebtest-aem_2.11, due to dependencies
-                        on play-json which wasn't yet released for 2.12</p>
                     <p>
-                        The <a
-                            href="https://github.com/unic/ScalaWebTest/blob/master/scalawebtest-aem/src/main/scala-2.11/org/scalawebtest/aem/PageProperties.scala">PageProperties</a>
-                        trait populates the pageProperties,
-                        and if applicable componentProperties and suffixProperties fields with a <a
-                            href="https://www.playframework.com/documentation/2.5.x/api/scala/index.html#play.api.libs.json.JsValue">JsValue</a>
-                        representing the properties of the currentPage, component and suffix respectively. It does so by
-                        retrieving the JSON representation of
-                        the currentPage. This works by default on all CQ/AEM author instances. In addition it provides
-                        convenience methods to access the pageProperties content.
+                        The <a href="https://github.com/unic/ScalaWebTest/blob/master/scalawebtest-aem/src/main/scala-2.11/org/scalawebtest/aem/PageProperties.scala">PageProperties</a>
+                        trait populates the pageProperties, and if applicable componentProperties and suffixProperties fields with a
+                        <a href="https://www.playframework.com/documentation/2.5.x/api/scala/index.html#play.api.libs.json.JsValue">JsValue</a>
+                        representing the properties of the currentPage, component and suffix respectively. It does so by retrieving the JSON representation of
+                        the currentPage. This works by default on all CQ/AEM author instances. In addition it provides convenience methods to access the pageProperties content.
                     </p>
                     <ul>
                         <li>pageProperties(name: String) - retrieve a page property by name</li>
@@ -1124,48 +1114,38 @@ class ResponseHeaderValueSpec extends IntegrationFlatSpec with ResponseAccessors
                     </ul>
 
                     <p>
-                        It populates the <code>pageProperties</code> field with a
-                        <code>play.api.libs.json.JsValue</code>, which
-                        represents the properties of the currentPage.
-                        In case the <i>url/path</i> points to something below jcr:content, the
+                        It populates the <code>pageProperties</code> field with a <code>play.api.libs.json.JsValue</code>, which
+                        represents the properties of the currentPage. In case the <i>url/path</i> points to something below jcr:content, the
                         <code>componentProperties</code> will be populated with the properties
                         of the component, and the <code>pageProperties</code> with those of the containing page.
-                        In case the <i>url/path</i> contains a suffix, the <code>suffixProperties</code> will be
-                        populated
+                        In case the <i>url/path</i> contains a suffix, the <code>suffixProperties</code> will be populated
                         with the properties of the page referenced in the suffix.
                         It does so by manipulating the <i>url</i> field, to request the JSON representation of the
                         currentPage from CQ/AEM.
                         This feature is available on CQ/AEM author instances by default. The <code>enable.json</code>
-                        property
-                        of the
-                        <code>org.apache.sling.servlets.get.DefaultGetServlet</code> of your CQ/AEM instance has to be
-                        set to
-                        true.
+                        property of the <code>org.apache.sling.servlets.get.DefaultGetServlet</code> of your CQ/AEM instance has to be
+                        set to true.
 
-                        Only extend this trait in tests which need the feature, as it otherwise unnecessarily slows down
-                        your tests,
+                        Only extend this trait in tests which need the feature, as it otherwise unnecessarily slows down your tests,
                         due to additional requests for page properties.
                     </p>
                     <h3 id="modules_json">JSON module</h3>
                     <p>JSON is currently the most important data exchange format in the web. We think writing
                         integration tests for web-services, which return JSON, should be as easy as for websites.
                         Therefore we created the <code>JsonGauge</code>, which provides functionality comparable to the
-                        <a href="#gauges">HtmlGauge</a>. All its magic is exposed via the according builder, which
+                        <a href="#gauges">HtmlGauge</a>. All its features are exposed via the according builder, which
                         provides implicit conversions for JsValue, JsLookup and functions retrieving the currentPage
                         from the webDriver.
-                        We choose to use <a
-                                href="https://www.playframework.com/documentation/2.5.x/ScalaJson">play-json</a> to
-                        parse the JSON response. To keep the core module clean from additional dependencies
-                        a module was created.
+                        We choose to use <a href="https://www.playframework.com/documentation/2.7.x/ScalaJson">play-json</a> to
+                        parse the JSON response. To keep the core module clean from additional dependencies a module was created.
                     </p>
                     <h4 id="modules/json/aFewValues">Only verifying a few values</h4>
                     <p>To verify the value or type of a few values, we consider standard play-json sufficient. Just use
                         <code>Json.parse</code> to parse the response and then use <code>\</code> and <code>\\</code> to
-                        navigate the json
-                        structure.</p>
-                     {% code scala %}
-package org.scalawebtest.documentation
-
+                        navigate the json structure.</p>
+                    <div class="flex_row">
+                        <div class="flex_column_one">
+                     {% code scala caption="Testing JSON with plain play-json" %}
 import org.scalawebtest.core.IntegrationFlatSpec
 import play.api.libs.json.Json
 
@@ -1177,63 +1157,68 @@ class ReducedJsonSpec extends IntegrationFlatSpec {
         def firstName = (json \ "firstName").as[String]
         firstName should equal("Edsger")
     }
-} {% endcode %}
+}{% endcode %}
+                        </div>
+                    </div>
                     <p>All JSON tests in the following examples use the following JSON response</p>
                     <div id="modules/json/testResponse">
-                         {% code json %}
+                        <div class="flex_row">
+                            <div class="flex_column_one">
+                         {% code json caption="JSON used in examples: dijkstra.json" %}
 {
-    "name": "Dijkstra",
-    "firstName": "Edsger",
-    "yearOfBirth": 1930,
-    "theories": [
+  "name": "Dijkstra",
+  "firstName": "Edsger",
+  "yearOfBirth": 1930,
+  "theories": [
     "shortest path",
     "graph theory"
-],
-    "isTuringAwardWinner": true,
-    "universities": [
-{
-    "name": "Universität Leiden",
-    "begin": 1948,
-    "end": 1956
-},
-{
-    "name": "Mathematisch Centrum Amsterdam",
-    "begin": 1951,
-    "end": 1959
-},
-{
-    "name": "Technische Universiteit Eindhoven",
-    "begin": 1962,
-    "end": 1984
-},
-{
-    "name": "University of Texas at Austin",
-    "begin": 1984,
-    "end": 1999
-}
-]
-} {% endcode %}
+  ],
+  "isTuringAwardWinner": true,
+  "universities": [
+    {
+      "name": "Universität Leiden",
+      "begin": 1948,
+      "end": 1956
+    },
+    {
+      "name": "Mathematisch Centrum Amsterdam",
+      "begin": 1951,
+      "end": 1959
+    },
+    {
+      "name": "Technische Universiteit Eindhoven",
+      "begin": 1962,
+      "end": 1984
+    },
+    {
+      "name": "University of Texas at Austin",
+      "begin": 1984,
+      "end": 1999
+    }
+  ]
+}{% endcode %}
+                            </div>
+                        </div>
                     </div>
-                    <p>Of course this way of verifying JSON responses reaches its limitations very soon. Therefore we
-                        created <code>JsonGauge</code></p>
+                    <p>As this way of verifying JSON doesn't scale well, we created <code>JsonGauge</code></p>
                     <h4 id="modules/json/gauge">JsonGauge - the ScalaWebTest way</h4>
                     <p>Same as when verifying HTML, we think the easiest and most natural way to formulate your
                         expectation is using the same language, as the tested response itself.
-                        With the JSON gauge you can use JSON to specify the gauge, into which the JSON response has to
-                        fit.
+                        With the JSON gauge you can use JSON to specify the gauge, into which the JSON response has to fit.
                     </p>
-                     {% code scala %}
-package org.scalawebtest.documentation
+                    <div class="flex_row">
+                        <div class="flex_column_one">
+                     {% code scala caption="Testing the response as a whole" %}
 import org.scalawebtest.core.IntegrationFlatSpec
 import org.scalawebtest.json.JsonGauge
 import org.scalawebtest.json.JsonGaugeFromResponse.fitsValues
 
 class DocumentFitsValuesSpec extends IntegrationFlatSpec with JsonGauge {
-    path = "/jsonResponse.json.jsp"
+  path = "/dijkstra.json"
 
-    "FitsValues" should "report success, when the json gauge contains the same values as the response it is tested against" in {
-        fitsValues(
-            """{
+  "FitsValues" should "report success, when the json gauge contains the same values as the response it is tested against" in {
+    fitsValues(
+      """{
             "name": "Dijkstra",
             "firstName": "Edsger",
             "yearOfBirth": 1930,
@@ -1243,41 +1228,42 @@ class DocumentFitsValuesSpec extends IntegrationFlatSpec with JsonGauge {
                 "graph theory"
             ]
             }"""
-        )
-    }
-} {% endcode %}
+    )
+  }
+}{% endcode %}
+                        </div>
+                    </div>
                     <p>Often verifying the complete response isn't ideal. We recommend to parse and traverse the
-                        document using <a
-                                href="https://www.playframework.com/documentation/2.5.x/ScalaJson">play-json</a> and
+                        document using <a href="https://www.playframework.com/documentation/2.7.x/ScalaJson">play-json</a> and
                         then verify if the <code>JsLookup</code> or <code>JsValue</code> <code>fits</code> the defined gauge.</p>
-                     {% code scala %}
-package org.scalawebtest.documentation
-
+                        <div class="flex_row">
+                            <div class="flex_column_one">
+                     {% code scala caption="Testing JsValue and JsLookup" %}
 import org.scalawebtest.core.IntegrationFlatSpec
 import org.scalawebtest.json.JsonGauge
 import play.api.libs.json.Json
 
-class DijkstraJsonGaugeSpec extends IntegrationFlatSpec with JsonGauge {
-    path = "/dijkstra.json"
-    def dijkstra = Json.parse(webDriver.getPageSource)
+class JsValueJsLookupFitsValues extends IntegrationFlatSpec with JsonGauge {
+  path = "/dijkstra.json"
+  def dijkstra = Json.parse(webDriver.getPageSource)
 
-    "The response for Dijkstra" should "contain the expected values" in {
-        dijkstra fits values of
-            """{
-                "firstName": "Edsger",
-                "name": "Dijkstra",
-                "yearOfBirth": 1930,
-                "theories": [
-                    "shortest path",
-                    "graph theory"
-                    ]
-                }
-            """
-        }
-    it should "contain the correct universities" in {
-        val universities = dijkstra \ "universities"
-        universities fit values of
-        """
+  "The response for Dijkstra" should "contain the expected values" in {
+    dijkstra fits values of
+      """{
+          "firstName": "Edsger",
+          "name": "Dijkstra",
+          "yearOfBirth": 1930,
+          "theories": [
+              "shortest path",
+              "graph theory"
+              ]
+          }
+      """
+  }
+  it should "contain the correct universities" in {
+    val universities = dijkstra \ "universities"
+    universities fit values of
+      """
         [
             { "name": "Universität Leiden","begin": 1948, "end": 1956 },
             { "name": "Mathematisch Centrum Amsterdam", "begin": 1951, "end": 1959 },
@@ -1285,14 +1271,14 @@ class DijkstraJsonGaugeSpec extends IntegrationFlatSpec with JsonGauge {
             { "name": "University of Texas at Austin", "begin": 1984, "end": 1999 }
         ]
         """
-    }
-} {% endcode %}
-                    <p>As with the HTML gauge, controlled variance is allowed. The original <a
-                            href="#modules/json/testResponse">response</a> contains additional key/value pairs (<code>isTuringAwardWinner</code>
-                        and <code>universities</code>).
+  }
+}{% endcode %}
+                            </div>
+                        </div>
+                    <p>As with the HTML gauge, controlled variance is allowed. The original <a href="#modules/json/testResponse">response</a>
+                        contains additional key/value pairs (<code>isTuringAwardWinner</code> and <code>universities</code>).
                         Also the order of the <code>name</code> and <code>firstName</code> is the other way around.
-                        Nevertheless
-                        this test would succeed, when run. It would report an error, if the response would:</p>
+                        Nevertheless this test would succeed, when run. It would report an error, if the response would:</p>
                     <ul>
                         <li>contain a different value for one of the keys</li>
                         <li>miss a key, which is contained in the gauge</li>
@@ -1300,31 +1286,33 @@ class DijkstraJsonGaugeSpec extends IntegrationFlatSpec with JsonGauge {
                     </ul>
                     <p><a href="http://www.scalatest.org/user_guide/sharing_tests">Behaviors</a> are a good way to share
                         tests. When sharing test via behaviors, verifying values is often too specific. Therefore we
-                        provide
-                        <code>fits types of</code> in addition to <code>fits values of</code>.
+                        provide <code>fits types of</code> in addition to <code>fits values of</code>.
                     </p>
-                     {% code scala %}
-package org.scalawebtest.documentation
-
+                    <div class="flex_row">
+                        <div class="flex_column_one">
+                     {% code scala caption="Testing only the types of a JSON" %}
 import org.scalawebtest.core.IntegrationFlatSpec
 import org.scalawebtest.json.JsonGauge
 import play.api.libs.json.Json
 
-class DijkstraJsonGaugeFitsTypesSpec extends IntegrationFlatSpec with JsonGauge {
-    path = "/dijkstra.json"
-    def dijkstra = Json.parse(webDriver.getPageSource)
+class FitsTypeSpec extends IntegrationFlatSpec with JsonGauge {
+  path = "/dijkstra.json"
 
-    "The response for Dijkstra" should "contain the expected types" in {
-        dijkstra fits types of
-            """{
-                "firstName": "",
-                "name": "",
-                "yearOfBirth": 0,
-                "theories": [ "" ]
-            }
-        """
-    }
-} {% endcode %}
+  def dijkstra = Json.parse(webDriver.getPageSource)
+
+  "The response for Dijkstra" should "contain the expected types" in {
+    dijkstra fits types of
+      """{
+            "firstName": "",
+            "name": "",
+            "yearOfBirth": 0,
+            "theories": [ "" ]
+        }
+    """
+  }
+}{% endcode %}
+                        </div>
+                    </div>
                     <p>Now the values no longer matter. They are only used to determine the expected type. Therefore we
                         recommend to use values, which indicate that only the type matters. Use empty strings and 0.
                         This test would succeed. It would fail, when the response would:</p>
@@ -1335,11 +1323,12 @@ class DijkstraJsonGaugeFitsTypesSpec extends IntegrationFlatSpec with JsonGauge 
                         <li>when an array value would contain an element with a mismatching type</li>
                     </ul>
                     <p>Lets have a closer look at arrays. Usually we expect all array elements to match certain
-                        expectations. When using <code>fits types of</code>, you only have to define those expectations
-                        once.
+                        expectations. When using <code>fits types of</code>, you only have to define those expectations once.
                         All array elements then have to fulfill them. Lets have a look at an example. Lets assume the
                         test of the previous example would be replaced with the following</p>
-                     {% code scala %}
+                    <div class="flex_row">
+                        <div class="flex_column_one">
+                     {% code scala caption="Testing the types of array elements" %}
 "The response for Dijkstra" should "contain the expected types" in {
     dijkstra fits types of
         """{
@@ -1356,21 +1345,22 @@ class DijkstraJsonGaugeFitsTypesSpec extends IntegrationFlatSpec with JsonGauge 
         }
         """
 } {% endcode %}
+                        </div>
+                    </div>
                     <p>This would enforce all elements of the <code>universities</code> array to contain a key <code>name</code>
                         with a value of type <code>string</code> and the keys <code>begin</code> and <code>end</code>
-                        with a value of type
-                        <code>number</code>.
-                        The elements might contain additional keys, such as <code>department</code>, but no
-                        contradictions.
+                        with a value of type <code>number</code>.
+                        The elements might contain additional keys, such as <code>department</code>, but no contradictions.
                         Sometimes this is not the behavior one is looking for. Two more options exist to verify arrays.
-                        One common scenario is, that the size of the array matters, i.e. coordinates in a <a
-                                href="http://geojson.org/">GeoJson</a> document. To test this use <code>fits
-                            typesAndArraySizes of</code>.
+                        One common scenario is, that the size of the array matters, i.e. coordinates in a <a href="http://geojson.org/">GeoJson</a> document.
+                        To test this use <code>fits typesAndArraySizes of</code>.
                         In this case every array element is considered unique, you have to provide specific expectations
                         for every element, but those expectations are allowed to differ.
                         For example, we expect Martin to have studied and worked at three universities. For the first
                         two an <code>end</code> is known. This isn't the case for the last one.</p>
-                     {% code scala %}
+                    <div class="flex_row">
+                        <div class="flex_column_one">
+                     {% code scala caption="Testing the types and size of arrays" %}
 "The response for Odersky" should "contain the expected types and array sizes" in {
     odersky fits typesAndArraySizes of
         """{
@@ -1394,10 +1384,14 @@ class DijkstraJsonGaugeFitsTypesSpec extends IntegrationFlatSpec with JsonGauge 
         }
         """
 } {% endcode %}
+                        </div>
+                    </div>
                     <p>One more common situation exists with arrays. Often the array elements are not sorted. Although
                         we expect the array to contain a specific element, we don't know it's position.
                         For this situation <code>containsElementFitting values/types/typesAndArraySizes of</code> exists.</p>
-                     {% code scala %}
+                    <div class="flex_row">
+                        <div class="flex_column_one">
+                     {% code scala caption="Search arrays for fitting elements" %}
 package org.scalawebtest.documentation
 
 import org.scalawebtest.core.IntegrationFlatSpec
@@ -1426,16 +1420,48 @@ class ContainsElementFittingSpec extends IntegrationFlatSpec with JsonGauge {
                 | }""".stripMargin
     }
 } {% endcode %}
+                        </div>
+                    </div>
+                    <p>If we know all elements of an array, but we do not know their position, we can use <code>fits valuesIgnoringArrayOrder of</code> instead of checking only for a single one with <code>containsElementFitting</code>.</p>
+
+                    <div class="flex_row">
+                        <div class="flex_column_one">
+                    {% code scala caption="Testing the values of array elements, but ignoring the order of the elements" %}
+import org.scalawebtest.integration.json.{FitsTypeMismatchBehavior, ScalaWebTestJsonBaseSpec}
+import play.api.libs.json.{JsValue, Json}
+
+class FitsValuesIgnoringArrayOrderSpec extends ScalaWebTestJsonBaseSpec with FitsTypeMismatchBehavior {
+  path = "/dijkstra.json"
+
+  def dijkstra: JsValue = Json.parse(webDriver.getPageSource)
+
+  "Dijkstra" should "contain the correct firstName and lastName and the correct universities in any order" in {
+    dijkstra fits valuesIgnoringArrayOrder of
+      """
+        |{
+        | "name": "Dijkstra",
+        | "firstName": "Edsger",
+        | "universities":
+        | [
+        |   { "name": "Universität Leiden","begin": 1948, "end": 1956 },
+        |   { "name": "University of Texas at Austin", "begin": 1984, "end": 1999 },
+        |   { "name": "Technische Universiteit Eindhoven", "begin": 1962, "end": 1984 },
+        |   { "name": "Mathematisch Centrum Amsterdam", "begin": 1951, "end": 1959 }
+        | ]
+        |}
+      """.stripMargin
+  }
+}{% endcode %}
+                        </div>
+                    </div>
                     <h4 id="modules/json/alternatives"></h4>
                     <p>
-                        Because of its simplicity we prefer <a
-                            href="https://www.playframework.com/documentation/2.5.x/ScalaJson">play-json</a> over <a
-                            href="http://argonaut.io/">Argonaut</a> and <a
-                            href="https://circe.github.io/circe/">Circe</a>.
+                        Because of its simplicity we prefer <a href="https://www.playframework.com/documentation/2.7.x/ScalaJson">play-json</a> over
+                        <a href="http://argonaut.io/">Argonaut</a> or <a href="https://circe.github.io/circe/">Circe</a>.
                         A good alternative to our JSON module is <a href="http://agourlay.github.io/cornichon/">cornichon</a>.
                         Cornichon requires your tests to be a bit more specific then the ScalaWebTest ones, but it
                         provides nice ways to do so.
-                        As cornichon uses Akka Http instead of HtmlUnit to retrieve the JSON response, it is only
+                        As cornichon uses Akka Http instead of Selenium to retrieve the JSON response, it is only
                         partially compatible with ScalaWebTest. They might coexist in the same codebase and both are
                         based on <a href="http://www.scalatest.org/">ScalaTest</a>,
                         but cornichon can't make much use of the boilerplate reduction provided by our IntegrationSpec.
@@ -1453,26 +1479,22 @@ class ContainsElementFittingSpec extends IntegrationFlatSpec with JsonGauge {
                     <p>One of the core extension points for gauge testing, are the matchers. ScalaWebTest uses two
                         types of matchers, one for text and one for attributes.
                         You may create your own <code>TextMatcher</code> or <code>AttributeMatcher</code> by extending
-                        those traits. You can then add the your own matcher, by prepending to the list of <code>textMatchers</code> or
+                        those traits. You can then add your own matcher, by prepending to the list of <code>textMatchers</code> or
                         <code>attributesMatchers</code> in the <code>Matchers</code> object.</p>
                     <p>
-                        <a href="https://github.com/unic/ScalaWebTest/tree/master/scalawebtest-integration/src/it/scala/org/scalawebtest/integration/extending/ExtendingMatchers.scala">Here</a>
-                        is a full example, of how to implement your own Matcher</p>
+                        <a href="https://github.com/unic/ScalaWebTest/tree/master/scalawebtest-integration/src/it/scala/org/scalawebtest/integration/extending/ExtendingMatchers.scala">ExtendingMatchers.scala</a>
+                        contains an example, of how to implement your own Matcher</p>
                     <h3 id="extending_login">Create a custom login</h3>
                     <p>If the available login mechanisms don't work with your web application. No worries, simply
                         create your own implementation of the <code>Login</code> interface
-                        and extend it in your base trait. Ideally you then contribute it back to the project via pull
-                        request.</p>
-                    <p>The <a
-                            href="https://github.com/unic/ScalaWebTest/blob/master/scalawebtest-core/src/main/scala/org/scalawebtest/core/Login.scala">FormBasedLogin</a>
+                        and extend it in your base trait. Ideally you then contribute it back to the project via pull request.</p>
+                    <p>The <a href="https://github.com/unic/ScalaWebTest/blob/master/scalawebtest-core/src/main/scala/org/scalawebtest/core/Login.scala">FormBasedLogin</a>
                         provides a good example on how to implement your custom login</p>
                     <h3 id="extending_module">Create your own module</h3>
                     <p>If you implement multiple web applications with the same framework, you might want to create a
                         framework specific module. This allows to share framework specific testing code among multiple
-                        projects. You
-                        can start using it within your company/project and share it later with the rest of the community
-                        by creating a pull
-                        request. If you provide your own module to ScalaWebTest, we ask you to help maintaining it.</p>
+                        projects. You can start using it within your company/project and share it later with the rest of the community
+                        by creating a pull request. If you provide your own module to ScalaWebTest, we ask you to help maintaining it.</p>
                 </section>
 
                 <section>
@@ -1482,26 +1504,21 @@ class ContainsElementFittingSpec extends IntegrationFlatSpec with JsonGauge {
 
                     <h3 id="api_IntegrationSpec">IntegrationSpec</h3>
 
-                    <p>The <code>IntegrationSpec</code> is the base trait, which all testing style specific traits
-                        extend.
+                    <p>The <code>IntegrationSpec</code> is the base trait, which all testing style specific traits extend.
                         When writing a spec you should not extend <code>IntegrationSpec</code>, but one of the testing
-                        style specific traits, such as
-                        <code>IntegrationFlatSpec</code></p>
+                        style specific traits, such as <code>IntegrationFlatSpec</code></p>
                     <p>The base trait extends the following traits</p>
                     <ul>
                         <li>Webbrowser - Selenium DSL for ScalaTest</li>
                         <li>Suite - encapsulates a conceptual suite of tests</li>
                         <li>BeforeAndAfterEach - provides beforeEach and afterEach test hooks</li>
-                        <li>BeforeAndAfterAll - provides beforeAll and AfterAll tests hooks</li>
-                        <li>WebClientExposingHtmlUnit - wrapper for <code>HtmlUnitDriver</code>, which exposes the
-                            <code>WebClient</code></li>
+                        <li>BeforeAndAfterAllConfigMap - provides beforeAll and AfterAll tests hooks</li>
                         <li>IntegrationSettings - a set of fields to configure IntegrationSpec</li>
                         <li>Eventually - provides <code>eventually</code> function</li>
                     </ul>
                     <h3 id="api_Integration_Spec">Integration_Spec</h3>
-                    <p>There is a complete set of test style specific base traits. Choose a <a href="">testing style</a>
-                        and then extend the according style specific <code>Integration_Spec</code> trait to create your
-                        test.</p>
+                    <p>There is a complete set of test style specific base traits. Choose a <a href="http://www.scalatest.org/user_guide/selecting_a_style">testing style</a>
+                        and then extend the according style specific <code>Integration_Spec</code> trait to create your test.</p>
                     <p>This traits extend the following traits</p>
                     <ul>
                         <li>_Spec i.e. FlatSpec - provides the testing style specific DSL</li>
@@ -1516,12 +1533,9 @@ class ContainsElementFittingSpec extends IntegrationFlatSpec with JsonGauge {
                     <h3 id="api_SpecBehavior">_SpecBehavior</h3>
                     <p>One way to share assertions between testing suites, is to use <code>behavior</code>. A behavior
                         contains a set of assertions. You can then use <code>X behaves like SomeBehavior</code> within
-                        the suite. Behavior and
-                        Suite have to use the same testing style. Therefore ScalaWebTest builds its style specific base
-                        traits on the style
-                        specific behavior traits.
-                        The following traits, which are part of the Integration_Spec, are in fact inherited from the
-                        behavior trait</p>
+                        the suite. Behavior and Suite have to use the same testing style. Therefore ScalaWebTest builds its style specific base
+                        traits on the style specific behavior traits.
+                        The following traits, which are part of the Integration_Spec, are in fact inherited from the behavior trait</p>
                     <ul>
                         <li>_Spec i.e. FlatSpec</li>
                         <li>Matchers</li>
@@ -1530,32 +1544,24 @@ class ContainsElementFittingSpec extends IntegrationFlatSpec with JsonGauge {
                     <h3 id="api_Gauge">Gauge</h3>
                     <p>The <code>Gauge</code> provides the methods <code>fit</code>, <code>fits</code>, <code>doesnt
                         fit</code> and <code>not fit</code>.
-                        All of them are used to verify if the current webpage matches the given gauge specification. To
-                        do so, the
-                        gauge, searches for elements, as defined by the specification, in the current webpage. Elements
-                        are found by element
-                        name and containing classes. All elements which fulfill the search criteria, are considered
-                        candidates. Candidates
-                        are then verified for correct attributes and textcontent, using <code>Matchers</code>, next they
-                        are verified by checking
-                        whether their children match. As soon as something doesn't match a <code>Misfit</code> is
-                        reported. If no candidate matches
-                        all criteria, the gauge doesn't fit. While verifying the candidates, a list of
-                        <code>Misfits</code> was acquired, the
-                        gauge will only report the most specific of all <code>Misfits</code>.
+                        All of them are used to verify if the current page matches the given gauge specification. To
+                        do so, the gauge, searches for elements, as defined by the specification, in the current webpage. Elements
+                        are found by element name and containing classes. All elements which fulfill the search criteria, are considered
+                        candidates. Candidates are then verified for correct attributes and text, using <code>Matchers</code>, next they
+                        are verified by checking whether their children match. As soon as something doesn't match a <code>Misfit</code> is
+                        reported. If no candidate matches all criteria, the gauge doesn't fit. While verifying the candidates, a list of
+                        <code>Misfits</code> was acquired, the gauge will only report the most specific of all <code>Misfits</code>.
                     </p>
                     <h3 id="api_Misfit">Misfit</h3>
                     <p>A <code>Misfit</code> is a container for an error message, when something didn't fit a given
                         Matcher.
                         It contains an error message and a relevance. The deeper the current check in the gauge
-                        specification is, the higher
-                        its relevance. In the end only the <code>Misfits</code> with the highest relevance will be part
+                        specification is, the higher its relevance. In the end only the <code>Misfits</code> with the highest relevance will be part
                         of the error message.
                     </p>
                     <h3 id="api_Matchers">Matchers</h3>
                     <p>When working with <code>gauges</code> for testing, <code>Matchers</code> are used to test
-                        attributes and text
-                        content of elements. By default the following <code>Matchers</code> are available.</p>
+                        attributes and text content of elements. By default the following <code>Matchers</code> are available.</p>
                     <ul>
                         <li>Default Matcher: tests whether an attribute or text exactly matches a given String</li>
                         <li>Contains Matcher: tests whether an attribute or text contains a given String</li>
@@ -1563,14 +1569,12 @@ class ContainsElementFittingSpec extends IntegrationFlatSpec with JsonGauge {
                     </ul>
                     <p>All <code>Matchers</code>, which are available by default, can be used for attributes and text.
                         When creating a new <code>Matcher</code>, one is not forced to implement for both. For each
-                        matcher type a specific trait exists. Extend <code>AttributeMatcher</code> or
-                        <code>TextMatcher</code> or
+                        matcher type a specific trait exists. Extend <code>AttributeMatcher</code> or <code>TextMatcher</code> or
                         both, when creating your own <code>Matcher</code>
                     </p>
                     <p>When creating a custom <code>Matcher</code> the most important thing is to provide a detailed
-                        <code>Some(Misfit)</code>
-                        in case the <code>Matcher</code> doesn't match. In case of a match, the <code>Matcher</code>
-                        simply returns None.
+                        <code>Some(Misfit)</code> in case the <code>Matcher</code> doesn't match.
+                        In case of a match, the <code>Matcher</code> returns None.
                     </p>
                     <h3 id="api_Login">Login</h3>
                     <p>
@@ -1578,26 +1582,18 @@ class ContainsElementFittingSpec extends IntegrationFlatSpec with JsonGauge {
                         field should be called.
                         It is used to mark specific implementations as <code>Login</code> and to assert that <code>username</code>
                         and <code>password</code> are consistent over all implementations. Depending on the
-                        authentication process for which a
-                        Login trait was implemented, it might make sense to overwrite the <code>login</code> function
-                        from
-                        <a href="documentation.html#api/IntegrationSpec">IntegrationSpec</a>.
+                        authentication process for which a Login trait was implemented, it might make sense to overwrite the <code>login</code> function
+                        from <a href="documentation.html#api_IntegrationSpec">IntegrationSpec</a>.
                     </p>
-                    <h3 id="api_WebDriver">WebDriver</h3>
+                    <h3 id="api_WebDriver">WebClientExposingDriver</h3>
                     <p>
-                        <i>ScalaWebTest</i> uses a custom web driver, more precisely a wrapper for the HtmlUnitDriver.
+                        <i>ScalaWebTest</i> per default uses a custom web driver, more precisely a wrapper for the HtmlUnitDriver.
                         Thanks to this wrapper, we can expose the WebClient to enable more control over the WebClient.
-                        We also rely on
-                        the HtmlUnitDriver, because it has the option to compare the order of html elements within the
-                        document. This is not
-                        available with all WebDriver implementations, but crucial for the implementation of <a
-                            href="documentation.html#api/Gauge">Gauge</a>.
                     </p>
-                    <h3 id="api_WebDriverConfigFixtures">WebDriverConfigFixtures</h3>
-                    <p>The WebDriverConfigFixtures provide the option to execute a <i>closure</i> with a specific
+                    <h3 id="api_WebDriverConfigFixtures">WebClientExposingDriverConfigFixtures</h3>
+                    <p>The WebClientExposingDriverConfigFixtures provide the option to execute a <i>closure</i> with a specific
                         configuration. After the <i>closure</i> is executed, the WebDriver configuration will be
-                        reverted to what it was before
-                        the call of the fixture.</p>
+                        reverted to what it was before the call of the fixture.</p>
                 </section>
                 <div id="topspace"></div>
             </div>

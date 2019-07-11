@@ -2,7 +2,7 @@ package org.scalawebtest.integration.doc._006
 
 import org.scalawebtest.core.IntegrationFlatSpec
 
-class HtmlGauge extends IntegrationFlatSpec {
+class HtmlGaugeSpec extends IntegrationFlatSpec {
   config.useBaseUri("http://localhost:8080")
   path = "index.html"
 

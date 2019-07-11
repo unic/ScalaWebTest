@@ -2,7 +2,7 @@ package org.scalawebtest.integration.doc._007
 
 import org.scalawebtest.core.IntegrationFlatSpec
 
-class GapGauge extends IntegrationFlatSpec {
+class GapGaugeSpec extends IntegrationFlatSpec {
   config.useBaseUri("http://localhost:8080")
   path = "index.html"
 

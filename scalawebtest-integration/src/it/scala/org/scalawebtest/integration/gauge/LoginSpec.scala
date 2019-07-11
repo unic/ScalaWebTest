@@ -4,6 +4,7 @@ import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
 class LoginSpec extends ScalaWebTestBaseSpec{
   path = "/protectedContent.jsp"
+  config.disableNavigateToBeforeEach()
 
   "When accessing protectedContent it" should "show the login form" in {
      fits(<form name="login_form">

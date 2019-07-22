@@ -15,11 +15,13 @@
 package org.scalawebtest.core.gauge
 
 import com.gargoylesoftware.htmlunit.html.DomNode
-import org.jsoup.Jsoup
+import org.jsoup.nodes.Element
+import org.jsoup.parser.{Parser => JsoupParser}
 import org.openqa.selenium.htmlunit.HtmlUnitWebElement
-import org.openqa.selenium.{WebDriver, WebElement}
-import org.openqa.selenium.JavascriptExecutor
+import org.openqa.selenium.{JavascriptExecutor, WebDriver, WebElement}
+import org.scalawebtest.core.gauge.FragmentParser.parseFragment
 
+import scala.collection.JavaConverters._
 import scala.language.reflectiveCalls
 import scala.xml.NodeSeq
 
@@ -40,7 +42,7 @@ trait HtmlElementGauge {
     /**
       * Assert that the provided element `fits` the HTML snippet provided as definition for the `Gauge`.
       *
-      * For detailed information on how to construct your gauge definition, consult the documentation of [[org.scalawebtest.core.gauge.Gauge$#fits]]
+      * For detailed information on how to construct your gauge definition, consult the documentation of [[org.scalawebtest.core.gauge.Gauge#fits]]
       *
       * ==Example==
       *
@@ -56,11 +58,11 @@ trait HtmlElementGauge {
       * If you verify all elements of a list of elements found by findAll, remember to verify the search result is of expected length, or at least not empty.
       */
     def fits(definition: NodeSeq)(implicit webDriver: WebDriver): Unit = {
-      new Gauge(definition).elementFits(Jsoup.parseBodyFragment(extractSource(element)).body().child(0))
+      new Gauge(definition).elementFits(parseFragment(extractSource(element)).head)
     }
 
     def doesNotFit(definition: NodeSeq)(implicit webDriver: WebDriver): Unit = {
-      new Gauge(definition).elementDoesNotFit(Jsoup.parseBodyFragment(extractSource(element)).body().child(0))
+      new Gauge(definition).elementDoesNotFit(parseFragment(extractSource(element)).head)
     }
 
     def fit(definition: NodeSeq)(implicit webDriver: WebDriver): Unit = {
@@ -83,5 +85,65 @@ trait HtmlElementGauge {
         val outerHtml = webdriver.asInstanceOf[JavascriptExecutor].executeScript("return arguments[0].outerHTML;", element.underlying).asInstanceOf[String]
         outerHtml
     }
+  }
+}
+
+/**
+  * The FragmentParser is a ScalaWebTest internal helper, taking care of providing the needed context and wrapping, when parsing HTML fragments with Jsoup
+  */
+object FragmentParser {
+
+  case class ParseFix(selfName: String, context: Option[String], fragmentWrapper: Option[String], modernized: Option[String]) {
+    def autoWrapped(fragment: String): String = fragmentWrapper.map(w => s"<$w>$fragment</$w>").getOrElse(fragment)
+
+    def autoModernized: String = modernized.getOrElse(selfName)
+
+    def useContext: String = context.getOrElse("body")
+  }
+
+  private def parseFixFor(self: String)(context: Option[String], fragmentWrapper: Option[String] = None, modernized: Option[String] = None) =
+    self -> ParseFix(self, context, fragmentWrapper, modernized)
+
+  private val parseFixByElementName: Map[String, ParseFix] =
+    Map(
+      parseFixFor("rp")(None, Some("ruby")),
+      parseFixFor("rt")(None, Some("ruby")),
+      parseFixFor("caption")(Some("table")),
+      parseFixFor("col")(Some("colgroup")),
+      parseFixFor("colgroup")(Some("table")),
+      parseFixFor("tbody")(Some("table")),
+      parseFixFor("td")(Some("tr")),
+      parseFixFor("tfoot")(Some("table")),
+      parseFixFor("th")(Some("tr")),
+      parseFixFor("thead")(Some("table")),
+      parseFixFor("tr")(Some("tbody")),
+      parseFixFor("frame")(Some("frameset")),
+      parseFixFor("frameset")(Some("html")),
+      parseFixFor("image")(None, None, Some("img")),
+    )
+
+  def parseFragment(fragment: String): List[Element] = {
+    val topElementName: String =
+      "<\\w+[\\w-]*".r
+        .findFirstIn(fragment)
+        .map(_.substring(1))
+        .getOrElse("unknown")
+
+    val parseFix: ParseFix = parseFixByElementName.getOrElse(topElementName, ParseFix(topElementName, None, None, None))
+    val context = new Element(parseFix.useContext)
+
+    val nodes = JsoupParser.parseFragment(parseFix.autoWrapped(fragment), context, "").asScala
+
+    val unwrappedNodes =
+      parseFix.fragmentWrapper match {
+        case Some(wrapper) => nodes.flatMap(_.childNodes().asScala.toList)
+        case None => nodes
+      }
+
+    unwrappedNodes
+      .filter(_.nodeName() == parseFix.autoModernized)
+      .filter(_.isInstanceOf[Element])
+      .map(_.asInstanceOf[Element])
+      .toList
   }
 }

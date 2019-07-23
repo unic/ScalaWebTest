@@ -119,7 +119,7 @@ object FragmentParser {
       parseFixFor("tr")(Some("tbody")),
       parseFixFor("frame")(Some("frameset")),
       parseFixFor("frameset")(Some("html")),
-      parseFixFor("image")(None, None, Some("img")),
+      parseFixFor("image")(None, None, Some("img"))
     )
 
   def parseFragment(fragment: String): List[Element] = {

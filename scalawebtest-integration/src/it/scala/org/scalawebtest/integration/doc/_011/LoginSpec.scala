@@ -5,6 +5,7 @@ import org.scalawebtest.core.IntegrationFlatSpec
 import org.scalawebtest.core.gauge.HtmlGauge
 
 class LoginSpec extends IntegrationFlatSpec with HtmlGauge {
+  config.useBaseUri("http://localhost:9090")
   path = "/protectedContent.jsp"
 
   "When accessing protectedContent it" should "show the login form" in {

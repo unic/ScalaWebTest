@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html class=" desktop"><!--
+	Linear by TEMPLATED
+    templated.co @templatedco
+    Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+--><head>
+    <title>ScalaWebTest - integration testing made easy</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="ScalaWebTest is a library for writing ScalaTest/Selenium based integration tests for websites. It helps you with your basic setup and provides a new and very efficient approach to testing.">
+    
+    <meta name="keywords" content="Scala,ScalaTest,Selenium,integration testing,web development,web testing,e2e testing,end-to-end testing,browser testing,ui testing">
+    
+    <!-- Twitter Card data -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Integration testing made easy">
+    <meta name="twitter:description" content="ScalaWebTest is a library for writing ScalaTest/Selenium based integration tests for websites. It helps you with your basic setup and provides a new and very efficient approach to testing.">
+    
+    <meta name="twitter:creator" content="@scalawebtest">
+    
+
+    <!-- Iconography -->
+    <link rel="shortcut icon" href="https://www.scalawebtest.org/images/favicons/favicon.ico">
+	<link rel="apple-touch-icon" sizes="180x180" href="https://www.scalawebtest.org/images/favicons/apple-touch-icon.png">
+	<link rel="icon" type="image/png" href="https://www.scalawebtest.org/images/favicons/favicon-32x32.png" sizes="32x32">
+	<link rel="icon" type="image/png" href="https://www.scalawebtest.org/images/favicons/favicon-16x16.png" sizes="16x16">
+	<link rel="manifest" href="https://www.scalawebtest.org/images/favicons/manifest.json">
+	<link rel="mask-icon" href="https://www.scalawebtest.org/images/favicons/safari-pinned-tab.svg" color="#c22d40">
+	<meta name="msapplication-config" content="/images/favicons/browserconfig.xml">
+	<meta name="theme-color" content="#c22d40">
+
+    <!-- Twitter Summary card images must be at least 200x200px -->
+    <meta name="twitter:image" content="/images/summarycard.png">
+
+    <!-- Open Graph data -->
+    <meta property="og:title" content="Integration testing made easy">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="/">
+    <meta property="og:image" content="/images/summarycard.png">
+    <meta property="og:description" content="ScalaWebTest is a library for writing ScalaTest/Selenium based integration tests for websites. It helps you with your basic setup and provides a new and very efficient approach to testing.">
+    <meta property="og:site_name" content="scalawebtest.org">
+
+    <link href="index_files/css.css" rel="stylesheet" type="text/css">
+    <script src="index_files/jquery.js"></script>
+    <script src="index_files/gttBtn.js"></script>
+    <script src="index_files/navbar.js"></script>
+    <style type="text/css">html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}table{border-collapse:collapse;border-spacing:0}body{-webkit-text-size-adjust:none}</style><style type="text/css">@-ms-viewport{width: device-width}</style><style type="text/css">*,*:before,*:after{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box}</style><style type="text/css">body{min-width:1200px}.container{margin-left:auto;margin-right:auto;width:1200px}.container.small{width:900px}.container.big{width:100%;max-width:1500px;min-width:1200px}</style><style type="text/css">.\31 2u{width:100%}.\31 1u{width:91.6666666667%}.\31 0u{width:83.3333333333%}.\39 u{width:75%}.\38 u{width:66.6666666667%}.\37 u{width:58.3333333333%}.\36 u{width:50%}.\35 u{width:41.6666666667%}.\34 u{width:33.3333333333%}.\33 u{width:25%}.\32 u{width:16.6666666667%}.\31 u{width:8.3333333333%}.\-11u{margin-left:91.6666666667%}.\-10u{margin-left:83.3333333333%}.\-9u{margin-left:75%}.\-8u{margin-left:66.6666666667%}.\-7u{margin-left:58.3333333333%}.\-6u{margin-left:50%}.\-5u{margin-left:41.6666666667%}.\-4u{margin-left:33.3333333333%}.\-3u{margin-left:25%}.\-2u{margin-left:16.6666666667%}.\-1u{margin-left:8.3333333333%}</style><style type="text/css">.row>*{float:left;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box}.row:after{content:'';display:block;clear:both;height:0}.row:first-child>*{padding-top:0!important}</style><style type="text/css">.row.flush{margin-left:0}.row.flush>*{padding:0!important}.row>*{padding-left:50px}.row+.row>*{padding:50px 0 0 50px}.row{margin-left:-50px}.row.half>*{padding-left:25px}.row+.row.half>*{padding:25px 0 0 25px}.row.half{margin-left:-25px}.row.quarter>*{padding-left:12.5px}.row+.row.quarter>*{padding:12.5px 0 0 12.5px}.row.quarter{margin-left:-12.5px}.row.oneandhalf>*{padding-left:75px}.row+.row.oneandhalf>*{padding:75px 0 0 75px}.row.oneandhalf{margin-left:-75px}.row.double>*{padding-left:100px}.row+.row.double>*{padding:100px 0 0 100px}.row.double{margin-left:-100px}</style><style type="text/css">.not-desktop{display:none!important}.only-mobile,.only-1000px{display:none!important}</style><link rel="stylesheet" type="text/css" href="index_files/style.css"><link rel="stylesheet" type="text/css" href="index_files/style-desktop.css"><script src="index_files/skel.js"></script>
+    <script src="index_files/skel-panels.js"></script>
+    <script src="index_files/init.js"></script>
+    <script src="index_files/twitter.js" async=""></script>
+    <link rel="stylesheet" href="index_files/highlight.css">
+    <link href="index_files/icon.css" rel="stylesheet">
+    <noscript>
+        <link rel="stylesheet" href="/css/skel-noscript.css" />
+        <link rel="stylesheet" href="/css/style.css" />
+        <link rel="stylesheet" href="/css/style-desktop.css" />
+    </noscript>
+</head>
+
+<body class="homepage"><div id="skel-panels-pageWrapper" style="position: relative; left: 0px; right: 0px; top: 0px; backface-visibility: hidden; transition: transform 0.25s ease-in-out 0s;">
+
+<!-- Header -->
+    <div id="header">
+        <div id="nav-wrapper">
+    <!-- Nav -->
+    <nav id="nav">
+        <ul>
+            <li class="home"><a href="https://www.scalawebtest.org/index.html">ScalaWebTest </a></li>
+            
+                <li><a href="https://www.scalawebtest.org/documentation.html" title="Documentation">Documentation</a></li>
+            
+                <li><a href="https://www.scalawebtest.org/download.html" title="Download">Download</a></li>
+            
+                <li><a href="https://www.scalawebtest.org/community.html" title="Community">Community</a></li>
+            
+        </ul>
+    </nav>
+</div>
+        <div class="container">
+
+            <!-- Logo -->
+            <div id="logo">
+                <h1><a>Integration testing made easy</a></h1>
+                <span class="tag">write <strong>Selenium</strong> and <strong>ScalaTest</strong> based integration tests in minutes</span>
+            </div>
+        </div>
+    </div>
+<!-- Header -->
+
+
+<!-- Featured -->
+<div id="featured">
+    <div class="container">
+
+        <header>
+            <h2>Reduce the effort needed to write integration tests</h2>
+        </header>
+        <p>
+            ScalaWebTests helps you to set up integration tests in no 
+time and provides useful functions in order to
+            reduce the effort needed to write integration tests 
+(end-to-end tests, browser tests or UI tests, we don't care how you call
+ them) for web applications.
+        </p>
+        <hr>
+        <div class="row">
+            <section class="4u">
+                <span class="pennant"><span class="fa fa-fast-forward"></span></span>
+                <h3>Ready in minutes</h3>
+                <p>Add one dependency to your project and start writing your integration tests. We manage the transitive
+                    dependencies for you and provide the functions every web project needs for testing</p>
+                <a href="https://www.scalawebtest.org/documentation.html#gettingStarted" class="button button-style1">Get started</a>
+            </section>
+            <section class="4u">
+                <span class="pennant"><span class="fa fa-heart-o"></span></span>
+                <h3>Simple Gauges</h3>
+                <p>Gauges or templates are used in manufacturing to quickly verify a workpiece. If it fits the gauge, it
+                    fulfills the requirements.
+                    An essential part of this concept is, to only verify what's needed and with the needed
+                    precision.</p>
+                <a href="https://www.scalawebtest.org/documentation.html#writingGauges" class="button button-style1">Read More</a>
+            </section>
+            <section class="4u">
+                <span class="pennant"><span class="fa fa-copy"></span></span>
+                <h3>Great examples</h3>
+                <p>Imitation is a key process when learning new concepts. ScalaWebTest's own integration tests are there
+                    to provide a great example on how to structure and build your integration tests.</p>
+                <a href="https://github.com/unic/ScalaWebTest/tree/master/scalawebtest-integration/src/it/scala/org/scalawebtest/integration" class="button button-style1">Learn More</a>
+            </section>
+        </div>
+    </div>
+</div>
+
+<div id="fromtheblog">
+    <div class="container">
+        <header>
+            <h2>Release announcements</h2>
+        </header>
+        <p>
+            <a href="https://www.scalawebtest.org/2019/06/14/scalawebtest-release-3.0.0.html" class="button">Latest version: ScalaWebTest
+                3.0.0</a>
+        </p>
+        <div class="row">
+            
+            <section class="4u">
+                <h3>ScalaWebTest 3.0.0</h3>
+                <p>is compatible with a Selenium WebDrivers. It can be configured with environment variables, which makes it Docker friendly.</p>
+                <a href="https://www.scalawebtest.org/2019/06/14/scalawebtest-release-3.0.0.html" class="button">Read more</a>
+            </section>
+            
+            <section class="4u">
+                <h3>ScalaWebTest 2.0.1</h3>
+                <p>fixes a bug in the JsonGauge</p>
+                <a href="https://www.scalawebtest.org/2017/12/01/scalawebtest-release-2.0.1.html" class="button">Read more</a>
+            </section>
+            
+            <section class="4u">
+                <h3>ScalaWebTest 2.0.0</h3>
+                <p>introduces semantic versioning</p>
+                <a href="https://www.scalawebtest.org/2017/10/31/scalawebtest-release-2.0.0.html" class="button">Read more</a>
+            </section>
+            
+        </div>
+    </div>
+</div>
+
+<!-- Tweet -->
+<div id="tweet">
+    <div class="container">
+        <section>
+            <blockquote><a href="https://twitter.com/scalawebtest/status/1140605182037954561"><img src="index_files/tweet.svg" width="25" height="25">Mon Jun 17 2019</a>: “The mentioned 3.0.0 release is available. Read <a href="https://t.co/NqVp8N32cL" rel="nofollow noopener" dir="ltr" data-expanded-url="https://www.scalawebtest.org/2019/06/14/scalawebtest-release-3.0.0.html" class="link customisable" target="_blank" title="https://www.scalawebtest.org/2019/06/14/scalawebtest-release-3.0.0.html" data-scribe="element:url"><span class="u-hiddenVisually">https://www.</span>scalawebtest.org/2019/06/14/sca<span class="u-hiddenVisually">lawebtest-release-3.0.0.html&nbsp;</span>…</a> for details.”</blockquote>
+        </section>
+    </div>
+</div>
+
+<!-- Footer -->
+<div id="footer">
+    <div class="container">
+        <section>
+            <header>
+                <h2>Get in touch</h2>
+            </header>
+            <p>
+                E-Mail: <script>document.write('<a href="mailto:scalawebtest' + '@unic.com">scalawebtest' + "@unic.com</a>");</script><a href="mailto:scalawebtest@unic.com">scalawebtest@unic.com</a>
+            </p>
+            <p>
+                Unic AG<br>
+                Belpstrasse 48, 3007 Bern, Switzerland<br>
+                Telephone: +41 31 560 12 12<br>
+                Fax: +41 31 560 12 13
+            </p>
+
+            <ul class="contact">
+                <li><a href="https://twitter.com/scalawebtest" class="fa fa-twitter"><span>Twitter</span></a></li>
+                <li><a href="https://github.com/unic/ScalaWebTest" class="fa fa-github"><span>Github</span></a></li>
+            </ul>
+        </section>
+    </div>
+</div>
+
+<!-- Copyright -->
+<div id="copyright">
+    <div class="container">
+        Design: <a href="http://templated.co/">TEMPLATED</a>
+    </div>
+</div>
+
+
+</div><div id="skel-panels-defaultWrapper" style="height: 100%;"></div><div id="skel-panels-fixedWrapper" style="position: relative;"></div></body></html>

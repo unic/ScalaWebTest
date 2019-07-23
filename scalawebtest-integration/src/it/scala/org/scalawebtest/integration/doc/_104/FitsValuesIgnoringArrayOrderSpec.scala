@@ -4,6 +4,7 @@ import org.scalawebtest.integration.json.{FitsTypeMismatchBehavior, ScalaWebTest
 import play.api.libs.json.{JsValue, Json}
 
 class FitsValuesIgnoringArrayOrderSpec extends ScalaWebTestJsonBaseSpec with FitsTypeMismatchBehavior {
+  config.useBaseUri("http://localhost:9090")
   path = "/dijkstra.json"
 
   def dijkstra: JsValue = Json.parse(webDriver.getPageSource)

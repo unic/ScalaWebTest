@@ -4,7 +4,8 @@ import org.openqa.selenium.By
 import org.scalawebtest.core.IntegrationFlatSpec
 
 class HomepageSpec extends IntegrationFlatSpec {
-  config.useBaseUri("http://www.scalawebtest.org/index.html")
+  config.useBaseUri("http://localhost:9090/scalawebtest")
+  path = "/index.html"
 
   loginConfig.swallowJavaScriptErrors()
   config.enableJavaScript(throwOnError = true)

@@ -4,4 +4,16 @@
 		 xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
 		  http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
 		 version="3.1">
+	<mime-mapping>
+		<extension>html</extension>
+		<mime-type>text/html;charset=utf-8</mime-type>
+	</mime-mapping>
+	<mime-mapping>
+		<extension>json</extension>
+		<mime-type>text/json;charset=utf-8</mime-type>
+	</mime-mapping>
+	<mime-mapping>
+		<extension>txt</extension>
+		<mime-type>text/plain;charset=utf-8</mime-type>
+	</mime-mapping>
 </web-app>

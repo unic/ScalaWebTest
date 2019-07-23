@@ -11,31 +11,37 @@ object ScalaWebTestBuild {
           <groupId>org.scalawebtest</groupId>
           <artifactId>scalawebtest-core_{scalaMajorVersion}</artifactId>
           <version>{versions("scalaWebTest")}</version>
+          <scope>test</scope>
         </dependency>
         <dependency>
           <groupId>org.scalawebtest</groupId>
           <artifactId>scalawebtest-json_{scalaMajorVersion}</artifactId>
           <version>{versions("scalaWebTest")}</version>
+          <scope>test</scope>
         </dependency>
         <dependency>
           <groupId>org.scalawebtest</groupId>
           <artifactId>scalawebtest-aem_{scalaMajorVersion}</artifactId>
           <version>{versions("scalaWebTest")}</version>
+          <scope>test</scope>
         </dependency>
         <dependency>
           <groupId>org.scalatest</groupId>
           <artifactId>scalatest_{scalaMajorVersion}</artifactId>
           <version>{versions("scalaTest")}</version>
+          <scope>test</scope>
         </dependency>
         <dependency>
           <groupId>org.seleniumhq.selenium</groupId>
           <artifactId>selenium-java</artifactId>
           <version>{versions("selenium")}</version>
+          <scope>test</scope>
         </dependency>
         <dependency>
           <groupId>org.seleniumhq.selenium</groupId>
           <artifactId>htmlunit-driver</artifactId>
           <version>{versions("htmlUnit")}</version>
+          <scope>test</scope>
         </dependency>
       </dependencyManagementDependencies>
     </dependencyManagement>

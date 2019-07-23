@@ -76,7 +76,7 @@ object Matchers {
       if (element.text.trim.equals(expected)) {
         None
       } else {
-        Some(Misfit(element.relevance, "Misfitting Text", s"The text [${element.text}] within [${element.element.parent.prettyString}] didn't equal [$expected]", Some(expected), Some(element.text)))
+        Some(Misfit(element.relevance, "Misfitting Text", s"The text [${element.text}] in [${element.element.parent.prettyString}] didn't equal [$expected]", Some(expected), Some(element.text)))
       }
     }
   }
@@ -96,7 +96,7 @@ object Matchers {
       if (element.text.trim().matches(expected)) {
         None
       } else {
-        Some(Misfit(element.relevance, "Misfitting Text", s"The text [${element.text}] from [${element.element.prettyString}] didn't match regex pattern [$expected]", None, None))
+        Some(Misfit(element.relevance, "Misfitting Text", s"The text [${element.text}] in [${element.element.parent.prettyString}] didn't match regex pattern [$expected]", None, None))
       }
     }
   }
@@ -117,7 +117,7 @@ object Matchers {
       if (element.text.contains(expected)) {
         None
       } else {
-        Some(Misfit(element.relevance, "Misfitting Text", s"The text [${element.text}] from [${element.element.prettyString}] didn't contain [$expected]", Some(s"...expected..."), Some(element.text)))
+        Some(Misfit(element.relevance, "Misfitting Text", s"The text [${element.text}] in [${element.element.parent.prettyString}] didn't contain [$expected]", Some(s"...expected..."), Some(element.text)))
       }
     }
   }

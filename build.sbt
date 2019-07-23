@@ -11,7 +11,7 @@ val htmlUnitVersion = "2.35.1"
 val slf4jVersion = "1.7.26"
 val playJsonVersion = "2.7.4"
 
-val versions = Map("scalaWebTest" -> projectVersion, "scalaTest" -> scalaTestVersion, "selenium" -> seleniumVersion, "htmlUnit" -> htmlUnitVersion)
+val versions = Map("scalaWebTest" -> projectVersion, "scalaTest" -> scalaTestVersion, "selenium" -> seleniumVersion, "htmlUnit" -> htmlUnitVersion, "playJson" -> playJsonVersion)
 
 val scalaWebTestSeries = "3.0.0"
 def mimaSettings(projectName: String) = Seq(

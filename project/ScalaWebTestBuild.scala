@@ -43,6 +43,12 @@ object ScalaWebTestBuild {
           <version>{versions("htmlUnit")}</version>
           <scope>test</scope>
         </dependency>
+        <dependency>
+          <groupId>com.typesafe.play</groupId>
+          <artifactId>play-json</artifactId>
+          <version>{versions("playJson")}</version>
+          <scope>test</scope>
+        </dependency>
       </dependencyManagementDependencies>
     </dependencyManagement>
     dependencies

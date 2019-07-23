@@ -14,8 +14,6 @@
  */
 package org.scalawebtest.core
 
-import org.openqa.selenium.WebDriver
-
 /**
   * Provide fixtures to set a specific webdriver configuration for a given function call
   * and restore previous configuration after the function call.

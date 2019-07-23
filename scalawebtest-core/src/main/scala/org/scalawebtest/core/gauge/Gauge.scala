@@ -22,9 +22,8 @@ import org.scalatest.words.NotWord
 import org.scalawebtest.core.gauge.JNodePrettifier.PrettyStringProvider
 
 import scala.annotation.tailrec
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.io.AnsiColor.{UNDERLINED, RESET}
-import scala.language.reflectiveCalls
 import scala.xml._
 
 /**

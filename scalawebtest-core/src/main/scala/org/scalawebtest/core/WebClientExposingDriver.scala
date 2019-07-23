@@ -20,7 +20,7 @@ import com.gargoylesoftware.htmlunit.xml.XmlPage
 import com.gargoylesoftware.htmlunit.{BrowserVersion, TextPage, WebClient, WebClientOptions}
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 /**
   * Extension of the default HtmlUnitDriver that provides access to some of the web client's options and methods which are hidden in the

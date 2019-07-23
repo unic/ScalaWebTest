@@ -18,7 +18,7 @@ import org.openqa.selenium.By
 import org.scalatest.OptionValues
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 /**
   * Illustrates the effort needed to implement NavigationSpec witout ScalaWebTest.

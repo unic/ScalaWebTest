@@ -1,7 +1,7 @@
 package org.scalawebtest.core.gauge
 
 import org.jsoup.nodes.{Element => JElement, Node => JNode, TextNode => JTextNode}
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 object JNodePrettifier {
   implicit class PrettyStringProvider(domNode: JNode) {

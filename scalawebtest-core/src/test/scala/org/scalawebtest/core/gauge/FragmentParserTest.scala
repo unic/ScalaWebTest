@@ -17,7 +17,7 @@ package org.scalawebtest.core.gauge
 import org.jsoup.nodes.{Node, TextNode}
 import org.scalatest.{AppendedClues, FreeSpec, Matchers => STMatchers}
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 
 class FragmentParserTest extends FreeSpec with STMatchers with AppendedClues {

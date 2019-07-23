@@ -28,7 +28,7 @@ lazy val commonSettings = Seq(
   organization := "org.scalawebtest",
   version := projectVersion,
   scalaVersion := "2.12.8",
-  scalacOptions := Seq("-unchecked", "-deprecation"),
+  scalacOptions := Seq("-unchecked", "-deprecation", "-Xfatal-warnings"),
   publishMavenStyle := true,
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
@@ -38,7 +38,7 @@ lazy val commonSettings = Seq(
       Some("releases" at nexus + "service/local/staging/deploy/maven2")
   },
   pomIncludeRepository := { _ => false },
-  pomExtra := scalaWebTestPomExtra
+  dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-annotations" % "2.9.8"
 )
 
 lazy val core = Project(id = "scalawebtest-core", base = file("scalawebtest-core"))
@@ -50,7 +50,8 @@ lazy val core = Project(id = "scalawebtest-core", base = file("scalawebtest-core
       "org.seleniumhq.selenium" % "selenium-java" % seleniumVersion,
       "org.seleniumhq.selenium" % "htmlunit-driver" % htmlUnitVersion,
       "org.jsoup" % "jsoup" % "1.11.3",
-      "org.slf4j" % "slf4j-api" % slf4jVersion
+      "org.slf4j" % "slf4j-api" % slf4jVersion,
+      "org.scala-lang.modules" %% "scala-collection-compat" % "2.1.1"
     )
   )
   .settings(mimaSettings("scalawebtest-core"))

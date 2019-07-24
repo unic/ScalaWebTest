@@ -102,7 +102,7 @@ The release process of ScalaWebTest is currently done manually. The process is d
 		1. Go to <https://oss.sonatype.org/#stagingRepositories> verify and close the staging repository
 		1. `exit` - exits the sbt interactive mode
 1. Commit your changes with the commit message "Release x.x.x" (e.g. `Release 1.0.0`)
-1. Tag this commit with the release version
+1. Tag this commit with the release version `git tag -a x.x.x -m "x.x.x"`
 1. Switch the version in `build.sbt` to the snapshot version (e.g. from `1.0.0` to `1.0.0-SNAPSHOT`) and update the documentation if needed
-1. Finally commit those changes with the commit message "Release x.x.x complete" (e.g. `Release 1.0.0 complete`)
+1. Finally commit those changes with the commit message "Bump version to x.x.x-SNAPSHOT" (e.g. `Bump version to 1.0.0-SNAPSHOT`)
 1. Push you changes and the tag

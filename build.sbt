@@ -4,7 +4,7 @@ import scala.xml.transform.RewriteRule
 
 lazy val supportedScalaVersions = Seq("2.13.0", "2.12.8", "2.11.12")
 
-val projectVersion = "3.0.2-SNAPSHOT"
+val projectVersion = "3.0.1"
 val scalaTestVersion = "3.0.8"
 val seleniumVersion = "3.141.59"
 val htmlUnitVersion = "2.35.1"
@@ -38,7 +38,8 @@ lazy val commonSettings = Seq(
       Some("releases" at nexus + "service/local/staging/deploy/maven2")
   },
   pomIncludeRepository := { _ => false },
-  dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-annotations" % "2.9.8"
+  dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-annotations" % "2.9.8",
+  pomExtra := scalaWebTestPomExtra
 )
 
 lazy val core = Project(id = "scalawebtest-core", base = file("scalawebtest-core"))

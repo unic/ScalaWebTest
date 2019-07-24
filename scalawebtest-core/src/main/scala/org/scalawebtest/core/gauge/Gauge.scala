@@ -28,8 +28,8 @@ import scala.xml._
 
 /**
   * Gauge provides functions to write integration tests with very low effort. For a detailed description of it's usage,
-  * see [[org.scalawebtest.core.gauge.HtmlGauge.fits]] and [[org.scalawebtest.core.gauge.HtmlGauge.doesnt.fit]]
-  * as well as [[org.scalawebtest.core.gauge.HtmlElementGauge.GaugeFromElement.fits]] and [[org.scalawebtest.core.gauge.HtmlElementGauge.GaugeFromElement.fits]]
+  * see [[org.scalawebtest.core.gauge.HtmlGauge.fits HtmlGauge.fits]] and [[org.scalawebtest.core.gauge.HtmlGauge.doesnt.fit HtmlGauge.doesnt.fit]]
+  * as well as [[org.scalawebtest.core.gauge.HtmlElementGauge.GaugeFromElement.fits GaugeFromElement.fits]] and [[org.scalawebtest.core.gauge.HtmlElementGauge.GaugeFromElement#doesntFit GaugeFromElement.doesntFit]]
   */
 class Gauge(definition: NodeSeq)(implicit webDriver: WebDriver) extends Assertions {
   type MisfitRelevance = Int
@@ -398,7 +398,7 @@ trait HtmlGauge {
     *
     * ==Markers==
     * =\u0040contains=
-    * The marker `\u0040contains` might be used in [[scala.xml.Text]] and attributes of [[scala.xml.Elem]] to request that the text or attribute contains the following text, i.e.
+    * * The marker `\u0040contains` might be used in [[scala.xml.Text$]] and attributes of [[scala.xml.Elem]] to request that the text or attribute contains the following text, i.e.
     *
     * {{{
     * <a href="@contains index">Home</a>
@@ -435,7 +435,7 @@ trait HtmlGauge {
     * }}}
     *
     * =\u0040regex=
-    * The marker `\u0040regex` might be used in [[scala.xml.Text]] and attributes of [[scala.xml.Elem]] to request a regex pattern match, i.e.
+    * The marker `\u0040regex` might be used in [[scala.xml.Text$]] and attributes of [[scala.xml.Elem]] to request a regex pattern match, i.e.
     *
     * {{{
     * <a href="@regex http:\/\/[a-zA-Z]+\.domain.com.*,"></a>
@@ -493,7 +493,7 @@ trait HtmlGauge {
     /**
       * Assert that the current document `doesnt fit` the html snippet provided as definition for the `Gauge`
       *
-      * To get detailed information about available options in `Gauge` definitions, read the ScalaDoc of [[org.scalawebtest.core.gauge.HtmlGauge#fits]]
+      * To get detailed information about available options in `Gauge` definitions, read the ScalaDoc of [[org.scalawebtest.core.gauge.HtmlGauge#fits HtmlGauge.fits]]
       */
     def fit(definition: NodeSeq)(implicit webDriver: WebDriver): Unit = {
       new Gauge(definition).doesNotFit()

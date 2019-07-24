@@ -56,55 +56,55 @@ trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with
   val config: Configuration = new Configuration with HtmlUnitConfiguration
 
   /**
-    * [[Configuration.baseUri]] with [[path]] appended is used as [[uri]].
-    * Per default, the webdriver navigates to [[uri]], before the test is executed.
+    * [[org.scalawebtest.core.configuration.Configuration#baseUri baseUri]] with [[org.scalawebtest.core.IntegrationSpec#path path]] appended is used as [[org.scalawebtest.core.IntegrationSpec#uri uri]].
+    * Per default, the webdriver navigates to [[org.scalawebtest.core.IntegrationSpec#uri uri]], before the test is executed.
     */
   var path: String = ""
 
   /**
-    * @return [[uri]] as String
+    * @return [[org.scalawebtest.core.IntegrationSpec#uri uri]] as String
     */
   def url: String = uri.toString
 
   /**
-    * @return [[config.baseUri]] + [[path]] as [[java.net.URI]]
+    * @return [[org.scalawebtest.core.configuration.Configuration#baseUri]] + [[org.scalawebtest.core.IntegrationSpec#path path]] as [[java.net.URI]]
     */
   def uri: URI = config.baseUri.resolve(config.baseUri.getPath + path)
 
   /**
-    * @return [[webDriver.getPageSource]] wrapped in a [[CurrentPage]]
+    * @return org.openqa.selenium.WebDriver.getPageSource wrapped in a [[org.scalawebtest.core.IntegrationSpec.CurrentPage CurrentPage]]
     */
   def currentPage: CurrentPage = CurrentPage(webDriver.getPageSource)
 
   /**
-    * The [[CurrentPage]] provides convenient access to the source of the current page and to HtmlGauge functions.
+    * The [[org.scalawebtest.core.IntegrationSpec.CurrentPage CurrentPage]] provides convenient access to the source of the current page and to HtmlGauge functions.
     */
   case class CurrentPage(source: String) {
     /**
-      * The same as [[org.scalawebtest.core.gauge.HtmlGauge#fits]], but explicitly using the source of the currentPage.
+      * The same as [[org.scalawebtest.core.gauge.HtmlGauge#fits HtmlGauge.fits]], but explicitly using the source of the currentPage.
       *
-      * @see [[org.scalawebtest.core.gauge.HtmlGauge#fits]]
+      * @see [[org.scalawebtest.core.gauge.HtmlGauge#fits HtmlGauge.fits]]
       */
     def fits(definition: NodeSeq): Unit =  new Gauge(definition).fitsCurrentPageSource(source)
 
     /**
-      * The same as [[org.scalawebtest.core.gauge.HtmlGauge#fits]], but explicitly using the source of the currentPage.
+      * The same as [[org.scalawebtest.core.gauge.HtmlGauge#fits HtmlGauge.fits]], but explicitly using the source of the currentPage.
       *
-      * @see [[org.scalawebtest.core.gauge.HtmlGauge#fits]]
+      * @see [[org.scalawebtest.core.gauge.HtmlGauge#fits HtmlGauge.fits]]
       */
     def fit(definition: NodeSeq): Unit =  new Gauge(definition).fitsCurrentPageSource(source)
 
     /**
-      * The same as [[org.scalawebtest.core.gauge.HtmlGauge.doesnt#fit]], but explicitly using the source of the currentPage.
+      * The same as [[org.scalawebtest.core.gauge.HtmlGauge.doesnt#fit HtmlGauge.doesnt.fit]], but explicitly using the source of the currentPage.
       *
-      * @see [[org.scalawebtest.core.gauge.HtmlGauge.doesnt#fit]]
+      * @see [[org.scalawebtest.core.gauge.HtmlGauge.doesnt#fit HtmlGauge.doesnt.fit]]
       */
     def doesNotFit(definition: NodeSeq): Unit =  new Gauge(definition).doesNotFitCurrentPageSource(source)
 
     /**
-      * The same as [[org.scalawebtest.core.gauge.HtmlGauge.doesnt#fit]], but explicitly using the source of the currentPage.
+      * The same as [[org.scalawebtest.core.gauge.HtmlGauge.doesnt#fit HtmlGauge.doesnt.fit]], but explicitly using the source of the currentPage.
       *
-      * @see [[org.scalawebtest.core.gauge.HtmlGauge.doesnt#fit]]
+      * @see [[org.scalawebtest.core.gauge.HtmlGauge.doesnt#fit HtmlGauge.doesnt.fit]]
       */
     def doesntFit(definition: NodeSeq): Unit =  new Gauge(definition).doesNotFitCurrentPageSource(source)
   }

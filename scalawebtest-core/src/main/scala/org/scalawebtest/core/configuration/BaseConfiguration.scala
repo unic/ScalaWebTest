@@ -18,7 +18,7 @@ import java.net.URI
 
 import org.openqa.selenium.WebDriver
 import org.scalatest.ConfigMap
-import org.scalawebtest.core.{Configurable, IntegrationSpec}
+import org.scalawebtest.core.Configurable
 
 import scala.util.Try
 
@@ -37,12 +37,12 @@ abstract class BaseConfiguration() extends Configurable {
   def disableJavaScript(): Unit
 
   /**
-    * Throw on JavaScript Error. Preferably use [[HtmlUnitConfiguration.disableJavaScript()]], as the two configurations only make sense when combined.
+    * Throw on JavaScript Error. Preferably use [[HtmlUnitConfiguration#disableJavaScript]], as the two configurations only make sense when combined.
     */
   def throwOnJavaScriptError(): Unit
 
   /**
-    * Silently swallow JavaScript errors. Preferably use [[HtmlUnitConfiguration.disableJavaScript()]], as the two configurations only make sense when combined.
+    * Silently swallow JavaScript errors. Preferably use [[HtmlUnitConfiguration#disableJavaScript]], as the two configurations only make sense when combined.
     */
   def swallowJavaScriptErrors(): Unit
 
@@ -94,23 +94,23 @@ abstract class Configuration extends BaseConfiguration {
   def baseUri: URI = internalBaseUri
 
   /**
-    * Enabling navigateTo is the default. [[org.scalatest.BeforeAndAfterEach.beforeEach]] Test navigateTo is called with the current value of [[IntegrationSpec.path]]
+    * Enabling navigateTo is the default. [[org.scalatest.BeforeAndAfterEach#beforeEach]] Test navigateTo is called with the current value of [[org.scalawebtest.core.IntegrationSpec#path]]
     */
   def enableNavigateToBeforeEach(): Unit = navigateToBeforeEachEnabled = true
 
   /**
-    * Disables the navigateTo call, which otherwise happens in [[org.scalatest.BeforeAndAfterEach.beforeEach]]
+    * Disables the navigateTo call, which otherwise happens in [[org.scalatest.BeforeAndAfterEach#beforeEach]]
     */
   def disableNavigateToBeforeEach(): Unit = navigateToBeforeEachEnabled = false
 
   /**
     * By default navigateTo only navigates to the configured path, if it isn't the same as the currentPage.
-    * By enabling enforceNavigateTo, [[org.scalatest.selenium.WebBrowser.goTo()]] is always called.
+    * By enabling enforceNavigateTo, [[org.scalatestplus.selenium.WebBrowser.goTo(url* WebBrowser.goTo]] is always called.
     */
   def enforceReloadOnNavigateTo(): Unit = reloadOnNavigateToEnforced = true
 
   /**
-    * This is the default behavior. NavigateTo only calls [[org.scalatest.selenium.WebBrowser.goTo()]], if the
+    * This is the default behavior. NavigateTo only calls [[org.scalatestplus.selenium.WebBrowser.goTo(url* WebBrowser.goTo]], if the
     * currentPage isn't the same as the configured path.
     */
   def doNotEnforceReloadOnNavigateTo(): Unit = reloadOnNavigateToEnforced = false

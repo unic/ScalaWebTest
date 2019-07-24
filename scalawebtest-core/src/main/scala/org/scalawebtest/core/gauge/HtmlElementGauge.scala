@@ -27,12 +27,12 @@ import scala.xml.NodeSeq
 
 
 /**
-  * Helper object to provide functions to fluently build a [[org.scalawebtest.core.gauge.Gauge]], to verify an [[org.scalatest.selenium.WebBrowser.Element]] instead of a complete document.
+  * Helper object to provide functions to fluently build a [[org.scalawebtest.core.gauge.Gauge]], to verify an [[org.scalatestplus.selenium.WebBrowser.Element]] instead of a complete document.
   */
 object HtmlElementGauge extends HtmlElementGauge
 
 /**
-  * Helper trait to provide functions to fluently build a [[org.scalawebtest.core.gauge.Gauge]], to verify an [[org.scalatest.selenium.WebBrowser.Element]] instead of a complete document.
+  * Helper trait to provide functions to fluently build a [[org.scalawebtest.core.gauge.Gauge]], to verify an [[org.scalatestplus.selenium.WebBrowser.Element]] instead of a complete document.
   */
 trait HtmlElementGauge {
   type Element = {def underlying: WebElement}
@@ -42,7 +42,7 @@ trait HtmlElementGauge {
     /**
       * Assert that the provided element `fits` the HTML snippet provided as definition for the `Gauge`.
       *
-      * For detailed information on how to construct your gauge definition, consult the documentation of [[org.scalawebtest.core.gauge.Gauge#fits]]
+      * For detailed information on how to construct your gauge definition, consult the documentation of [[org.scalawebtest.core.gauge.Gauge#fits Gauge.fits]]
       *
       * ==Example==
       *

@@ -5,7 +5,7 @@ defaults:
     scope:
       path: ""
     values:
-      scalaWebTestVersion: 3.0.0
+      scalaWebTestVersion: 3.0.1
       slf4jVersion: 1.7.26
 collections:
   - mainNavItems

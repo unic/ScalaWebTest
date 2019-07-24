@@ -1,0 +1,41 @@
+---
+title: ScalaWebTest 3.0.1
+layout: post
+twitterAuthor: danireych
+description: ScalaWebTest 3.0.1 Release notes
+abstract: fixed false negatives in HtmlElementGauge for elements that require a certain parent to be valid, improved BOM for Maven
+---
+
+<section>
+    <header><h2>Highlights of this release</h2></header>
+
+    <section>
+        <header><h3>Update from ScalaWebTest < 3.0.1</h3></header>
+        <p>No code change is required.</p>
+    </section>
+
+    <section>
+        <header><h3>Update from ScalaWebTest < 3.0.0</h3></header>
+        <p>Please follow the update description in the <a href="2019-06-14-scalawebtest-release-3.0.0.html">3.0.0
+            release notes</a></p>
+    </section>
+
+    <section>
+        <header><h3>False negatives in HtmlElementGauge</h3></header>
+        <p>
+            With <a href="https://github.com/unic/ScalaWebTest/issues/98">#98</a> we fixed a bug, where the HTML
+            fragment, after parsing with Jsoup, would miss the top-level element, if this required a certain parent,
+            which is not part of the parsed fragment.
+            For example &lt;tr&gt; is only valid within a &lt;tbody&gt;. As Jsoup removes invalid elements during parsing, the &lt;tr&gt; would be missig in the tree, returned by Jsoup.
+            To prevent this we now provide an according context to Jsoup, if needed.
+        </p>
+    </section>
+
+    <section>
+        <header><h3>BOM was improved</h3></header>
+        <p>
+            The Bill-of-Materials, which can be <code>imported</code> in the <code>dependencyManagement</code> of your maven build, was improved.
+            We added <code>&lt;scope&gt;test&lt;/scope&gt;</code> to all dependencies. Additionally we added <code>play-json</code> to the BOM.
+        </p>
+    </section>
+</section>

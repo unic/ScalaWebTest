@@ -1,4 +1,3 @@
-cd C:\Users\daniel.rey\git\ScalaWebTest\examples\docker
 docker build -t testrunner .
 docker run --rm -it testrunner
 pause

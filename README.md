@@ -1,10 +1,10 @@
 # [![ScalaWebTest](https://www.scalawebtest.org/images/swt-logo-light.png)](http://www.scalawebtest.org)
 
-## [![Build Status](https://travis-ci.org/unic/ScalaWebTest.svg?branch=master)](https://travis-ci.org/unic/ScalaWebTest) [![Join the chat at https://gitter.im/ScalaWebTest/Lobby](https://badges.gitter.im/ScalaWebTest/Lobby.svg)](https://gitter.im/ScalaWebTest/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+## [![Build Status](https://travis-ci.org/unic/ScalaWebTest.svg?branch=main)](https://travis-ci.org/unic/ScalaWebTest) [![Join the chat at https://gitter.im/ScalaWebTest/Lobby](https://badges.gitter.im/ScalaWebTest/Lobby.svg)](https://gitter.im/ScalaWebTest/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ScalaWebTest is a library for writing ScalaTest/Selenium based integration tests for websites. It helps you with your basic setup and provides a new and very efficient approach to testing.
 
-In manufacturing it is common to use gauges (also called checking gauges or testing gauges) to verify whether a workpiece meets predefined criteria and tolerances. ScalaWebTest transfers this concept to the world of web integration testing. You can define a gauge in HTML, and use it to verify your web application. This greatly improves the readability, simplicity of your integration tests.
+In manufacturing, it is common to use gauges (also called checking gauges or testing gauges) to verify whether a workpiece meets predefined criteria and tolerances. ScalaWebTest transfers this concept to the world of web integration testing. You can define a gauge in HTML, and use it to verify your web application. This greatly improves the readability, simplicity of your integration tests.
 
 Read the full documentation on our website <https://www.scalawebtest.org>
 

@@ -18,7 +18,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.{Element => JElement, Node => JNode, TextNode => JTextNode}
 import org.openqa.selenium.WebDriver
 import org.scalatest.Assertions
-import org.scalatest.words.NotWord
+import org.scalatest.matchers.dsl.NotWord
 import org.scalawebtest.core.gauge.JNodePrettifier.PrettyStringProvider
 
 import scala.annotation.tailrec

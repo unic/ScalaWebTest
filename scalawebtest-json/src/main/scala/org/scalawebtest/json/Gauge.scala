@@ -15,7 +15,8 @@
 package org.scalawebtest.json
 
 import org.scalatest.exceptions.TestFailedException
-import org.scalatest.{AppendedClues, Assertions, Matchers}
+import org.scalatest.{AppendedClues, Assertions}
+import org.scalatest.matchers.should.Matchers
 import play.api.libs.json._
 
 import scala.language.implicitConversions

@@ -32,7 +32,7 @@ class JsonSpec extends ScalaWebTestBaseSpec {
     model.theories should contain("graph theory")
   }
   it should "have the correct university names" in {
-    model.universityNames should contain allOf(
+    model.universityNames should contain.allOf(
       "Universität Leiden",
       "Mathematisch Centrum Amsterdam",
       "Technische Universiteit Eindhoven",

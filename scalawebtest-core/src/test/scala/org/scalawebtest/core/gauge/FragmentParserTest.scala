@@ -15,12 +15,14 @@
 package org.scalawebtest.core.gauge
 
 import org.jsoup.nodes.{Node, TextNode}
-import org.scalatest.{AppendedClues, FreeSpec, Matchers => STMatchers}
+import org.scalatest.AppendedClues
 
 import scala.jdk.CollectionConverters._
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.should.Matchers
 
 
-class FragmentParserTest extends FreeSpec with STMatchers with AppendedClues {
+class FragmentParserTest extends AnyFreeSpec with Matchers with AppendedClues {
   def renderElement(name: String): String = {
     def isSelfClosing: Boolean = List("br", "plaintext").contains(name)
 

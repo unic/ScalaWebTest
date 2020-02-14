@@ -65,9 +65,9 @@ trait FormBasedLogin extends Login {
       go to loginConfig.loginUri.toString
       logger.info(s"Filling login form at ${loginConfig.loginUri}")
       click on username_fieldname
-      emailField(username_fieldname).value = username
+      emailField(username_fieldname).underlying.sendKeys(username)
       click on password_fieldname
-      pwdField(password_fieldname).value = password
+      pwdField(password_fieldname).underlying.sendKeys(password)
 
       submit()
     })

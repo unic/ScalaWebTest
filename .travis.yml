@@ -1,8 +1,7 @@
 language: scala
 scala:
- - 2.13.0
+ - 2.13.3
  - 2.12.8
- - 2.11.12
 jdk: openjdk8
 env:
  - WEBDRIVER_CHROME_DRIVER="/usr/lib/chromium-browser/chromedriver"

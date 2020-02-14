@@ -194,7 +194,7 @@ trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with
   def setCookieForSingleTest(name: String, value: String): Unit = {
     val cookie: Cookie = new Cookie(name, value)
     webDriver.manage().addCookie(cookie)
-    add cookie(name, value)
+    add.cookie(name, value)
     cookiesToBeDiscarded += cookie
   }
 

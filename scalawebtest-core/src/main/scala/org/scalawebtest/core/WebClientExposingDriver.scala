@@ -26,7 +26,7 @@ import scala.jdk.CollectionConverters._
   * Extension of the default HtmlUnitDriver that provides access to some of the web client's options and methods which are hidden in the
   * default implementation.
   */
-class WebClientExposingDriver(version: BrowserVersion) extends HtmlUnitDriver(version) {
+class WebClientExposingDriver(version: BrowserVersion) extends HtmlUnitDriver(version, true) {
 
   /**
     * @return the options object of the WebClient

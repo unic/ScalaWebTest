@@ -12,5 +12,6 @@ script:
 addons:
  chrome: stable
  apt:
+  update: true
   packages:
     - chromium-chromedriver

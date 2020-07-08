@@ -34,7 +34,7 @@ Before running the integration tests, you will need to configure `WEBDRIVER_CHRO
 $ export WEBDRIVER_CHROME_DRIVER="$(which chromedriver)"
 ```
 
-And then run the tests using the command below:
+Then run the tests using the command below:
 
 ```bash
 $ sbt inttest
@@ -44,7 +44,7 @@ This will start a Jetty server, executes the integration tests and stops the ser
 
 ### Start Jetty server and run single tests
 
-If you would like to run the Jetty server and in parallel work on integration tests and some code changes,
+If you would like to run the Jetty server and in parallel work on integration tests, and some code changes,
 you can do the following:
 
 ```bash
@@ -75,7 +75,7 @@ Copy the private key (Sonatype PGP Private and Public Key from our company passw
 
 Create the file  ~/.sbt/1.0/sonatype.sbt
 
-Add the following content and replace username, password
+Add the following content, then replace username and password
 
 ```scalas
 credentials += Credentials("Sonatype Nexus Repository Manager",
@@ -86,23 +86,23 @@ credentials += Credentials("Sonatype Nexus Repository Manager",
 
 ### Release
 
-The release process of ScalaWebTest is currently done manually. The process is done as follows:
+The release process of ScalaWebTest is currently done manually. The process is as follows:
 
 1. Switch the version in `build.sbt` to that which is to be released (e.g. from `0.0.1-SNAPSHOT` to `1.0.0`)
 1. In your command line type in the following:
 	1. the long way:
 		1. `sbt` - enters the sbt interactive mode
 		r. `+ clean` - deletes all generated files (target)
-		1. `+ compile` - compiles the main sources
+		1. `+ test` - compiles and tests the main sources
 		1. `+ doc` - generate scaladoc
 		1. `mimaReportBinaryIssues` - execute the Migration Manager to verify binary compatibility
 		1. `inttest` - compile and run the integration tests
-		1. `+ publishSigned` - creates all of the below plus the poms
+		1. `+ publishSigned` - publishes all packages, sources and poms 
 		1. Enter the Sonatype PGP Key Password as stored in our company password store
 		1. Go to <https://oss.sonatype.org/#stagingRepositories> verify and close the staging repository
 		1. `exit` - exits the sbt interactive mode
 1. Commit your changes with the commit message "Release x.x.x" (e.g. `Release 1.0.0`)
 1. Tag this commit with the release version `git tag -a x.x.x -m "x.x.x"`
 1. Switch the version in `build.sbt` to the snapshot version (e.g. from `1.0.0` to `1.0.0-SNAPSHOT`) and update the documentation if needed
-1. Finally commit those changes with the commit message "Bump version to x.x.x-SNAPSHOT" (e.g. `Bump version to 1.0.0-SNAPSHOT`)
-1. Push you changes and the tag
+1. Finally, commit those changes with the commit message "Bump version to x.x.x-SNAPSHOT" (e.g. `Bump version to 1.0.0-SNAPSHOT`)
+1. Push your changes, and the tag

@@ -65,7 +65,7 @@ object ChromeDriverServiceRunner extends Configurable {
       case Left(s) =>
         s.stop()
         println("Stopped ChromeDriverService")
-      case Right(p) =>
+      case Right(_) =>
         println(s"Not taking any action regarding ChromeDriverService, because it is managed outside of ScalaWebTest and access was provided via $driverServiceUrlProperty property.")
     }
   }

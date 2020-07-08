@@ -44,7 +44,7 @@ class FragmentParserTest extends AnyFreeSpec with STMatchers with AppendedClues 
     self.asInstanceOf[TextNode].getWholeText shouldBe text withClue s"$breadcrumb should contain the text $text"
   }
 
-  "Parsing an HTML fragement should be successful for" - {
+  "Parsing an HTML fragment should be successful for" - {
     "a single appearance of every HTML body element that ever existed" in {
       for (element <- HtmlElementsReference.bodyElementsIncludingDeprecated) {
         val parsed = FragmentParser.parseFragment(renderElement(element))

@@ -56,7 +56,7 @@ case class Gauge(testee: JsValue, fitValues: Boolean, fitArraySizes: Boolean, ig
               true
             } catch {
               //silent catch, it is expected that some elements do not fit the provided gauge
-              case e: TestFailedException => false
+              case _: TestFailedException => false
             }
           })
           if (!matchingElementFound)

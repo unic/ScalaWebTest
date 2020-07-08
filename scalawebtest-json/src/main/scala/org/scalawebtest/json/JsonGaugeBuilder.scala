@@ -150,7 +150,7 @@ case class JsonGaugeArrayContains(gauge: Gauge) extends Assertions with Appended
         true
       } catch {
         //silent catch, it is expected that some elements do not fit the provided gauge
-        case e: TestFailedException => false
+        case _: TestFailedException => false
       }
     })
   }

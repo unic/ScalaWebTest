@@ -19,10 +19,10 @@ import org.scalatest.AppendedClues
 
 import scala.jdk.CollectionConverters._
 import org.scalatest.freespec.AnyFreeSpec
-import org.scalatest.matchers.should.Matchers
+import org.scalatest.matchers.should.{Matchers => STMatchers}
 
 
-class FragmentParserTest extends AnyFreeSpec with Matchers with AppendedClues {
+class FragmentParserTest extends AnyFreeSpec with STMatchers with AppendedClues {
   def renderElement(name: String): String = {
     def isSelfClosing: Boolean = List("br", "plaintext").contains(name)
 

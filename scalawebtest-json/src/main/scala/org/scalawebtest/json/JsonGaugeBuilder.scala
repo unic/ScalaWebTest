@@ -76,25 +76,57 @@ trait JsonGauge {
           testee = json,
           fitValues = false,
           fitArraySizes = false,
-          ignoreArrayOrder = true)
+          ignoreArrayOrder = true,
+          specifiedPropertiesOnly = false)
+      case `typesAndHasOnlyPropertiesSpecified` =>
+        Gauge(
+          testee = json,
+          fitValues = false,
+          fitArraySizes = false,
+          ignoreArrayOrder = true,
+          specifiedPropertiesOnly = true)
       case `typesAndArraySizes` =>
         Gauge(
           testee = json,
           fitValues = false,
           fitArraySizes = true,
-          ignoreArrayOrder = true)
+          ignoreArrayOrder = true,
+          specifiedPropertiesOnly = false)
+      case `typesArraySizesAndHasOnlyPropertiesSpecified` =>
+        Gauge(
+          testee = json,
+          fitValues = false,
+          fitArraySizes = true,
+          ignoreArrayOrder = true,
+          specifiedPropertiesOnly = true)
       case `values` =>
         Gauge(
           testee = json,
           fitValues = true,
           fitArraySizes = true,
-          ignoreArrayOrder = false)
+          ignoreArrayOrder = false,
+          specifiedPropertiesOnly = false)
+      case `valuesAndHasOnlyPropertiesSpecified` =>
+        Gauge(
+          testee = json,
+          fitValues = true,
+          fitArraySizes = true,
+          ignoreArrayOrder = false,
+          specifiedPropertiesOnly = true)
       case `valuesIgnoringArrayOrder` =>
         Gauge(
           testee = json,
           fitValues = true,
           fitArraySizes = true,
-          ignoreArrayOrder = true)
+          ignoreArrayOrder = true,
+          specifiedPropertiesOnly = false)
+      case `valuesIgnoringArrayOrderAndHavingOnlyPropertiesSpecified` =>
+        Gauge(
+          testee = json,
+          fitValues = true,
+          fitArraySizes = true,
+          ignoreArrayOrder = true,
+          specifiedPropertiesOnly = true)
     }
   }
 
@@ -104,10 +136,21 @@ trait JsonGauge {
   object types extends GaugeType
 
   /**
+    * marker object to build a gauge, which only verifies by type and only allows specified properties
+    */
+  object typesAndHasOnlyPropertiesSpecified extends GaugeType
+
+  /**
     * marker object to build a gauge, which only verifies by type,
     * but checks array sizes as well
     */
   object typesAndArraySizes extends GaugeType
+
+  /**
+    * marker object to build a gauge, which only verifies by type,
+    * but checks array sizes and only allows specified properties
+    */
+  object typesArraySizesAndHasOnlyPropertiesSpecified extends GaugeType
 
   /**
     * marker object to build a gauge, which verifies values
@@ -115,10 +158,21 @@ trait JsonGauge {
   object values extends GaugeType
 
   /**
+    * marker object to build a gauge, which verifies values and only allows specified properties
+    */
+  object valuesAndHasOnlyPropertiesSpecified extends GaugeType
+
+  /**
     * marker object to build a gauge, which verifies values,
     * but ignores their order within arrays
     */
   object valuesIgnoringArrayOrder extends GaugeType
+
+  /**
+    * marker object to build a gauge, which verifies values and only allows specified properties
+    * but ignores their order within arrays
+    */
+  object valuesIgnoringArrayOrderAndHavingOnlyPropertiesSpecified extends GaugeType
 
   /**
     * base trait for the marker objects, which are used to select the behavior of the [[org.scalawebtest.json.Gauge]]
@@ -129,6 +183,7 @@ trait JsonGauge {
 
 case class JsonGaugeFits(gauge: Gauge) {
   def of(definition: String): Unit = gauge.fits(Json.parse(definition))
+  def by(definition: String): Unit = of(definition)
 }
 
 case class JsonGaugeArrayContains(gauge: Gauge) extends Assertions with AppendedClues with Matchers {
@@ -141,6 +196,8 @@ case class JsonGaugeArrayContains(gauge: Gauge) extends Assertions with Appended
       case v => v shouldBe a[JsArray]
     }
   }
+
+  def by(definition: String): Unit = of(definition)
 
   private def hasMatchingElement(array: JsArray, definition: String) = {
     array.value.exists(e => {

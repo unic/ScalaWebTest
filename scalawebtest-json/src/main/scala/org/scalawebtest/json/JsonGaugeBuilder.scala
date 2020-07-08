@@ -15,7 +15,8 @@
 package org.scalawebtest.json
 
 import org.scalatest.exceptions.TestFailedException
-import org.scalatest.{AppendedClues, Assertions, Matchers}
+import org.scalatest.{AppendedClues, Assertions}
+import org.scalatest.matchers.should.Matchers
 import play.api.libs.json._
 
 import scala.language.implicitConversions
@@ -149,7 +150,7 @@ case class JsonGaugeArrayContains(gauge: Gauge) extends Assertions with Appended
         true
       } catch {
         //silent catch, it is expected that some elements do not fit the provided gauge
-        case e: TestFailedException => false
+        case _: TestFailedException => false
       }
     })
   }

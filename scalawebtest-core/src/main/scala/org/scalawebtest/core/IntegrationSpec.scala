@@ -38,7 +38,7 @@ import scala.xml.NodeSeq
   * adapted the default configuration available in loginConfig and config,
   * and extend one of the Login traits if applicable.
   */
-trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with BeforeAndAfterAllConfigMap with IntegrationSettings with Eventually {
+trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with BeforeAndAfterAllConfigMap with Eventually {
   implicit var webDriver: WebDriver = new WebClientExposingDriver(BrowserVersion.CHROME)
 
   private val logger: Logger = LoggerFactory.getLogger(getClass.getName)
@@ -194,7 +194,7 @@ trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with
   def setCookieForSingleTest(name: String, value: String): Unit = {
     val cookie: Cookie = new Cookie(name, value)
     webDriver.manage().addCookie(cookie)
-    add cookie(name, value)
+    add.cookie(name, value)
     cookiesToBeDiscarded += cookie
   }
 

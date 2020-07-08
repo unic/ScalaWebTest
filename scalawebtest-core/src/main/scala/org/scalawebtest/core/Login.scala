@@ -50,14 +50,7 @@ trait FormBasedLogin extends Login {
   val username_fieldname = "j_username"
   val password_fieldname = "j_password"
 
-  @deprecated(message =
-    """The 'loginPath' property was moved/merged into the 'uri' in the LoginConfiguration.
-      |The LoginConfiguration holds the configurations for the login.
-      |If you used 'host = "http://localhost:8181"' and 'loginPath = "/login"' before, then use 'loginConfig.useLoginUri("http://locahost:8181/login")' instead.""".stripMargin,
-    since = "ScalaWebTest 3.0.0")
-  final val loginPath = "The FormBasedLogin.loginPath property was deprecated with ScalaWebTest 3.0.0 - use loginConfig.useLoginUri instead"
-
-  def loginTimeout = Timeout(5 seconds)
+  def loginTimeout: Timeout = Timeout(5 seconds)
 
   override def login(configMap: ConfigMap): Unit = {
     eventually(loginTimeout)({
@@ -65,9 +58,9 @@ trait FormBasedLogin extends Login {
       go to loginConfig.loginUri.toString
       logger.info(s"Filling login form at ${loginConfig.loginUri}")
       click on username_fieldname
-      emailField(username_fieldname).value = username
+      emailField(username_fieldname).underlying.sendKeys(username)
       click on password_fieldname
-      pwdField(password_fieldname).value = password
+      pwdField(password_fieldname).underlying.sendKeys(password)
 
       submit()
     })

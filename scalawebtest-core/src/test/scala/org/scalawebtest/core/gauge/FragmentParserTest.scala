@@ -15,12 +15,14 @@
 package org.scalawebtest.core.gauge
 
 import org.jsoup.nodes.{Node, TextNode}
-import org.scalatest.{AppendedClues, FreeSpec, Matchers => STMatchers}
+import org.scalatest.AppendedClues
 
 import scala.jdk.CollectionConverters._
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.should.{Matchers => STMatchers}
 
 
-class FragmentParserTest extends FreeSpec with STMatchers with AppendedClues {
+class FragmentParserTest extends AnyFreeSpec with STMatchers with AppendedClues {
   def renderElement(name: String): String = {
     def isSelfClosing: Boolean = List("br", "plaintext").contains(name)
 
@@ -42,7 +44,7 @@ class FragmentParserTest extends FreeSpec with STMatchers with AppendedClues {
     self.asInstanceOf[TextNode].getWholeText shouldBe text withClue s"$breadcrumb should contain the text $text"
   }
 
-  "Parsing an HTML fragement should be successful for" - {
+  "Parsing an HTML fragment should be successful for" - {
     "a single appearance of every HTML body element that ever existed" in {
       for (element <- HtmlElementsReference.bodyElementsIncludingDeprecated) {
         val parsed = FragmentParser.parseFragment(renderElement(element))

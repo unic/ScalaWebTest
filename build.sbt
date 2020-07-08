@@ -2,18 +2,19 @@ import ScalaWebTestBuild._
 
 import scala.xml.transform.RewriteRule
 
-lazy val supportedScalaVersions = Seq("2.13.0", "2.12.8", "2.11.12")
+lazy val supportedScalaVersions = Seq("2.13.3", "2.12.8")
 
-val projectVersion = "3.0.2-SNAPSHOT"
-val scalaTestVersion = "3.0.8"
+val projectVersion = "4.0.0-SNAPSHOT"
+val scalaTestVersion = "3.2.0"
+val scalaTestSeleniumVersion = "3.2.0.0"
 val seleniumVersion = "3.141.59"
-val htmlUnitVersion = "2.35.1"
-val slf4jVersion = "1.7.26"
-val playJsonVersion = "2.7.4"
+val htmlUnitVersion = "2.41.0"
+val slf4jVersion = "1.7.28"
+val playJsonVersion = "2.9.0"
 
 val versions = Map("scalaWebTest" -> projectVersion, "scalaTest" -> scalaTestVersion, "selenium" -> seleniumVersion, "htmlUnit" -> htmlUnitVersion, "playJson" -> playJsonVersion)
 
-val scalaWebTestSeries = "3.0.0"
+val scalaWebTestSeries = "4.0.0"
 def mimaSettings(projectName: String) = Seq(
    mimaPreviousArtifacts := Set("org.scalawebtest" %% projectName % scalaWebTestSeries)
 )
@@ -27,7 +28,7 @@ lazy val root = (project in file("."))
 lazy val commonSettings = Seq(
   organization := "org.scalawebtest",
   version := projectVersion,
-  scalaVersion := "2.12.8",
+  scalaVersion := "2.13.3",
   scalacOptions := Seq("-unchecked", "-deprecation", "-Xfatal-warnings"),
   publishMavenStyle := true,
   publishTo := {
@@ -48,11 +49,12 @@ lazy val core = Project(id = "scalawebtest-core", base = file("scalawebtest-core
   .settings(
     libraryDependencies ++= Seq(
       "org.scalatest" %% "scalatest" % scalaTestVersion,
+      "org.scalatestplus" %% "selenium-3-141" % scalaTestSeleniumVersion,
       "org.seleniumhq.selenium" % "selenium-java" % seleniumVersion,
       "org.seleniumhq.selenium" % "htmlunit-driver" % htmlUnitVersion,
-      "org.jsoup" % "jsoup" % "1.11.3",
+      "org.jsoup" % "jsoup" % "1.13.1",
       "org.slf4j" % "slf4j-api" % slf4jVersion,
-      "org.scala-lang.modules" %% "scala-collection-compat" % "2.1.1"
+      "org.scala-lang.modules" %% "scala-collection-compat" % "2.1.6"
     )
   )
   .settings(mimaSettings("scalawebtest-core"))

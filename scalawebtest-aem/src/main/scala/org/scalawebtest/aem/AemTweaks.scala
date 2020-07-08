@@ -36,7 +36,7 @@ trait AemTweaks {
   }
 
   private def setWcmModeCookie(mode: WcmMode): Unit = {
-    add cookie("wcmmode", mode.toString)
+    add.cookie("wcmmode", mode.toString)
   }
 
   /**

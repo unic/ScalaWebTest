@@ -136,7 +136,7 @@ object FragmentParser {
 
     val unwrappedNodes =
       parseFix.fragmentWrapper match {
-        case Some(wrapper) => nodes.flatMap(_.childNodes().asScala.toList)
+        case Some(_) => nodes.flatMap(_.childNodes().asScala.toList)
         case None => nodes
       }
 

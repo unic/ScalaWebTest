@@ -18,7 +18,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.{Element => JElement, Node => JNode, TextNode => JTextNode}
 import org.openqa.selenium.WebDriver
 import org.scalatest.Assertions
-import org.scalatest.words.NotWord
+import org.scalatest.matchers.dsl.NotWord
 import org.scalawebtest.core.gauge.JNodePrettifier.PrettyStringProvider
 
 import scala.annotation.tailrec
@@ -99,32 +99,6 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebDriver) extends Assertio
       //when proceeding to the next definition, old misfits do not matter anymore
       misfitHolder.wipe()
     })
-  }
-
-  private def verifyClassesOnCandidate(domNode: JNode, elem: Elem, misfitRelevance: MisfitRelevance): Boolean = {
-    val definitionAttributes = elem.attributes.asAttrMap
-
-    def assertContainsClass(domNode: JNode, clazz: String): Boolean = {
-      val domNodeClass = domNode.attributes.get("class")
-      if (domNodeClass == null) {
-        misfitHolder.addMisfit(Misfit(misfitRelevance, "Misfitting Element", s"Expected element to contain the class [$clazz], but didn't contain any class attribute in [${domNode.prettyString}]", Some(clazz), Some("")))
-        false
-      } else {
-        val containsClass = domNodeClass.split(" ").map(_.trim).filter(_.nonEmpty).contains(clazz)
-        if (!containsClass) {
-          misfitHolder.addMisfit(Misfit(misfitRelevance, "Misfitting Element", s"Expected element to contain the class [$clazz], but only contained [$domNodeClass] in [${domNode.prettyString}]", Some(clazz), Some(domNodeClass)))
-        }
-        containsClass
-      }
-    }
-
-    definitionAttributes.get("class").map(
-      _.split(" ")
-        .map(_.trim)
-        .filter(_.nonEmpty)
-        .map(clazz => assertContainsClass(domNode, clazz)
-        ).forall(identity)
-    ).forall(identity)
   }
 
   private def nodeToCssSelector(node: Node) = {
@@ -351,6 +325,7 @@ class Gauge(definition: NodeSeq)(implicit webDriver: WebDriver) extends Assertio
         parentsInner(node, Nil).reverse
       }
 
+      @tailrec
       def nodeWithParentsBefore(self: List[JNode], others: List[JNode]): Boolean = {
         if (self.tail.headOption == others.tail.headOption) {
           self.head.siblingIndex < others.head.siblingIndex

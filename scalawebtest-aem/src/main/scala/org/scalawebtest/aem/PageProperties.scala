@@ -105,24 +105,20 @@ trait PageProperties {
     }
 
     if (config.navigateToBeforeEachEnabled) {
-      pageProperties = Try {
-        navigateToUri(pagePropertiesUrl)
-        Json.parse(webDriver.getPageSource)
-      }.toOption.orNull
+      def jsValueFromUrl(url: Option[String]): JsValue = {
+        url.flatMap(u =>
+          Try {
+            navigateToUri(u)
+            Json.parse(webDriver.getPageSource)
+          }.toOption
+        ).orNull
+      }
 
-      componentProperties = componentPropertiesUrl.flatMap(u =>
-        Try {
-          navigateToUri(u)
-          Json.parse(webDriver.getPageSource)
-        }.toOption
-      ).orNull
+      pageProperties = jsValueFromUrl(Some(pagePropertiesUrl))
 
-      suffixProperties = suffixPropertiesUrl.flatMap(u =>
-        Try {
-          navigateToUri(u)
-          Json.parse(webDriver.getPageSource)
-        }.toOption
-      ).orNull
+      componentProperties = jsValueFromUrl(componentPropertiesUrl)
+
+      suffixProperties = jsValueFromUrl(suffixPropertiesUrl)
 
       navigateToUri(url)
     }

@@ -14,6 +14,8 @@
  */
 package org.scalawebtest.core.browser
 
+import java.util.concurrent.TimeUnit
+
 import org.openqa.selenium.firefox.{FirefoxDriver, FirefoxOptions, FirefoxProfile, GeckoDriverService}
 import org.scalatest.ConfigMap
 import org.scalawebtest.core.configuration._
@@ -49,6 +51,8 @@ trait SeleniumFirefox extends Configurable {
         .addArguments(firefoxArguments)
         .setProfile(profile)
     )
+
+    webDriver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS)
   }
 
   class CleanedPageSourceFirefoxDriver(driverService: GeckoDriverService, firefoxOptions: FirefoxOptions) extends FirefoxDriver(driverService, firefoxOptions) {

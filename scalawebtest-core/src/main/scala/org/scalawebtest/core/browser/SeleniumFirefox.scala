@@ -19,7 +19,7 @@ import org.scalatest.ConfigMap
 import org.scalawebtest.core.configuration._
 import org.scalawebtest.core.{Configurable, IntegrationSpec}
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 
 trait SeleniumFirefox extends Configurable {

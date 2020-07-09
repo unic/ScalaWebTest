@@ -4,10 +4,10 @@ import java.net.{URI, URL}
 
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.{Matchers => STMatchers}
-import org.scalatest.{AppendedClues, ConfigMap, OptionValues}
+import org.scalatest.{AppendedClues, ConfigMap, Inspectors, OptionValues}
 import org.scalawebtest.core.Configurable
 
-class ConfigurableTest extends AnyFreeSpec with STMatchers with AppendedClues with OptionValues {
+class ConfigurableTest extends AnyFreeSpec with STMatchers with AppendedClues with OptionValues with Inspectors {
 
   object testee extends Configurable
 
@@ -49,9 +49,9 @@ class ConfigurableTest extends AnyFreeSpec with STMatchers with AppendedClues wi
     }
   }
   "The Configurable should be able to read any property as String" in {
-    configs.foreachEntry({
-      (key, value) => testee.configFor[String](configMap)(key).value shouldBe value
-    })
+    forAll(configs.keys) {
+      key => testee.configFor[String](configMap)(key).value shouldBe configs(key)
+    }
   }
   "The Configurable should prevent reading properties of wrong Type" - {
     "String as Int" in {

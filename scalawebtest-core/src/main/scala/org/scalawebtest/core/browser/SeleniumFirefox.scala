@@ -37,7 +37,7 @@ trait SeleniumFirefox extends Configurable {
 
     val firefoxArguments =
       configFor[String](configMap)("webdriver.firefox.arguments").map(_.split(',').toList)
-        .getOrElse(List("--headless", "--no-remote"))
+        .getOrElse(List("--headless"))
         .asJava
 
     val profile = new FirefoxProfile()

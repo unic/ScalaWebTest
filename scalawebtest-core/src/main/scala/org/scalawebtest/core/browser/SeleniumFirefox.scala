@@ -54,7 +54,7 @@ trait SeleniumFirefox extends Configurable {
   class CleanedPageSourceFirefoxDriver(driverService: GeckoDriverService, firefoxOptions: FirefoxOptions) extends FirefoxDriver(driverService, firefoxOptions) {
     override def getPageSource: String = {
       super.getPageSource
-        .replaceFirst("""<html.*><head.*><link rel="alternate stylesheet".*></head><body><pre>""", "")
+        .replaceFirst("""<html.*><head.*><link.*></head><body><pre>""", "")
         .replaceFirst("""</pre></body></html>""", "")
     }
   }

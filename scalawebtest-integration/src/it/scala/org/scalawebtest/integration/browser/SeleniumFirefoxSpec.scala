@@ -26,6 +26,6 @@ class SeleniumFirefoxSpec extends IntegrationFlatSpec with FormBasedLogin with A
   path = "/"
 
   "SeleniumFirefox" should behave like aWebBrowserWithElementLookup()
-  it should behave like anHtmlGauge
-  it should behave like aJsonGauge
+  it should behave like anHtmlGauge()
+  it should behave like aJsonGauge()
 }

@@ -29,6 +29,9 @@ import scala.jdk.CollectionConverters._
 trait SeleniumChrome extends Configurable {
   self: IntegrationSpec =>
 
+  val defaultArguments: List[String] = List("--no-sandbox", "--headless")
+  val forcedArguments: List[String] = Nil
+
   override val loginConfig = new LoginConfiguration with SeleniumChromeConfiguration
 
   override val config = new Configuration with SeleniumChromeConfiguration
@@ -39,8 +42,8 @@ trait SeleniumChrome extends Configurable {
   override def prepareWebDriver(configMap: ConfigMap): Unit = {
     val driverServiceUrl = driverServiceRunner.assertInitialized(configMap)
     val chromeArguments =
-      configFor[String](configMap)("webdriver.chrome.arguments").map(_.split(',').toList)
-        .getOrElse(List("--no-sandbox", "--headless"))
+      configFor[String](configMap)("webdriver.chrome.arguments").map(s => (s.split(',').toList ::: forcedArguments).distinct)
+        .getOrElse(defaultArguments)
         .asJava
 
     webDriver = new ChromeRemoteWebDriver(
@@ -63,5 +66,13 @@ trait SeleniumChrome extends Configurable {
 
 }
 
+trait HeadlessSeleniumChrome extends SeleniumChrome {
+  self: IntegrationSpec =>
+  override val forcedArguments = List("--headless")
+}
 
+trait HeadedSeleniumChrome extends SeleniumChrome {
+  self: IntegrationSpec =>
+  override val defaultArguments = List("--no-sandbox")
+}
 

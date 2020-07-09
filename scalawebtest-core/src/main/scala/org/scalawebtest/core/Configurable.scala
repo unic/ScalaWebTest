@@ -19,6 +19,7 @@ import java.net.{URI, URL}
 import org.scalatest.ConfigMap
 import org.slf4j.{Logger, LoggerFactory}
 
+import scala.reflect.ClassTag
 import scala.util.{Failure, Success, Try}
 
 trait Configurable {
@@ -35,11 +36,24 @@ trait Configurable {
     override def transform(s: String, c: Context): Option[String] = Some(s)
   }
 
+  implicit object BooleanTransformer extends Transformer[Boolean] {
+    override def transform(s: String, c: Context): Option[Boolean] = Try(s.toBoolean).toOption
+  }
+
   implicit object IntTransformer extends Transformer[Int] {
     override def transform(s: String, c: Context): Option[Int] = Try(s.toInt) match {
       case Success(i) => Some(i)
       case Failure(e) =>
         logger.error(s"Could not transform ${c.kind} ${c.name} with value $s to ${classOf[Int].getName}", e)
+        None
+    }
+  }
+
+  implicit object DoubleTransformer extends Transformer[Double] {
+    override def transform(s: String, c: Context): Option[Double] = Try(s.toDouble) match {
+      case Success(i) => Some(i)
+      case Failure(e) =>
+        logger.error(s"Could not transform ${c.kind} ${c.name} with value $s to ${classOf[Double].getName}", e)
         None
     }
   }

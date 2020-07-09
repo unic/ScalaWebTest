@@ -6,7 +6,7 @@ jdk: openjdk8
 env:
  global:
   - WEBDRIVER_CHROME_DRIVER="/usr/lib/chromium-browser/chromedriver"
-  - WEBDRIVER_GECKO_DRIVER="/usr/lib/geckodriver/geckodriver"
+  - WEBDRIVER_GECKO_DRIVER="/usr/bin/geckodriver"
 script:
  - sbt ++$TRAVIS_SCALA_VERSION test
  - sbt ++$TRAVIS_SCALA_VERSION inttest

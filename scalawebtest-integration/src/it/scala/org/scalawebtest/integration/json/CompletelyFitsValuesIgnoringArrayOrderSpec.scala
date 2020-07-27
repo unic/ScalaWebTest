@@ -17,12 +17,12 @@ package org.scalawebtest.integration.json
 import org.scalatest.exceptions.TestFailedException
 import play.api.libs.json.{JsValue, Json}
 
-class FitsValuesIgnoringArrayOrderAndHavingOnlyPropertiesSpecifiedSpec extends ScalaWebTestJsonBaseSpec with FitsTypeMismatchBehavior {
+class CompletelyFitsValuesIgnoringArrayOrderSpec extends ScalaWebTestJsonBaseSpec with FitsTypeMismatchBehavior {
   path = "/jsonResponse.json.jsp"
   def dijkstra: JsValue = Json.parse(webDriver.getPageSource)
 
   "Fits types" should "report success, when the json gauge contains the same valuesIgnoringArrayOrder as the response it is tested against" in {
-    dijkstra fits valuesIgnoringArrayOrderAndHavingOnlyPropertiesSpecified by
+    dijkstra completelyFits valuesIgnoringArrayOrder of
       """{
         | "name": "Dijkstra",
         | "firstName": "Edsger",
@@ -44,7 +44,7 @@ class FitsValuesIgnoringArrayOrderAndHavingOnlyPropertiesSpecifiedSpec extends S
   }
   it should "fail when a property is present in the testee, which is not specified in the gauge" in {
     assertThrows[TestFailedException] {
-      dijkstra fits valuesIgnoringArrayOrderAndHavingOnlyPropertiesSpecified by
+        dijkstra completelyFits valuesIgnoringArrayOrder of
         //gauge doesn't contain universities
         """{
           | "name": "Dijkstra",
@@ -60,5 +60,5 @@ class FitsValuesIgnoringArrayOrderAndHavingOnlyPropertiesSpecifiedSpec extends S
       """.stripMargin
     }
   }
-  it should behave like jsonGaugeFitting(valuesIgnoringArrayOrderAndHavingOnlyPropertiesSpecified)
+  it should behave like jsonGaugeCompletelyFitting(valuesIgnoringArrayOrder)
 }

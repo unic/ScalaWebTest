@@ -3,12 +3,12 @@ package org.scalawebtest.integration.json
 import org.scalatest.exceptions.TestFailedException
 import play.api.libs.json.{JsValue, Json}
 
-class FitsTypesAndArraySizesAndHasOnlyPropertiesSpecifiedSpec extends ScalaWebTestJsonBaseSpec with FitsTypeMismatchBehavior {
+class CompletelyFitsTypesAndArraySizesSpec extends ScalaWebTestJsonBaseSpec with FitsTypeMismatchBehavior {
   path = "/jsonResponse.json.jsp"
   def dijkstra: JsValue = Json.parse(webDriver.getPageSource)
 
   "The json response representing Edsger Dijkstra" should "use the correct types" in {
-    dijkstra fits typesArraySizesAndHasOnlyPropertiesSpecified by
+    dijkstra completelyFits typesAndArraySizes of
       """{
         | "name": "",
         | "firstName": "",
@@ -22,7 +22,7 @@ class FitsTypesAndArraySizesAndHasOnlyPropertiesSpecifiedSpec extends ScalaWebTe
   }
   it should "fail when a property is present in the testee, which is not specified in the gauge" in {
     assertThrows[TestFailedException] {
-      dijkstra fits typesArraySizesAndHasOnlyPropertiesSpecified by
+      dijkstra completelyFits typesAndArraySizes of
         //gauge doesn't contain yearOfBirth
         """{
           | "name": "",
@@ -37,7 +37,7 @@ class FitsTypesAndArraySizesAndHasOnlyPropertiesSpecifiedSpec extends ScalaWebTe
   }
   it should "fail when a property is present in the testee, which is not specified in the gauge, even when nested within an array" in {
     assertThrows[TestFailedException] {
-      dijkstra fits typesArraySizesAndHasOnlyPropertiesSpecified by
+      dijkstra completelyFits typesAndArraySizes of
         //gauge doesn't contain the name property in the universities array
         """{
           | "name": "",
@@ -53,12 +53,12 @@ class FitsTypesAndArraySizesAndHasOnlyPropertiesSpecifiedSpec extends ScalaWebTe
   }
   it should "not have only a single entry in universities" in {
     assertThrows[TestFailedException] {
-      dijkstra fits typesArraySizesAndHasOnlyPropertiesSpecified of
+      dijkstra completelyFits typesAndArraySizes of
       """{
         | "universities": [{}]
         |}
       """.stripMargin
     }
   }
-  it should behave like jsonGaugeFitting(typesArraySizesAndHasOnlyPropertiesSpecified)
+  it should behave like jsonGaugeCompletelyFitting(typesAndArraySizes)
 }

@@ -29,7 +29,7 @@ trait JsonGaugeFromResponse {
     */
   def fitsTypes(definition: String)(implicit webDriver: WebDriver): Unit = {
     def document = Json.parse(webDriver.getPageSource)
-    Gauge(document, fitValues = false, fitArraySizes = false, ignoreArrayOrder = true, specifiedPropertiesOnly = false).fits(Json.parse(definition))
+    Gauge(document, fitValues = false, fitArraySizes = false, ignoreArrayOrder = true, allPropertiesDefined = false).fits(Json.parse(definition))
   }
 
   /**
@@ -37,7 +37,7 @@ trait JsonGaugeFromResponse {
     */
   def fitsTypesAndHasOnlySpecifiedProperties(definition: String)(implicit webDriver: WebDriver): Unit = {
     def document = Json.parse(webDriver.getPageSource)
-    Gauge(document, fitValues = false, fitArraySizes = false, ignoreArrayOrder = true, specifiedPropertiesOnly = true).fits(Json.parse(definition))
+    Gauge(document, fitValues = false, fitArraySizes = false, ignoreArrayOrder = true, allPropertiesDefined = true).fits(Json.parse(definition))
   }
 
   /**
@@ -45,7 +45,7 @@ trait JsonGaugeFromResponse {
     */
   def fitsTypesAndArraySizes(definition: String)(implicit webDriver: WebDriver): Unit = {
     def document = Json.parse(webDriver.getPageSource)
-    Gauge(document, fitValues = false, fitArraySizes = true, ignoreArrayOrder = true, specifiedPropertiesOnly = false).fits(Json.parse(definition))
+    Gauge(document, fitValues = false, fitArraySizes = true, ignoreArrayOrder = true, allPropertiesDefined = false).fits(Json.parse(definition))
   }
 
   /**
@@ -53,7 +53,7 @@ trait JsonGaugeFromResponse {
     */
   def fitsTypesArraySizesAndHasOnlySpecifiedProperties(definition: String)(implicit webDriver: WebDriver): Unit = {
     def document = Json.parse(webDriver.getPageSource)
-    Gauge(document, fitValues = false, fitArraySizes = true, ignoreArrayOrder = true, specifiedPropertiesOnly = true).fits(Json.parse(definition))
+    Gauge(document, fitValues = false, fitArraySizes = true, ignoreArrayOrder = true, allPropertiesDefined = true).fits(Json.parse(definition))
   }
 
   /**
@@ -61,7 +61,7 @@ trait JsonGaugeFromResponse {
     */
   def fitsValues(definition: String)(implicit webDriver: WebDriver): Unit = {
     def document = Json.parse(webDriver.getPageSource)
-    Gauge(document, fitValues = true, fitArraySizes = true, ignoreArrayOrder = false, specifiedPropertiesOnly = false).fits(Json.parse(definition))
+    Gauge(document, fitValues = true, fitArraySizes = true, ignoreArrayOrder = false, allPropertiesDefined = false).fits(Json.parse(definition))
   }
 
   /**
@@ -69,7 +69,7 @@ trait JsonGaugeFromResponse {
     */
   def fitsValuesAndHasOnlySpecifiedProperties(definition: String)(implicit webDriver: WebDriver): Unit = {
     def document = Json.parse(webDriver.getPageSource)
-    Gauge(document, fitValues = true, fitArraySizes = true, ignoreArrayOrder = false, specifiedPropertiesOnly = true).fits(Json.parse(definition))
+    Gauge(document, fitValues = true, fitArraySizes = true, ignoreArrayOrder = false, allPropertiesDefined = true).fits(Json.parse(definition))
   }
 
   /**
@@ -78,7 +78,7 @@ trait JsonGaugeFromResponse {
     */
   def fitsValuesIgnoringArrayOrders(definition: String)(implicit webDriver: WebDriver): Unit = {
     def document = Json.parse(webDriver.getPageSource)
-    Gauge(document, fitValues = true, fitArraySizes = true, ignoreArrayOrder = true, specifiedPropertiesOnly = false).fits(Json.parse(definition))
+    Gauge(document, fitValues = true, fitArraySizes = true, ignoreArrayOrder = true, allPropertiesDefined = false).fits(Json.parse(definition))
   }
 
   /**
@@ -87,7 +87,7 @@ trait JsonGaugeFromResponse {
     */
   def fitsValuesIgnoringArrayOrdersAndHavingOnlySpecifiedProperties(definition: String)(implicit webDriver: WebDriver): Unit = {
     def document = Json.parse(webDriver.getPageSource)
-    Gauge(document, fitValues = true, fitArraySizes = true, ignoreArrayOrder = true, specifiedPropertiesOnly = true).fits(Json.parse(definition))
+    Gauge(document, fitValues = true, fitArraySizes = true, ignoreArrayOrder = true, allPropertiesDefined = true).fits(Json.parse(definition))
   }
 }
 

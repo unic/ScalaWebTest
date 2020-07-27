@@ -3,12 +3,12 @@ package org.scalawebtest.integration.json
 import org.scalatest.exceptions.TestFailedException
 import play.api.libs.json.{JsValue, Json}
 
-class FitsTypesAndHasOnlyPropertiesSpecifiedSpec extends ScalaWebTestJsonBaseSpec with FitsTypeMismatchBehavior {
+class CompletelyFitsTypesSpec extends ScalaWebTestJsonBaseSpec with FitsTypeMismatchBehavior {
   path = "/jsonResponse.json.jsp"
   def dijkstra: JsValue = Json.parse(webDriver.getPageSource)
   "Fits types" should "report success, when the json gauge contains the same types as the response it is tested against" in {
 
-    dijkstra fits typesAndHasOnlyPropertiesSpecified by
+    dijkstra completelyFits types of
       """{
         | "name": "",
         | "firstName": "",
@@ -22,7 +22,7 @@ class FitsTypesAndHasOnlyPropertiesSpecifiedSpec extends ScalaWebTestJsonBaseSpe
   }
   it should "fail when a property is present in the testee, which is not specified in the gauge" in {
     assertThrows[TestFailedException] {
-      dijkstra fits typesAndHasOnlyPropertiesSpecified by
+        dijkstra completelyFits types of
         //gauge doesn't contain yearOfBirth
         """{
           | "name": "",
@@ -37,7 +37,7 @@ class FitsTypesAndHasOnlyPropertiesSpecifiedSpec extends ScalaWebTestJsonBaseSpe
   }
   it should "fail when a property is present in the testee, which is not specified in the gauge, even when nested within an array" in {
     assertThrows[TestFailedException] {
-      dijkstra fits typesAndHasOnlyPropertiesSpecified by
+        dijkstra completelyFits types of
         //gauge doesn't contain the name property in the universities array
         """{
           | "name": "",
@@ -51,5 +51,5 @@ class FitsTypesAndHasOnlyPropertiesSpecifiedSpec extends ScalaWebTestJsonBaseSpe
       """.stripMargin
     }
   }
-  it should behave like jsonGaugeFitting(typesAndHasOnlyPropertiesSpecified)
+  it should behave like jsonGaugeCompletelyFitting(types)
 }

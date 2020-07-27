@@ -29,11 +29,11 @@ import scala.reflect.ClassTag
   * @param testee        JsValue to be tested with the gauge
   * @param fitValues     whether the [[testee]] is expected to fit the gauge values
   * @param fitArraySizes whether the [[testee]] is expected to fit the sizes of contained arrays
-  * @param specifiedPropertiesOnly whether the [[testee]] is expected to have only properties, which are specified by the gauge
+  * @param allPropertiesDefined whether the [[testee]] is expected to ony have properties, which are specified by the gauge definition
   */
-case class Gauge(testee: JsValue, fitValues: Boolean, fitArraySizes: Boolean, ignoreArrayOrder: Boolean, specifiedPropertiesOnly: Boolean) extends Assertions with AppendedClues with Matchers {
+case class Gauge(testee: JsValue, fitValues: Boolean, fitArraySizes: Boolean, ignoreArrayOrder: Boolean, allPropertiesDefined: Boolean) extends Assertions with AppendedClues with Matchers {
 
-  def withTestee(testee: JsValue): Gauge = Gauge(testee, this.fitValues, this.fitArraySizes, this.ignoreArrayOrder, this.specifiedPropertiesOnly)
+  def withTestee(testee: JsValue): Gauge = Gauge(testee, this.fitValues, this.fitArraySizes, this.ignoreArrayOrder, this.allPropertiesDefined)
 
   def fits(definition: JsValue): Unit = {
     definition match {
@@ -93,7 +93,7 @@ case class Gauge(testee: JsValue, fitValues: Boolean, fitArraySizes: Boolean, ig
       case o: JsObject =>
         defO.fields.foreach { case (k, v) => assertObjectContains(o, k :: breadcrumb, v) }
 
-        if (specifiedPropertiesOnly) {
+        if (allPropertiesDefined) {
           o.fields.foreach {
             case (k, v) => assertGaugeContains(defO, k :: breadcrumb, v)
           }

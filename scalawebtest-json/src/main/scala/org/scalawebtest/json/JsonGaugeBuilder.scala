@@ -64,69 +64,60 @@ trait JsonGauge {
   }
 
   class JsonGaugeFromPlayJson(json: JsValue) {
+    /**
+      * Build a JsonGauge, which checks if the testee fits the gaugeDefinition, by the rules of the gaugeType.
+      * The testee might contain properties, which are not specified in the gaugeDefinition.
+      */
     def fits(gaugeType: GaugeType): JsonGaugeFits = JsonGaugeFits(gaugeByType(gaugeType))
 
+    /**
+      * Synonym for @see [[org.scalawebtest.json.JsonGauge.JsonGaugeFromPlayJson#fits]]
+      */
     def fit(gaugeType: GaugeType): JsonGaugeFits = fits(gaugeType)
+
+    /**
+      * Build a JsonGauge, which checks if the testee fits the gaugeDefinition, by the rules of the gaugeType.
+      * More restrictive then @see [[org.scalawebtest.json.JsonGauge.JsonGaugeFromPlayJson#fits]]. All properties
+      * of the testee have to be specified by the gaugeDefinition.
+      */
+    def completelyFits(gaugeType: GaugeType): JsonGaugeFits = JsonGaugeFits(gaugeByType(gaugeType, allPropertiesDefined = true))
+
+    /**
+      * Synonym for @see [[org.scalawebtest.json.JsonGauge.JsonGaugeFromPlayJson#completelyFits]]
+      */
+    def completelyFit(gaugeType: GaugeType): JsonGaugeFits = completelyFits(gaugeType)
 
     def containsElementFitting(gaugeType: GaugeType): JsonGaugeArrayContains = JsonGaugeArrayContains(gaugeByType(gaugeType))
 
-    protected def gaugeByType(gaugeType: GaugeType): Gauge = gaugeType match {
+    protected def gaugeByType(gaugeType: GaugeType, allPropertiesDefined: Boolean = false): Gauge = gaugeType match {
       case `types` =>
         Gauge(
           testee = json,
           fitValues = false,
           fitArraySizes = false,
           ignoreArrayOrder = true,
-          specifiedPropertiesOnly = false)
-      case `typesAndHasOnlyPropertiesSpecified` =>
-        Gauge(
-          testee = json,
-          fitValues = false,
-          fitArraySizes = false,
-          ignoreArrayOrder = true,
-          specifiedPropertiesOnly = true)
+          allPropertiesDefined = allPropertiesDefined)
       case `typesAndArraySizes` =>
         Gauge(
           testee = json,
           fitValues = false,
           fitArraySizes = true,
           ignoreArrayOrder = true,
-          specifiedPropertiesOnly = false)
-      case `typesArraySizesAndHasOnlyPropertiesSpecified` =>
-        Gauge(
-          testee = json,
-          fitValues = false,
-          fitArraySizes = true,
-          ignoreArrayOrder = true,
-          specifiedPropertiesOnly = true)
+          allPropertiesDefined = allPropertiesDefined)
       case `values` =>
         Gauge(
           testee = json,
           fitValues = true,
           fitArraySizes = true,
           ignoreArrayOrder = false,
-          specifiedPropertiesOnly = false)
-      case `valuesAndHasOnlyPropertiesSpecified` =>
-        Gauge(
-          testee = json,
-          fitValues = true,
-          fitArraySizes = true,
-          ignoreArrayOrder = false,
-          specifiedPropertiesOnly = true)
+          allPropertiesDefined = allPropertiesDefined)
       case `valuesIgnoringArrayOrder` =>
         Gauge(
           testee = json,
           fitValues = true,
           fitArraySizes = true,
           ignoreArrayOrder = true,
-          specifiedPropertiesOnly = false)
-      case `valuesIgnoringArrayOrderAndHavingOnlyPropertiesSpecified` =>
-        Gauge(
-          testee = json,
-          fitValues = true,
-          fitArraySizes = true,
-          ignoreArrayOrder = true,
-          specifiedPropertiesOnly = true)
+          allPropertiesDefined = allPropertiesDefined)
     }
   }
 
@@ -136,21 +127,10 @@ trait JsonGauge {
   object types extends GaugeType
 
   /**
-    * marker object to build a gauge, which only verifies by type and only allows specified properties
-    */
-  object typesAndHasOnlyPropertiesSpecified extends GaugeType
-
-  /**
     * marker object to build a gauge, which only verifies by type,
     * but checks array sizes as well
     */
   object typesAndArraySizes extends GaugeType
-
-  /**
-    * marker object to build a gauge, which only verifies by type,
-    * but checks array sizes and only allows specified properties
-    */
-  object typesArraySizesAndHasOnlyPropertiesSpecified extends GaugeType
 
   /**
     * marker object to build a gauge, which verifies values
@@ -158,21 +138,10 @@ trait JsonGauge {
   object values extends GaugeType
 
   /**
-    * marker object to build a gauge, which verifies values and only allows specified properties
-    */
-  object valuesAndHasOnlyPropertiesSpecified extends GaugeType
-
-  /**
     * marker object to build a gauge, which verifies values,
     * but ignores their order within arrays
     */
   object valuesIgnoringArrayOrder extends GaugeType
-
-  /**
-    * marker object to build a gauge, which verifies values and only allows specified properties
-    * but ignores their order within arrays
-    */
-  object valuesIgnoringArrayOrderAndHavingOnlyPropertiesSpecified extends GaugeType
 
   /**
     * base trait for the marker objects, which are used to select the behavior of the [[org.scalawebtest.json.Gauge]]
@@ -183,11 +152,15 @@ trait JsonGauge {
 
 case class JsonGaugeFits(gauge: Gauge) {
   def of(definition: String): Unit = gauge.fits(Json.parse(definition))
-  def by(definition: String): Unit = of(definition)
+  def of(definition: JsValue): Unit = gauge.fits(definition)
 }
 
 case class JsonGaugeArrayContains(gauge: Gauge) extends Assertions with AppendedClues with Matchers {
   def of(definition: String): Unit = {
+    of(Json.parse(definition))
+  }
+
+  def of(definition: JsValue): Unit = {
     gauge.testee match {
       case array: JsArray =>
         if (!hasMatchingElement(array, definition)) {
@@ -197,12 +170,10 @@ case class JsonGaugeArrayContains(gauge: Gauge) extends Assertions with Appended
     }
   }
 
-  def by(definition: String): Unit = of(definition)
-
-  private def hasMatchingElement(array: JsArray, definition: String) = {
+  private def hasMatchingElement(array: JsArray, definition: JsValue) = {
     array.value.exists(e => {
       try {
-        gauge.withTestee(e).fits(Json.parse(definition))
+        gauge.withTestee(e).fits(definition)
         //the next line is only reached, if all array elements fit the definition
         true
       } catch {

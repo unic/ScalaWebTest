@@ -29,7 +29,15 @@ trait JsonGaugeFromResponse {
     */
   def fitsTypes(definition: String)(implicit webDriver: WebDriver): Unit = {
     def document = Json.parse(webDriver.getPageSource)
-    Gauge(document, fitValues = false, fitArraySizes = false, ignoreArrayOrder = true).fits(Json.parse(definition))
+    Gauge(document, fitValues = false, fitArraySizes = false, ignoreArrayOrder = true, allPropertiesDefined = false).fits(Json.parse(definition))
+  }
+
+  /**
+    * Test if all types of the response fit the provided [[org.scalawebtest.json.Gauge]] definition, and now unspecified properties are present.
+    */
+  def fitsTypesAndHasOnlySpecifiedProperties(definition: String)(implicit webDriver: WebDriver): Unit = {
+    def document = Json.parse(webDriver.getPageSource)
+    Gauge(document, fitValues = false, fitArraySizes = false, ignoreArrayOrder = true, allPropertiesDefined = true).fits(Json.parse(definition))
   }
 
   /**
@@ -37,7 +45,15 @@ trait JsonGaugeFromResponse {
     */
   def fitsTypesAndArraySizes(definition: String)(implicit webDriver: WebDriver): Unit = {
     def document = Json.parse(webDriver.getPageSource)
-    Gauge(document, fitValues = false, fitArraySizes = true, ignoreArrayOrder = true).fits(Json.parse(definition))
+    Gauge(document, fitValues = false, fitArraySizes = true, ignoreArrayOrder = true, allPropertiesDefined = false).fits(Json.parse(definition))
+  }
+
+  /**
+    * Test if all types and array sizes of the response fit the provided [[org.scalawebtest.json.Gauge]] definition and no unspecified properties are present.
+    */
+  def fitsTypesArraySizesAndHasOnlySpecifiedProperties(definition: String)(implicit webDriver: WebDriver): Unit = {
+    def document = Json.parse(webDriver.getPageSource)
+    Gauge(document, fitValues = false, fitArraySizes = true, ignoreArrayOrder = true, allPropertiesDefined = true).fits(Json.parse(definition))
   }
 
   /**
@@ -45,16 +61,33 @@ trait JsonGaugeFromResponse {
     */
   def fitsValues(definition: String)(implicit webDriver: WebDriver): Unit = {
     def document = Json.parse(webDriver.getPageSource)
-    Gauge(document, fitValues = true, fitArraySizes = true, ignoreArrayOrder = false).fits(Json.parse(definition))
+    Gauge(document, fitValues = true, fitArraySizes = true, ignoreArrayOrder = false, allPropertiesDefined = false).fits(Json.parse(definition))
+  }
+
+  /**
+    * Test if all values of the response fit the provided [[org.scalawebtest.json.Gauge]] definition and no unspecified properties are present.
+    */
+  def fitsValuesAndHasOnlySpecifiedProperties(definition: String)(implicit webDriver: WebDriver): Unit = {
+    def document = Json.parse(webDriver.getPageSource)
+    Gauge(document, fitValues = true, fitArraySizes = true, ignoreArrayOrder = false, allPropertiesDefined = true).fits(Json.parse(definition))
   }
 
   /**
     * Test if all values of the response fit the provided [[org.scalawebtest.json.Gauge]] definition,
-    * but ignoring the order of elements with arrays
+    * but ignoring the order of elements in arrays.
     */
   def fitsValuesIgnoringArrayOrders(definition: String)(implicit webDriver: WebDriver): Unit = {
     def document = Json.parse(webDriver.getPageSource)
-    Gauge(document, fitValues = true, fitArraySizes = true, ignoreArrayOrder = true).fits(Json.parse(definition))
+    Gauge(document, fitValues = true, fitArraySizes = true, ignoreArrayOrder = true, allPropertiesDefined = false).fits(Json.parse(definition))
+  }
+
+  /**
+    * Test if all values of the response fit the provided [[org.scalawebtest.json.Gauge]] definition and no unspecified properties are present,
+    * but ignoring the order of elements in arrays.
+    */
+  def fitsValuesIgnoringArrayOrdersAndHavingOnlySpecifiedProperties(definition: String)(implicit webDriver: WebDriver): Unit = {
+    def document = Json.parse(webDriver.getPageSource)
+    Gauge(document, fitValues = true, fitArraySizes = true, ignoreArrayOrder = true, allPropertiesDefined = true).fits(Json.parse(definition))
   }
 }
 

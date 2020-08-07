@@ -18,7 +18,9 @@ import java.net.URL
 
 import org.openqa.selenium.Capabilities
 import org.openqa.selenium.chrome.ChromeOptions
-import org.openqa.selenium.remote.RemoteWebDriver
+import org.openqa.selenium.html5.LocalStorage
+import org.openqa.selenium.remote.{RemoteExecuteMethod, RemoteWebDriver}
+import org.openqa.selenium.remote.html5.RemoteWebStorage
 import org.scalatest.ConfigMap
 import org.scalawebtest.core.configuration._
 import org.scalawebtest.core.{Configurable, IntegrationSpec}
@@ -61,7 +63,9 @@ trait SeleniumChrome extends Configurable {
     override val webDriverName: String = classOf[SeleniumChrome].getCanonicalName
   }
 
+  def getLocalWebStorage: LocalStorage = {
+    val executeMethod = new RemoteExecuteMethod(webDriver.asInstanceOf[RemoteWebDriver])
+    val webStorage = new RemoteWebStorage(executeMethod)
+    webStorage.getLocalStorage
+  }
 }
-
-
-

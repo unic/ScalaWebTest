@@ -68,6 +68,8 @@ sbt> it:testOnly org.scalawebtest.integration.gauge.ContainsSpec
 
 1. Create the file `~/.sbt/1.0/plugins/gpg.sbt` and add the following line `addSbtPlugin("com.jsuereth" % "sbt-pgp" % "2.0.1")`
 
+1. Create the file `~/sbt/1.0/global.sbt` and add the following line `Global / useGpg := false` or install gpg according to the [sbt-pgp documentation](https://github.com/sbt/sbt-pgp).
+
 1. Copy the private key (Sonatype PGP Private and Public Key from our company password store), to `~/.sbt/gpg/secring.asc`
 
 1. Create the file  `~/.sbt/1.0/sonatype.sbt` and add the following content, then replace username and password with your personal oss.sonatype credentials

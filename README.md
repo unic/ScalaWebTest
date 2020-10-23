@@ -66,7 +66,7 @@ sbt> it:testOnly org.scalawebtest.integration.gauge.ContainsSpec
 
 ### Prerequisites
 
-1. Create the file `~/.sbt/1.0/plugins/gpg.sbt` and add the following line `addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.1.1")`
+1. Create the file `~/.sbt/1.0/plugins/gpg.sbt` and add the following line `addSbtPlugin("com.jsuereth" % "sbt-pgp" % "2.0.1")`
 
 1. Copy the private key (Sonatype PGP Private and Public Key from our company password store), to `~/.sbt/gpg/secring.asc`
 
@@ -94,7 +94,7 @@ The release process of ScalaWebTest is currently done manually. The process is a
     1. `inttest` - compile and run the integration tests
     1. `+ publishSigned` - publishes all packages, sources and poms 
     1. Enter the Sonatype PGP Key Password as stored in our company password store
-    1. Go to <https://oss.sonatype.org/#stagingRepositories> verify and close the staging repository
+    1. Go to <https://oss.sonatype.org/#stagingRepositories> close and release the staging repository
     1. `exit` - exits the sbt interactive mode
 1. Commit your changes with the commit message "Release x.x.x" (e.g. `Release 1.0.0`)
 1. Tag this commit with the release version `git tag -a x.x.x -m "x.x.x"`

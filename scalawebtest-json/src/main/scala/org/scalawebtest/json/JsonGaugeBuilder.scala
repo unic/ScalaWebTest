@@ -40,7 +40,7 @@ object JsonGauge extends JsonGauge
   *
   * Next you choose the [[org.scalawebtest.json.JsonGauge.GaugeType]], which has to be one of the following [[org.scalawebtest.json.JsonGauge#types$ types]], [[org.scalawebtest.json.JsonGauge#typesAndArraySizes$ typesAndArraySizes]], [[org.scalawebtest.json.JsonGauge#values$ values]] or [[org.scalawebtest.json.JsonGauge.JsonGaugeFromJsLookup#containsElementFitting containsElementFitting]]
   *
-  * Last is the definition of the JSON `gauge` wrapped in [[org.scalawebtest.json.JsonGaugeFits#of of]]. The definition has to be a String, which contains a valid JSON document.
+  * Last is the definition of the JSON `gauge` wrapped in [[org.scalawebtest.json.JsonGaugeFits!.of(definition:String)* of]] or [[org.scalawebtest.json.JsonGaugeFits!.of(definition:play\.api\.libs\.json\.JsValue)* of]]. The definition has to be either a String, which contains a valid JSON document or a JsValue.
   *
   * ==Example==
   * {{{

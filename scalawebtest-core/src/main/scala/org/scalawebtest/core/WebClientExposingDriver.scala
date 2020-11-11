@@ -17,7 +17,7 @@ package org.scalawebtest.core
 import com.gargoylesoftware.htmlunit.html.HtmlPage
 import com.gargoylesoftware.htmlunit.util.NameValuePair
 import com.gargoylesoftware.htmlunit.xml.XmlPage
-import com.gargoylesoftware.htmlunit.{BrowserVersion, TextPage, WebClient, WebClientOptions}
+import com.gargoylesoftware.htmlunit.{BrowserVersion, Page, StorageHolder, TextPage, WebClient, WebClientOptions}
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
 
 import scala.jdk.CollectionConverters._
@@ -115,6 +115,16 @@ class WebClientExposingDriver(version: BrowserVersion) extends HtmlUnitDriver(ve
   def waitForBackgroundJavaScript(timeoutMillis: Long): Int = {
     getWebClient.waitForBackgroundJavaScript(timeoutMillis)
   }
+
+
+  /**
+    * @return Gets the Local storage for the given page.
+    */
+  def localWebStorage(page:Page): java.util.Map[String, String] = getWebClient.getStorageHolder.getStore(StorageHolder.Type.LOCAL_STORAGE, page)
+
+
+  /**
+    * @return Gets the Session storage for the given page.
+    */
+  def sessionStorage(page:Page): java.util.Map[String, String] = getWebClient.getStorageHolder.getStore(StorageHolder.Type.SESSION_STORAGE, page)
 }
-
-

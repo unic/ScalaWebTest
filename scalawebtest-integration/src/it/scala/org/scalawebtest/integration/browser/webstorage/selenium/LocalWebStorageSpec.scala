@@ -1,6 +1,6 @@
-package org.scalawebtest.integration.browser.localstorage
+package org.scalawebtest.integration.browser.webstorage.selenium
 
-import org.scalatest.AppendedClues
+import org.scalatest.{AppendedClues, ConfigMap}
 import org.scalawebtest.core.IntegrationFlatSpec
 import org.scalawebtest.core.browser.SeleniumChrome
 import org.scalawebtest.core.gauge.HtmlGauge
@@ -35,4 +35,13 @@ class LocalWebStorageSpec extends IntegrationFlatSpec with AppendedClues with Ht
     localWebStorage.removeItem(localWebStorageKey)
     localWebStorage.keySet() should not contain localWebStorageKey
   }
+
+  // only test which differs in behaviour
+//  it should "still contain the same key after the driver was closed once" in {
+//    close()
+//    prepareWebDriver(new ConfigMap(Map()))
+//    go to url
+//    localWebStorage should have size 1
+//    localWebStorage.keySet() should contain(localWebStorageKey)
+//  }
 }

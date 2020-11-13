@@ -5,7 +5,7 @@ import java.net.URL
 import org.scalatest.AppendedClues
 import org.scalawebtest.core.{IntegrationFlatSpec, WebClientExposingHtmlUnit}
 
-class SessionStorageSpec extends IntegrationFlatSpec with AppendedClues with WebClientExposingHtmlUnit {
+class SessionStorageSpec extends IntegrationFlatSpec with AppendedClues {
 
   config.useBaseUri("http://localhost:9090")
   loginConfig.useLoginUri("http://localhost:9090/fakeLogin.jsp")
@@ -15,7 +15,7 @@ class SessionStorageSpec extends IntegrationFlatSpec with AppendedClues with Web
   val sessionStorageKey: String            = "message"
   val expectedMsg: String                  = "Hello SessionStorage"
 
-  def sessionStorage = webDriver.sessionStorage(webDriver.getCurrentHtmlPage.get)
+  def sessionStorage = asWebClientExposingDriverOrError(webDriver).sessionStorage(asWebClientExposingDriverOrError(webDriver).getCurrentHtmlPage.get)
 
   // maybe extract to a Behaviour?
   it should "not be null" in {
@@ -41,8 +41,8 @@ class SessionStorageSpec extends IntegrationFlatSpec with AppendedClues with Web
 
   // only test which differs in behaviour
   it should "still contain the same key after the driver was closed once" in {
-    webDriver.getClient.close()
-    webDriver.getClient.openWindow(new URL(url), "")
+    asWebClientExposingDriverOrError(webDriver).close()
+    asWebClientExposingDriverOrError(webDriver).getClient.openWindow(new URL(url), "")
     sessionStorage.keySet() should not contain sessionStorageKey
   }
 }

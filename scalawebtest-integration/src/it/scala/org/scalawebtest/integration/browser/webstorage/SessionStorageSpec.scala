@@ -3,7 +3,7 @@ package org.scalawebtest.integration.browser.webstorage
 import java.net.URL
 
 import org.scalatest.AppendedClues
-import org.scalawebtest.core.{IntegrationFlatSpec, WebClientExposingHtmlUnit}
+import org.scalawebtest.core.{IntegrationFlatSpec}
 
 class SessionStorageSpec extends IntegrationFlatSpec with AppendedClues {
 

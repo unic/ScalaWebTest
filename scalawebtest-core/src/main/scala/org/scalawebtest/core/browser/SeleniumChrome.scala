@@ -18,10 +18,11 @@ import java.net.URL
 
 import org.openqa.selenium.Capabilities
 import org.openqa.selenium.chrome.ChromeOptions
-import org.openqa.selenium.html5.{LocalStorage, SessionStorage}
-import org.openqa.selenium.remote.{RemoteExecuteMethod, RemoteWebDriver}
 import org.openqa.selenium.remote.html5.RemoteWebStorage
+import org.openqa.selenium.remote.{RemoteExecuteMethod, RemoteWebDriver}
 import org.scalatest.ConfigMap
+import org.scalawebtest.core.browser.webstorage.common.WebStorageAccessor
+import org.scalawebtest.core.browser.webstorage.{SeleniumChromeLocalStorage, SeleniumChromeSessionStorage}
 import org.scalawebtest.core.configuration._
 import org.scalawebtest.core.{Configurable, IntegrationSpec}
 
@@ -68,7 +69,7 @@ trait SeleniumChrome extends Configurable {
     new RemoteWebStorage(executeMethod)
   }
 
-  def localWebStorage: LocalStorage = webStorage.getLocalStorage
-  def sessionStorage: SessionStorage = webStorage.getSessionStorage
+  def localStorage: WebStorageAccessor = new SeleniumChromeLocalStorage(webStorage.getLocalStorage)
+  def sessionStorage: WebStorageAccessor = new SeleniumChromeSessionStorage(webStorage.getSessionStorage)
 
 }

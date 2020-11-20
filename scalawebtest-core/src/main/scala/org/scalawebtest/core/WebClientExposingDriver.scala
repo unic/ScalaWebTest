@@ -17,8 +17,10 @@ package org.scalawebtest.core
 import com.gargoylesoftware.htmlunit.html.HtmlPage
 import com.gargoylesoftware.htmlunit.util.NameValuePair
 import com.gargoylesoftware.htmlunit.xml.XmlPage
-import com.gargoylesoftware.htmlunit.{BrowserVersion, Page, StorageHolder, TextPage, WebClient, WebClientOptions}
+import com.gargoylesoftware.htmlunit._
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
+import org.scalawebtest.core.browser.webstorage.WebClientExposingWebStorage
+import org.scalawebtest.core.browser.webstorage.common.WebStorageAccessor
 
 import scala.jdk.CollectionConverters._
 
@@ -118,13 +120,13 @@ class WebClientExposingDriver(version: BrowserVersion) extends HtmlUnitDriver(ve
 
 
   /**
-    * @return Gets the Local storage for the given page.
+    * @return Gets the Local storage for the last page it as a WebClientExposingWebStorage.
     */
-  def localWebStorage(page:Page): java.util.Map[String, String] = getWebClient.getStorageHolder.getStore(StorageHolder.Type.LOCAL_STORAGE, page)
+  def localStorage(): WebStorageAccessor = new WebClientExposingWebStorage(getWebClient.getStorageHolder, StorageHolder.Type.LOCAL_STORAGE, lastPage())
 
 
   /**
-    * @return Gets the Session storage for the given page.
+    * @return Gets the Session storage for the last page and wraps it as a WebClientExposingWebStorage.
     */
-  def sessionStorage(page:Page): java.util.Map[String, String] = getWebClient.getStorageHolder.getStore(StorageHolder.Type.SESSION_STORAGE, page)
+  def sessionStorage(): WebStorageAccessor = new WebClientExposingWebStorage(getWebClient.getStorageHolder, StorageHolder.Type.SESSION_STORAGE, lastPage())
 }

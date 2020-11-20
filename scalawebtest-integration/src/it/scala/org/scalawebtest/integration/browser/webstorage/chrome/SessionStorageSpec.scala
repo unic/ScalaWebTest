@@ -15,6 +15,6 @@ class SessionStorageSpec extends IntegrationFlatSpec with AppendedClues with Sel
   val sessionWebStorageKey: String          = "message"
   val expectedMsg: String                   = "Hello SessionStorage"
 
-  "SessionStorage of SeleniumChrome" should behave like aWebStorage(localStorage, sessionWebStorageKey, expectedMsg)
-  "SessionStorage of SeleniumChrome" should behave like aSessionStorage(localStorage, sessionWebStorageKey)
+  "SessionStorage of SeleniumChrome" should behave like aWebStorage(sessionStorage, sessionWebStorageKey, expectedMsg)
+  "SessionStorage of SeleniumChrome" should behave like aSessionStorage(sessionStorage, sessionWebStorageKey)
 }

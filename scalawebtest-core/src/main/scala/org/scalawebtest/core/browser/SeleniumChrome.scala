@@ -18,11 +18,10 @@ import java.net.URL
 
 import org.openqa.selenium.Capabilities
 import org.openqa.selenium.chrome.ChromeOptions
+import org.openqa.selenium.html5.{LocalStorage, SessionStorage, WebStorage}
 import org.openqa.selenium.remote.html5.RemoteWebStorage
 import org.openqa.selenium.remote.{RemoteExecuteMethod, RemoteWebDriver}
 import org.scalatest.ConfigMap
-import org.scalawebtest.core.browser.webstorage.common.WebStorageAccessor
-import org.scalawebtest.core.browser.webstorage.{SeleniumChromeLocalStorage, SeleniumChromeSessionStorage}
 import org.scalawebtest.core.configuration._
 import org.scalawebtest.core.{Configurable, IntegrationSpec}
 
@@ -52,24 +51,23 @@ trait SeleniumChrome extends Configurable {
     )
   }
 
-  class ChromeRemoteWebDriver(remoteAddress: URL, capabilities: Capabilities) extends RemoteWebDriver(remoteAddress, capabilities) {
+  class ChromeRemoteWebDriver(remoteAddress: URL, capabilities: Capabilities) extends RemoteWebDriver(remoteAddress, capabilities) with WebStorage {
     override def getPageSource: String = {
       super.getPageSource
         .replaceFirst("""<html.*><head.*></head><body.*><pre style="word-wrap: break-word; white-space: pre-wrap;">""", "")
         .replaceFirst("""</pre></body></html>""", "")
     }
+
+    protected def webStorage: RemoteWebStorage = {
+      val executeMethod = new RemoteExecuteMethod(webDriver.asInstanceOf[RemoteWebDriver])
+      new RemoteWebStorage(executeMethod)
+    }
+
+    override def getLocalStorage: LocalStorage = webStorage.getLocalStorage
+    override def getSessionStorage: SessionStorage = webStorage.getSessionStorage
   }
 
   trait SeleniumChromeConfiguration extends BaseConfiguration with WebDriverName with SeleniumBrowserConfiguration {
     override val webDriverName: String = classOf[SeleniumChrome].getCanonicalName
   }
-
-  protected def webStorage: RemoteWebStorage = {
-    val executeMethod = new RemoteExecuteMethod(webDriver.asInstanceOf[RemoteWebDriver])
-    new RemoteWebStorage(executeMethod)
-  }
-
-  def localStorage: WebStorageAccessor = new SeleniumChromeLocalStorage(webStorage.getLocalStorage)
-  def sessionStorage: WebStorageAccessor = new SeleniumChromeSessionStorage(webStorage.getSessionStorage)
-
 }

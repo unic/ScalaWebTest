@@ -18,9 +18,9 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage
 import com.gargoylesoftware.htmlunit.util.NameValuePair
 import com.gargoylesoftware.htmlunit.xml.XmlPage
 import com.gargoylesoftware.htmlunit._
+import org.openqa.selenium.html5.{LocalStorage, SessionStorage, WebStorage}
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
-import org.scalawebtest.core.browser.webstorage.WebClientExposingWebStorage
-import org.scalawebtest.core.browser.webstorage.common.WebStorageAccessor
+import org.scalawebtest.core.browser.webstorage.{HtmlUnitLocalStorage, HtmlUnitSessionStorage, StorageHolderBasedWebStorage}
 
 import scala.jdk.CollectionConverters._
 
@@ -28,7 +28,7 @@ import scala.jdk.CollectionConverters._
   * Extension of the default HtmlUnitDriver that provides access to some of the web client's options and methods which are hidden in the
   * default implementation.
   */
-class WebClientExposingDriver(version: BrowserVersion) extends HtmlUnitDriver(version) {
+class WebClientExposingDriver(version: BrowserVersion) extends HtmlUnitDriver(version) with WebStorage {
 
   /**
     * @return the options object of the WebClient
@@ -118,15 +118,13 @@ class WebClientExposingDriver(version: BrowserVersion) extends HtmlUnitDriver(ve
     getWebClient.waitForBackgroundJavaScript(timeoutMillis)
   }
 
-
   /**
     * @return Gets the Local storage for the last page it as a WebClientExposingWebStorage.
     */
-  def localStorage(): WebStorageAccessor = new WebClientExposingWebStorage(getWebClient.getStorageHolder, StorageHolder.Type.LOCAL_STORAGE, lastPage())
-
+  override def getLocalStorage: LocalStorage = new HtmlUnitLocalStorage(getWebClient.getStorageHolder, StorageHolder.Type.LOCAL_STORAGE, lastPage())
 
   /**
     * @return Gets the Session storage for the last page and wraps it as a WebClientExposingWebStorage.
     */
-  def sessionStorage(): WebStorageAccessor = new WebClientExposingWebStorage(getWebClient.getStorageHolder, StorageHolder.Type.SESSION_STORAGE, lastPage())
+  override def getSessionStorage: SessionStorage = new HtmlUnitSessionStorage(getWebClient.getStorageHolder, StorageHolder.Type.SESSION_STORAGE, lastPage())
 }

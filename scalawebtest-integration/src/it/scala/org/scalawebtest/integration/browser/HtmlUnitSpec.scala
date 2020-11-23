@@ -9,4 +9,6 @@ class HtmlUnitSpec extends ScalaWebTestBaseSpec with BrowserBehaviors {
   "HtmlUnit" should behave like aWebBrowserWithElementLookup()
   it should behave like anHtmlGauge()
   it should behave like aJsonGauge()
+  it should behave like aLocalStorage()
+  it should behave like aSessionStorage()
 }

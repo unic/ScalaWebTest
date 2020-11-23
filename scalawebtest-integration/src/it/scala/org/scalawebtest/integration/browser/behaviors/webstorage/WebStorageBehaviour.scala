@@ -6,7 +6,7 @@ import org.scalawebtest.core.browser.webstorage.common.WebStorageAccessor
 trait WebStorageBehaviour {
   self: IntegrationFlatSpec =>
 
-  def aWebStorage(webStorage: WebStorageAccessor, storageKey:String, expectedMsg:String): Unit = {
+  def aWebStorage(webStorage: => WebStorageAccessor, storageKey:String, expectedMsg:String): Unit = {
 
     it should "not be null" in {
       webStorage should not be null

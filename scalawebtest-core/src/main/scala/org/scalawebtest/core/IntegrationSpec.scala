@@ -18,6 +18,7 @@ import java.net.URI
 import java.util.logging.Level
 
 import com.gargoylesoftware.htmlunit.BrowserVersion
+import org.openqa.selenium.html5.WebStorage
 import org.openqa.selenium.{Cookie, WebDriver}
 import org.scalatest._
 import org.scalatest.concurrent.Eventually
@@ -39,7 +40,7 @@ import scala.xml.NodeSeq
   * and extend one of the Login traits if applicable.
   */
 trait IntegrationSpec extends WebBrowser with Suite with BeforeAndAfterEach with BeforeAndAfterAllConfigMap with Eventually {
-  implicit var webDriver: WebDriver = new WebClientExposingDriver(BrowserVersion.CHROME)
+  implicit var webDriver: WebDriver with WebStorage = new WebClientExposingDriver(BrowserVersion.CHROME)
 
   private val logger: Logger = LoggerFactory.getLogger(getClass.getName)
   val cookiesToBeDiscarded = new ListBuffer[Cookie]()

@@ -67,21 +67,23 @@ trait SeleniumChrome extends Configurable {
     }
 
     override def getLocalStorage: LocalStorage = webStorage.getLocalStorage
+
     override def getSessionStorage: SessionStorage = webStorage.getSessionStorage
   }
 
   trait SeleniumChromeConfiguration extends BaseConfiguration with WebDriverName with SeleniumBrowserConfiguration {
     override val webDriverName: String = classOf[SeleniumChrome].getCanonicalName
   }
-}
 
-trait HeadlessSeleniumChrome extends SeleniumChrome {
-  self: IntegrationSpec =>
-  override val forcedArguments = List("--headless")
-}
 
-trait HeadedSeleniumChrome extends SeleniumChrome {
-  self: IntegrationSpec =>
-  override val defaultArguments = List("--no-sandbox")
-}
+  trait HeadlessSeleniumChrome extends SeleniumChrome {
+    self: IntegrationSpec =>
+    override val forcedArguments = List("--headless")
+  }
 
+  trait HeadedSeleniumChrome extends SeleniumChrome {
+    self: IntegrationSpec =>
+    override val defaultArguments = List("--no-sandbox")
+  }
+
+}

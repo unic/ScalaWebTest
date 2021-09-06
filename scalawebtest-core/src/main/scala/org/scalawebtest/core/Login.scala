@@ -14,7 +14,8 @@
  */
 package org.scalawebtest.core
 
-import javax.xml.bind.DatatypeConverter
+import java.util.Base64
+
 import org.scalatest.ConfigMap
 import org.scalatest.concurrent.PatienceConfiguration.Timeout
 import org.scalatest.time.SpanSugar._
@@ -77,7 +78,7 @@ trait FormBasedLogin extends Login {
 
 trait BasicAuthLogin extends Login {
   self: IntegrationSpec =>
-  def base64Encode(value: String): String = DatatypeConverter.printBase64Binary(value.getBytes())
+  def base64Encode(value: String): String = Base64.getEncoder.encodeToString(value.getBytes())
 
   asWebClientExposingDriverOrError(webDriver)
     .getClient

@@ -66,16 +66,13 @@ sbt> it:testOnly org.scalawebtest.integration.gauge.ContainsSpec
 
 ### Prerequisites
 
-Create the following file ~/.sbt/1.0/plugins/gpg.sbt
+1. Create the file `~/.sbt/1.0/plugins/gpg.sbt` and add the following line `addSbtPlugin("com.jsuereth" % "sbt-pgp" % "2.0.1")`
 
-Add the following line to gpg.sbt
-`addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.1.1")`
+1. Create the file `~/sbt/1.0/global.sbt` and add the following line `Global / useGpg := false` or install gpg according to the [sbt-pgp documentation](https://github.com/sbt/sbt-pgp).
 
-Copy the private key (Sonatype PGP Private and Public Key from our company password store), to ~/.sbt/gpg/secring.ast
+1. Copy the private key (Sonatype PGP Private and Public Key from our company password store), to `~/.sbt/gpg/secring.asc`
 
-Create the file  ~/.sbt/1.0/sonatype.sbt
-
-Add the following content, then replace username and password
+1. Create the file  `~/.sbt/1.0/sonatype.sbt` and add the following content, then replace username and password with your personal oss.sonatype credentials
 
 ```scalas
 credentials += Credentials("Sonatype Nexus Repository Manager",
@@ -90,17 +87,17 @@ The release process of ScalaWebTest is currently done manually. The process is a
 
 1. Switch the version in `build.sbt` to that which is to be released (e.g. from `0.0.1-SNAPSHOT` to `1.0.0`)
 1. In your command line type in the following:
-	1. the long way:
-		1. `sbt` - enters the sbt interactive mode
-		r. `+ clean` - deletes all generated files (target)
-		1. `+ test` - compiles and tests the main sources
-		1. `+ doc` - generate scaladoc
-		1. `mimaReportBinaryIssues` - execute the Migration Manager to verify binary compatibility
-		1. `inttest` - compile and run the integration tests
-		1. `+ publishSigned` - publishes all packages, sources and poms 
-		1. Enter the Sonatype PGP Key Password as stored in our company password store
-		1. Go to <https://oss.sonatype.org/#stagingRepositories> verify and close the staging repository
-		1. `exit` - exits the sbt interactive mode
+    1. navigate to the root folder of the ScalaWebTest git repository
+    1. `sbt` - enters the sbt interactive mode
+    1. `+ clean` - deletes all generated files (target)
+    1. `+ test` - compiles and tests the main sources
+    1. `+ doc` - generate scaladoc
+    1. `mimaReportBinaryIssues` - execute the Migration Manager to verify binary compatibility
+    1. `inttest` - compile and run the integration tests
+    1. `+ publishSigned` - publishes all packages, sources and poms 
+    1. Enter the Sonatype PGP Key Password as stored in our company password store
+    1. Go to <https://oss.sonatype.org/#stagingRepositories> close and release the staging repository
+    1. `exit` - exits the sbt interactive mode
 1. Commit your changes with the commit message "Release x.x.x" (e.g. `Release 1.0.0`)
 1. Tag this commit with the release version `git tag -a x.x.x -m "x.x.x"`
 1. Switch the version in `build.sbt` to the snapshot version (e.g. from `1.0.0` to `1.0.0-SNAPSHOT`) and update the documentation if needed

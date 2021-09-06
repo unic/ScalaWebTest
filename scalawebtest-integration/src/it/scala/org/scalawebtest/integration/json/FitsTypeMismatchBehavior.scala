@@ -7,43 +7,52 @@ import play.api.libs.json.Json
 trait FitsTypeMismatchBehavior {
   self: ScalaWebTestJsonBaseSpec =>
 
-  def jsonGaugeFitting(gaugeType: GaugeType): Unit = {
+  def jsonGaugeCompletelyFitting(gaugeType: GaugeType): Unit = jsonGaugeFitting(gaugeType, completely = true)
+
+  def jsonGaugeFitting(gaugeType: GaugeType, completely: Boolean = false): Unit = {
     def dijkstra = Json.parse(webDriver.getPageSource)
+
+    def dijkstraFits(gaugeType: GaugeType) = {
+      if (completely)
+        dijkstra completelyFits gaugeType
+      else
+        dijkstra fits gaugeType
+    }
 
     "When verifying JSON using fitsTypes or fitsTypesAndArraySizes" should
       "fail when a String is expected, but an Int provided" in {
       assertThrows[TestFailedException] {
-        dijkstra fits gaugeType of """{"yearOfBirth": ""}"""
+        dijkstraFits(gaugeType) of """{"yearOfBirth": ""}"""
       }
     }
     it should "fail when an Int is expected, but a String provided" in {
       assertThrows[TestFailedException] {
-        dijkstra fits gaugeType of """{"name": 0}"""
+        dijkstraFits(gaugeType) of """{"name": 0}"""
       }
     }
     it should "fail when a Boolean is expected, but a String provided" in {
       assertThrows[TestFailedException] {
-        dijkstra fits gaugeType of """{"name": true}"""
+        dijkstraFits(gaugeType) of """{"name": true}"""
       }
     }
     it should "fail when an Object is expected, but a String provided" in {
       assertThrows[TestFailedException] {
-        dijkstra fits gaugeType of """{"name": {}}"""
+        dijkstraFits(gaugeType) of """{"name": {}}"""
       }
     }
     it should "fail when an Array is expected, but a String provided" in {
       assertThrows[TestFailedException] {
-        dijkstra fits gaugeType of """{"name": []}"""
+        dijkstraFits(gaugeType) of """{"name": []}"""
       }
     }
     it should "fail when null is expected, but a String provided" in {
       assertThrows[TestFailedException] {
-        dijkstra fits gaugeType of """{"name": null}"""
+        dijkstraFits(gaugeType) of """{"name": null}"""
       }
     }
     it should "fail when a property is missing" in {
       assertThrows[TestFailedException] {
-        dijkstra fits gaugeType of """{"thesis": "Communication with an Automatic Computer"}"""
+        dijkstraFits(gaugeType) of """{"thesis": "Communication with an Automatic Computer"}"""
       }
     }
   }

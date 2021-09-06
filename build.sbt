@@ -2,7 +2,7 @@ import ScalaWebTestBuild._
 
 import scala.xml.transform.RewriteRule
 
-lazy val supportedScalaVersions = Seq("2.13.3", "2.12.8")
+lazy val supportedScalaVersions = Seq("2.13.3", "2.12.12")
 
 val projectVersion = "4.0.0-SNAPSHOT"
 val scalaTestVersion = "3.2.0"

@@ -74,7 +74,7 @@ trait SeleniumChrome extends Configurable {
   trait SeleniumChromeConfiguration extends BaseConfiguration with WebDriverName with SeleniumBrowserConfiguration {
     override val webDriverName: String = classOf[SeleniumChrome].getCanonicalName
   }
-
+}
 
   trait HeadlessSeleniumChrome extends SeleniumChrome {
     self: IntegrationSpec =>
@@ -85,5 +85,3 @@ trait SeleniumChrome extends Configurable {
     self: IntegrationSpec =>
     override val defaultArguments = List("--no-sandbox")
   }
-
-}

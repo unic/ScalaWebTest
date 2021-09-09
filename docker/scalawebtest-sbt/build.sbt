@@ -1,4 +1,4 @@
-ThisBuild / scalaVersion := "2.13.0"
+ThisBuild / scalaVersion := "2.13.3"
 
 lazy val tests = (project in file("."))
   .enablePlugins(JavaAppPackaging)

@@ -2,7 +2,7 @@
 # ScalaWebTest SBT Dockerfile
 #
 # Pull base image
-FROM hseeberger/scala-sbt:8u212_1.2.8_2.13.0
+FROM hseeberger/scala-sbt:8u265_1.4.3_2.13.3
 
 # Define working directory
 WORKDIR /home/sbtuser

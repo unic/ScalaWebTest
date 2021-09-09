@@ -4,8 +4,8 @@ import scala.xml.transform.RewriteRule
 
 lazy val supportedScalaVersions = Seq("2.13.3", "2.12.12")
 
-val projectVersion = "4.0.0-SNAPSHOT"
-val scalaTestVersion = "3.2.0"
+val projectVersion = "4.0.0-RC2"
+val scalaTestVersion = "3.2.9"
 val scalaTestSeleniumVersion = "3.2.0.0"
 val seleniumVersion = "3.141.59"
 val htmlUnitVersion = "2.41.0"
@@ -14,7 +14,7 @@ val playJsonVersion = "2.9.0"
 
 val versions = Map("scalaWebTest" -> projectVersion, "scalaTest" -> scalaTestVersion, "selenium" -> seleniumVersion, "htmlUnit" -> htmlUnitVersion, "playJson" -> playJsonVersion)
 
-val scalaWebTestSeries = "4.0.0"
+val scalaWebTestSeries = "3.0.1"
 def mimaSettings(projectName: String) = Seq(
    mimaPreviousArtifacts := Set("org.scalawebtest" %% projectName % scalaWebTestSeries)
 )

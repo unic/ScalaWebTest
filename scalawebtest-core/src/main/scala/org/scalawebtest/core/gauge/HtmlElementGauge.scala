@@ -22,7 +22,7 @@ import org.openqa.selenium.{JavascriptExecutor, WebDriver, WebElement}
 import org.scalawebtest.core.gauge.FragmentParser.parseFragment
 
 import scala.jdk.CollectionConverters._
-import scala.language.reflectiveCalls
+import scala.reflect.Selectable.reflectiveSelectable
 import scala.xml.NodeSeq
 
 

@@ -58,7 +58,7 @@ trait WebClientExposingDriverConfigFixtures {
   def withJavascript[X](f: X => Unit): X => Unit = withJavascript(f, enabled = true)
 
   private def withFollowingRedirectsInternal[X](f: X => Unit, enableRedirects: Boolean): X => Unit = {
-    x: X => {
+    (x: X) => {
       val webClientExposingDriver = asWebClientExposingDriverOrError(webDriver)
       val redirectionEnabled = webClientExposingDriver.getOptions.isRedirectEnabled
       webClientExposingDriver.getOptions.setRedirectEnabled(enableRedirects)
@@ -71,7 +71,7 @@ trait WebClientExposingDriverConfigFixtures {
   }
 
   private def withCssInternal[X](f: X => Unit, enableCss: Boolean): X => Unit = {
-    x: X => {
+    (x: X) => {
       val webClientExposingDriver = asWebClientExposingDriverOrError(webDriver)
       val wasEnabled = webClientExposingDriver.getOptions.isCssEnabled
       webClientExposingDriver.getOptions.setCssEnabled(enableCss)
@@ -84,7 +84,7 @@ trait WebClientExposingDriverConfigFixtures {
   }
 
   private def withJavascript[X](f: X => Unit, enabled: Boolean): X => Unit = {
-    x: X => {
+    (x: X) => {
       val webClientExposingDriver = asWebClientExposingDriverOrError(webDriver)
       val jsEnabled = webClientExposingDriver.getOptions.isJavaScriptEnabled
       webClientExposingDriver.getOptions.setJavaScriptEnabled(enabled)

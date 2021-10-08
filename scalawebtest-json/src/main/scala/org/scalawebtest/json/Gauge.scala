@@ -145,7 +145,7 @@ case class Gauge(testee: JsValue, fitValues: Boolean, fitArraySizes: Boolean, ig
       case s: JsString => fitsString(json, breadcrumb, s)
       case b: JsBoolean => fitsBoolean(json, breadcrumb, b)
       case JsNull => fitsNull(json, breadcrumb)
-      case _ => fail("Invalid element in gauge definition")
+      case null => fail("Invalid element in gauge definition")
     }
   }
 

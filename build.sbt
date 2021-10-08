@@ -2,15 +2,15 @@ import ScalaWebTestBuild._
 
 import scala.xml.transform.RewriteRule
 
-lazy val supportedScalaVersions = Seq("2.13.3", "2.12.12")
+lazy val supportedScalaVersions = Seq("3.0.2", "2.13.6")
 
 val projectVersion = "4.0.1-SNAPSHOT"
 val scalaTestVersion = "3.2.9"
-val scalaTestSeleniumVersion = "3.2.0.0"
+val scalaTestSeleniumVersion = "3.2.9.0"
 val seleniumVersion = "3.141.59"
 val htmlUnitVersion = "2.41.0"
 val slf4jVersion = "1.7.28"
-val playJsonVersion = "2.9.0"
+val playJsonVersion = "2.10.0-RC5"
 
 val versions = Map("scalaWebTest" -> projectVersion, "scalaTest" -> scalaTestVersion, "selenium" -> seleniumVersion, "htmlUnit" -> htmlUnitVersion, "playJson" -> playJsonVersion)
 
@@ -26,8 +26,8 @@ lazy val root = (project in file("."))
 lazy val commonSettings = Seq(
   organization := "org.scalawebtest",
   version := projectVersion,
-  scalaVersion := "2.13.3",
-  scalacOptions := Seq("-unchecked", "-deprecation", "-Xfatal-warnings"),
+  scalaVersion := "3.0.2",
+  scalacOptions := Seq("-unchecked", "-deprecation", "-Xfatal-warnings", "-rewrite", "-source:3.0-migration"),
   publishMavenStyle := true,
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
@@ -53,7 +53,6 @@ lazy val core = Project(id = "scalawebtest-core", base = file("scalawebtest-core
       "org.seleniumhq.selenium" % "htmlunit-driver" % htmlUnitVersion,
       "org.jsoup" % "jsoup" % "1.13.1",
       "org.slf4j" % "slf4j-api" % slf4jVersion,
-      "org.scala-lang.modules" %% "scala-collection-compat" % "2.1.6"
     )
   )
 

@@ -8,8 +8,8 @@ val projectVersion = "4.0.1-SNAPSHOT"
 val scalaTestVersion = "3.2.9"
 val scalaTestSeleniumVersion = "3.2.9.0"
 val seleniumVersion = "3.141.59"
-val htmlUnitVersion = "2.41.0"
-val slf4jVersion = "1.7.28"
+val htmlUnitVersion = "2.53.0"
+val slf4jVersion = "1.7.32"
 val playJsonVersion = "2.10.0-RC5"
 
 val versions = Map("scalaWebTest" -> projectVersion, "scalaTest" -> scalaTestVersion, "selenium" -> seleniumVersion, "htmlUnit" -> htmlUnitVersion, "playJson" -> playJsonVersion)
@@ -37,7 +37,7 @@ lazy val commonSettings = Seq(
       Some("releases" at nexus + "service/local/staging/deploy/maven2")
   },
   pomIncludeRepository := { _ => false },
-  dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-annotations" % "2.9.8",
+  dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-annotations" % "2.13.0",
   pomExtra := scalaWebTestPomExtra,
   mimaPreviousArtifacts := Set(organization.value %% moduleName.value % scalaWebTestSeries)
 )
@@ -51,7 +51,7 @@ lazy val core = Project(id = "scalawebtest-core", base = file("scalawebtest-core
       "org.scalatestplus" %% "selenium-3-141" % scalaTestSeleniumVersion,
       "org.seleniumhq.selenium" % "selenium-java" % seleniumVersion,
       "org.seleniumhq.selenium" % "htmlunit-driver" % htmlUnitVersion,
-      "org.jsoup" % "jsoup" % "1.13.1",
+      "org.jsoup" % "jsoup" % "1.14.3",
       "org.slf4j" % "slf4j-api" % slf4jVersion,
     )
   )
@@ -116,7 +116,7 @@ lazy val integration_test = Project(id = "scalawebtest-integration", base = file
       "org.seleniumhq.selenium" % "htmlunit-driver" % htmlUnitVersion % "it",
       "org.slf4j" % "slf4j-api" % slf4jVersion % "it",
       "org.slf4j" % "slf4j-simple" % slf4jVersion % "it",
-      "com.typesafe.play" %% "play-json" % playJsonVersion % "it"
+      "com.typesafe.play" %% "play-json" % playJsonVersion % "it",
     )
   )
   .settings(mimaFailOnNoPrevious := false)

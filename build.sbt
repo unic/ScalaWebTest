@@ -20,7 +20,7 @@ lazy val root = (project in file("."))
   .settings(commonSettings: _*)
   .settings(publishArtifact := false)
   .settings(crossScalaVersions := Nil)
-  .disablePlugins(MimaPlugin)
+  .settings(mimaFailOnNoPrevious := false)
   .aggregate(core, aem, json, bom, integration_test)
 
 lazy val commonSettings = Seq(
@@ -73,9 +73,10 @@ lazy val bom = Project(id = "scalawebtest-bom", base = file("scalawebtest-bom"))
   .settings(commonSettings: _*)
   .settings(crossScalaVersions := supportedScalaVersions)
   .settings(
-    publishArtifact in(Compile, packageBin) := false,
-    publishArtifact in(Compile, packageDoc) := false,
-    publishArtifact in(Compile, packageSrc) := false)
+    Compile / packageBin / publishArtifact := false,
+    Compile / packageDoc / publishArtifact := false,
+    Compile / packageSrc / publishArtifact := false,
+  )
   .settings(
     pomExtra := pomExtra.value ++ scalaVersion(bomDependencies(versions)).value
   )
@@ -100,7 +101,7 @@ lazy val bom = Project(id = "scalawebtest-bom", base = file("scalawebtest-bom"))
     val transformer = new scala.xml.transform.RuleTransformer(rewriteRule)
     transformer.transform(node).head
   })
-  .disablePlugins(MimaPlugin)
+  .settings(mimaFailOnNoPrevious := false)
 
 lazy val integration_test = Project(id = "scalawebtest-integration", base = file("scalawebtest-integration"))
   .configs(IntegrationTest)
@@ -118,9 +119,9 @@ lazy val integration_test = Project(id = "scalawebtest-integration", base = file
       "com.typesafe.play" %% "play-json" % playJsonVersion % "it"
     )
   )
-  .disablePlugins(MimaPlugin)
+  .settings(mimaFailOnNoPrevious := false)
   .enablePlugins(JettyPlugin)
-  .settings(containerPort in Jetty := 9090)
+  .settings(Jetty / containerPort := 9090)
   .dependsOn(core)
   .dependsOn(aem)
   .dependsOn(json)

@@ -4,7 +4,7 @@ import scala.xml.transform.RewriteRule
 
 lazy val supportedScalaVersions = Seq("2.13.3", "2.12.12")
 
-val projectVersion = "4.0.0-SNAPSHOT"
+val projectVersion = "4.0.1-SNAPSHOT"
 val scalaTestVersion = "3.2.9"
 val scalaTestSeleniumVersion = "3.2.0.0"
 val seleniumVersion = "3.141.59"
@@ -14,15 +14,13 @@ val playJsonVersion = "2.9.0"
 
 val versions = Map("scalaWebTest" -> projectVersion, "scalaTest" -> scalaTestVersion, "selenium" -> seleniumVersion, "htmlUnit" -> htmlUnitVersion, "playJson" -> playJsonVersion)
 
-val scalaWebTestSeries = "3.0.1"
-def mimaSettings(projectName: String) = Seq(
-   mimaPreviousArtifacts := Set("org.scalawebtest" %% projectName % scalaWebTestSeries)
-)
+val scalaWebTestSeries = "4.0.0"
 
 lazy val root = (project in file("."))
   .settings(commonSettings: _*)
   .settings(publishArtifact := false)
   .settings(crossScalaVersions := Nil)
+  .disablePlugins(MimaPlugin)
   .aggregate(core, aem, json, bom, integration_test)
 
 lazy val commonSettings = Seq(
@@ -40,7 +38,8 @@ lazy val commonSettings = Seq(
   },
   pomIncludeRepository := { _ => false },
   dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-annotations" % "2.9.8",
-  pomExtra := scalaWebTestPomExtra
+  pomExtra := scalaWebTestPomExtra,
+  mimaPreviousArtifacts := Set(organization.value %% moduleName.value % scalaWebTestSeries)
 )
 
 lazy val core = Project(id = "scalawebtest-core", base = file("scalawebtest-core"))
@@ -57,20 +56,17 @@ lazy val core = Project(id = "scalawebtest-core", base = file("scalawebtest-core
       "org.scala-lang.modules" %% "scala-collection-compat" % "2.1.6"
     )
   )
-  .settings(mimaSettings("scalawebtest-core"))
 
 lazy val aem = Project(id = "scalawebtest-aem", base = file("scalawebtest-aem"))
   .settings(commonSettings: _*)
   .settings(crossScalaVersions := supportedScalaVersions)
   .settings(libraryDependencies += "com.typesafe.play" %% "play-json" % playJsonVersion)
-  .settings(mimaSettings("scalawebtest-aem"))
   .dependsOn(core)
 
 lazy val json = Project(id = "scalawebtest-json", base = file("scalawebtest-json"))
   .settings(commonSettings: _*)
   .settings(crossScalaVersions := supportedScalaVersions)
   .settings(libraryDependencies += "com.typesafe.play" %% "play-json" % playJsonVersion)
-  .settings(mimaSettings("scalawebtest-json"))
   .dependsOn(core)
 
 lazy val bom = Project(id = "scalawebtest-bom", base = file("scalawebtest-bom"))
@@ -105,6 +101,7 @@ lazy val bom = Project(id = "scalawebtest-bom", base = file("scalawebtest-bom"))
     val transformer = new scala.xml.transform.RuleTransformer(rewriteRule)
     transformer.transform(node).head
   })
+  .disablePlugins(MimaPlugin)
 
 lazy val integration_test = Project(id = "scalawebtest-integration", base = file("scalawebtest-integration"))
   .configs(IntegrationTest)
@@ -122,6 +119,7 @@ lazy val integration_test = Project(id = "scalawebtest-integration", base = file
       "com.typesafe.play" %% "play-json" % playJsonVersion % "it"
     )
   )
+  .disablePlugins(MimaPlugin)
   .enablePlugins(JettyPlugin)
   .settings(containerPort in Jetty := 9090)
   .dependsOn(core)

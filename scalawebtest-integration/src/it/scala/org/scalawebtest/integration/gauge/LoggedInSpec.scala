@@ -15,12 +15,13 @@
 package org.scalawebtest.integration.gauge
 
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
+import dotty.xml.interpolator.*
 
 class LoggedInSpec extends ScalaWebTestBaseSpec{
   path = "/protectedContent.jsp?username=admin&password=secret"
 
   "When logged in the protectedContent page" should "not show the login form" in {
-    not fit <form name="login_form"></form>
+    not fit xml"""<form name="login_form"></form>"""
   }
 
 }

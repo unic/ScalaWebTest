@@ -1,6 +1,7 @@
 package org.scalawebtest.integration.gauge
 
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
+import dotty.xml.interpolator.*
 
 class SiblingsWithoutIdSpec extends ScalaWebTestBaseSpec {
 
@@ -8,11 +9,13 @@ class SiblingsWithoutIdSpec extends ScalaWebTestBaseSpec {
 
   "The HtmlGauge" should "handle ID-less sibling elements of the same type correctly" in {
     fits(
-      <select name="foobar" class="select">
-        <option value="foo" selected="selected">foo</option>
-        <option value="bar">bar</option>
-        <option value="baz">baz</option>
-      </select>
+      xml"""
+        <select name="foobar" class="select">
+          <option value="foo" selected="selected">foo</option>
+          <option value="bar">bar</option>
+          <option value="baz">baz</option>
+        </select>
+      """
     )
   }
 }

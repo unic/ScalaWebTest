@@ -27,7 +27,7 @@ lazy val commonSettings = Seq(
   organization := "org.scalawebtest",
   version := projectVersion,
   scalaVersion := "3.0.2",
-  scalacOptions := Seq("-unchecked", "-deprecation", "-Xfatal-warnings", "-rewrite", "-source:3.0-migration"),
+  scalacOptions := Seq("-unchecked", "-deprecation", "-Xfatal-warnings"),
   publishMavenStyle := true,
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
@@ -117,6 +117,7 @@ lazy val integration_test = Project(id = "scalawebtest-integration", base = file
       "org.slf4j" % "slf4j-api" % slf4jVersion % "it",
       "org.slf4j" % "slf4j-simple" % slf4jVersion % "it",
       "com.typesafe.play" %% "play-json" % playJsonVersion % "it",
+      "dotty-xml-interpolator" %% "dotty-xml-interpolator" % "0.2.0" % "it",
     )
   )
   .settings(mimaFailOnNoPrevious := false)

@@ -15,24 +15,29 @@
 package org.scalawebtest.integration.gauge
 
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
+import dotty.xml.interpolator.*
 
 class NavigationSpec extends ScalaWebTestBaseSpec {
   path = "/elementsList.jsp"
 
   "The navigation" should "contain three items" in {
     currentPage fits
-      <ul>
-        <li class="list_item"/>
-        <li class="list_item"/>
-        <li class="list_item"/>
-      </ul>
+      xml"""
+        <ul>
+          <li class="list_item"/>
+          <li class="list_item"/>
+          <li class="list_item"/>
+        </ul>
+      """
   }
   it should "contain elements with link and description" in {
     currentPage fits
-      <li class="list_item">
-        <a class="link" href="/test-link1.html">
-          <div class="title">Link 1</div>
-        </a>
-      </li>
+      xml"""
+        <li class="list_item">
+          <a class="link" href="/test-link1.html">
+            <div class="title">Link 1</div>
+          </a>
+        </li>
+      """ 
   }
 }

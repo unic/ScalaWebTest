@@ -15,30 +15,35 @@
 package org.scalawebtest.integration.gauge
 
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
+import dotty.xml.interpolator.*
 
 class RegexSpec extends ScalaWebTestBaseSpec {
   path = "/navigation.jsp"
 
   "Regex" should "work for path matches" in {
     fits(
-      <nav>
-        <ul>
-          <li>
-            <a href="@regex \/path\/to\/first\/element">first navigation element</a>
-          </li>
-        </ul>
-      </nav>
+      xml"""
+        <nav>
+          <ul>
+            <li>
+              <a href="@regex \/path\/to\/first\/element">first navigation element</a>
+            </li>
+          </ul>
+        </nav>
+      """
     )
   }
   it should "work for text matches" in {
     fits(
-      <nav>
-        <ul>
-          <li>
-            <a href="/path/to/first/element">@regex first.* element</a>
-          </li>
-        </ul>
-      </nav>
+      xml"""
+        <nav>
+          <ul>
+            <li>
+              <a href="/path/to/first/element">@regex first.* element</a>
+            </li>
+          </ul>
+        </nav>
+      """
     )
   }
 }

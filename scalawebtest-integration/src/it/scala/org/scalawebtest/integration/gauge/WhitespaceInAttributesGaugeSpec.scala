@@ -15,6 +15,7 @@
 package org.scalawebtest.integration.gauge
 
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
+import dotty.xml.interpolator.*
 
 /**
   * Some HTML element attributes, such as the class attribute, allow white spaces. Other than separating
@@ -25,40 +26,44 @@ class WhitespaceInAttributesGaugeSpec extends ScalaWebTestBaseSpec {
 
   "An element with an empty attribute" should "be matched by a gauge" in {
     fits (
-      <div class="">
-        <div class="first"></div>
-      </div>
+      xml"""
+        <div class="">
+          <div class="first"></div>
+        </div>
+      """
     )
     fits (
-      <div>
-        <div class="first"></div>
-      </div>
+      xml"""
+        <div>
+          <div class="first"></div>
+        </div>
+      """
     )
   }
 
   "A preceding space" should "not affect a gauge" in {
-    fits(<div class="precedingSpace"></div>)
+    fits(xml"""<div class="precedingSpace"></div>""")
   }
 
   "A surrounding space" should "not affect a gauge" in {
-    fits(<div class="surroundingSpace"></div>)
+    fits(xml"""<div class="surroundingSpace"></div>""")
   }
 
   "A preceding tab" should "not affect a gauge" in {
-    fits(<div class="precedingTab"></div>)
+    fits(xml"""<div class="precedingTab"></div>""")
   }
 
   "A surrounding tab" should "not affect a gauge" in {
-    fits(<div class="surroundingSpace"></div>)
+    fits(xml"""<div class="surroundingSpace"></div>""")
   }
 
   "White spaces" should "be treated as value separators" in {
     fits(
-      <div class="space separated"></div>
+      xml"""<div class="space separated"></div>"""
     )
   }
 
   "Line breaks" should "be treated like spaces in" in {
-    fits(<div class="line breaks"><div id="lineBreakChild"></div></div>)
+    fits(xml"""<div class="line breaks"><div id="lineBreakChild"></div></div>""")
   }
 }

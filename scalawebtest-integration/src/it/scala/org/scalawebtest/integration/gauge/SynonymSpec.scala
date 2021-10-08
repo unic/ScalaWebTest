@@ -15,20 +15,21 @@
 package org.scalawebtest.integration.gauge
 
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
+import dotty.xml.interpolator.*
 
 class SynonymSpec extends ScalaWebTestBaseSpec {
   path = "/index.jsp"
 
   "CheckingGauge" should "work with fits" in {
-    fits(<h1>ScalaWebTest - Mock Server</h1>)
+    fits(xml"""<h1>ScalaWebTest - Mock Server</h1>""")
   }
   it should "work with fit (synonym of fits)" in {
-    fit(<h1>ScalaWebTest - Mock Server</h1>)
+    fit(xml"""<h1>ScalaWebTest - Mock Server</h1>""")
   }
   it should "work with doesnt fit" in {
-    doesnt fit <h2>ScalaWebTest - False Text and Tag</h2>
+    doesnt fit xml"""<h2>ScalaWebTest - False Text and Tag</h2>"""
   }
   it should "work with not fit (synonym of doesnt fit)" in {
-    not fit <h2>ScalaWebTest - False Text and Tag</h2>
+    not fit xml"""<h2>ScalaWebTest - False Text and Tag</h2>"""
   }
 }

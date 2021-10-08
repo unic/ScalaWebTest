@@ -16,6 +16,7 @@ package org.scalawebtest.integration.gauge
 
 import org.scalawebtest.core.gauge.HtmlElementGauge._
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
+import dotty.xml.interpolator.*
 
 class ElementGaugeObjectEdgeCasesSpec extends ScalaWebTestBaseSpec {
 
@@ -28,11 +29,11 @@ class ElementGaugeObjectEdgeCasesSpec extends ScalaWebTestBaseSpec {
     rows should have size 2 withClue "table.jsp is expected to contain 2 rows"
 
     for (row <- rows)
-      row fits <tr>
+      row fits xml"""<tr>
         <td>
           <img src="@contains .jpg"></img>
         </td>
-      </tr>
+      </tr>"""
   }
   it should "work for fragments with <rp> on top level, although they have to be wrapped in <ruby>" in {
     navigateTo("/ruby.jsp")
@@ -42,7 +43,7 @@ class ElementGaugeObjectEdgeCasesSpec extends ScalaWebTestBaseSpec {
     rps should have size 4 withClue "ruby.jsp is expected to contain 4 <rp> tags (wrapping two <rb> tags)"
 
     for (rp <- rps)
-      rp fits <rp>@regex [()]</rp>
+      rp fits xml"""<rp>@regex [()]</rp>"""
   }
   it should "work for the outdated <image> tag, which is automatically modernized to <img>" in {
     navigateTo("/outdatedImageTag.jsp")
@@ -50,6 +51,6 @@ class ElementGaugeObjectEdgeCasesSpec extends ScalaWebTestBaseSpec {
 
     images should have size 2 withClue "oudatedImageTag.jsp is expected to contain 2 images"
     for (img <- images)
-      img fits <image href="@contains .jpg"></image>
+      img fits xml"""<image href="@contains .jpg"></image>"""
   }
 }

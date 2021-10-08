@@ -3,6 +3,7 @@ package org.scalawebtest.integration.doc._011
 import org.scalawebtest.core.IntegrationFlatSpec
 
 import org.scalawebtest.core.gauge.HtmlGauge
+import dotty.xml.interpolator.*
 
 class LoginSpec extends IntegrationFlatSpec with HtmlGauge {
   config.useBaseUri("http://localhost:9090")
@@ -10,14 +11,16 @@ class LoginSpec extends IntegrationFlatSpec with HtmlGauge {
 
   "When accessing protectedContent it" should "show the login form" in {
     currentPage fits
-      <form name="login_form">
-        <input name="username"></input>
-        <input name="password"></input>
-      </form>
+      xml"""
+        <form name="login_form">
+          <input name="username"></input>
+          <input name="password"></input>
+        </form>
+      """
   }
 
   it should "hide the protected content, when not logged in" in {
-    currentPage doesNotFit <p>sensitive information</p>
+    currentPage doesNotFit xml"""<p>sensitive information</p>"""
   }
 
   it should "show the protected content, after logging in" in {
@@ -26,6 +29,6 @@ class LoginSpec extends IntegrationFlatSpec with HtmlGauge {
 
     submit()
 
-    currentPage fits <p>sensitive information</p>
+    currentPage fits xml"""<p>sensitive information</p>"""
   }
 }

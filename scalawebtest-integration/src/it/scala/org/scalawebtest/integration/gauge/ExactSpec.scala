@@ -15,29 +15,34 @@
 package org.scalawebtest.integration.gauge
 
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
+import dotty.xml.interpolator.*
 
 class ExactSpec extends ScalaWebTestBaseSpec {
   path = "/navigation.jsp"
   "The default matcher" should "exactly match attributes" in {
     fits(
-      <nav>
-        <ul>
-          <li>
-            <a href="/path/to/first/element">first navigation element</a>
-          </li>
-        </ul>
-      </nav>
+      xml"""
+        <nav>
+          <ul>
+            <li>
+              <a href="/path/to/first/element">first navigation element</a>
+            </li>
+          </ul>
+        </nav>
+      """
     )
   }
   it should "exactly match text" in {
     fits(
-      <nav>
-        <ul>
-          <li>
-            <a href="/path/to/first/element">first navigation element</a>
-          </li>
-        </ul>
-      </nav>
+      xml"""
+        <nav>
+          <ul>
+            <li>
+              <a href="/path/to/first/element">first navigation element</a>
+            </li>
+          </ul>
+        </nav>
+      """
     )
   }
 }

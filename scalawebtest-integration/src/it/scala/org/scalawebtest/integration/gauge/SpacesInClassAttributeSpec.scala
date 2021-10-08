@@ -15,20 +15,21 @@
 package org.scalawebtest.integration.gauge
 
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
+import dotty.xml.interpolator.*
 
 class SpacesInClassAttributeSpec extends ScalaWebTestBaseSpec {
   path = "/galleryOverview.jsp"
 
   "Spaces in the class attribute" should "be used to separate the classes" in {
-    fit(<img class="obj_full lazyload"></img>)
+    fit(xml"""<img class="obj_full lazyload"></img>""")
   }
   it should "not be an issue if more then one space is used two separate two classes" in {
-    fit(<img class="obj_full   lazyload"></img>)
+    fit(xml"""<img class="obj_full   lazyload"></img>""")
   }
   it should "not be an issue if the class attribute is empty" in {
-    fit(<img class=""></img>)
+    fit(xml"""<img class=""></img>""")
   }
   it should "not be an issue if the class attribute only contains spaces" in {
-    fit(<img class="  "></img>)
+    fit(xml"""<img class="  "></img>""")
   }
 }

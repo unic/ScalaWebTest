@@ -3,6 +3,7 @@ package org.scalawebtest.integration.extending
 import org.scalawebtest.core.gauge.Matchers.{AttributeMatcher, TextMatcher}
 import org.scalawebtest.core.gauge._
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
+import dotty.xml.interpolator.*
 
 class ExtendingMatchers extends ScalaWebTestBaseSpec {
 
@@ -40,12 +41,12 @@ class ExtendingMatchers extends ScalaWebTestBaseSpec {
   //use your custom matcher
   path = "/contact.jsp"
   "Contact page" should "contain a valid email" in {
-    fits(<a class="mail" href="@email">@email</a>)
+    fits(xml"""<a class="mail" href="@email">@email</a>""")
   }
   it should "not have an email address in the web link" in {
-    doesnt fit <a class="web" href="@email"></a>
+    doesnt fit xml"""<a class="web" href="@email"></a>"""
   }
   it should "not have an email address in the web link text" in {
-    doesnt fit <a class="web">@email</a>
+    doesnt fit xml"""<a class="web">@email</a>"""
   }
 }

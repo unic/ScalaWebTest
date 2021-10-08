@@ -15,30 +15,31 @@
 package org.scalawebtest.integration.gauge
 
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
+import dotty.xml.interpolator.*
 
 class ContainsSpec extends ScalaWebTestBaseSpec {
   path = "/navigation.jsp"
 
   "Contains" should "loosely match attributes" in {
     fits(
-      <nav>
+      xml"""<nav>
         <ul>
           <li>
             <a href="@contains first">first navigation element</a>
           </li>
         </ul>
-      </nav>
+      </nav>"""
     )
   }
   it should "loosely match text" in {
     fits(
-      <nav>
+      xml"""<nav>
         <ul>
           <li>
             <a href="/path/to/first/element">@contains navigation</a>
           </li>
         </ul>
-      </nav>
+      </nav>"""
     )
   }
 }

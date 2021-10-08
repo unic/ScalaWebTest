@@ -15,6 +15,7 @@
 package org.scalawebtest.integration.gauge
 
 import org.scalawebtest.core.IntegrationFlatSpec
+import dotty.xml.interpolator.*
 
 class HtmlGaugeFromCurrentPageSpec extends IntegrationFlatSpec {
   config.useBaseUri("http://localhost:9090")
@@ -22,15 +23,15 @@ class HtmlGaugeFromCurrentPageSpec extends IntegrationFlatSpec {
   path = "/index.jsp"
 
   "CurrentPage" should "fit a matching GaugeDefinition" in {
-    currentPage fits <h1>ScalaWebTest - Mock Server</h1>
+    currentPage fits xml"""<h1>ScalaWebTest - Mock Server</h1>"""
   }
   it should "also work with fit (synonym of fits)" in {
-    currentPage fit <h1>ScalaWebTest - Mock Server</h1>
+    currentPage fit xml"""<h1>ScalaWebTest - Mock Server</h1>"""
   }
   it should "not fit a GaugeDefinition with a wrong title" in {
-    currentPage doesntFit <h2>ScalaWebTest - False Text and Tag</h2>
+    currentPage doesntFit xml"""<h2>ScalaWebTest - False Text and Tag</h2>"""
   }
   it should """also work with "doesNotFit" (synonym of doesntFit)""" in {
-    currentPage doesNotFit <h2>ScalaWebTest - False Text and Tag</h2>
+    currentPage doesNotFit xml"""<h2>ScalaWebTest - False Text and Tag</h2>"""
   }
 }

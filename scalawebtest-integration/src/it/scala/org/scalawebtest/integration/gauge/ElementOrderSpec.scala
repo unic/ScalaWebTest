@@ -15,25 +15,29 @@
 package org.scalawebtest.integration.gauge
 
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
+import dotty.xml.interpolator.*
 
 class ElementOrderSpec extends ScalaWebTestBaseSpec {
   path = "/elementsList.jsp"
 
   "List" should "contain three items in the correct order" in {
     fits(
-      <ul>
-        <a href="/test-link1.html"></a>
-        <a href="/test-link2.html"></a>
-        <a href="/test-link3.html"></a>
-      </ul>
+      xml"""
+        <ul>
+          <a href="/test-link1.html"></a>
+          <a href="/test-link2.html"></a>
+          <a href="/test-link3.html"></a>
+        </ul>"""
     )
   }
   it should "not contain them in the wrong order" in {
     doesnt fit
-      <ul>
-        <a href="/test-link1.html"></a>
-        <a href="/test-link3.html"></a>
-        <a href="/test-link2.html"></a>
-      </ul>
+      xml"""
+        <ul>
+          <a href="/test-link1.html"></a>
+          <a href="/test-link3.html"></a>
+          <a href="/test-link2.html"></a>
+        </ul>
+      """
   }
 }

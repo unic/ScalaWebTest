@@ -4,6 +4,7 @@ import org.scalawebtest.aem.PageProperties
 import org.scalawebtest.core.gauge.HtmlGauge.fits
 import org.scalawebtest.integration.extensions.aem.AemModuleScalaWebTestBaseSpec
 import play.api.libs.json.{JsObject, JsValue}
+import dotty.xml.interpolator.*
 
 class FindByResourceTypeSpec extends AemModuleScalaWebTestBaseSpec with PageProperties {
   path = "/aem/geometrixx-outdoors/en/company/our-story.html"
@@ -18,6 +19,6 @@ class FindByResourceTypeSpec extends AemModuleScalaWebTestBaseSpec with PageProp
 
   "Content page" should "have the correct alt text in the sidebar image" in {
     val contentPage = ContentPage(pageProperties)
-    fits(<img alt={contentPage.sidebarImageAltText}></img>)
+    fits(xml"""<img alt=${contentPage.sidebarImageAltText}></img>""")
   }
 }

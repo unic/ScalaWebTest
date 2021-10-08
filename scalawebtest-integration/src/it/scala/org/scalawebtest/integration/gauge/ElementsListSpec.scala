@@ -15,44 +15,53 @@
 package org.scalawebtest.integration.gauge
 
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
+import dotty.xml.interpolator.*
 
 class ElementsListSpec extends ScalaWebTestBaseSpec {
   path = "/elementsList.jsp"
 
   "List" should "contain three items" in {
     fits(
-      <ul>
-        <li class="list_item"/>
-        <li class="list_item"/>
-        <li class="list_item"/>
-      </ul>
+      xml"""
+        <ul>
+          <li class="list_item"/>
+          <li class="list_item"/>
+          <li class="list_item"/>
+        </ul>
+      """
     )
   }
   it should "match first item" in {
     fits(
-      <li class="list_item">
-        <a class="link" href="/test-link1.html">
-          <div class="title">Link 1</div>
-        </a>
-      </li>
+      xml"""
+        <li class="list_item">
+          <a class="link" href="/test-link1.html">
+            <div class="title">Link 1</div>
+          </a>
+        </li>
+      """
     )
   }
   it should "match second item" in {
     fits(
-      <li class="list_item">
-        <a class="link" href="/test-link2.html">
-          <div class="title">Link 2</div>
-        </a>
-      </li>
+      xml"""
+        <li class="list_item">
+          <a class="link" href="/test-link2.html">
+            <div class="title">Link 2</div>
+          </a>
+        </li>
+      """
     )
   }
   it should "match last item" in {
     fits(
-      <li class="list_item">
-        <a class="link" href="/test-link3.html">
-          <div class="title">Link 3</div>
-        </a>
-      </li>
+      xml"""
+        <li class="list_item">
+          <a class="link" href="/test-link3.html">
+            <div class="title">Link 3</div>
+          </a>
+        </li>
+      """
     )
   }
 }

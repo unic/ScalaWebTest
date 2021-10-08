@@ -18,6 +18,7 @@ import org.scalawebtest.aem.PageProperties
 import org.scalawebtest.core.gauge.HtmlGauge.fits
 import org.scalawebtest.integration.extensions.aem.AemModuleScalaWebTestBaseSpec
 import play.api.libs.json.{JsObject, JsValue}
+import dotty.xml.interpolator.*
 
 class PagePropertiesSpec extends AemModuleScalaWebTestBaseSpec with PageProperties {
   path = "/aem/geometrixx-outdoors/en/company/our-story.html"
@@ -29,13 +30,13 @@ class PagePropertiesSpec extends AemModuleScalaWebTestBaseSpec with PageProperti
 
   "Content page" should "have the correct title (pageProperties example)" in {
     val contentPage = ContentPage(pageProperties)
-    fits(<h1>{contentPage.jcrTitle}</h1>)
+    fits(xml"""<h1>{contentPage.jcrTitle}</h1>""")
   }
   it should "have the correct title (jcrContent example" in {
-    fits(<h1>{(pageProperties \ "jcr:content" \ "jcr:title").as[String]}</h1>)
+    fits(xml"""<h1>{(pageProperties \ "jcr:content" \ "jcr:title").as[String]}</h1>""")
   }
   it should "have the correct title (page model example" in {
     val individualPage = ContentPage(pageProperties)
-    fits(<h1>{individualPage.jcrTitle}</h1>)
+    fits(xml"""<h1>{individualPage.jcrTitle}</h1>""")
   }
 }

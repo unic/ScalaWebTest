@@ -16,6 +16,7 @@ package org.scalawebtest.integration.js
 
 import org.scalatest.time.SpanSugar._
 import org.scalawebtest.integration.ScalaWebTestBaseSpec
+import dotty.xml.interpolator.*
 
 import scala.language.postfixOps
 
@@ -33,7 +34,7 @@ class AjaxSpec extends ScalaWebTestBaseSpec {
   }
   it should "work with Gauge.fits" in {
     eventually(timeout(3 seconds)) {
-      fits(<div id="container">Text loaded with JavaScript</div>)
+      fits(xml"""<div id="container">Text loaded with JavaScript</div>""")
     }
   }
 

@@ -103,3 +103,14 @@ The release process of ScalaWebTest is currently done manually. The process is a
 1. Switch the version in `build.sbt` to the snapshot version (e.g. from `1.0.0` to `1.0.0-SNAPSHOT`) and update the documentation if needed
 1. Finally, commit those changes with the commit message "Bump version to x.x.x-SNAPSHOT" (e.g. `Bump version to 1.0.0-SNAPSHOT`)
 1. Push your changes, and the tag
+
+### Website
+
+The website's parts are found in the `docs`-folder of this project. 
+It is built using `jekyll`, please see the `serve_local-files` for local serving. Or use the following command:
+```
+bundle exec jekyll build
+```
+
+The website is deployed through Netlify. It's deployment configurations are found in `netlify.tom`.
+Please find the login in our company password store.

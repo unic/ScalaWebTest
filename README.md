@@ -1,5 +1,28 @@
 # [![ScalaWebTest](https://www.scalawebtest.org/images/swt-logo-light.png)](http://www.scalawebtest.org)
 
+> ⚠️ **Project Status: Unmaintained**
+>
+>As of July 2025, this project is no longer actively maintained.
+>
+>We are grateful to everyone who used, contributed to, or supported this project along the way.
+>
+>### What does this mean for you?
+>
+>- The code will remain available under the same open source license.
+>- You are welcome to fork the repository and continue development under your own namespace.
+>- No further features, bug fixes, or updates will be made by the original author.
+>- Pull requests and issues may not receive a response.
+>
+>### Looking for a Maintainer
+>
+>If you're interested in continuing the work — whether maintaining it, evolving it, or just keeping it running — feel free to reach out by opening an issue or starting a discussion. We’re happy to support a transition if >someone steps forward.
+>
+>### Planned Archival
+>
+>If no new maintainer steps forward, this repository will be archived in **January 2026**. After archiving, it will become read-only but remain publicly accessible.
+
+---
+
 ## [![Build Status](https://travis-ci.org/unic/ScalaWebTest.svg?branch=main)](https://travis-ci.org/unic/ScalaWebTest) [![Join the chat at https://gitter.im/ScalaWebTest/Lobby](https://badges.gitter.im/ScalaWebTest/Lobby.svg)](https://gitter.im/ScalaWebTest/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ScalaWebTest is a library for writing ScalaTest/Selenium based integration tests for websites. It helps you with your basic setup and provides a new and very efficient approach to testing.
